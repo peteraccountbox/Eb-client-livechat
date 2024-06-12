@@ -1,0 +1,413 @@
+import { type } from "node:os";
+
+export type ChatPrefsWidgetType = {
+  position: string;
+  colorCode: string;
+  colorCode2: string;
+  title: string;
+  default_profile_image: string;
+  empty_chat_list_message: string;
+  header_message: string;
+  hideOnMobile: boolean;
+  new_conversation_btn_text: string;
+  showOnlyOnManualTrigger: boolean;
+  welcomeGreetingEnabled: boolean;
+  welcome_message: string;
+  welcome_message_placeholder: string;
+  chatEnabled: boolean;
+  ticketEnabled: boolean;
+  homeEnabled: boolean;
+  helpEnabled: boolean;
+  chat_footer_settings: ChatFooterDataPayload[];
+  home_page_welcome_message: string;
+  logo_url: string;
+};
+
+export type ChatFooterDataPayload = {
+  tab: string;
+  enable: boolean;
+};
+// export enum FormFieldTypes {
+//     EMAIL, TEXT, DATE, LIST, CHECKBOX, TEXTAREA, NUMBER, FORMULA, MULTICHECKBOX, URL, CURRENCY, PHONE, TODAY_DATE, TAX, FILE, PASSWORD
+// }
+
+export type ChatFromFieldDataPayLoad = {
+  name: string;
+  type: string;
+  required: boolean;
+  visible?: boolean;
+  error: string;
+  pattern?: string;
+  field_type: string;
+  placeholder?: string;
+  options?: string;
+  value: string | string[];
+  valueArr: string[];
+  is_valid: boolean;
+};
+
+export type TicketFromFieldDataPayLoad = {
+  type: string;
+  required: boolean;
+  name: string;
+  value: string;
+  placeholder: string;
+  error?: string;
+  is_valid: boolean;
+};
+
+export type ChatPrefsPreChatType = {
+  button_text?: string;
+  enabled: boolean;
+  formData: ChatFromFieldDataPayLoad[];
+  title?: string;
+};
+
+export type ChatPrefsSystemMessageType = {
+  ASK_USER_DETAILS_TO_AGENT?: string;
+  ASK_USER_DETAILS_TO_VISITOR?: string;
+  CHAT_MESSAGE_OFFLINE_STATUS_MESSAGE?: string;
+  CHAT_MESSAGE_OFFLINE_STATUS_MESSAGE_ENABLED?: string;
+  CHAT_SESSION_CLOSED_TO_AGENT?: string;
+  CHAT_SESSION_CLOSED_TO_VISITOR?: string;
+};
+
+export type ChatPrefsPayloadType = {
+  widget: ChatPrefsWidgetType;
+  prechat: ChatPrefsPreChatType;
+  systemMessage: ChatPrefsSystemMessageType;
+  botPrefs?: AIBotPrefPayloadType[];
+  matchedBotPrefs?: AIBotPrefPayloadType;
+  isWhiteLabelEnabled?: boolean;
+};
+
+export enum AIBotPromptActionEnum {
+  CONNECT_TO_AGENT = "CONNECT_TO_AGENT",
+  MESSAGE = "MESSAGE",
+}
+
+export type AIBotPromptsPayloadType = {
+  action: AIBotPromptActionEnum;
+  message: string;
+  description: string;
+  label: string;
+};
+
+export type AIBotPrefPayloadType = {
+  id: number;
+  name: string;
+  botPrompts: AIBotPromptsPayloadType[];
+  settings: {
+    showChatFormBeforeConnectToAgent: boolean;
+    chatBotIconURL: string;
+    newConversationBtnText: string;
+    welcomeMessage: string;
+    placeHolderText: string;
+  };
+};
+
+export type WebActionType = {
+  action: string;
+  delay_timer: number;
+  popup_pattern: string;
+  position: string;
+  redirect_on_subscribe: boolean;
+  scroll_percentage: number;
+};
+
+export type WebRulesPayloadType = {
+  actionType: string;
+  createdTime: number;
+  customData: string;
+  disabled: boolean;
+  force: boolean;
+  id: number;
+  name: string;
+  or_rules: [];
+  ownerId: number;
+  rules: [];
+  scope: string;
+  updatedTime: number;
+  waitTime: number;
+  web_action: WebActionType;
+};
+
+export type AgentPaylodObj = {
+  id: number;
+  name: string;
+  email: string;
+  profile_img_url: string;
+};
+
+export type ChatSessionPaylodObj = {
+  id: number;
+  meta_data?: string;
+  bot_conversation_id: string;
+  gpt_bot_id?: number;
+  conversationId: string;
+  contact_id: number;
+  status: string;
+  connected_with: ChatSessionConnectedWithEnum;
+  created_time: number;
+  updated_time: number;
+  first_answered_by_user_id: number;
+  agent_involved: boolean;
+  participant_user_ids: number[];
+  closed_by: string;
+  message_list: ChatMessagePaylodObj[];
+  type: string;
+  unRead: number;
+  typing: boolean;
+  typing_alert: number;
+  connect_to_agent_on_demand?: boolean;
+};
+
+export type BotDetails = {
+  botId: string;
+  message_list: BotMessageList[];
+  replyButtonList: [];
+  triggerDialogueId: string;
+  currentDialogueId: string;
+  conversationId: string;
+  loadingBot: boolean;
+};
+
+export enum MessageByTypeEnum {
+  Agent = "Agent",
+  GPT = "GPT",
+  Visitor = "Visitor",
+  System = "System",
+}
+
+export enum ChatSessionConnectedWithEnum {
+  AGENT = "AGENT",
+  GPT = "GPT",
+}
+
+export type ChatMessagePaylodObj = {
+  [x: string]: any;
+  id?: string;
+  from: MessageByTypeEnum;
+  sources?: string;
+  user_id?: number;
+  created_time: number;
+  misc_info?: string;
+  meta_data?: string;
+  gpt_relavance_score?: number;
+  gpt_bot_id?: number;
+  message_type: MessageFormatType;
+  system_message_type?: string;
+  session_id?: number;
+};
+
+export type BotMessageList = {
+  id: string;
+  message_type: string;
+  service: string;
+  from: string;
+  message: string;
+  created_time: number;
+  button_status: string;
+  status: string;
+};
+
+export interface ConversationResponsePayload {
+  operators: AgentPaylodObj[];
+  sessions: ChatSessionPaylodObj[];
+}
+
+export enum AppStateComponentsEnum {
+  LOADER,
+  CONVERSATIONLIST,
+  CONVERSATION,
+}
+
+export enum SessionStateEnum {
+  NEW_SESSION = "NEW_SESSION",
+  DB_SESSION = "DB_SESSION",
+}
+
+export type ActiveSessionObjType = {
+  session_id?: number;
+  session_type?: SessionStateEnum;
+  session?: ChatSessionPaylodObj;
+};
+
+export type JSONObjectType = {
+  [key: string]: string | string[];
+};
+
+export type JSONObjectType1 = {
+  [key: string]: string | number | object | null;
+};
+
+export enum MessageFormatType {
+  FILE = "FILE",
+  TEXT = "TEXT",
+  FETCHING = "FETCHING",
+}
+
+export type PermaLinkType = {
+  cname_id: number;
+  count: number | null;
+  created_time: number;
+  cursor: string | null;
+  id: number;
+  link_id: number;
+  link_type: string;
+  owner_id: number | null;
+  updated_time: number | null;
+  url: string;
+};
+
+export type SectionType = {
+  article_ids: number[];
+  articles: ArticleType[];
+  default_section: boolean;
+  name: string;
+};
+
+export type CollectionType = {
+  article_count: number;
+  article_ids: number[];
+  articles: ArticleType[];
+  authors: AgentPaylodObj[];
+  count: number | null;
+  created_time: number;
+  cursor: string | null;
+  description: string;
+  entiy_group_name: string;
+  id: number;
+  img_url: string;
+  owner_id: number | null;
+  permalinkUrl: string;
+  permalinks: PermaLinkType[];
+  position: number;
+  section_list: SectionType[];
+  sections_json_str: string | null;
+  status: string;
+  title: string;
+  updated_time: string | null;
+  url: string | null;
+};
+
+export type ArticleReactionType = {
+  count: number;
+  index_1: number;
+  index_2: number;
+  index_3: number;
+};
+
+export type ArticleReactionStatsType = {
+  reactionIndex: number;
+  count: number;
+};
+
+export type ArticleStatsType = {
+  created_time: number;
+  entityId: number;
+  id: number;
+  reacted: number;
+  reactionStats: ArticleReactionStatsType[];
+  updated_time: number;
+  views: number;
+};
+export type ArticleType = {
+  collection: CollectionType;
+  collection_id: number | null;
+  content: string;
+  count: number | null;
+  created_time: number;
+  cursor: string | null;
+  description: string | null;
+  entiy_group_name: string;
+  id: number;
+  owner: AgentPaylodObj;
+  owner_id: number | null;
+  permalink: PermaLinkType | null;
+  permalinkUrl: string;
+  permalinks: PermaLinkType[];
+  reaction: ArticleReactionType;
+  stats: ArticleStatsType;
+  status: string;
+  title: string;
+  updated_time: number | null;
+  url: string | null;
+  views: number;
+};
+
+export type AutomationStatusType = {
+  addedTime: number;
+  automationId: number;
+  automationStatus: string;
+};
+
+export type SubscriberPartialType = {
+  email: string;
+  id: number;
+  name: string;
+};
+
+export type TicketType = {
+  assigned_to: string;
+  automationStatus: AutomationStatusType[];
+  cc_emails: string[];
+  count: number;
+  assignee_id?: number;
+  created_by: string;
+  created_time: number;
+  owner?: AgentPaylodObj;
+  forceUpdate: boolean;
+  group_id: number;
+  html_body: string;
+  id: number;
+  is_spam: boolean;
+  last_note_id: number;
+  priority: number;
+  private_notes_count: number;
+  properties: any[];
+  public_notes_count: number;
+  references: string[];
+  reopens_count: number;
+  requester_email: string;
+  requester_first_name: string;
+  requester_last_name: string;
+  requester_name: string;
+  source: string;
+  status: number;
+  subject: string;
+  subscriber: SubscriberPartialType;
+  subscriber_id: number;
+  tags: any[];
+  text_body: string;
+  type: number;
+  updated_time: number;
+  VISITOR_UUID: string;
+};
+
+export type RepoAttachmentType = {
+  extension: string;
+  id: number;
+  size: number;
+  title: string;
+  url: string;
+};
+
+export type TicketNoteType = {
+  cc_emails: string[];
+  created_by: string;
+  created_time: number;
+  has_mime_object: boolean;
+  html_body: string;
+  id: number;
+  is_first_note: boolean;
+  is_mail_opened: boolean;
+  text_body: string;
+  owner: AgentPaylodObj;
+  owner_id: number;
+  repository_attachment_ids: number[];
+  repository_attachment_list: RepoAttachmentType[];
+  status: number;
+  ticket_id: number;
+  type: string;
+};

@@ -1,0 +1,69 @@
+import {
+  Component,
+  createContext,
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  useState,
+} from "react";
+import { PromtWidth, widgetFooterTabs } from "./App";
+import {
+  AgentPaylodObj,
+  ChatPrefsPayloadType,
+  ChatSessionPaylodObj,
+} from "./Models";
+
+export function createCtx<A>(defaultValue: A) {
+  type UpdateType = Dispatch<SetStateAction<typeof defaultValue>>;
+  const defaultUpdate: UpdateType = () => defaultValue;
+  const ctx = createContext({
+    state: defaultValue,
+    update: defaultUpdate,
+  });
+
+  function Provider(props: PropsWithChildren<{}>) {
+    const [state, update] = useState(defaultValue);
+    return <ctx.Provider value={{ state, update }} {...props} />;
+  }
+  return [ctx, Provider] as const; // alternatively, [typeof ctx, typeof Provider]
+}
+
+const [ctx, TextProvider] = createCtx("someText");
+
+export const TextContext = ctx;
+export function App() {
+  return (
+    <TextProvider>
+      <Component />
+    </TextProvider>
+  );
+}
+
+interface AppContextPayload {
+  agents?: AgentPaylodObj[];
+  setAgents: (prefs: AgentPaylodObj[]) => void;
+  sessions: ChatSessionPaylodObj[];
+  setSessions: (prefs: ChatSessionPaylodObj[]) => void;
+  chatPrefs: ChatPrefsPayloadType;
+  setChatPrefs: (prefs: ChatPrefsPayloadType) => void;
+  chatBubbleClicked: () => void;
+  //chatBotStatus: boolean
+  activeTab: widgetFooterTabs;
+  changeActiveTab: (tab: widgetFooterTabs) => void;
+  promtWidth: PromtWidth;
+  setPromtWidth: (tab: PromtWidth) => void;
+}
+
+export const AppContext = createContext({
+  agents: [] as AgentPaylodObj[],
+  setAgents: (prefs: AgentPaylodObj[]) => {},
+  sessions: [] as ChatSessionPaylodObj[],
+  setSessions: (prefs: ChatSessionPaylodObj[]) => {},
+  chatPrefs: {} as ChatPrefsPayloadType,
+  chatBubbleClicked: () => {},
+  setChatPrefs: (prefs: ChatPrefsPayloadType) => {},
+  activeTab: "" as widgetFooterTabs,
+  changeActiveTab: (tab: widgetFooterTabs) => {},
+  promtWidth: "" as PromtWidth,
+  setPromtWidth: (tab: PromtWidth) => {},
+} as AppContextPayload);

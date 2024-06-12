@@ -1,0 +1,52 @@
+@keyframes is-typing-dot {
+	0%,
+	100%,
+	30% {
+		transform: translateY(0);
+	}
+	15% {
+		transform: translateY(-2px);
+	}
+}
+
+.chat {
+	/** Chat typing **/
+	.conversation__list__item__summary__is-typing {
+		height: 16px;
+		margin-left: -6px;
+	}
+
+	.conversation__is-typing-animation__dot-01,
+	.conversation__is-typing-animation__dot-02,
+	.conversation__is-typing-animation__dot-03 {
+		animation: is-typing-dot 1s infinite ease-in;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background-color: #888;
+		position: absolute;
+		top: 6px;
+	}
+
+	.conversation__is-typing-animation__dot-01 {
+		left: 6px;
+	}
+
+	.conversation__is-typing-animation__dot-02 {
+		animation-delay: 0.15s;
+		left: 16px;
+	}
+
+	.conversation__is-typing-animation__dot-03 {
+		animation-delay: 0.3s;
+		left: 26px;
+	}
+
+	.chat-list-item.active .conversation__is-typing-animation__dot-01,
+	.chat-list-item.active .conversation__is-typing-animation__dot-02,
+	.chat-list-item.active .conversation__is-typing-animation__dot-03 {
+		background-color: #fff;
+	}
+
+	/** End of Chat typing **/
+}

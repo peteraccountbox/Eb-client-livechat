@@ -1,0 +1,29 @@
+@import '../abstracts/_theme.scss';
+// Colors
+$color-black: #000000;
+$color-white: #ffffff;
+$text-helper-color: #585656;
+
+$body-color: #1F2A68;
+
+$color-gray: #50565d;
+$color-gray-lgt: #afafaf;
+$color-gray-alt: #f3f3f4;
+$color-gray-alt-2: #ecf6fd;
+$color-gray-alt-3: #657786;
+$color-gray-alt-4: #58adee;
+
+$inline-block: inline-block;
+$table-cell: table-cell;
+$table: table;
+$md-border-radius: 10px;
+$scroll-primary-color: rgb(153, 153, 153);
+$scroll-secondar-color: rgb(208, 208, 208);
+$chat-tip-color: $color-primary;
+
+// Typography
+// @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+// $font-main: 'Poppins', 'Helvetica', 'Arial', sans-serif;
+$font-main: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+

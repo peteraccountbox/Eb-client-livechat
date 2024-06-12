@@ -1,0 +1,95 @@
+.chat {
+	.engagebay-composer-popover {
+		z-index: 2147483003;
+		position: absolute;
+		bottom: 100%;
+		//left: calc(50% - 168px);
+		-webkit-box-shadow: 0 1px 15px 1px rgba(0, 0, 0, 0.12);
+		box-shadow: 0 1px 15px 1px rgba(0, 0, 0, 0.12);
+		background-color: #fff;
+		border-radius: 6px;
+		left: auto;
+		right: 0;
+		aside {
+			width: 300px !important;
+			height: 400px !important;
+		}
+	}
+
+	.engagebay-emoji-picker-small {
+		width: 145px;
+		height: 115px;
+	}
+
+	.engagebay-composer-emoji-popover .engagebay-composer-popover-caret {
+		left: auto;
+	}
+
+	.engagebay-composer-popover-caret {
+		position: absolute;
+		bottom: -8px;
+		right: 0;
+		width: 0;
+		height: 0;
+		border-left: 8px solid transparent;
+		border-right: 8px solid transparent;
+		border-top: 8px solid #fff;
+	}
+
+	.engagebay-emoji-picker-image {
+		background-image: url(https://d2p078bqz5urf7.cloudfront.net/livechat/img/emoji-stiripe-16.png);
+		background-size: 576px 576px;
+		background-repeat: no-repeat;
+		border: 10px solid;
+		color: #fff;
+		background-color: #fff;
+		border-color: #fff;
+		cursor: pointer;
+	}
+}
+
+.livechat-sm {
+	.chat {
+		.engagebay-composer-popover {
+			aside {
+           @media (min-height: 391px) {
+				height: 285px !important;
+			}
+
+		   @media (min-height: 450px) {
+				height: 300px !important;
+            }  		
+           
+		   @media (min-height: 500px) {
+                height: 350 !important;
+			}  
+	        }
+        }
+		@media screen and (max-width: 390px) {
+		.chat__actions:has(.chat__attachments) {
+			.engagebay-composer-popover {
+					 right:-40px;
+		}
+	    }
+		.chat__actions:not(:has(.chat__attachments)) {
+			.engagebay-composer-popover {
+					 right:-40px;
+		}
+	    }
+		.chat__actions:not(:has(.chat__attachments)):not(:has(.chat_send_btn)) {
+			.engagebay-composer-popover {
+					 right:-8px;
+		}
+	    }
+		.chat__actions:has(.chat_send_btn):has(.chat__attachments) {
+			.engagebay-composer-popover {
+					 right:-65px;
+		}
+	    }
+	}
+   }
+}  
+
+
+
+ 
