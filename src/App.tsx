@@ -188,12 +188,12 @@ const App: React.FunctionComponent = () => {
     // }
 
     // Subscribe to event bus
-    eventBus.on("reacho-channel-message-received", function () {
+    eventBus.on("reacho-socket-event", function () {
       alert("evnt received");
     });
 
     return () => {
-      eventBus.off("reacho-channel-message-received");
+      eventBus.off("reacho-socket-event");
     }
 
   }, []);

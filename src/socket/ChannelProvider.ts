@@ -15,7 +15,7 @@ export const initalizeSocket = () => {
         let channelName = TENANT_ID + "-" + VISITOR_UUID;
         alert(channelName);
         console.log("channelName", channelName);
-        const pusher = new Pusher("1bd6d84d7a6d517eeee5q", {
+        const pusher = new Pusher("1bd6d84d7a6d517eeee5", {
             cluster: "ap2",
             forceTLS: true,
         });
@@ -31,22 +31,28 @@ export const initalizeSocket = () => {
             // console.log(wasTriggered);
             // });
 
+
+
         });
 
         // unbind to event for messages
-        channel.unbind("reacho-channel-client-event");
+        // channel.unbind("reacho-channel-client-event");
 
         // Subscribe to event for messages
         channel.bind(
-            "reacho-channel-message-received",
+            "reacho-socket-event",
             function (message: string, channel: any, ortc: any) {
+
+                alert("innnn");
                 try {
-                    eventBus.on("reacho-channel-message-received", JSON.parse(message));
+                    eventBus.on("reacho-socket-event", JSON.parse(message));
                 } catch (e) {
                     console.error(e);
                 }
             }
         );
+
+
 
     } catch (error) {
         console.error("error", error);
