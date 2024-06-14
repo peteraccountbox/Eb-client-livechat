@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
   cache: false,
   mode: "development",
-  devtool: "eval-cheap-source-map",
+  devtool: "source-map",
   entry: {
     preview: './src/preview-src/index.js',
     main: './src/index.tsx',
@@ -16,7 +16,8 @@ module.exports = {
     },
   },
   resolve: {
-    extensions: [".tsx", ".js", '.jsx'],
+    extensions: [".tsx", ".js", '.jsx', '.ts'],
+    modules: ['node_modules', 'src'], // Ensure 'src' is included if using absolute imports
   },
   module: {
     rules: [

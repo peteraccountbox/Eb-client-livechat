@@ -102,7 +102,7 @@ export const promptImg = (
   });
   return agent && agent.profile_img_url
     ? agent.profile_img_url
-    : chatPrefs?.widget.default_profile_image;
+    : chatPrefs?.meta.decoration.headerPictureUrl;
 };
 export const pushMessage = (
   message: ChatMessagePaylodObj,
@@ -111,7 +111,7 @@ export const pushMessage = (
   if (!session) {
     console.log("Session not found");
     // if (activeSessionDetails.session_type == SessionStateEnum.NEW_SESSION) {
-    //   activeSessionDetails.session?.message_list.push(message);
+    //   activeSessionDetails.session?.messageList.push(message);
     //   setActiveSessionDetails(activeSessionDetails);
     // }
 
@@ -138,14 +138,14 @@ export const pushMessage = (
 
   // Push message
   let matchFound = false;
-  session.message_list.forEach(function (eachMessage, index) {
+  session.messageList.forEach(function (eachMessage, index) {
     if (eachMessage.id == message.id && session) {
       matchFound = true;
-      session.message_list[index] = message;
+      session.messageList[index] = message;
     }
   });
 
-  if (!matchFound) session.message_list.push(message);
+  if (!matchFound) session.messageList.push(message);
 
   //if (message.from != "Visitor") {
   // Play sound
@@ -155,10 +155,11 @@ export const pushMessage = (
   // this.blinkTitle(message.message);
   //}
 
-  if (message.from === "Agent") {
+  if (message.from == MessageByTypeEnum.AGENT) {
     // Close typing
     session.typing = false;
   }
+
 };
 
 export const getOperatorFromSession = (
@@ -168,13 +169,13 @@ export const getOperatorFromSession = (
   let userId: number | undefined = undefined;
 
   try {
-    if (session?.message_list) {
-      for (let i = 0; i < session?.message_list?.length; i++) {
+    if (session?.messageList) {
+      for (let i = 0; i < session?.messageList?.length; i++) {
         if (
-          session.message_list[i].from == MessageByTypeEnum.Agent &&
-          session.message_list[i].user_id
+          session.messageList[i].from == MessageByTypeEnum.AGENT &&
+          session.messageList[i].user_id
         )
-          userId = session.message_list[i].user_id;
+          userId = session.messageList[i].user_id;
       }
     }
   } catch (e) { }
@@ -426,13 +427,13 @@ export function getSystemMessage(type: string) {
   switch (type) {
     case "ASK_USER_DETAILS":
       message =
-        PARENT_WINDOW_LIVECHAT_REF.ref.settings.systemMessage[
+        PARENT_WINDOW_LIVECHAT_REF.ref.settings.SYSTEMMessage[
         type + "_TO_VISITOR"
         ];
       break;
     case "CHAT_SESSION_CLOSED":
       message =
-        PARENT_WINDOW_LIVECHAT_REF.ref.settings.systemMessage[
+        PARENT_WINDOW_LIVECHAT_REF.ref.settings.SYSTEMMessage[
         type + "_TO_VISITOR"
         ];
       break;

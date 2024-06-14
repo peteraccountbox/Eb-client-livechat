@@ -16,9 +16,9 @@ const Notice: FC<NoticePropsType> = (props) => {
       message &&
       message.from === "System" &&
       (!message.message ||
-        message.system_message_type === "CHAT_SESSION_CLOSED")
+        message.SYSTEM_message_type === "CHAT_SESSION_CLOSED")
     )
-      return getSystemMessage(message.system_message_type);
+      return getSystemMessage(message.SYSTEM_message_type);
 
     return message.message;
   }

@@ -35,14 +35,13 @@ const TicketList: FC<TicketListComponentProps> = (props) => {
   const getImage = (ticket: TicketType) => {
     return ticket.owner?.profile_img_url
       ? ticket.owner?.profile_img_url
-      : parentContext.chatPrefs.widget.default_profile_image;
+      : parentContext.chatPrefs.meta.decoration.introductionText;
   };
 
   return (
     <div
-      className={`chat__help chat__ticket ${
-        tickets.length == 0 ? "chat_no_padcontent_data" : ""
-      } `}
+      className={`chat__help chat__ticket ${tickets.length == 0 ? "chat_no_padcontent_data" : ""
+        } `}
     >
       <div className="chat__header">
         <div className="chat__help-action"></div>
@@ -55,9 +54,8 @@ const TicketList: FC<TicketListComponentProps> = (props) => {
       </div>
 
       <div
-        className={`help__collections ${
-          tickets.length == 0 ? "" : "chat__ticket-collections"
-        }`}
+        className={`help__collections ${tickets.length == 0 ? "" : "chat__ticket-collections"
+          }`}
       >
         {tickets.length > 0 ? (
           <div className="chat__ticket-collections-body">

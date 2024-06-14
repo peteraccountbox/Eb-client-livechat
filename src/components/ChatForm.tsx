@@ -93,7 +93,7 @@ const ChatForm: FC<ChatFormPropsType> = (props) => {
             {parentContext.chatPrefs.prechat.title ? (
               <p className="mb-2"> {parentContext.chatPrefs.prechat.title} </p>
             ) : (
-              <p className="mb-2"> {parentContext.chatPrefs.widget.title} </p>
+              <p className="mb-2"> {parentContext.chatPrefs.meta.decoration.introductionText} </p>
             )}{" "}
           </pre>
         </div>

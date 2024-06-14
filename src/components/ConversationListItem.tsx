@@ -29,9 +29,10 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
   const parentContext = useContext(AppContext);
   const setSessions = parentContext.setSessions;
   const sessions = parentContext.sessions;
-  const from = MessageByTypeEnum[
-    props.session.message_list[props.session.message_list.length - 1]?.from
-  ] as unknown as MessageByTypeEnum;
+  // const from = MessageByTypeEnum[
+  //   props.session.messageList[props.session.messageList.length - 1]?.from
+  // ] as unknown as MessageByTypeEnum;
+  const from = MessageByTypeEnum.CUSTOMER;
 
   const [agentTypingTimer, setAgentTypingTimer] = useState<any>(null);
   // useEffect(() => {
@@ -48,9 +49,9 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
   const getLatestChat = (): ChatMessagePaylodObj | undefined => {
     try {
       // if (props.session.type == "BOT") {
-      return props.session.message_list[props.session.message_list.length - 1];
+      return props.session.messageList[props.session.messageList.length - 1];
       //}
-      // return this.session.message_list[this.session.message_list.length - 1];
+      // return this.session.messageList[this.session.messageList.length - 1];
     } catch (error) {
       return undefined;
     }
@@ -61,15 +62,15 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
       let mssg: ChatMessagePaylodObj | undefined = getLatestChat();
       if (
         mssg &&
-        mssg.from === "System" &&
-        (!mssg.message || mssg.system_message_type === "CHAT_SESSION_CLOSED")
+        mssg.from === MessageByTypeEnum.SYSTEM &&
+        (!mssg.message || mssg.SYSTEM_message_type === "CHAT_SESSION_CLOSED")
       )
         return (
-          mssg.system_message_type && getSystemMessage(mssg.system_message_type)
+          mssg.SYSTEM_message_type && getSystemMessage(mssg.SYSTEM_message_type)
         );
 
       return mssg?.message;
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // const clickOpenBotConversation = () => {
@@ -83,11 +84,11 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
 
   const getMessageTime = () => {
     try {
-      if (!props.session.message_list || props.session.message_list.length == 0)
+      if (!props.session.messageList || props.session.messageList.length == 0)
         return 0;
 
       return (
-        props.session.message_list[props.session.message_list.length - 1]
+        props.session.messageList[props.session.messageList.length - 1]
           .created_time * 1000
       );
     } catch (e) {
@@ -99,25 +100,25 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
   const getImage = () => {
     const lastMessage = getLatestChat();
     if (!lastMessage)
-      return parentContext.chatPrefs.widget.default_profile_image;
+      return parentContext.chatPrefs.meta.decoration.headerPictureUrl;
 
-    if (lastMessage.from == MessageByTypeEnum.Agent) {
+    if (lastMessage.from == MessageByTypeEnum.AGENT) {
       const agent = parentContext.agents?.find((agent) => {
         return agent.id === lastMessage.user_id;
       });
       return agent && agent.profile_img_url
         ? agent.profile_img_url
-        : parentContext.chatPrefs.widget.default_profile_image;
+        : parentContext.chatPrefs.meta.decoration.headerPictureUrl;
     } else if (lastMessage.from == MessageByTypeEnum.GPT) {
       const bot = parentContext.chatPrefs.botPrefs?.find((bot) => {
         return bot.id === lastMessage.gpt_bot_id;
       });
       return bot && bot.settings.chatBotIconURL
         ? bot.settings.chatBotIconURL
-        : parentContext.chatPrefs.widget.default_profile_image;
+        : parentContext.chatPrefs.meta.decoration.botAvatarImage;
     }
 
-    return parentContext.chatPrefs.widget.default_profile_image;
+    return parentContext.chatPrefs.meta.decoration.headerPictureUrl;
   };
 
   const getName = (): string => {
@@ -125,17 +126,17 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
     console.log(lastMessage, " lastMessage");
     if (!lastMessage) return "";
 
-    if (lastMessage.from == MessageByTypeEnum.Agent) {
+    if (lastMessage.from == MessageByTypeEnum.AGENT) {
       const agent = parentContext.agents?.find((agent) => {
         return agent.id === lastMessage.user_id;
       });
-      return agent && agent.name ? agent.name : "Agent";
+      return agent && agent.name ? agent.name : "AGENT";
     } else if (lastMessage.from == MessageByTypeEnum.GPT) {
       const bot = parentContext.chatPrefs.botPrefs?.find((bot) => {
         return bot.id === lastMessage.gpt_bot_id;
       });
       return bot && bot.name ? bot.name : "Bot";
-    } else if (lastMessage.from == MessageByTypeEnum.System) {
+    } else if (lastMessage.from == MessageByTypeEnum.SYSTEM) {
       return "Operator";
     }
 
@@ -178,18 +179,18 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
         onClick={() => clickOpenChatConversation()}
       >
         <div className="chat__all-messages-item-avatar">
-        <div
-          className="chat__all-messages-item-profile"
-          style={{ backgroundImage: 'url("' + getImage() + '")' }}
-        >
-          &nbsp;
-        </div>
+          <div
+            className="chat__all-messages-item-profile"
+            style={{ backgroundImage: 'url("' + getImage() + '")' }}
+          >
+            &nbsp;
+          </div>
         </div>
 
         <div className="chat__all-messages-item-copy">
           <div className="chat__all-messages-item-main">
             {props.session.typing ||
-            getLatestChat()?.message_type === "FETCHING" ? (
+              getLatestChat()?.message_type === "FETCHING" ? (
               <>
                 <div data-a={JSON.stringify(getLatestChat())}>
                   {getLatestChat()?.message}
@@ -198,20 +199,20 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
               </>
             ) : (
               <>
-                <p className={`${props.session.unRead > 0 ? "unRead" : ""}`}>
+                {/* <p className={`${props.session.unRead > 0 ? "unRead" : ""}`}>
                   {getLatestChat()?.message_type == "TEXT" ||
-                  from == MessageByTypeEnum.System ? (
+                    from == MessageByTypeEnum.SYSTEM ? (
                     getLatestMessage()
                   ) : (
                     <></>
                   )}
-                </p>
+                </p> */}
 
                 <p>
                   {getLatestChat()?.message_type == "FILE" ? (
                     <>
                       File{" "}
-                      {from == MessageByTypeEnum.Visitor ? (
+                      {from == MessageByTypeEnum.CUSTOMER ? (
                         <span>Sent</span>
                       ) : (
                         <span>Received</span>
@@ -228,11 +229,11 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
             <p className="chat-messages-username"> {getName()}</p>
             <p className="chat__all-messages-item-header-timegao">
               •{" "}
-              <ReactTimeAgo
+              {/* <ReactTimeAgo
                 date={getMessageTime()}
                 locale="en-US"
                 tooltip={false}
-              />
+              /> */}
             </p>
           </div>
         </div>

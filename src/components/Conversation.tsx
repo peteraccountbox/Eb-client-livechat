@@ -1,6 +1,6 @@
 import HeaderAction from "./HeaderAction";
 import ChatForm from "./ChatForm";
-import { postReq } from "../request";
+import { getReq, postReq } from "../request";
 import ConversationItem from "./ConversationItem";
 import Emoji from "./Emoji";
 import FileUpload from "./FileUpload";
@@ -29,13 +29,16 @@ import {
 } from "../Utils";
 import { AppContext } from "../appContext";
 import {
+  CHANNEL_ID,
   CONNECT_TO_AGENT_URL_PATH,
+  CONVERSATION_MESSAGE_FETCH_URL_PATH,
   FORM_DATA,
   MESSAGE_URL_PATH,
   NEW_SESSION_URL_PATH,
   OPENED_CHAT,
   PROACTIVE_MESSAGE,
   TYPING_ALERT_URL_PATH,
+  VISITOR_UUID,
 } from "../globals";
 import React, {
   useContext,
@@ -72,14 +75,14 @@ const Conversation = (props: ConversationProps) => {
 
   const getEmptySession = () => {
     let session = {} as ChatSessionPaylodObj;
-    session.message_list = [];
+    session.messageList = [];
 
     let initialMessage = getSessionStoragePrefs(PROACTIVE_MESSAGE);
     if (initialMessage) {
-      session.message_list.push({
-        from: MessageByTypeEnum.System,
-        message: initialMessage,
-        message_type: MessageFormatType.TEXT,
+      session.messageList.push({
+        from: MessageByTypeEnum.SYSTEM,
+        bodyText: initialMessage,
+        format: MessageFormatType.TEXT,
         session_id: undefined,
         system_message_type: "PROACTIVE_SYSTEM_MESSAGE",
         created_time: new Date().getTime() / 1000,
@@ -91,10 +94,10 @@ const Conversation = (props: ConversationProps) => {
       chatPrefs.matchedBotPrefs.id &&
       chatPrefs.matchedBotPrefs.settings.welcomeMessage
     ) {
-      session.message_list.push({
+      session.messageList.push({
         from: MessageByTypeEnum.GPT,
-        message: chatPrefs.matchedBotPrefs.settings.welcomeMessage,
-        message_type: MessageFormatType.TEXT,
+        bodyText: chatPrefs.matchedBotPrefs.settings.welcomeMessage,
+        format: MessageFormatType.TEXT,
         session_id: undefined,
         created_time: new Date().getTime() / 1000,
       });
@@ -127,7 +130,7 @@ const Conversation = (props: ConversationProps) => {
 
   useEffect(() => {
     setScrollBottom();
-  }, [session?.message_list]);
+  }, [session?.messageList]);
 
   useEffect(() => {
     setSession(getSession());
@@ -137,8 +140,8 @@ const Conversation = (props: ConversationProps) => {
     let chatId = getSessionStoragePrefs(OPENED_CHAT);
     if (
       (!session ||
-        !session?.message_list ||
-        session?.message_list.length === 0) &&
+        !session?.messageList ||
+        session?.messageList.length === 0) &&
       shouldShowForm() &&
       !isGPTEnabled() &&
       (!chatId || chatId == "new")
@@ -150,7 +153,33 @@ const Conversation = (props: ConversationProps) => {
     if (matchedBot) {
       setMatchedBotPrefs(matchedBot);
     }
+
+    if (session.id)
+      getMessageList();
+
   }, []);
+
+  const getMessageList = async () => {
+
+    if (!session.id)
+      return;
+
+    // 
+
+    try {
+      const response = await getReq(
+        CONVERSATION_MESSAGE_FETCH_URL_PATH + "/" + session.id,
+        {}
+      );
+
+      session.messageList = response.data.data;
+      setSessions([...sessions]);
+
+    } catch (error) {
+
+    }
+
+  }
 
   const getMatchedBotPrefs = () => {
     if (session && session.id) {
@@ -176,25 +205,25 @@ const Conversation = (props: ConversationProps) => {
 
     let fields: ChatFromFieldDataPayLoad[] = [];
 
-    chatPrefs.prechat.formData.forEach(
-      (field: ChatFromFieldDataPayLoad, index: number) => {
-        let fieldClone = JSON.parse(
-          JSON.stringify(field)
-        ) as ChatFromFieldDataPayLoad;
+    // chatPrefs.prechat.formData.forEach(
+    //   (field: ChatFromFieldDataPayLoad, index: number) => {
+    //     let fieldClone = JSON.parse(
+    //       JSON.stringify(field)
+    //     ) as ChatFromFieldDataPayLoad;
 
-        fieldClone.value =
-          storedFormData[fieldClone.name] &&
-            !(field.field_type == "SYSTEM" && field.name == "message")
-            ? storedFormData[fieldClone.name]
-            : "";
-        if (fieldClone.type == "multicheckbox" || fieldClone.type == "checkbox")
-          fieldClone.valueArr = storedFormData[fieldClone.name]
-            ? Array.from(storedFormData[fieldClone.name])
-            : [];
-        fieldClone.is_valid = false;
-        fields.push(fieldClone);
-      }
-    );
+    //     fieldClone.value =
+    //       storedFormData[fieldClone.name] &&
+    //         !(field.field_type == "SYSTEM" && field.name == "message")
+    //         ? storedFormData[fieldClone.name]
+    //         : "";
+    //     if (fieldClone.type == "multicheckbox" || fieldClone.type == "checkbox")
+    //       fieldClone.valueArr = storedFormData[fieldClone.name]
+    //         ? Array.from(storedFormData[fieldClone.name])
+    //         : [];
+    //     fieldClone.is_valid = false;
+    //     fields.push(fieldClone);
+    //   }
+    // );
 
     setFormFields(fields);
   }, [showChatForm]);
@@ -242,10 +271,10 @@ const Conversation = (props: ConversationProps) => {
     // Get session from session id
     let session = getSessionById(message.session_id);
     console.log("updating message session", session);
-    if (!session || !session.message_list || session.message_list.length == 0)
+    if (!session || !session.messageList || session.messageList.length == 0)
       return;
 
-    session.message_list.map((eachmessage: ChatMessagePaylodObj) => {
+    session.messageList.map((eachmessage: ChatMessagePaylodObj) => {
       if (message.id === eachmessage.id) return message;
       return eachmessage;
     });
@@ -275,7 +304,7 @@ const Conversation = (props: ConversationProps) => {
     console.log("updating message session", session);
     if (!session) return;
 
-    session.message_list = session.message_list.map(
+    session.messageList = session.messageList.map(
       (eachmessage: ChatMessagePaylodObj) => {
         if ("SENDING" === eachmessage.status) return message;
         return eachmessage;
@@ -335,7 +364,7 @@ const Conversation = (props: ConversationProps) => {
         "Whoops! Something went wrong. Please try again later.";
 
       var data: ChatMessagePaylodObj = getChatMessage(mssg, undefined);
-      data.from = MessageByTypeEnum.System;
+      data.from = MessageByTypeEnum.SYSTEM;
       pushMessage(data, session);
 
       setSessions([...sessions]);
@@ -433,6 +462,9 @@ const Conversation = (props: ConversationProps) => {
 
     // Make temp push
     if (newChat) {
+      session.channelId = CHANNEL_ID;
+      session.visitorId = VISITOR_UUID;
+      session.channelType = "CHAT";
       pushMessage(data, session);
     } else {
       data.session_id = session?.id;
@@ -463,10 +495,12 @@ const Conversation = (props: ConversationProps) => {
     type?: MessageFormatType
   ) => {
     let state: ChatMessagePaylodObj = {
-      from: MessageByTypeEnum.Visitor,
-      message: msg,
-      message_type: !type ? MessageFormatType.TEXT : type,
+      from: MessageByTypeEnum.CUSTOMER,
+      bodyText: msg,
+      format: !type ? MessageFormatType.TEXT : type,
       session_id: session?.id,
+      ticketId: session?.id + "",
+      source: "WEBSITE",
       created_time: new Date().getTime(),
     } as ChatMessagePaylodObj;
 
@@ -511,7 +545,8 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const shouldShowForm = () => {
-    return parentContext.chatPrefs.prechat.enabled;
+    return false;
+    //return  parentContext.chatPrefs.prechat.enabled;
   };
 
   /**
@@ -553,7 +588,7 @@ const Conversation = (props: ConversationProps) => {
 
     if (matchedBotPrefs?.id) return matchedBotPrefs?.settings.chatBotIconURL;
 
-    return parentContext.chatPrefs.widget.default_profile_image;
+    return parentContext.chatPrefs.meta.decoration.headerPictureUrl;
   };
 
   const getHeaderName = () => {
@@ -562,7 +597,7 @@ const Conversation = (props: ConversationProps) => {
 
     if (matchedBotPrefs?.id) return matchedBotPrefs?.name;
 
-    return parentContext.chatPrefs.widget.title;
+    return parentContext.chatPrefs.meta.decoration.introductionText;
   };
 
   const connectToAgent = () => {
@@ -575,10 +610,10 @@ const Conversation = (props: ConversationProps) => {
     session.connect_to_agent_on_demand = true;
 
     let formData = getFormMetaData();
-    session.meta_data = JSON.stringify(getFormMetaData());
+    session.meta = JSON.stringify(getFormMetaData());
 
     if (formData && formData.message) {
-      session.message_list.push(
+      session.messageList.push(
         getChatMessage(formData.message as string, MessageFormatType.TEXT)
       );
     }
@@ -586,7 +621,7 @@ const Conversation = (props: ConversationProps) => {
     submitSessionEvent(url, session, (response: any) => {
       // Get session
       let newNession = response.data as ChatSessionPaylodObj;
-      // newNession.message_list = session.message_list;
+      // newNession.messageList = session.messageList;
       updateAndOpenSession(newNession);
     });
   };
@@ -608,7 +643,7 @@ const Conversation = (props: ConversationProps) => {
           prompt.message,
           MessageFormatType.TEXT
         );
-        message.from = MessageByTypeEnum.Visitor;
+        message.from = MessageByTypeEnum.CUSTOMER;
 
         console.log("in", message);
 
@@ -724,7 +759,7 @@ const Conversation = (props: ConversationProps) => {
               } */}
 
               {!showChatForm ? (
-                session?.message_list?.map(
+                session?.messageList?.map(
                   (message: ChatMessagePaylodObj, index: number) => {
                     return (
                       <div>
@@ -732,7 +767,7 @@ const Conversation = (props: ConversationProps) => {
                           <ConversationItem
                             message={message}
                             session={session}
-                            nextMessage={session?.message_list[index + 1]}
+                            nextMessage={session?.messageList[index + 1]}
                             formFields={formFields}
                             updateMessage={updateMessage}
                           />
@@ -787,7 +822,7 @@ const Conversation = (props: ConversationProps) => {
               value={typeText}
               placeholder={
                 !matchedBotPrefs || matchedBotPrefs.botPrompts?.length == 0
-                  ? parentContext.chatPrefs.widget.welcome_message_placeholder
+                  ? parentContext.chatPrefs.meta.decoration.introductionText
                   : matchedBotPrefs.settings.placeHolderText
               }
               contentEditable="true"

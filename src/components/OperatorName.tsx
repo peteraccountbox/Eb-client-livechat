@@ -4,7 +4,7 @@ import { ChatMessagePaylodObj } from '../Models';
 import { getOperator, getOperatorName } from '../Utils';
 
 export interface OperatorNamePropsType {
-  agent_id:number,
+  agent_id: number,
 }
 
 const OperatorName: FC<OperatorNamePropsType> = (props) => {
@@ -17,12 +17,12 @@ const OperatorName: FC<OperatorNamePropsType> = (props) => {
     return operator?.name;
   }
   useEffect(() => {
-    
-  
-        return () => {
-          
-        }
-    }, []);
+
+
+    return () => {
+
+    }
+  }, []);
   return (
     <span>{getOperatorName()}</span>
   )

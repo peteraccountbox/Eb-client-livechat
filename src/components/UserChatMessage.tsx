@@ -25,7 +25,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
   const parentContext = useContext(AppContext);
 
   useEffect(() => {
-    return () => {};
+    return () => { };
   }, []);
 
   const getMessageTime = () => {
@@ -45,31 +45,25 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
     if (xyz) nextFrom = MessageByTypeEnum[xyz] as unknown as MessageByTypeEnum;
 
     try {
-      if (
-        !parentContext.chatPrefs.systemMessage
-          .CHAT_MESSAGE_OFFLINE_STATUS_MESSAGE_ENABLED ||
-        !parentContext.chatPrefs.systemMessage.CHAT_MESSAGE_OFFLINE_STATUS_MESSAGE?.trim() ||
-        from != MessageByTypeEnum.Visitor ||
-        !props.message.agents_unavailable
-      )
+      if (true)
         return false;
 
-      var canShowUnavailabiltyInCurrentMessage =
-        from == MessageByTypeEnum.Visitor && props.message.agents_unavailable;
-      if (
-        (!props.message.nextMessage && canShowUnavailabiltyInCurrentMessage) ||
-        (canShowUnavailabiltyInCurrentMessage &&
-          props.nextMessage &&
-          (nextFrom != MessageByTypeEnum.Visitor ||
-            !(
-              nextFrom == MessageByTypeEnum.Visitor &&
-              props.nextMessage.agents_unavailable
-            )))
-      ) {
-        return true;
-      }
+      // var canShowUnavailabiltyInCurrentMessage =
+      //   from == MessageByTypeEnum.CUSTOMER && props.message.agents_unavailable;
+      // if (
+      //   (!props.message.nextMessage && canShowUnavailabiltyInCurrentMessage) ||
+      //   (canShowUnavailabiltyInCurrentMessage &&
+      //     props.nextMessage &&
+      //     (nextFrom != MessageByTypeEnum.CUSTOMER ||
+      //       !(
+      //         nextFrom == MessageByTypeEnum.CUSTOMER &&
+      //         props.nextMessage.agents_unavailable
+      //       )))
+      // ) {
+      //   return true;
+      // }
 
-      return false;
+      // return false;
     } catch (error) {
       return false;
     }
@@ -86,11 +80,12 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
                 {props.message.status == "SENDING" ? (
                   "Sending ..."
                 ) : (
-                  <ReactTimeAgo
-                    date={getMessageTime()}
-                    locale="en-US"
-                    tooltip={false}
-                  />
+                  <>{getMessageTime()}</>
+                  // <ReactTimeAgo
+                  //   date={getMessageTime()}
+                  //   locale="en-US"
+                  //   tooltip={false}
+                  // />
                 )}
               </span>
             </div>
@@ -115,7 +110,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
             <ChatMessage
               sessionId={props.sessionId}
               message={props.message}
-              updateMessage={() => {}}
+              updateMessage={() => { }}
             />
           </li>
         </ul>
@@ -136,8 +131,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
             >
               <span className="message-sent-status">
                 {
-                  parentContext.chatPrefs.systemMessage
-                    .CHAT_MESSAGE_OFFLINE_STATUS_MESSAGE
+                  "sent status"
                 }
               </span>
             </div>

@@ -80,7 +80,7 @@ const TicketForm: FC<TicketFormComponentProps> = (props) => {
         else if (field.name == "subject") body.subject = field.value;
         else body.text_body = field.value;
       });
-      body.VISITOR_UUID = VISITOR_UUID;
+      body.CUSTOMER_UUID = VISITOR_UUID;
       const wait = postReq(TICKET_CREATE_URL, body);
       wait
         .then((response: any) => {

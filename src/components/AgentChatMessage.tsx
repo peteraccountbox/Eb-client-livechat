@@ -56,7 +56,7 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
                 src={
                   agent?.profile_img_url
                     ? agent?.profile_img_url
-                    : parentContext.chatPrefs.widget.default_profile_image
+                    : parentContext.chatPrefs.meta.decoration.headerPictureUrl
                 }
                 alt="Avatar"
               />
@@ -67,18 +67,19 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
                 <ChatMessage
                   message={props.message}
                   sessionId={props.sessionId}
-                  updateMessage={() => {}}
+                  updateMessage={() => { }}
                 />
               </li>
             </ul>
           </div>
 
           <div className="chat__messages-timestamp">
-            <ReactTimeAgo
+            <>{getMessageTime()}</>
+            {/* <ReactTimeAgo
               date={getMessageTime()}
               locale="en-US"
               tooltip={false}
-            />
+            /> */}
           </div>
         </div>
       </div>

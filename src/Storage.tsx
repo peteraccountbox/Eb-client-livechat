@@ -1,41 +1,45 @@
+import { CHANNEL_ID } from "./globals";
+
+const prefix = "reacho-" + CHANNEL_ID + "-";
+
 export const setLocalStoragePrefs: Function = (key: any, value: any) => {
   if (key === undefined || value === undefined) return null;
 
-  localStorage.setItem("engagebay-" + key, value);
+  localStorage.setItem(prefix + key, value);
 };
 
 export const getLocalStoragePrefs: Function = (key: any) => {
   if (!key) return null;
 
-  return localStorage.getItem("engagebay-" + key);
+  return localStorage.getItem(prefix + key);
 };
 
 export const setSessionStoragePrefs: Function = (key: any, value: any) => {
   if (key === undefined || value === undefined) return null;
 
-  sessionStorage.setItem("engagebay-" + key, value);
+  sessionStorage.setItem(prefix + key, value);
 };
 
 export const removeSessionStoragePrefs: Function = (key: any) => {
   try {
-    sessionStorage.removeItem("engagebay-" + key);
-  } catch (error) {}
+    sessionStorage.removeItem(prefix + key);
+  } catch (error) { }
 };
 
 export const getSessionStoragePrefs: Function = (key: any) => {
   if (!key) return null;
 
-  return sessionStorage.getItem("engagebay-" + key);
+  return sessionStorage.getItem(prefix + key);
 };
 
 // export const deleteStoragePrefs: Function = (key: any) => {
-//     localStorage.removeItem('engagebay-' + key);
+//     localStorage.removeItem('reacho-' + key);
 // }
 
 export const getCookie: Function = (key: string) => {
   if (!key) return undefined;
 
-  key = "engagebay-" + key;
+  key = prefix + key;
 
   let ca = document.cookie.split(";");
   for (let i = 0; i < ca.length; i++) {
@@ -61,7 +65,7 @@ export const setCookie: Function = (
     expires = "; expires=" + date.toUTCString();
   }
 
-  document.cookie = "engagebay-" + key + "=" + value + expires + "; path=/";
+  document.cookie = prefix + key + "=" + value + expires + "; path=/";
 };
 
 export const deleteCookie: Function = (key: string) => {

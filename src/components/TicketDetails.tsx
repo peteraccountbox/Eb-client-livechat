@@ -186,9 +186,8 @@ const TicketDetails: FC<TicketDetailsComponentProps> = (props) => {
       <div className="chat__content">
         <div className="chat__messages">
           <div
-            className={`chat__messages-track ${
-              showDetails ? "" : "ticket_conversations_data"
-            }`}
+            className={`chat__messages-track ${showDetails ? "" : "ticket_conversations_data"
+              }`}
           >
             {loading ? (
               <div className="pad-content">
@@ -232,20 +231,18 @@ const TicketDetails: FC<TicketDetailsComponentProps> = (props) => {
                 <div className="chat__ticket__report-status-list">
                   <ul className="chat__ticket__report-status-bar">
                     <li
-                      className={`chat__ticket__report-status-item ${
-                        ticket.status == 1 || ticket.status == 2
-                          ? "active border_primary"
-                          : ""
-                      }`}
+                      className={`chat__ticket__report-status-item ${ticket.status == 1 || ticket.status == 2
+                        ? "active border_primary"
+                        : ""
+                        }`}
                     >
                       <label className="chat__ticket__report-status-label">
                         Submitted
                       </label>
                     </li>
                     <li
-                      className={`chat__ticket__report-status-item ${
-                        ticket.status == 3 ? "active border_primary" : ""
-                      }`}
+                      className={`chat__ticket__report-status-item ${ticket.status == 3 ? "active border_primary" : ""
+                        }`}
                     >
                       <label className="chat__ticket__report-status-label">
                         In progress
@@ -253,11 +250,10 @@ const TicketDetails: FC<TicketDetailsComponentProps> = (props) => {
                     </li>
 
                     <li
-                      className={`chat__ticket__report-status-item ${
-                        ticket.status == 4 || ticket.status == 5
-                          ? "active border_primary"
-                          : ""
-                      }`}
+                      className={`chat__ticket__report-status-item ${ticket.status == 4 || ticket.status == 5
+                        ? "active border_primary"
+                        : ""
+                        }`}
                     >
                       <label className="chat__ticket__report-status-label">
                         Resolved

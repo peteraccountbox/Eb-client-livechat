@@ -39,26 +39,20 @@ const Home = ({
               <div className="home__feeds-logo-brand">
                 <img
                   src={
-                    chatPrefs.widget.logo_url
-                      ? chatPrefs.widget.logo_url
-                      : "https://cdn5.engagebay.com/assets/img/engagebay-brand-logo-white.svg"
+                    "https://cdn5.engagebay.com/assets/img/engagebay-brand-logo-white.svg"
                   }
                   alt="Logo"
                 />
               </div>
               <div className="chat__help-end">
-                <CloseWidgetPanel/>
+                <CloseWidgetPanel />
               </div>
             </div>
 
             <div className="home__feeds-home-title">
-              {chatPrefs.widget.home_page_welcome_message ? (
+              {("welcome message") ? (
                 <>
-                  {chatPrefs.widget.home_page_welcome_message
-                    .split("\n")
-                    .map((line, index) => {
-                      return index == 0 ? <h1>{line}</h1> : <h2>{line}</h2>;
-                    })}
+                  Welcome message
                 </>
               ) : (
                 <></>
@@ -72,9 +66,8 @@ const Home = ({
                   <div className="home__feeds-media">
                     <div className="home__feeds-media-content">
                       <h4
-                        className={`${
-                          recentSession.unRead > 0 ? "unRead" : ""
-                        }`}
+                        className={`${recentSession.unRead > 0 ? "unRead" : ""
+                          }`}
                         style={{ cursor: "auto" }}
                       >
                         Recent conversation
@@ -98,8 +91,7 @@ const Home = ({
                 <div className="home__feeds-media">
                   <div className="home__feeds-media-content">
                     <h5>
-                      {chatPrefs.widget.new_conversation_btn_text ||
-                        "Send us a message"}
+                      "Send us a message "
                     </h5>
                     {/* <p>We typically reply within a day</p> */}
                   </div>

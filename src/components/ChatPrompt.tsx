@@ -13,7 +13,7 @@ interface ChatPromptProp {
 const ChatPrompt: FC<ChatPromptProp> = (props) => {
 	const [chatMessage, setChatMessage] = useState("");
 	const parentContext = useContext(AppContext);
-	const from = props.session?.message_list[props.session?.message_list.length - 1].from as unknown as string;
+	const from = props.session?.messageList[props.session?.messageList.length - 1].from as unknown as string;
 	useEffect(() => {
 
 
@@ -28,9 +28,9 @@ const ChatPrompt: FC<ChatPromptProp> = (props) => {
 
 		try {
 			// if (props.session.type == "BOT") {
-			return props.session?.message_list[props.session.message_list.length - 1];
+			return props.session?.messageList[props.session.messageList.length - 1];
 			//}
-			// return this.session.message_list[this.session.message_list.length - 1];
+			// return this.session.messageList[this.session.messageList.length - 1];
 		} catch (error) {
 			return undefined;
 		}
@@ -44,9 +44,9 @@ const ChatPrompt: FC<ChatPromptProp> = (props) => {
 			if (
 				mssg &&
 				mssg.from === "System" &&
-				(!mssg.message || mssg.system_message_type === "CHAT_SESSION_CLOSED")
+				(!mssg.message || mssg.SYSTEM_message_type === "CHAT_SESSION_CLOSED")
 			)
-				return getSystemMessage(mssg.system_message_type);
+				return getSystemMessage(mssg.SYSTEM_message_type);
 
 			return mssg.message;
 		} catch (error) { }

@@ -76,7 +76,9 @@ const GPTChatMessage: FC<GPTChatMessagePropsType> = (props) => {
 
           </div>
 
-          <div className='chat__messages-timestamp'><ReactTimeAgo date={getmessageTime()} locale="en-US" tooltip={false}/></div>
+          <div className='chat__messages-timestamp'>
+            {/* <ReactTimeAgo date={getmessageTime()} locale="en-US" tooltip={false}/> */}
+          </div>
         </div>
 
       </div>

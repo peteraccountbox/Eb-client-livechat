@@ -18,7 +18,7 @@ interface ChatBubbleProps {
 
 const ChatBubble: React.FC<ChatBubbleProps> = (props) => {
   useEffect(() => {
-    return () => {};
+    return () => { };
   }, []);
 
   const chatPrefs = useContext(AppContext).chatPrefs;
@@ -30,13 +30,10 @@ const ChatBubble: React.FC<ChatBubbleProps> = (props) => {
 
   return (
     <div
-      className={`chat__trigger ${isVisible ? "" : "hide"} ${
-        chatPrefs.widget.chatEnabled ? "" : "hide"
-      } ${chatPrefs.widget.position == "LEFT" ? "left" : ""} ${
-        chatPrefs.widget.position == "RIGHT" ? "right" : ""
-      } ${props.opened ? "chat-opend" : "chat-closed"}`}
+      className={`chat__trigger ${isVisible ? "" : "hide"} ${chatPrefs.meta.decoration.widgetAlignment == "LEFT" ? "left" : ""} ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""
+        } ${props.opened ? "chat-opend" : "chat-closed"}`}
       data-trigger="widget"
-      // onClick={() => props.chatBubbleClicked()}
+    // onClick={() => props.chatBubbleClicked()}
     >
       {props.opened ? (
         <div

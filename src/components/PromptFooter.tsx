@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
-import { ChatPrefsWidgetType, ChatSessionPaylodObj } from "../Models";
+import { ChatSessionPaylodObj } from "../Models";
 import send from "../assets/img/send.png";
 import { getLocalStoragePrefs, setLocalStoragePrefs } from "../Storage";
 import { getFormData } from "../Utils";
 import { FORM_DATA } from "../globals";
 
 interface PromptFooterProp {
-  widgetPrefs: ChatPrefsWidgetType | undefined;
+  widgetPrefs: undefined;
   session: ChatSessionPaylodObj | undefined;
   handleProactiveMessageSubmit: (arg0: string, arg1: number) => void;
 }
@@ -48,9 +48,7 @@ const PromptFooter: FC<PromptFooterProp> = (props) => {
             type="text"
             className="chat__prompt-input"
             placeholder={
-              !props.session
-                ? props.widgetPrefs?.welcome_message_placeholder
-                : "Write a reply"
+              "Write a reply"
             }
             onChange={(e) => handleKeyChange(e)}
             onKeyDown={handleKeyDown}

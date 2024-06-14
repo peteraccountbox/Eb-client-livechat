@@ -105,9 +105,8 @@ const Article: FC<ArticleComponentProps> = (props) => {
                 </div>
                 <div className="chat__header-user">
                   <h3
-                    className={`chat__header-user-name ${
-                      article.title ? "article-header" : ""
-                    }`}
+                    className={`chat__header-user-name ${article.title ? "article-header" : ""
+                      }`}
                     ref={titleRef}
                   >
                     {article.title}
@@ -224,20 +223,20 @@ const Article: FC<ArticleComponentProps> = (props) => {
                           {article.updated_time ? (
                             <div>
                               Updated over{" "}
-                              <ReactTimeAgo
+                              {/* <ReactTimeAgo
                                 date={article.updated_time * 1000}
                                 locale="en-US"
                                 tooltip={false}
-                              />
+                              /> */}
                             </div>
                           ) : (
                             <div>
                               Posted over{" "}
-                              <ReactTimeAgo
+                              {/* <ReactTimeAgo
                                 date={article.created_time * 1000}
                                 locale="en-US"
                                 tooltip={false}
-                              />
+                              /> */}
                             </div>
                           )}
                         </span>

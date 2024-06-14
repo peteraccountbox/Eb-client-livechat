@@ -12,13 +12,10 @@ export interface PreviewComponentProps {
 const Preview: FC<PreviewComponentProps> = (props) => {
   const { chatPrefs } = props;
 
-  const settings = chatPrefs
-    ? chatPrefs.widget.chat_footer_settings.filter(
-        (footer) => footer.enable == true
-      )
-    : [];
-  const logo = chatPrefs?.widget.logo_url
-    ? chatPrefs.widget.logo_url
+  const settings = [{ tab: 'Messages' }];
+
+  const logo = chatPrefs?.meta.decoration.headerPictureUrl
+    ? chatPrefs.meta.decoration.headerPictureUrl
     : "https://cdn5.engagebay.com/assets/img/engagebay-brand-logo-white.svg";
   const [tab, setTab] = useState(settings ? settings[0]?.tab : "Messages");
   const appThemeStyle: Object = useMemo(() => {
@@ -26,12 +23,12 @@ const Preview: FC<PreviewComponentProps> = (props) => {
       "--bottom": settings?.length < 2 ? "20px" : "125px",
       "--reduceHeight": settings?.length < 2 ? "135px" : "210px",
       "--themeColor":
-        chatPrefs && chatPrefs.widget.colorCode
-          ? chatPrefs.widget.colorCode
+        chatPrefs && chatPrefs.meta.decoration.mainColor
+          ? chatPrefs.meta.decoration.mainColor
           : "blue",
       "--themeColor2":
-        chatPrefs && chatPrefs.widget.colorCode2
-          ? chatPrefs.widget.colorCode2
+        chatPrefs && chatPrefs.meta.decoration.mainColor
+          ? chatPrefs.meta.decoration.mainColor
           : "red",
     };
   }, [chatPrefs]);
@@ -39,7 +36,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
     if (chatPrefs.matchedBotPrefs?.id)
       return chatPrefs.matchedBotPrefs?.settings.newConversationBtnText;
 
-    return chatPrefs.widget.new_conversation_btn_text;
+    return "Start New";
   };
 
   const getLabel = (label: string) => {
@@ -52,15 +49,14 @@ const Preview: FC<PreviewComponentProps> = (props) => {
     chatPrefs && (
       <div
         id="App"
-        className={`engagebay-viewport ${
-          !chatPrefs.widget.chatEnabled ? "hide" : ""
-        } `}
+        className={`engagebay-viewport ${!chatPrefs.meta.deactivated ? "hide" : ""
+          } `}
         style={appThemeStyle}
       >
         <div
           className={`chat is-open
-              ${chatPrefs.widget.position == "LEFT" ? "left" : ""} 
-              ${chatPrefs.widget.position == "RIGHT" ? "right" : ""}`}
+              ${chatPrefs.meta.decoration.widgetAlignment == "LEFT" ? "left" : ""} 
+              ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""}`}
           data-target="widget"
         >
           <div className="chat__main">
@@ -70,9 +66,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                   <div className="chat__header">
                     <div className="chat__header-user">
                       <h3 className="chat__header-user-name">
-                        {tab == "Messages"
-                          ? chatPrefs.widget.header_message
-                          : tab}
+                        {tab}
                       </h3>
                     </div>
                   </div>
@@ -127,9 +121,9 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                     </div>
 
                     <div className="home__feeds-home-title">
-                      {chatPrefs?.widget.home_page_welcome_message ? (
+                      {chatPrefs?.meta.decoration.introductionText ? (
                         <>
-                          {chatPrefs.widget.home_page_welcome_message
+                          {chatPrefs.meta.decoration.introductionText
                             .split("\n")
                             .map((line, index) => {
                               return index == 0 ? (
@@ -149,7 +143,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                     <div className="home__feeds-send-card">
                       <div className="home__feeds-media">
                         <div className="home__feeds-media-content">
-                          <h5>{chatPrefs.widget.new_conversation_btn_text}</h5>
+                          <h5>Start Conversation</h5>
                           {/* <p>We typically reply within a day</p> */}
                         </div>
                         <div className="home__feeds-media-icon">
@@ -178,9 +172,8 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                   {settings.map((footerTab) => {
                     return (
                       <div
-                        className={`chat__tabs-nav-link ${
-                          footerTab.tab == tab ? "active" : ""
-                        }`}
+                        className={`chat__tabs-nav-link ${footerTab.tab == tab ? "active" : ""
+                          }`}
                         onClick={() => setTab(footerTab.tab)}
                       >
                         <div className="chat__tabs-icon">
@@ -205,11 +198,9 @@ const Preview: FC<PreviewComponentProps> = (props) => {
           </div>
         </div>
         <div
-          className={`chat__trigger ${
-            chatPrefs.widget.chatEnabled ? "" : "hide"
-          } ${chatPrefs.widget.position == "LEFT" ? "left" : ""} ${
-            chatPrefs.widget.position == "RIGHT" ? "right" : ""
-          } chat-opend`}
+          className={`chat__trigger ${!chatPrefs.meta.deactivated ? "" : "hide"
+            } ${chatPrefs.meta.decoration.widgetAlignment == "LEFT" ? "left" : ""} ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""
+            } chat-opend`}
         >
           <div className="close_chat_bubble">
             <svg

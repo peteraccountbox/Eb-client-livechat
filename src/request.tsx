@@ -1,24 +1,24 @@
 import axios, { AxiosResponse } from "axios";
 import { TENANT_ID, SERVER_REQ_HOST_PATH } from "./globals";
 
-axios.defaults.headers.common["Authorization"] = TENANT_ID;
+// axios.defaults.headers.common["X-API-Key"] = TENANT_ID;
 
-axios.interceptors.request.use(
-  function (config) {
+export const baseReqService = axios;
 
-    // Add a parameter to the request
-    try {
-      config.params = {
-        ...config.params,
-        tenantId: (window.parent as any).EhAccount.getTenantId()
-      };
-    } catch (error) {
-    }
+export const reachoAPI = baseReqService.create({
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': TENANT_ID,
+  },
+});
 
+reachoAPI.interceptors.request.use(
+  (config) => {
+    // Log the request configuration for debugging
+    console.log('Request config:', config);
     return config;
   },
-  function (error) {
-    // Do something with request error
+  (error) => {
     return Promise.reject(error);
   }
 );
@@ -42,8 +42,8 @@ export const getReq = async (
   data: object
 ): Promise<AxiosResponse> => {
 
-  return await axios.get<AxiosResponse>(
-    getServerHost(path) + "?apiKey=" + TENANT_ID,
+  return reachoAPI.get<AxiosResponse>(
+    getServerHost(path),
     { params: data }
   );
 
@@ -52,18 +52,13 @@ export const getReq = async (
 export const postReq = async (path: string, data: object) => {
   const headers = {
     "Content-Type": "application/json",
-    Authorization: TENANT_ID,
+    // Authorization: API_KEY,
   };
-  return await axios
+  return reachoAPI
     .post(getServerHost(path), data, {
       headers: headers,
-    })
-    .then(function (response) {
-      return response;
-    })
-    .catch(function (err) {
-      console.log(err);
     });
+
 };
 
 export default fetch;

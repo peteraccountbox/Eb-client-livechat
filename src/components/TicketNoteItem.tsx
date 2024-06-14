@@ -38,11 +38,12 @@ const TicketNoteItem: FC<TicketNoteItemComponentProps> = (props) => {
             <li className="chat__messages-list-item">
               <Tippy
                 content={
-                  <ReactTimeAgo
-                    date={getMessageTime()}
-                    locale="en-US"
-                    tooltip={false}
-                  />
+                  <></>
+                  // <ReactTimeAgo
+                  //   date={getMessageTime()}
+                  //   locale="en-US"
+                  //   tooltip={false}
+                  // />
                 }
               >
                 <div className="chat__messages-bubble">
@@ -62,13 +63,13 @@ const TicketNoteItem: FC<TicketNoteItemComponentProps> = (props) => {
 
           <div
             className="chat__messages-timestamp ticket_conversations_timeago"
-            // style={{ display: "none" }}
+          // style={{ display: "none" }}
           >
-            <ReactTimeAgo
+            {/* <ReactTimeAgo
               date={getMessageTime()}
               locale="en-US"
               tooltip={false}
-            />
+            /> */}
           </div>
         </div>
       ) : (
@@ -87,11 +88,12 @@ const TicketNoteItem: FC<TicketNoteItemComponentProps> = (props) => {
                 <li className="chat__messages-list-item">
                   <Tippy
                     content={
-                      <ReactTimeAgo
-                        date={getMessageTime()}
-                        locale="en-US"
-                        tooltip={false}
-                      />
+                      // <ReactTimeAgo
+                      //   date={getMessageTime()}
+                      //   locale="en-US"
+                      //   tooltip={false}
+                      // />
+                      <></>
                     }
                   >
                     <div className="chat__messages-bubble">
@@ -121,11 +123,11 @@ const TicketNoteItem: FC<TicketNoteItemComponentProps> = (props) => {
               {/* </Tooltip> */}
             </div>
             <div className="chat__messages-timestamp ticket_conversations_timeago">
-              <ReactTimeAgo
+              {/* <ReactTimeAgo
                 date={getMessageTime()}
                 locale="en-US"
                 tooltip={false}
-              />
+              /> */}
             </div>
           </div>
         </div>

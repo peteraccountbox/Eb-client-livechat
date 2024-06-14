@@ -12,8 +12,8 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
   const appThemeStyle: Object = useMemo(() => {
     return {
       "--themeColor":
-        chatPrefs && chatPrefs.widget.colorCode
-          ? chatPrefs.widget.colorCode
+        chatPrefs && chatPrefs.meta.decoration.mainColor
+          ? chatPrefs.meta.decoration.mainColor
           : "blue",
       position: "inherit",
       opacity: "inherit",
@@ -50,7 +50,7 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                 className="chat__header-user-img"
                 style={{
                   backgroundImage:
-                    'url("' + chatPrefs.widget.default_profile_image + '")',
+                    'url("' + chatPrefs.meta.decoration.headerPictureUrl + '")',
                 }}
               >
                 &nbsp;
@@ -59,8 +59,7 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
 
             <div className="chat__header-user-title">
               <h1 className="chat__header-user-name">
-                {" "}
-                {chatPrefs.widget.title}{" "}
+                title
               </h1>
             </div>
           </div>
@@ -78,14 +77,14 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                   <pre>
                     {" "}
                     {chatPrefs.prechat.title ? (
-                      <p className="mb-2"> {chatPrefs.prechat.title} </p>
+                      <p className="mb-2"> {"title"} </p>
                     ) : (
-                      <p className="mb-2"> {chatPrefs.widget.title} </p>
+                      <p className="mb-2"> {"title"} </p>
                     )}{" "}
                   </pre>
                 </div>
 
-                {chatPrefs.prechat.formData.map((field, index) => {
+                {chatPrefs.prechat && chatPrefs.prechat.formData.map((field, index) => {
                   return (
                     <>
                       <div className="chat__messages-form-group">
@@ -152,36 +151,36 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
 
                             case field.visible &&
                               field.type == "multicheckbox": {
-                              return (
-                                <div className="chat__form-checkbox">
-                                  <label className="chat__form-label">
-                                    {" "}
-                                    {field.placeholder}{" "}
-                                  </label>
-                                  {JSON.parse(field?.options || "[]").map(
-                                    (opt: string, index: number) => {
-                                      return (
-                                        <div className="chat__form-check">
-                                          <input
-                                            type="checkbox"
-                                            className="chat__form-check-input"
-                                            id={opt}
-                                            value={opt}
-                                          />
-                                          <label
-                                            className="chat__form-check-label"
-                                            htmlFor={opt}
-                                          >
-                                            {" "}
-                                            {opt}{" "}
-                                          </label>
-                                        </div>
-                                      );
-                                    }
-                                  )}
-                                </div>
-                              );
-                            }
+                                return (
+                                  <div className="chat__form-checkbox">
+                                    <label className="chat__form-label">
+                                      {" "}
+                                      {field.placeholder}{" "}
+                                    </label>
+                                    {JSON.parse(field?.options || "[]").map(
+                                      (opt: string, index: number) => {
+                                        return (
+                                          <div className="chat__form-check">
+                                            <input
+                                              type="checkbox"
+                                              className="chat__form-check-input"
+                                              id={opt}
+                                              value={opt}
+                                            />
+                                            <label
+                                              className="chat__form-check-label"
+                                              htmlFor={opt}
+                                            >
+                                              {" "}
+                                              {opt}{" "}
+                                            </label>
+                                          </div>
+                                        );
+                                      }
+                                    )}
+                                  </div>
+                                );
+                              }
 
                             case field.visible && field.type == "radiobutton": {
                               return (

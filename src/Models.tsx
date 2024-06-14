@@ -1,27 +1,27 @@
 import { type } from "node:os";
 
-export type ChatPrefsWidgetType = {
-  position: string;
-  colorCode: string;
-  colorCode2: string;
-  title: string;
-  default_profile_image: string;
-  empty_chat_list_message: string;
-  header_message: string;
-  hideOnMobile: boolean;
-  new_conversation_btn_text: string;
-  showOnlyOnManualTrigger: boolean;
-  welcomeGreetingEnabled: boolean;
-  welcome_message: string;
-  welcome_message_placeholder: string;
-  chatEnabled: boolean;
-  ticketEnabled: boolean;
-  homeEnabled: boolean;
-  helpEnabled: boolean;
-  chat_footer_settings: ChatFooterDataPayload[];
-  home_page_welcome_message: string;
-  logo_url: string;
-};
+// export type ChatPrefsWidgetType = {
+//   position: string;
+//   colorCode: string;
+//   colorCode2: string;
+//   title: string;
+//   default_profile_image: string;
+//   empty_chat_list_message: string;
+//   header_message: string;
+//   hideOnMobile: boolean;
+//   new_conversation_btn_text: string;
+//   showOnlyOnManualTrigger: boolean;
+//   welcomeGreetingEnabled: boolean;
+//   welcome_message: string;
+//   welcome_message_placeholder: string;
+//   chatEnabled: boolean;
+//   ticketEnabled: boolean;
+//   homeEnabled: boolean;
+//   helpEnabled: boolean;
+//   chat_footer_settings: ChatFooterDataPayload[];
+//   home_page_welcome_message: string;
+//   logo_url: string;
+// };
 
 export type ChatFooterDataPayload = {
   tab: string;
@@ -72,8 +72,41 @@ export type ChatPrefsSystemMessageType = {
   CHAT_SESSION_CLOSED_TO_VISITOR?: string;
 };
 
+
+export interface ChatChannelMeta {
+  deactivated: boolean;
+  hideOnMobile: boolean;
+  hideOnOutsideBusinessHours: boolean;
+  emailCaptureEnabled: boolean;
+  emailCaptureEnforcement: boolean;
+  decoration: Decoration;
+  liveChatAvailability: 'always-live-during-business-hours' | 'auto-based-on-agent-availability' | 'offline';
+  sendChatTranscript: boolean;
+}
+
+export interface Decoration {
+  headerPictureUrl: string;
+  fontFamily: string;
+  mainColor: string;
+  conversationColor: string;
+  backgroundStyle: string;
+  introductionText: string;
+  offlineIntroductionText: string;
+  avatarType: string;
+  widgetAlignment: string;
+  widgetAlignmentOffsetX: number;
+  widgetAlignmentOffsetY: number;
+  launcherType: string;
+  agentAvatarImageType: string;
+  agentAvatarNameType: string;
+  botAvatarImage: string;
+}
+
 export type ChatPrefsPayloadType = {
-  widget: ChatPrefsWidgetType;
+
+  meta: ChatChannelMeta;
+
+  // widget: ChatPrefsWidgetType;
   prechat: ChatPrefsPreChatType;
   systemMessage: ChatPrefsSystemMessageType;
   botPrefs?: AIBotPrefPayloadType[];
@@ -141,7 +174,19 @@ export type AgentPaylodObj = {
 
 export type ChatSessionPaylodObj = {
   id: number;
-  meta_data?: string;
+  visitorId: string;
+  createdBy: "CUSTOMER";
+  createdSource?: "WEBSITE";
+  channelType: "CHAT";
+  channelId: string;
+  customerEmail: string,
+  customerName: string,
+  subject: string,
+  meta: any
+
+  messageList: ChatMessagePaylodObj[];
+
+
   bot_conversation_id: string;
   gpt_bot_id?: number;
   conversationId: string;
@@ -154,7 +199,6 @@ export type ChatSessionPaylodObj = {
   agent_involved: boolean;
   participant_user_ids: number[];
   closed_by: string;
-  message_list: ChatMessagePaylodObj[];
   type: string;
   unRead: number;
   typing: boolean;
@@ -164,7 +208,7 @@ export type ChatSessionPaylodObj = {
 
 export type BotDetails = {
   botId: string;
-  message_list: BotMessageList[];
+  messageList: BotMessageList[];
   replyButtonList: [];
   triggerDialogueId: string;
   currentDialogueId: string;
@@ -173,10 +217,10 @@ export type BotDetails = {
 };
 
 export enum MessageByTypeEnum {
-  Agent = "Agent",
+  AGENT = "AGENT",
   GPT = "GPT",
-  Visitor = "Visitor",
-  System = "System",
+  CUSTOMER = "CUSTOMER",
+  SYSTEM = "SYSTEM",
 }
 
 export enum ChatSessionConnectedWithEnum {
@@ -187,7 +231,12 @@ export enum ChatSessionConnectedWithEnum {
 export type ChatMessagePaylodObj = {
   [x: string]: any;
   id?: string;
+  ticketId?: string;
+  type?: "PUBLIC"
   from: MessageByTypeEnum;
+  bodyText: string;
+  format: MessageFormatType;
+
   sources?: string;
   user_id?: number;
   created_time: number;
@@ -195,9 +244,9 @@ export type ChatMessagePaylodObj = {
   meta_data?: string;
   gpt_relavance_score?: number;
   gpt_bot_id?: number;
-  message_type: MessageFormatType;
   system_message_type?: string;
   session_id?: number;
+
 };
 
 export type BotMessageList = {

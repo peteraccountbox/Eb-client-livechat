@@ -36,7 +36,7 @@ const ConversationList = ({
     if (parentContext.chatPrefs.matchedBotPrefs?.id)
       return parentContext.chatPrefs.matchedBotPrefs?.name;
 
-    return parentContext.chatPrefs.widget.header_message;
+    return "Header Text";
   };
 
   const getStartConvButtonText = () => {
@@ -44,7 +44,7 @@ const ConversationList = ({
       return parentContext.chatPrefs.matchedBotPrefs?.settings
         .newConversationBtnText;
 
-    return parentContext.chatPrefs.widget.new_conversation_btn_text;
+    return "start new chat";
   };
 
   return (
@@ -55,7 +55,7 @@ const ConversationList = ({
           <h3 className="chat__header-user-name"> {getHeaderText()} </h3>
         </div>
         <div className="chat__help-end">
-        <CloseWidgetPanel/>
+          <CloseWidgetPanel />
         </div>
       </div>
 
@@ -69,7 +69,7 @@ const ConversationList = ({
                     session={session}
                     openChatConversation={openChatConversation}
                     key={session.id}
-                    // updateSession={updateSession}
+                  // updateSession={updateSession}
                   />
                 )
               )}
@@ -86,7 +86,7 @@ const ConversationList = ({
               />
               <h2 className="pad-content-title">No Chats</h2>
               <p className="pad-text">
-                {parentContext.chatPrefs.widget.empty_chat_list_message}
+                No Messages
               </p>
             </div>
           </div>

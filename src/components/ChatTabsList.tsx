@@ -9,9 +9,10 @@ const ChatTabsList = (props: any) => {
 
   const { chatPrefs, activeTab, changeActiveTab } = parentContext;
 
-  const footerTabs = chatPrefs?.widget?.chat_footer_settings.filter(
-    (footer) => footer.enable == true
-  );
+  const footerTabs = [{
+    tab: "Messages",
+    enable: true
+  }];
 
   const getLabel = (label: string) => {
     if (label == "Messages") return "Chats";

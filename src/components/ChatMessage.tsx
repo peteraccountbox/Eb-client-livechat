@@ -66,7 +66,8 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   return (
     <Tippy
       content={
-        <ReactTimeAgo date={getMessageTime()} locale="en-US" tooltip={false} />
+        <></>
+        // <ReactTimeAgo date={getMessageTime()} locale="en-US" tooltip={false} />
       }
       // visible={props.message.session_id ? true : false}
       disabled={
@@ -85,13 +86,13 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                   <span
                     className="actual"
                     dangerouslySetInnerHTML={{
-                      __html: convertEmojis(props.message.message),
+                      __html: convertEmojis(props.message.bodyText),
                     }}
                   ></span>
 
                   {props.message.from === MessageByTypeEnum.GPT &&
-                  props.message.sources &&
-                  JSON.parse(props.message.sources).length > 0 ? (
+                    props.message.sources &&
+                    JSON.parse(props.message.sources).length > 0 ? (
                     <div className="source-label-sec">
                       <div className="source-label-list">
                         {JSON.parse(props.message.sources).map(
@@ -123,11 +124,10 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                     <div className="feedback-actions">
                       <span
                         onClick={() => submitGPTFeedback(1)}
-                        className={`btn positive-btn ${
-                          props.message.gpt_relavance_score === 1
-                            ? "active"
-                            : ""
-                        }`}
+                        className={`btn positive-btn ${props.message.gpt_relavance_score === 1
+                          ? "active"
+                          : ""
+                          }`}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -139,11 +139,10 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                       </span>
                       <span
                         onClick={() => submitGPTFeedback(2)}
-                        className={`btn negative-btn ${
-                          props.message.gpt_relavance_score === 2
-                            ? "active"
-                            : ""
-                        }`}
+                        className={`btn negative-btn ${props.message.gpt_relavance_score === 2
+                          ? "active"
+                          : ""
+                          }`}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

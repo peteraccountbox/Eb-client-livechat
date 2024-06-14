@@ -30,7 +30,7 @@ const ConversationItem: FC<ConversationItemPropsType> = (props) => {
 
   return (
     <>
-      {from === MessageByTypeEnum.Agent ? (
+      {from === MessageByTypeEnum.AGENT ? (
         <AgentChatMessage
           sessionId={props.session?.id}
           message={props.message}
@@ -40,8 +40,8 @@ const ConversationItem: FC<ConversationItemPropsType> = (props) => {
         <></>
       )}
 
-      {from === MessageByTypeEnum.System &&
-      props.message.system_message_type === "PROACTIVE_SYSTEM_MESSAGE" ? (
+      {from === MessageByTypeEnum.SYSTEM &&
+        props.message.SYSTEM_message_type === "PROACTIVE_SYSTEM_MESSAGE" ? (
         <AgentChatMessage
           sessionId={props.session?.id}
           message={props.message}
@@ -62,7 +62,7 @@ const ConversationItem: FC<ConversationItemPropsType> = (props) => {
         <></>
       )}
 
-      {from === MessageByTypeEnum.Visitor ? (
+      {from === MessageByTypeEnum.CUSTOMER ? (
         <UserChatMessage
           message={props.message}
           sessionId={props.session?.id}
@@ -72,8 +72,8 @@ const ConversationItem: FC<ConversationItemPropsType> = (props) => {
         <></>
       )}
 
-      {from === MessageByTypeEnum.System &&
-      props.message.system_message_type != "PROACTIVE_SYSTEM_MESSAGE" ? (
+      {from === MessageByTypeEnum.SYSTEM &&
+        props.message.SYSTEM_message_type != "PROACTIVE_SYSTEM_MESSAGE" ? (
         <Notice message={props.message} formFields={props.formFields} />
       ) : (
         <></>

@@ -2,8 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import "./assets/css/main.scss";
-import App, { widgetFooterTabs } from "./App";
-import { getSessionStoragePrefs, removeSessionStoragePrefs } from "./Storage";
+import App from "./App";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

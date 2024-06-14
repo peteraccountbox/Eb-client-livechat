@@ -2,23 +2,31 @@ import { ChatPrefsPayloadType } from "./Models";
 import { getSessionStoragePrefs, setSessionStoragePrefs } from "./Storage";
 
 export const TENANT_ID: string = (window as any).TENANT_ID;
+export const CHANNEL_ID: string = (window as any).CHANNEL_ID;
 export const VISITOR_UUID: string = (window as any).VISITOR_UUID;
 
 export const SERVER_REQ_HOST_PATH: string =
-  (window as any).SERVER_HOST_DOMAIN_URL || "https://app.engagebay.com/";
+  (window as any).SERVER_HOST_DOMAIN_URL || "https://sanndbox.reacho.com/";
 
 export const PARENT_WINDOW = (window as any).parent;
 export const PARENT_WINDOW_LIVECHAT_REF = PARENT_WINDOW
   ? PARENT_WINDOW.EngageBay_Livechat
   : undefined;
-export const CHAT_PREFS: ChatPrefsPayloadType = PARENT_WINDOW_LIVECHAT_REF
-  ? PARENT_WINDOW_LIVECHAT_REF.ref.settings
-  : undefined;
+
+// export const CHAT_PREFS: ChatPrefsPayloadType = PARENT_WINDOW_LIVECHAT_REF
+//   ? PARENT_WINDOW_LIVECHAT_REF.ref.settings
+//   : undefined;
+
+const REQUEST_PREFIX_PATH = "api/support/jsclient/inbox";
+
 export const NEW_SESSION_URL_PATH: string =
-  "chat/api/widget/new-session1/" + VISITOR_UUID;
+  REQUEST_PREFIX_PATH + "/new-conversation";
+
+export const MESSAGE_URL_PATH: string = REQUEST_PREFIX_PATH + "/new-message";
+
 
 export const CONNECT_TO_AGENT_URL_PATH: string =
-  "chat/api/widget/connect-to-agent/";
+  "api/support/jsclient/widget/connect-to-agent/";
 export const TICKETS_FETCH_URL: string = "jsapi/rest/get-tickets/" + VISITOR_UUID;
 
 export const TICKET_FETCH_URL: string = "jsapi/rest/ticket/" + VISITOR_UUID;
@@ -28,7 +36,6 @@ export const TICKET_CREATE_URL: string =
   "jsapi/rest/create-ticket/" + VISITOR_UUID;
 export const NOTE_URL: string = "jsapi/rest/ticket-notes/" + VISITOR_UUID;
 export const LAST_NOTE_URL: string = "jsapi/rest/last-note/";
-export const MESSAGE_URL_PATH: string = "chat/api/widget/message/" + VISITOR_UUID;
 
 export const KB_COLLECTION_URL_PATH: string = "jsapi/rest/hc/collections";
 export const KB_COLLECTION_URL_PATH_BY_ID: string = "jsapi/rest/hc/collection/";
@@ -36,15 +43,19 @@ export const KB_ARTICLE_URL_PATH: string = "jsapi/rest/hc/article/";
 export const KB_SEARCH_URL_PATH: string = "jsapi/rest/hc/search";
 
 export const GPT_MESSAGE_SCORE_UPDATE_URL_PATH: string =
-  "chat/api/widget/submit-gpt-message-feedback";
+  "api/support/jsclient/widget/submit-gpt-message-feedback";
 
 export const BOT_FETCH_URL_PATH: string = "";
 
-const REQUEST_PREFIX_PATH = "chat/api/";
 export const CONVERSATIONS_FETCH_URL_PATH =
-  REQUEST_PREFIX_PATH + "widget/get-conversations/" + VISITOR_UUID;
-export const CHAT_PREFS_FETCH_URL_PATH =
-  REQUEST_PREFIX_PATH + "widget/chat-prefs";
+  REQUEST_PREFIX_PATH + "/get-chat-conversations/" + VISITOR_UUID;
+
+export const CONVERSATION_MESSAGE_FETCH_URL_PATH =
+  REQUEST_PREFIX_PATH + "/get-chat-messages";
+
+export const CHANNEL_PREFS_FETCH_URL_PATH =
+  REQUEST_PREFIX_PATH + "/channel/chat/" + CHANNEL_ID;
+
 export const WEB_RULES_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "widget/web-rules";
 export const TYPING_ALERT_URL_PATH =

@@ -3,14 +3,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import { AppContext } from "./appContext";
 import ChatBubble from "./components/ChatBubble";
 import {
-  CHAT_PREFS,
-  CHAT_PREFS_FETCH_URL_PATH,
+  CHANNEL_PREFS_FETCH_URL_PATH,
   CONVERSATIONS_FETCH_URL_PATH,
   VISITOR_UUID,
-  TYPING_ALERT_URL_PATH,
-  IS_NEW_SESSION,
   PARENT_WINDOW,
-  TICKETS_FETCH_URL,
   GET_BIG_TEXT_URL_PATH,
   WINDOW_OPEN,
   OPENED_CHAT,
@@ -22,6 +18,7 @@ import {
 import {
   ActiveSessionObjType,
   AgentPaylodObj,
+  ChatChannelMeta,
   ChatFooterDataPayload,
   ChatMessagePaylodObj,
   ChatPrefsPayloadType,
@@ -34,7 +31,6 @@ import {
   WebRulesPayloadType,
 } from "./Models";
 import { getReq, postReq } from "./request";
-import Pusher from "pusher-js";
 import {
   getSessionStoragePrefs,
   removeSessionStoragePrefs,
@@ -47,6 +43,8 @@ import HelpCenter from "./HelpCenter";
 import Tickets from "./Tickets";
 import Loader from "./components/Loader";
 import NewPromptMessage from "./NewPromptMessage";
+import eventBus from "./eventBus";
+import { initalizeSocket } from "./socket";
 
 export enum widgetFooterTabs {
   Home = "Home",
@@ -69,20 +67,25 @@ export enum NotificationPromtTypes {
 
 const App: React.FunctionComponent = () => {
   // Context states
-  const [chatPrefs, setChatPrefs] = useState<ChatPrefsPayloadType>(
-    CHAT_PREFS || []
-  );
+  const [chatPrefs, setChatPrefs] = useState<ChatPrefsPayloadType | undefined>(undefined);
   const [agents, setAgents] = useState<AgentPaylodObj[]>(
     getSessionStoragePrefs(OPERATORS)
       ? JSON.parse(getSessionStoragePrefs(OPERATORS))
       : []
   );
+
   const [sessions, setSessions] = useState<ChatSessionPaylodObj[]>([]);
 
   const getWidgetActiveTabs = () => {
-    const footerTabs = chatPrefs?.widget?.chat_footer_settings.filter(
-      (footer) => footer.enable == true
-    );
+
+    if (!chatPrefs)
+      return [];
+
+    const footerTabs = [{
+      tab: "Messages",
+      enable: true
+    }]
+
     let activeTabname = getSessionStoragePrefs(WIDGET_ACTIVE_TAB);
     if (!activeTabname) activeTabname = widgetFooterTabs.Home;
     try {
@@ -118,8 +121,8 @@ const App: React.FunctionComponent = () => {
     id: undefined,
   });
 
-  const [pusherChannel, setPusherChannel] = useState<Pusher | undefined>(
-    undefined
+  const [channelConnected, setChannelConnected] = useState<boolean>(
+    false
   );
 
   // const [activeSessionDetails, setActiveSessionDetails] = useState<ActiveSessionObjType>({
@@ -129,7 +132,7 @@ const App: React.FunctionComponent = () => {
   // });
 
   const [prefsFetched, setPrefsFetched] = useState<boolean>(
-    CHAT_PREFS ? true : false
+    false
   );
   const [loadingSessions, setLoadingSessions] = useState<boolean>(true);
 
@@ -174,8 +177,6 @@ const App: React.FunctionComponent = () => {
     //   // deleteStoragePrefs("opened-chat-type");
     // }
 
-    executeWebrules();
-
     // Fetch conversations
     fetchConversationsAndAgents();
 
@@ -185,11 +186,17 @@ const App: React.FunctionComponent = () => {
     //   // Open window
     //   chatBubbleClicked();
     // }
-  }, []);
 
-  useEffect(() => {
-    bindPusherSocketEvents();
-  }, [pusherChannel, sessions]);
+    // Subscribe to event bus
+    eventBus.on("reacho-channel-message-received", function () {
+      alert("evnt received");
+    });
+
+    return () => {
+      eventBus.off("reacho-channel-message-received");
+    }
+
+  }, []);
 
   const closeNotify = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
@@ -217,26 +224,57 @@ const App: React.FunctionComponent = () => {
       openChat(notificationPrompt.id);
   };
 
-  const fetchChatPrefs = () => {
-    if (!CHAT_PREFS) {
-      const wait: Promise<AxiosResponse> = getReq(
-        CHAT_PREFS_FETCH_URL_PATH,
+  const fetchChatPrefs = async () => {
+
+    try {
+      const response: AxiosResponse<any, any> = await getReq(
+        CHANNEL_PREFS_FETCH_URL_PATH,
         {}
       );
-      wait
-        .then((response) => {
-          var prefs = response.data as ChatPrefsPayloadType;
 
-          if (prefs.botPrefs && prefs.botPrefs.length > 0)
-            prefs.matchedBotPrefs = prefs.botPrefs[0];
+      let prefs = response.data as ChatPrefsPayloadType;
 
-          setChatPrefs(prefs);
-          setPrefsFetched(true);
-        })
-        .catch(() => { });
-    } else {
+      if (prefs.botPrefs && prefs.botPrefs.length > 0)
+        prefs.matchedBotPrefs = prefs.botPrefs[0];
+
+      let chatChannelMeta: ChatChannelMeta = {
+        deactivated: false,
+        hideOnMobile: true,
+        hideOnOutsideBusinessHours: true,
+        emailCaptureEnabled: true,
+        emailCaptureEnforcement: false,
+        liveChatAvailability: 'always-live-during-business-hours',
+        sendChatTranscript: true,
+        decoration: {
+          headerPictureUrl: "https://example.com/image.png",
+          fontFamily: "Arial",
+          mainColor: "#FFFFFF",
+          conversationColor: "#000000",
+          backgroundStyle: "solid",
+          introductionText: "Welcome to our chat!",
+          offlineIntroductionText: "We are currently offline.",
+          avatarType: "circle",
+          widgetAlignment: "right",
+          widgetAlignmentOffsetX: 10,
+          widgetAlignmentOffsetY: 20,
+          launcherType: "icon",
+          agentAvatarImageType: "image",
+          agentAvatarNameType: "name",
+          botAvatarImage: "https://example.com/bot.png",
+        }
+      }
+
+      prefs.meta = chatChannelMeta;
+
+      setChatPrefs(prefs);
+
       setPrefsFetched(true);
+
+    } catch (e) {
+      console.log("errr", e);
+      alert("3 " + JSON.stringify(e));
     }
+
   };
 
   const chatBubbleClicked = () => {
@@ -275,43 +313,46 @@ const App: React.FunctionComponent = () => {
     }, 50);
   };
 
-  const fetchConversationsAndAgents = () => {
-    const await2: Promise<AxiosResponse<ConversationResponsePayload>> = getReq(
-      CONVERSATIONS_FETCH_URL_PATH,
-      {}
-    );
-    await2
-      .then((response) => {
-        console.log(response);
-        let agentsList = agents;
-        response.data.operators.forEach((agent) => {
-          agentsList.push(agent);
-        });
-        setSessionStoragePrefs(
-          OPERATORS,
-          JSON.stringify(response.data.operators)
-        );
-        setAgents(response.data.operators);
+  const fetchConversationsAndAgents = async () => {
 
-        let sessionsList = sessions;
-        response.data.sessions.forEach((session) => {
-          sessionsList.push(session);
-        });
+    try {
+      const response = await getReq(
+        CONVERSATIONS_FETCH_URL_PATH,
+        {}
+      );
 
-        setSessions([...sessionsList]);
-        setLoadingSessions(false);
+      console.log(response);
+      // let agentsList = agents;
+      // response.data.operators.forEach((agent) => {
+      //   agentsList.push(agent);
+      // });
 
-        if (sessions.length > 0) createSocket();
+      // setSessionStoragePrefs(
+      //   OPERATORS,
+      //   JSON.stringify(response.data.operators)
+      // );
+      // setAgents(response.data.operators);
 
-        // Check for opened chat
-        let openedChat = getSessionStoragePrefs(OPENED_CHAT);
-        if (openedChat) {
-          openChat(openedChat);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
+      let sessionsList = sessions;
+      response.data.data.forEach((session: ChatSessionPaylodObj) => {
+        sessionsList.push(session);
       });
+
+      setSessions([...sessionsList]);
+      setLoadingSessions(false);
+
+      if (sessions.length > 0) bindPusherSocketEvents();
+
+      // Check for opened chat
+      let openedChat = getSessionStoragePrefs(OPENED_CHAT);
+      if (openedChat) {
+        openChat(openedChat);
+      }
+
+    } catch (e) {
+      console.log(e);
+    }
+
   };
 
   const isPromptEnabled = () => {
@@ -429,40 +470,30 @@ const App: React.FunctionComponent = () => {
   };
 
   const bindPusherSocketEvents = () => {
-    if (pusherChannel && pusherChannel.bind) {
-      console.log("Binding channel");
 
-      // unbind to event for messages
-      pusherChannel.unbind("engagebay-event");
-
-      // Subscribe to event for messages
-      pusherChannel.bind(
-        "engagebay-event",
-        function (message: any, channel: any, ortc: any) {
-          try {
-            console.log("currentSessionId2  ", message);
-            processIncomingMessage(JSON.parse(message));
-          } catch (e) {
-            console.error(e);
-          }
-        }
-      );
+    if (channelConnected) {
+      console.log("Alredy connected");
+      return;
     }
+
+    initalizeSocket();
+    setChannelConnected(true);
+
   };
 
-  const createSocket = () => {
-    console.log("connectingsocket again");
+  // const createSocket = () => {
+  //   console.log("connectingsocket again");
 
-    // Get user sessions from visitorId
-    let channelName = TENANT_ID ? TENANT_ID + "-" + VISITOR_UUID : VISITOR_UUID;
-    const pusher = new Pusher("1bd6d84d7a6d517eeee5", {
-      cluster: "ap2",
-      forceTLS: true,
-    });
-    var channel = pusher.subscribe(channelName);
-    console.log("channelname", channelName);
-    setPusherChannel(pusher);
-  };
+  //   // Get user sessions from visitorId
+  //   let channelName = TENANT_ID ? TENANT_ID + "-" + VISITOR_UUID : VISITOR_UUID;
+  //   const pusher = new Pusher("1bd6d84d7a6d517eeee5", {
+  //     cluster: "ap2",
+  //     forceTLS: true,
+  //   });
+  //   var channel = pusher.subscribe(channelName);
+  //   console.log("channelname", channelName);
+  //   setPusherChannel(pusher);
+  // };
 
   const processIncomingMessage = (event: any) => {
     // Handle big text messages
@@ -523,9 +554,9 @@ const App: React.FunctionComponent = () => {
     //If system message
     if (
       event.event_type === "SYSTEM_MESSAGE" ||
-      chat_message.from === "System"
+      chat_message.from === MessageByTypeEnum.SYSTEM
     ) {
-      var message_type = chat_message.system_message_type;
+      var message_type = chat_message.SYSTEM_message_type;
       var systemMssgArray = [
         "CHAT_SESSION_ASSIGNED_TO_USER",
         "CHAT_SESSION_TRANSFERED_TO_ANOTHER_USER",
@@ -605,33 +636,31 @@ const App: React.FunctionComponent = () => {
 
     console.log(sessions);
 
-    if (!pusherChannel) createSocket();
+    bindPusherSocketEvents();
+
   };
 
   const appThemeStyle: object = useMemo(() => {
-    const settings = chatPrefs?.widget?.chat_footer_settings.filter(
-      (footer) => footer.enable == true
-    );
 
-    const setting = chatPrefs?.widget?.chat_footer_settings.find(
-      (footer) => footer.enable == true
-    );
+    if (!chatPrefs)
+      return {};
+
+    const settings = [{
+      tab: "Messages",
+      enable: true
+    }];
 
     return {
       "--bottom": settings?.length < 2 ? "20px" : "125px",
       "--reduceHeight": settings?.length < 2 ? "135px" : "210px",
       "--themeColor":
-        chatPrefs && chatPrefs.widget && chatPrefs.widget.colorCode
-          ? chatPrefs.widget.colorCode
-          : "blue",
+        "blue",
       "--themeColor2":
-        chatPrefs && chatPrefs.widget && chatPrefs.widget.colorCode2
-          ? chatPrefs.widget.colorCode2
-          : "red",
+        "red",
     };
   }, [chatPrefs]);
 
-  if (prefsFetched) {
+  if (prefsFetched && chatPrefs && !chatPrefs.meta.deactivated) {
     return (
       <AppContext.Provider
         value={{
@@ -673,8 +702,8 @@ const App: React.FunctionComponent = () => {
               ) : (
                 <div
                   className={`chat ${isOpened ? "is-open" : ""} 
-              ${chatPrefs.widget.position == "LEFT" ? "left" : ""} 
-              ${chatPrefs.widget.position == "RIGHT" ? "right" : ""}`}
+              ${chatPrefs.meta.decoration.widgetAlignment == "LEFT" ? "left" : ""} 
+              ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""}`}
                   data-target="widget"
                 >
                   <div

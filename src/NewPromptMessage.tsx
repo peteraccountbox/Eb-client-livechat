@@ -20,9 +20,8 @@ const NewPromptMessage = (props: NewPromptMessageComponentProps) => {
   const { agents, chatPrefs } = parentContext;
   return (
     <div
-      className={`chat_popover ${
-        chatPrefs.widget.position == "LEFT" ? "left" : "right"
-      } `}
+      className={`chat_popover ${chatPrefs.meta.decoration.widgetAlignment == "LEFT" ? "left" : "right"
+        } `}
     >
       <div className="chat_popover-content chat" onClick={open}>
         <div className="chat_popover-content-close" onClick={close}>
