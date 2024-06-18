@@ -72,7 +72,6 @@ export type ChatPrefsSystemMessageType = {
   CHAT_SESSION_CLOSED_TO_VISITOR?: string;
 };
 
-
 export interface ChatChannelMeta {
   deactivated: boolean;
   hideOnMobile: boolean;
@@ -80,7 +79,10 @@ export interface ChatChannelMeta {
   emailCaptureEnabled: boolean;
   emailCaptureEnforcement: boolean;
   decoration: Decoration;
-  liveChatAvailability: 'always-live-during-business-hours' | 'auto-based-on-agent-availability' | 'offline';
+  liveChatAvailability:
+    | "always-live-during-business-hours"
+    | "auto-based-on-agent-availability"
+    | "offline";
   sendChatTranscript: boolean;
 }
 
@@ -103,7 +105,6 @@ export interface Decoration {
 }
 
 export type ChatPrefsPayloadType = {
-
   meta: ChatChannelMeta;
 
   // widget: ChatPrefsWidgetType;
@@ -179,13 +180,12 @@ export type ChatSessionPaylodObj = {
   createdSource?: "WEBSITE";
   channelType: "CHAT";
   channelId: string;
-  customerEmail: string,
-  customerName: string,
-  subject: string,
-  meta: any
+  customerEmail: string;
+  customerName: string;
+  subject: string;
+  meta: any;
 
   messageList: ChatMessagePaylodObj[];
-
 
   bot_conversation_id: string;
   gpt_bot_id?: number;
@@ -232,7 +232,7 @@ export type ChatMessagePaylodObj = {
   [x: string]: any;
   id?: string;
   ticketId?: string;
-  type?: "PUBLIC"
+  type?: "PUBLIC";
   from: MessageByTypeEnum;
   bodyText: string;
   format: MessageFormatType;
@@ -246,7 +246,6 @@ export type ChatMessagePaylodObj = {
   gpt_bot_id?: number;
   system_message_type?: string;
   session_id?: number;
-
 };
 
 export type BotMessageList = {
@@ -293,6 +292,7 @@ export type JSONObjectType1 = {
 export enum MessageFormatType {
   FILE = "FILE",
   TEXT = "TEXT",
+  TEXT_AND_FILE = "TEXT_AND_FILE",
   FETCHING = "FETCHING",
 }
 

@@ -56,6 +56,7 @@ import {
   setSessionStoragePrefs,
 } from "../Storage";
 import CloseWidgetPanel from "./CloseWidgetPanel";
+import eventBus from "../eventBus";
 
 export interface ConversationProps {
   showChatsList(): void;
@@ -154,17 +155,13 @@ const Conversation = (props: ConversationProps) => {
       setMatchedBotPrefs(matchedBot);
     }
 
-    if (session.id)
-      getMessageList();
-
+    if (session.id) getMessageList();
   }, []);
 
   const getMessageList = async () => {
+    if (!session.id) return;
 
-    if (!session.id)
-      return;
-
-    // 
+    //
 
     try {
       const response = await getReq(
@@ -174,12 +171,8 @@ const Conversation = (props: ConversationProps) => {
 
       session.messageList = response.data.data;
       setSessions([...sessions]);
-
-    } catch (error) {
-
-    }
-
-  }
+    } catch (error) {}
+  };
 
   const getMatchedBotPrefs = () => {
     if (session && session.id) {
@@ -201,7 +194,7 @@ const Conversation = (props: ConversationProps) => {
     try {
       let obj: any = getFormData();
       if (obj) storedFormData = JSON.parse(obj) as JSONObjectType;
-    } catch (error) { }
+    } catch (error) {}
 
     let fields: ChatFromFieldDataPayLoad[] = [];
 
@@ -260,7 +253,7 @@ const Conversation = (props: ConversationProps) => {
       .then((response) => {
         console.log("typing");
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const updateMessage = (message: ChatMessagePaylodObj) => {
@@ -437,7 +430,7 @@ const Conversation = (props: ConversationProps) => {
 
         if (callback) callback(response);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const postMessage = (data: ChatMessagePaylodObj) => {
@@ -465,6 +458,7 @@ const Conversation = (props: ConversationProps) => {
       session.channelId = CHANNEL_ID;
       session.visitorId = VISITOR_UUID;
       session.channelType = "CHAT";
+      session.createdSource = "WEBSITE";
       pushMessage(data, session);
     } else {
       data.session_id = session?.id;
@@ -844,7 +838,7 @@ const Conversation = (props: ConversationProps) => {
               <Emoji onEmojiSelect={onEmojiSelect} />
 
               {session &&
-                session.connected_with === ChatSessionConnectedWithEnum.AGENT ? (
+              session.connected_with === ChatSessionConnectedWithEnum.AGENT ? (
                 <FileUpload fileUploadCallback={fileUploadCallback} />
               ) : (
                 <></>

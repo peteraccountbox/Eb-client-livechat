@@ -22,7 +22,7 @@ export interface ChatMessagePropsType {
 }
 
 const ChatMessage: FC<ChatMessagePropsType> = (props) => {
-  const message_type = props.message.message_type as unknown as string;
+  const format = props.message.format as unknown as string;
   // const filename = (message: ChatMessagePaylodObj) => {
   //   return JSON.parse(message.message).fileName;
   // };
@@ -74,12 +74,10 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
         props.message.id && props.message?.status != "SENDING" ? false : true
       }
     >
-      <div
-        className={`chat__messages-bubble chat__message-type-${message_type}`}
-      >
+      <div className={`chat__messages-bubble chat__message-type-${format}`}>
         {(() => {
           setScrollBottom();
-          switch (message_type) {
+          switch (format) {
             case "TEXT":
               return (
                 <>
@@ -91,8 +89,8 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                   ></span>
 
                   {props.message.from === MessageByTypeEnum.GPT &&
-                    props.message.sources &&
-                    JSON.parse(props.message.sources).length > 0 ? (
+                  props.message.sources &&
+                  JSON.parse(props.message.sources).length > 0 ? (
                     <div className="source-label-sec">
                       <div className="source-label-list">
                         {JSON.parse(props.message.sources).map(
@@ -124,10 +122,11 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                     <div className="feedback-actions">
                       <span
                         onClick={() => submitGPTFeedback(1)}
-                        className={`btn positive-btn ${props.message.gpt_relavance_score === 1
-                          ? "active"
-                          : ""
-                          }`}
+                        className={`btn positive-btn ${
+                          props.message.gpt_relavance_score === 1
+                            ? "active"
+                            : ""
+                        }`}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -139,10 +138,11 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                       </span>
                       <span
                         onClick={() => submitGPTFeedback(2)}
-                        className={`btn negative-btn ${props.message.gpt_relavance_score === 2
-                          ? "active"
-                          : ""
-                          }`}
+                        className={`btn negative-btn ${
+                          props.message.gpt_relavance_score === 2
+                            ? "active"
+                            : ""
+                        }`}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

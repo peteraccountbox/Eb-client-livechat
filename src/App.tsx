@@ -67,7 +67,9 @@ export enum NotificationPromtTypes {
 
 const App: React.FunctionComponent = () => {
   // Context states
-  const [chatPrefs, setChatPrefs] = useState<ChatPrefsPayloadType | undefined>(undefined);
+  const [chatPrefs, setChatPrefs] = useState<ChatPrefsPayloadType | undefined>(
+    undefined
+  );
   const [agents, setAgents] = useState<AgentPaylodObj[]>(
     getSessionStoragePrefs(OPERATORS)
       ? JSON.parse(getSessionStoragePrefs(OPERATORS))
@@ -77,14 +79,14 @@ const App: React.FunctionComponent = () => {
   const [sessions, setSessions] = useState<ChatSessionPaylodObj[]>([]);
 
   const getWidgetActiveTabs = () => {
+    if (!chatPrefs) return [];
 
-    if (!chatPrefs)
-      return [];
-
-    const footerTabs = [{
-      tab: "Messages",
-      enable: true
-    }]
+    const footerTabs = [
+      {
+        tab: "Messages",
+        enable: true,
+      },
+    ];
 
     let activeTabname = getSessionStoragePrefs(WIDGET_ACTIVE_TAB);
     if (!activeTabname) activeTabname = widgetFooterTabs.Home;
@@ -92,7 +94,7 @@ const App: React.FunctionComponent = () => {
       if (!footerTabs.find((footer) => footer.tab == activeTabname)) {
         activeTabname = footerTabs[0].tab;
       }
-    } catch (error) { }
+    } catch (error) {}
 
     return activeTabname;
   };
@@ -121,9 +123,7 @@ const App: React.FunctionComponent = () => {
     id: undefined,
   });
 
-  const [channelConnected, setChannelConnected] = useState<boolean>(
-    false
-  );
+  const [channelConnected, setChannelConnected] = useState<boolean>(false);
 
   // const [activeSessionDetails, setActiveSessionDetails] = useState<ActiveSessionObjType>({
   //   session_id: undefined,
@@ -131,9 +131,7 @@ const App: React.FunctionComponent = () => {
   //   session: undefined
   // });
 
-  const [prefsFetched, setPrefsFetched] = useState<boolean>(
-    false
-  );
+  const [prefsFetched, setPrefsFetched] = useState<boolean>(false);
   const [loadingSessions, setLoadingSessions] = useState<boolean>(true);
 
   useEffect(() => {
@@ -192,10 +190,17 @@ const App: React.FunctionComponent = () => {
       alert("evnt received");
     });
 
-    return () => {
-      eventBus.off("reacho-socket-event");
-    }
+    eventBus.on("new_message", function (message) {
+      let messageSession = sessions.find(function (session) {
+        return session.id == message.ticketId;
+      });
+      messageSession?.messageList.push(message);
+      setSessions([...sessions]);
+    });
 
+    return () => {
+      eventBus.off("new_message");
+    };
   }, []);
 
   const closeNotify = (e: React.MouseEvent<HTMLElement>) => {
@@ -225,7 +230,6 @@ const App: React.FunctionComponent = () => {
   };
 
   const fetchChatPrefs = async () => {
-
     try {
       const response: AxiosResponse<any, any> = await getReq(
         CHANNEL_PREFS_FETCH_URL_PATH,
@@ -243,7 +247,7 @@ const App: React.FunctionComponent = () => {
         hideOnOutsideBusinessHours: true,
         emailCaptureEnabled: true,
         emailCaptureEnforcement: false,
-        liveChatAvailability: 'always-live-during-business-hours',
+        liveChatAvailability: "always-live-during-business-hours",
         sendChatTranscript: true,
         decoration: {
           headerPictureUrl: "https://example.com/image.png",
@@ -261,20 +265,18 @@ const App: React.FunctionComponent = () => {
           agentAvatarImageType: "image",
           agentAvatarNameType: "name",
           botAvatarImage: "https://example.com/bot.png",
-        }
-      }
+        },
+      };
 
       prefs.meta = chatChannelMeta;
 
       setChatPrefs(prefs);
 
       setPrefsFetched(true);
-
     } catch (e) {
       console.log("errr", e);
       alert("3 " + JSON.stringify(e));
     }
-
   };
 
   const chatBubbleClicked = () => {
@@ -314,12 +316,8 @@ const App: React.FunctionComponent = () => {
   };
 
   const fetchConversationsAndAgents = async () => {
-
     try {
-      const response = await getReq(
-        CONVERSATIONS_FETCH_URL_PATH,
-        {}
-      );
+      const response = await getReq(CONVERSATIONS_FETCH_URL_PATH, {});
 
       console.log(response);
       // let agentsList = agents;
@@ -348,11 +346,9 @@ const App: React.FunctionComponent = () => {
       if (openedChat) {
         openChat(openedChat);
       }
-
     } catch (e) {
       console.log(e);
     }
-
   };
 
   const isPromptEnabled = () => {
@@ -389,7 +385,7 @@ const App: React.FunctionComponent = () => {
               let proactiveMsg = "";
               try {
                 proactiveMsg = JSON.parse(rule.customData).message;
-              } catch (error) { }
+              } catch (error) {}
               // console.log("proactiveMsg", proactiveMsg);
 
               // if (proactiveMsg)
@@ -470,7 +466,6 @@ const App: React.FunctionComponent = () => {
   };
 
   const bindPusherSocketEvents = () => {
-
     if (channelConnected) {
       console.log("Alredy connected");
       return;
@@ -478,7 +473,6 @@ const App: React.FunctionComponent = () => {
 
     initalizeSocket();
     setChannelConnected(true);
-
   };
 
   // const createSocket = () => {
@@ -515,7 +509,7 @@ const App: React.FunctionComponent = () => {
       .then((response) => {
         if (callback) callback(response.data);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const handleMessage = (event: any) => {
@@ -637,26 +631,23 @@ const App: React.FunctionComponent = () => {
     console.log(sessions);
 
     bindPusherSocketEvents();
-
   };
 
   const appThemeStyle: object = useMemo(() => {
+    if (!chatPrefs) return {};
 
-    if (!chatPrefs)
-      return {};
-
-    const settings = [{
-      tab: "Messages",
-      enable: true
-    }];
+    const settings = [
+      {
+        tab: "Messages",
+        enable: true,
+      },
+    ];
 
     return {
       "--bottom": settings?.length < 2 ? "20px" : "125px",
       "--reduceHeight": settings?.length < 2 ? "135px" : "210px",
-      "--themeColor":
-        "blue",
-      "--themeColor2":
-        "red",
+      "--themeColor": "blue",
+      "--themeColor2": "red",
     };
   }, [chatPrefs]);
 
@@ -679,8 +670,9 @@ const App: React.FunctionComponent = () => {
       >
         <div
           id="App"
-          className={`engagebay-viewport ${!isOpened && hideChatBubble ? "hide" : ""
-            } `}
+          className={`engagebay-viewport ${
+            !isOpened && hideChatBubble ? "hide" : ""
+          } `}
           style={appThemeStyle}
         >
           {isVisible ? (
@@ -702,15 +694,24 @@ const App: React.FunctionComponent = () => {
               ) : (
                 <div
                   className={`chat ${isOpened ? "is-open" : ""} 
-              ${chatPrefs.meta.decoration.widgetAlignment == "LEFT" ? "left" : ""} 
-              ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""}`}
+              ${
+                chatPrefs.meta.decoration.widgetAlignment == "LEFT"
+                  ? "left"
+                  : ""
+              } 
+              ${
+                chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
+                  ? "right"
+                  : ""
+              }`}
                   data-target="widget"
                 >
                   <div
                     className="chat__main"
                     style={{
-                      minWidth: `${promtWidth == PromtWidth.Large ? "700px" : "auto"
-                        }`,
+                      minWidth: `${
+                        promtWidth == PromtWidth.Large ? "700px" : "auto"
+                      }`,
                     }}
                   >
                     {(() => {

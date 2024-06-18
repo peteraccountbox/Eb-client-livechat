@@ -43,12 +43,12 @@ export const initalizeSocket = () => {
             "reacho-socket-event",
             function (message: string, channel: any, ortc: any) {
 
-                alert("innnn");
-                try {
-                    eventBus.on("reacho-socket-event", JSON.parse(message));
-                } catch (e) {
-                    console.error(e);
-                }
+                // alert("innnn");
+                if(JSON.parse(message).message_type == "new_message") 
+                    {
+                        eventBus.emit("new_message", JSON.parse(message).message.message)   
+                    }
+
             }
         );
 
