@@ -237,11 +237,11 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
             <p className="chat-messages-username"> {getName()}</p>
             <p className="chat__all-messages-item-header-timegao">
               •{" "}
-              {/* <ReactTimeAgo
+              <ReactTimeAgo
                 date={getMessageTime()}
                 locale="en-US"
                 tooltip={false}
-              /> */}
+              />
             </p>
           </div>
         </div>
