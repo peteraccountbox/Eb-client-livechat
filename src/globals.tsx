@@ -58,6 +58,9 @@ export const BOT_FETCH_URL_PATH: string = "";
 export const CONVERSATIONS_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/get-chat-conversations/" + VISITOR_UUID;
 
+export const CHAT_FLOWS_FETCH_URL_PATH =
+  REQUEST_PREFIX_PATH + "/chat-flows/";
+
 export const CONVERSATION_MESSAGE_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/get-chat-messages";
 
@@ -106,3 +109,14 @@ export const IS_NEW_SESSION: boolean = (function () {
   return isNew;
   // return false;
 })();
+
+export const FooterTabs = [
+  {
+    tab: "Home",
+    enable: true,
+  },
+  {
+    tab: "Messages",
+    enable: true,
+  },
+];

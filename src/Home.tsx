@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "./appContext";
 import ChatTabsList from "./components/ChatTabsList";
 import ConversationListItem from "./components/ConversationListItem";
-import { ChatSessionPaylodObj } from "./Models";
+import { ChatFlowsPayloadObj, ChatSessionPaylodObj } from "./Models";
 import CloseWidgetPanel from "./components/CloseWidgetPanel";
 
 const Home = ({
@@ -12,10 +12,11 @@ const Home = ({
   openChat: (id: string) => void;
   startNewChat: (initialMessage?: string | undefined) => void;
 }) => {
-  const parentContext = useContext(AppContext);
-  const { sessions, chatPrefs } = parentContext;
 
-  const [recentSession, setRecentSession] = useState<ChatSessionPaylodObj>();
+  const parentContext = useContext(AppContext);
+  const { sessions, chatPrefs, chatFlows } = parentContext;
+
+  const [recentSessions, setRecentSessions] = useState<ChatSessionPaylodObj[]>([]);
 
   useEffect(() => {
     function compare(a: ChatSessionPaylodObj, b: ChatSessionPaylodObj) {
@@ -24,7 +25,8 @@ const Home = ({
       return 0;
     }
     const sortedSessions = sessions?.sort(compare);
-    setRecentSession(sortedSessions[0]);
+    setRecentSessions([...sortedSessions]);
+    // setRecentSession(sortedSessions[0]);
   }, [sessions]);
 
   return (
@@ -55,30 +57,61 @@ const Home = ({
           </div>
           <div className="home__feeds-cards-main">
             <div className="home__feeds-cards-sec">
-              {recentSession ? (
-                <div className="home__feeds-send-card home__feeds-recent-card">
-                  <div className="home__feeds-media">
-                    <div className="home__feeds-media-content">
-                      <h4
-                        className={`${
-                          recentSession.unRead > 0 ? "unRead" : ""
-                        }`}
-                        style={{ cursor: "auto" }}
-                      >
-                        Recent conversation
-                      </h4>
-                      <ConversationListItem
-                        session={recentSession}
-                        openChatConversation={openChat}
-                        // openBotConversation={props.openBotConversation}
-                        key={recentSession.id}
-                      />
+
+              {chatFlows && chatFlows.length > 0 && (
+
+                <>
+                  <div className="home__feeds-send-card home__feeds-recent-card">
+                    <div className="home__feeds-media">
+                      <div className="home__feeds-media-content">
+
+                        {chatFlows.map(
+                          (chatFlow: ChatSessionPaylodObj, index: number) => (
+
+                            <div>asasd</div>
+
+                          )
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                <></>
+                </>
+
               )}
+
+              {recentSessions && recentSessions.length > 0 && (
+
+                <>
+                  <div className="home__feeds-send-card home__feeds-recent-card">
+                    <div className="home__feeds-media">
+                      <div className="home__feeds-media-content">
+                        <h4
+                          className={`${false ? "unRead" : ""
+                            }`}
+                          style={{ cursor: "auto" }}
+                        >
+                          Recent conversation
+                        </h4>
+                        {recentSessions.map(
+                          (recentSession: ChatSessionPaylodObj, index: number) => (
+
+                            <ConversationListItem
+                              session={recentSession}
+                              openChatConversation={openChat}
+                              // openBotConversation={props.openBotConversation}
+                              key={recentSession.id}
+                            />
+
+                          )
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </>
+
+              )}
+
+
               <div
                 className="home__feeds-send-card"
                 onClick={() => startNewChat()}

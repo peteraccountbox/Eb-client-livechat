@@ -13,7 +13,6 @@ export const initalizeSocket = () => {
 
         // Get user sessions from visitorId
         let channelName = TENANT_ID + "-" + VISITOR_UUID;
-        alert(channelName);
         console.log("channelName", channelName);
         const pusher = new Pusher("1bd6d84d7a6d517eeee5", {
             cluster: "ap2",
@@ -44,10 +43,9 @@ export const initalizeSocket = () => {
             function (message: string, channel: any, ortc: any) {
 
                 // alert("innnn");
-                if(JSON.parse(message).message_type == "new_ticket_message") 
-                    {
-                        eventBus.emit("new_ticket_message", JSON.parse(message).message)   
-                    }
+                if (JSON.parse(message).message_type == "new_ticket_message") {
+                    eventBus.emit("new_ticket_message", JSON.parse(message).message)
+                }
 
             }
         );

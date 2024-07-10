@@ -16,11 +16,14 @@ import {
   TENANT_ID,
   AGENTS_FETCH_URL_PATH,
   UPDATE_READ_URL_PATH,
+  FooterTabs,
+  CHAT_FLOWS_FETCH_URL_PATH,
 } from "./globals";
 import {
   ActiveSessionObjType,
   AgentPaylodObj,
   ChatChannelMeta,
+  ChatFlowsPayloadObj,
   ChatFooterDataPayload,
   ChatMessagePaylodObj,
   ChatPrefsPayloadType,
@@ -79,24 +82,18 @@ const App: React.FunctionComponent = () => {
   );
 
   const [sessions, setSessions] = useState<ChatSessionPaylodObj[]>([]);
+  const [chatFlows, setChatFlows] = useState<ChatFlowsPayloadObj[]>([]);
 
   const getWidgetActiveTabs = () => {
     if (!chatPrefs) return [];
 
-    const footerTabs = [
-      {
-        tab: "Messages",
-        enable: true,
-      },
-    ];
-
     let activeTabname = getSessionStoragePrefs(WIDGET_ACTIVE_TAB);
     if (!activeTabname) activeTabname = widgetFooterTabs.Home;
     try {
-      if (!footerTabs.find((footer) => footer.tab == activeTabname)) {
-        activeTabname = footerTabs[0].tab;
+      if (!FooterTabs.find((footer) => footer.tab == activeTabname)) {
+        activeTabname = FooterTabs[0].tab;
       }
-    } catch (error) {}
+    } catch (error) { }
 
     return activeTabname;
   };
@@ -134,6 +131,13 @@ const App: React.FunctionComponent = () => {
   // });
 
   const [prefsFetched, setPrefsFetched] = useState<boolean>(false);
+  useEffect(() => {
+    if (prefsFetched) {
+      fetchChatFlows();
+    }
+  }, [prefsFetched]);
+
+
   const [loadingSessions, setLoadingSessions] = useState<boolean>(true);
 
   useEffect(() => {
@@ -164,6 +168,8 @@ const App: React.FunctionComponent = () => {
   }, [promtWidth, isOpened, isVisible]);
 
   useEffect(() => {
+
+
     console.log("useEffect1");
 
     // Fetch chat prefs
@@ -189,7 +195,7 @@ const App: React.FunctionComponent = () => {
 
     // Subscribe to event bus
     eventBus.on("reacho-socket-event", function () {
-      alert("evnt received");
+
     });
 
     eventBus.on("new_ticket_message", function (message) {
@@ -294,7 +300,6 @@ const App: React.FunctionComponent = () => {
       setPrefsFetched(true);
     } catch (e) {
       console.log("errr", e);
-      alert("3 " + JSON.stringify(e));
     }
   };
 
@@ -333,6 +338,23 @@ const App: React.FunctionComponent = () => {
       }
     }, 50);
   };
+
+  const fetchChatFlows = async () => {
+
+    if (!chatPrefs?.meta.flowIds || chatPrefs?.meta.flowIds.length == 0)
+      return;
+
+    const response = await getReq(CHAT_FLOWS_FETCH_URL_PATH + "", {
+      page: 0,
+      size: 20,
+      sort: "updatedTime",
+    });
+
+    setChatFlows([...response.data]);
+
+
+  }
+
 
   const fetchConversationsAndAgents = async () => {
     try {
@@ -420,7 +442,7 @@ const App: React.FunctionComponent = () => {
               let proactiveMsg = "";
               try {
                 proactiveMsg = JSON.parse(rule.customData).message;
-              } catch (error) {}
+              } catch (error) { }
               // console.log("proactiveMsg", proactiveMsg);
 
               // if (proactiveMsg)
@@ -544,7 +566,7 @@ const App: React.FunctionComponent = () => {
       .then((response) => {
         if (callback) callback(response.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const handleMessage = (event: any) => {
@@ -707,13 +729,14 @@ const App: React.FunctionComponent = () => {
           changeActiveTab,
           promtWidth,
           setPromtWidth,
+          chatFlows,
+          setChatFlows
         }}
       >
         <div
           id="App"
-          className={`engagebay-viewport ${
-            !isOpened && hideChatBubble ? "hide" : ""
-          } `}
+          className={`engagebay-viewport ${!isOpened && hideChatBubble ? "hide" : ""
+            } `}
           style={appThemeStyle}
         >
           {isVisible ? (
@@ -735,24 +758,21 @@ const App: React.FunctionComponent = () => {
               ) : (
                 <div
                   className={`chat ${isOpened ? "is-open" : ""} 
-              ${
-                chatPrefs.meta.decoration.widgetAlignment == "LEFT"
-                  ? "left"
-                  : ""
-              } 
-              ${
-                chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
-                  ? "right"
-                  : ""
-              }`}
+              ${chatPrefs.meta.decoration.widgetAlignment == "LEFT"
+                      ? "left"
+                      : ""
+                    } 
+              ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
+                      ? "right"
+                      : ""
+                    }`}
                   data-target="widget"
                 >
                   <div
                     className="chat__main"
                     style={{
-                      minWidth: `${
-                        promtWidth == PromtWidth.Large ? "700px" : "auto"
-                      }`,
+                      minWidth: `${promtWidth == PromtWidth.Large ? "700px" : "auto"
+                        }`,
                     }}
                   >
                     {(() => {
