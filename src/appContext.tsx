@@ -9,6 +9,7 @@ import {
 import { PromtWidth, widgetFooterTabs } from "./App";
 import {
   AgentPaylodObj,
+  ChatFlowsPayloadObj,
   ChatPrefsPayloadType,
   ChatSessionPaylodObj,
 } from "./Models";
@@ -44,6 +45,8 @@ interface AppContextPayload {
   setAgents: (prefs: AgentPaylodObj[]) => void;
   sessions: ChatSessionPaylodObj[];
   setSessions: (prefs: ChatSessionPaylodObj[]) => void;
+  chatFlows: ChatFlowsPayloadObj[];
+  setChatFlows: (prefs: ChatFlowsPayloadObj[]) => void;
   chatPrefs: ChatPrefsPayloadType;
   setChatPrefs: (prefs: ChatPrefsPayloadType) => void;
   chatBubbleClicked: () => void;
@@ -56,14 +59,16 @@ interface AppContextPayload {
 
 export const AppContext = createContext({
   agents: [] as AgentPaylodObj[],
-  setAgents: (prefs: AgentPaylodObj[]) => {},
+  setAgents: (prefs: AgentPaylodObj[]) => { },
   sessions: [] as ChatSessionPaylodObj[],
-  setSessions: (prefs: ChatSessionPaylodObj[]) => {},
+  setSessions: (prefs: ChatSessionPaylodObj[]) => { },
+  chatFlows: [] as ChatFlowsPayloadObj[],
+  setChatFlows: (prefs: ChatFlowsPayloadObj[]) => { },
   chatPrefs: {} as ChatPrefsPayloadType,
-  chatBubbleClicked: () => {},
-  setChatPrefs: (prefs: ChatPrefsPayloadType) => {},
+  chatBubbleClicked: () => { },
+  setChatPrefs: (prefs: ChatPrefsPayloadType) => { },
   activeTab: "" as widgetFooterTabs,
-  changeActiveTab: (tab: widgetFooterTabs) => {},
+  changeActiveTab: (tab: widgetFooterTabs) => { },
   promtWidth: "" as PromtWidth,
-  setPromtWidth: (tab: PromtWidth) => {},
+  setPromtWidth: (tab: PromtWidth) => { },
 } as AppContextPayload);
