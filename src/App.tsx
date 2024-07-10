@@ -341,11 +341,18 @@ const App: React.FunctionComponent = () => {
 
   const fetchChatFlows = async () => {
 
+    if (!chatPrefs?.meta.flowIds || chatPrefs?.meta.flowIds.length == 0)
+      return;
+
     const response = await getReq(CHAT_FLOWS_FETCH_URL_PATH + "", {
       page: 0,
       size: 20,
       sort: "updatedTime",
     });
+
+    setChatFlows([...response.data]);
+
+
   }
 
 

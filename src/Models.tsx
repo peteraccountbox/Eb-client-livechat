@@ -84,6 +84,7 @@ export interface ChatChannelMeta {
   | "auto-based-on-agent-availability"
   | "offline";
   sendChatTranscript: boolean;
+  flowIds?: string[]
 }
 
 export interface Decoration {
