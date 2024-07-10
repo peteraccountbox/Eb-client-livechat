@@ -7,21 +7,22 @@ import {
   ChatFromFieldDataPayLoad,
   ChatMessagePaylodObj,
   ChatSessionPaylodObj,
+  EventPayloadObj,
   MessageByTypeEnum,
 } from "../Models";
 
 export interface ConversationItemPropsType {
-  message: ChatMessagePaylodObj;
+  message: EventPayloadObj;
   session: ChatSessionPaylodObj | undefined;
-  nextMessage: ChatMessagePaylodObj | undefined;
-  formFields: ChatFromFieldDataPayLoad[];
+  nextMessage: EventPayloadObj | undefined;
+  // formFields: ChatFromFieldDataPayLoad[];
   updateMessage: (message: ChatMessagePaylodObj) => void;
 }
 
 const ConversationItem: FC<ConversationItemPropsType> = (props) => {
   const formatMessageTime = () => {
-    if (!props.message || !props.message.created_time) return;
-    return props.message.created_time * 1000;
+    if (!props.message || !props.message.message.created_time) return;
+    return props.message.message.created_time * 1000;
   };
 
   const from = MessageByTypeEnum[
@@ -41,7 +42,7 @@ const ConversationItem: FC<ConversationItemPropsType> = (props) => {
       )}
 
       {from === MessageByTypeEnum.SYSTEM &&
-        props.message.SYSTEM_message_type === "PROACTIVE_SYSTEM_MESSAGE" ? (
+      props.message.SYSTEM_message_type === "PROACTIVE_SYSTEM_MESSAGE" ? (
         <AgentChatMessage
           sessionId={props.session?.id}
           message={props.message}
@@ -54,7 +55,7 @@ const ConversationItem: FC<ConversationItemPropsType> = (props) => {
       {from === MessageByTypeEnum.GPT ? (
         <GPTChatMessage
           sessionId={props.session?.id}
-          message={props.message}
+          message={props.message.message}
           formatMessageTime={formatMessageTime}
           updateMessage={props.updateMessage}
         />
@@ -73,8 +74,11 @@ const ConversationItem: FC<ConversationItemPropsType> = (props) => {
       )}
 
       {from === MessageByTypeEnum.SYSTEM &&
-        props.message.SYSTEM_message_type != "PROACTIVE_SYSTEM_MESSAGE" ? (
-        <Notice message={props.message} formFields={props.formFields} />
+      props.message.SYSTEM_message_type != "PROACTIVE_SYSTEM_MESSAGE" ? (
+        <Notice
+          message={props.message.message}
+          //  formFields={props.formFields}
+        />
       ) : (
         <></>
       )}

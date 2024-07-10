@@ -44,9 +44,9 @@ export const initalizeSocket = () => {
             function (message: string, channel: any, ortc: any) {
 
                 // alert("innnn");
-                if(JSON.parse(message).message_type == "new_message") 
+                if(JSON.parse(message).message_type == "new_ticket_message") 
                     {
-                        eventBus.emit("new_message", JSON.parse(message).message.message)   
+                        eventBus.emit("new_ticket_message", JSON.parse(message).message)   
                     }
 
             }

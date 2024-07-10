@@ -9,6 +9,7 @@ import {
   ChatMessagePaylodObj,
   ChatPrefsPayloadType,
   ChatSessionPaylodObj,
+  EventPayloadObj,
   MessageByTypeEnum,
   TicketFromFieldDataPayLoad,
 } from "./Models";
@@ -43,7 +44,7 @@ export const getOperator = (
 export const resizeFrame = (type: string) => {
   try {
     (window as any).parent.EngageBay_Livechat.ref.UI().resize(type);
-  } catch (error) { }
+  } catch (error) {}
 };
 
 export const loadBgAssetImage = (url: string) => {
@@ -105,7 +106,7 @@ export const promptImg = (
     : chatPrefs?.meta.decoration.headerPictureUrl;
 };
 export const pushMessage = (
-  message: ChatMessagePaylodObj,
+  event: EventPayloadObj,
   session: ChatSessionPaylodObj
 ) => {
   if (!session) {
@@ -118,7 +119,7 @@ export const pushMessage = (
     return;
   }
 
-  console.log("pushing new messge to", message.session_id);
+  console.log("pushing new messge to", event.ticketId);
 
   // Get session from session id
   // let session = getSessionById(message.session_id);
@@ -126,7 +127,8 @@ export const pushMessage = (
   if (!session) return;
 
   // Update time of the session
-  session.updated_time = parseInt((new Date().getTime() / 1000).toString());
+  // session.updated_time = parseInt((new Date().getTime() / 1000).toString());
+  session.updatedTime = new Date().toISOString().replace("Z", "");
 
   // Set unread count
   // if (!activeSessionDetails?.session_id || !activeSessionDetails?.session || activeSessionDetails.session.id != session.id) {
@@ -139,13 +141,13 @@ export const pushMessage = (
   // Push message
   let matchFound = false;
   session.messageList.forEach(function (eachMessage, index) {
-    if (eachMessage.id == message.id && session) {
+    if (eachMessage.id == event.id && session) {
       matchFound = true;
-      session.messageList[index] = message;
+      session.messageList[index] = event;
     }
   });
 
-  if (!matchFound) session.messageList.push(message);
+  if (!matchFound) session.messageList.push(event);
 
   //if (message.from != "Visitor") {
   // Play sound
@@ -155,11 +157,10 @@ export const pushMessage = (
   // this.blinkTitle(message.message);
   //}
 
-  if (message.from == MessageByTypeEnum.AGENT) {
+  if (event.from == MessageByTypeEnum.AGENT) {
     // Close typing
     session.typing = false;
   }
-
 };
 
 export const getOperatorFromSession = (
@@ -178,7 +179,7 @@ export const getOperatorFromSession = (
           userId = session.messageList[i].user_id;
       }
     }
-  } catch (e) { }
+  } catch (e) {}
 
   if (!userId)
     userId =
@@ -237,7 +238,7 @@ export function isValidField(field: ChatFromFieldDataPayLoad) {
   }
   try {
     if (field.value instanceof String) field.value = field.value.trim();
-  } catch (error) { }
+  } catch (error) {}
   if (field.pattern) {
     let pattern = new RegExp(field.pattern);
     if (pattern && field.value && !pattern.test(field.value + "")) {
@@ -274,11 +275,11 @@ export function isValidField(field: ChatFromFieldDataPayLoad) {
     case "url":
       let pattern = new RegExp(
         "^(https?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
+          "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+          "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+          "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+          "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+          "(\\#[-a-z\\d_]*)?$",
         "i"
       ); // fragment locator
       if (!pattern.test(field.value + "")) isValid = false;
@@ -373,14 +374,14 @@ export function convertEmojis(text: string) {
 
         return typeof emoji_json[g] != "undefined"
           ? '<span class="engagebay-emoji-picker-image" aria-label="' +
-          emoji_json[g].label +
-          '" style="' +
-          css +
-          '"></span>'
+              emoji_json[g].label +
+              '" style="' +
+              css +
+              '"></span>'
           : g;
       }
     );
-  } catch (error) { }
+  } catch (error) {}
   return text;
 }
 
@@ -428,13 +429,13 @@ export function getSystemMessage(type: string) {
     case "ASK_USER_DETAILS":
       message =
         PARENT_WINDOW_LIVECHAT_REF.ref.settings.SYSTEMMessage[
-        type + "_TO_VISITOR"
+          type + "_TO_VISITOR"
         ];
       break;
     case "CHAT_SESSION_CLOSED":
       message =
         PARENT_WINDOW_LIVECHAT_REF.ref.settings.SYSTEMMessage[
-        type + "_TO_VISITOR"
+          type + "_TO_VISITOR"
         ];
       break;
 

@@ -95,11 +95,11 @@ export default function LiveChat({
         </>
       )}
 
-      {activeComponentName == LivechatComponentNames.ConversationList ? (
+      {/* {activeComponentName == LivechatComponentNames.ConversationList ? (
         <ChatTabsList />
       ) : (
         <></>
-      )}
+      )} */}
     </>
   );
 }

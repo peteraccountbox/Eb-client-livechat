@@ -1,11 +1,11 @@
 import React, { FC, useContext, useState } from "react";
 import { AppContext } from "../appContext";
 import { ChatFromFieldDataPayLoad, JSONObjectType } from "../Models";
-import { isValidField } from "../Utils";
+import { isValidField, isValidTicketField } from "../Utils";
 
 export interface ChatFormPropsType {
-  formFields: ChatFromFieldDataPayLoad[];
-  setformFields(fields: ChatFromFieldDataPayLoad[]): void;
+  // formFields: any[];
+  // setFormFields(fields: any[]): void;
   submitChatForm: (formData: JSONObjectType) => void;
   closeChatForm: () => void;
   typeText: string;
@@ -14,43 +14,94 @@ export interface ChatFormPropsType {
 }
 
 const ChatForm: FC<ChatFormPropsType> = (props) => {
-
-  const { formFields, setTypeText, submitChatForm, setformFields, typeText } =
-    props;
+  const { setTypeText, submitChatForm, typeText } = props;
 
   const parentContext = useContext(AppContext);
   const [saving, setSaving] = useState(false);
+  const fields = [
+    {
+      name: "customerEmail",
+      label: "Drop your email",
+      type: "email",
+      required: true,
+      value: "",
+      placeholder: "reacho@email.com",
+      error: "",
+      is_valid: true,
+      helpText:
+        "Messages and ticket updates will be sent to this email address",
+    },
+    // {
+    //   name: "subject",
+    //   label: "Subject",
+    //   type: "text",
+    //   required: true,
+    //   value: "",
+    //   placeholder: "Subject",
+    //   error: "",
+    //   is_valid: true,
+    // },
+    // {
+    //   name: "description",
+    //   label: "Description",
+    //   type: "textarea",
+    //   required: true,
+    //   value: "",
+    //   placeholder: "Description",
+    //   error: "",
+    //   is_valid: true,
+    // },
+    // {
+    //   name: "date",
+    //   label: "When did the issue occur",
+    //   type: "date",
+    //   required: true,
+    //   value: "",
+    //   placeholder: "",
+    //   error: "",
+    //   is_valid: true,
+    // },
+  ];
 
-  const handleFieldValueChange = (
-    value: string,
-    field: ChatFromFieldDataPayLoad
-  ) => {
-    let results = formFields.map((eachField: ChatFromFieldDataPayLoad) => {
-      if (eachField === field) {
-        if (
-          eachField.type === "multicheckbox" ||
-          eachField.type === "checkbox"
-        ) {
-          if (!eachField.valueArr) eachField.valueArr = [];
-          if (eachField.valueArr.includes(value)) {
-            const index = eachField.valueArr.indexOf(value);
-            if (index > -1) {
-              eachField.valueArr.splice(index, 1);
-            }
-          } else eachField.valueArr.push(value);
-          eachField.value = eachField.valueArr;
-        } else {
-          eachField.value = value;
-        }
-        if (eachField.error) eachField = isValidField(eachField);
-        if (eachField.field_type == "SYSTEM" && field.name == "message")
-          setTypeText(value);
-      }
+  const [formFields, setFormFields] = useState<any[]>(fields);
+
+  // const handleFieldValueChange = (
+  //   value: string,
+  //   field: ChatFromFieldDataPayLoad
+  // ) => {
+  //   let results = formFields.map((eachField: ChatFromFieldDataPayLoad) => {
+  //     if (eachField === field) {
+  //       if (
+  //         eachField.type === "multicheckbox" ||
+  //         eachField.type === "checkbox"
+  //       ) {
+  //         if (!eachField.valueArr) eachField.valueArr = [];
+  //         if (eachField.valueArr.includes(value)) {
+  //           const index = eachField.valueArr.indexOf(value);
+  //           if (index > -1) {
+  //             eachField.valueArr.splice(index, 1);
+  //           }
+  //         } else eachField.valueArr.push(value);
+  //         eachField.value = eachField.valueArr;
+  //       } else {
+  //         eachField.value = value;
+  //       }
+  //       if (eachField.error) eachField = isValidField(eachField);
+  //       if (eachField.field_type == "SYSTEM" && field.name == "message")
+  //         setTypeText(value);
+  //     }
+  //     return eachField;
+  //   });
+  //   setformFields(results);
+  // };
+  const handleFieldValueChange = (value: string, field: any) => {
+    const results = formFields.map((eachField) => {
+      if (eachField.name == field.name) eachField.value = value;
+      if (eachField.error) eachField = isValidTicketField(eachField);
       return eachField;
     });
-    setformFields(results);
+    setFormFields(results);
   };
-
   const submitForm = () => {
     if (isvalidForm() && !saving) {
       // Set field data in to storage
@@ -73,7 +124,7 @@ const ChatForm: FC<ChatFormPropsType> = (props) => {
       if (isValid) isValid = field.is_valid;
       return field;
     });
-    setformFields(results);
+    setFormFields(results);
     return isValid;
   };
   const triggerForm = () => {
@@ -89,24 +140,21 @@ const ChatForm: FC<ChatFormPropsType> = (props) => {
       >
         <div className="text-left" style={{ marginBottom: "10px" }}>
           <pre>
-            {" "}
-            {parentContext.chatPrefs.prechat.title ? (
-              <p className="mb-2"> {parentContext.chatPrefs.prechat.title} </p>
-            ) : (
-              <p className="mb-2"> {parentContext.chatPrefs.meta.decoration.introductionText} </p>
-            )}{" "}
+            <p className="mb-2">
+              {parentContext.chatPrefs.meta.decoration.introductionText}
+            </p>
           </pre>
         </div>
 
         {/* <button className="btn" onClick={props.closeChatForm}>close form</button> */}
 
-        {formFields.map((field: ChatFromFieldDataPayLoad, index: number) => {
+        {formFields.map((field: any, index: number) => {
           return (
             <>
               <div className="chat__messages-form-group">
                 {(() => {
                   switch (true) {
-                    case field.type == "textarea" && field.visible:
+                    case field.type == "textarea":
                       {
                         if (typeText != "" && field.name == "message")
                           field.value = typeText;
@@ -278,7 +326,29 @@ const ChatForm: FC<ChatFormPropsType> = (props) => {
 
                     default:
                       {
-                        return <p>Bye</p>;
+                        return (
+                          <>
+                            <input
+                              type={field.type}
+                              placeholder={field.placeholder}
+                              required={field.required}
+                              name={field.name}
+                              className="chat_form-control"
+                              value={field.value}
+                              onChange={(e) =>
+                                handleFieldValueChange(e.target.value, field)
+                              }
+                            />
+                            {/* {field.error ? (
+                              <div className="error-content">{field.error}</div>
+                            ) : (
+                              <></>
+                            )} */}
+                            {/* <div className="chat__ticket-form-text">
+                              {field.helpText}
+                            </div> */}
+                          </>
+                        );
                       }
                       break;
                   }
@@ -293,14 +363,18 @@ const ChatForm: FC<ChatFormPropsType> = (props) => {
           );
         })}
 
-        <a onClick={triggerForm} href="javascript:void(0)" className="chat__messages-btn">
+        <a
+          onClick={triggerForm}
+          href="javascript:void(0)"
+          className="chat__messages-btn"
+        >
           {props.saving ? (
             <span>Sending ...</span>
           ) : (
             <span
               style={{ display: "flex", alignItems: "center", gap: "10px" }}
             >
-              <span> {parentContext.chatPrefs.prechat.button_text} </span>
+              <span> Save </span>
               <svg
                 className="chat_send_icon"
                 id="fi_9290348"

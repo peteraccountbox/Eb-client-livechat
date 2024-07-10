@@ -1,15 +1,22 @@
-import React, { FC } from 'react'
-import { ChatFromFieldDataPayLoad, ChatMessagePaylodObj, ChatSessionPaylodObj, MessageByTypeEnum } from '../Models'
-import { getSystemMessage } from '../Utils';
+import React, { FC } from "react";
+import {
+  ChatFromFieldDataPayLoad,
+  ChatMessagePaylodObj,
+  ChatSessionPaylodObj,
+  MessageByTypeEnum,
+} from "../Models";
+import { getSystemMessage } from "../Utils";
 
 export interface NoticePropsType {
-  message: ChatMessagePaylodObj,
+  message: ChatMessagePaylodObj;
   // session: ChatSessionPaylodObj | undefined,
-  formFields: ChatFromFieldDataPayLoad[],
+  // formFields: ChatFromFieldDataPayLoad[],
 }
 
 const Notice: FC<NoticePropsType> = (props) => {
-  const from = MessageByTypeEnum[props.message.from] as unknown as MessageByTypeEnum;
+  const from = MessageByTypeEnum[
+    props.message.from
+  ] as unknown as MessageByTypeEnum;
 
   const getSystemMessageNotice = (message: any) => {
     if (
@@ -21,13 +28,13 @@ const Notice: FC<NoticePropsType> = (props) => {
       return getSystemMessage(message.SYSTEM_message_type);
 
     return message.message;
-  }
+  };
 
   return (
-    <div className="chat__messages-notice" >
+    <div className="chat__messages-notice">
       {getSystemMessageNotice(props.message)}
     </div>
-  )
-}
+  );
+};
 
-export default Notice
+export default Notice;

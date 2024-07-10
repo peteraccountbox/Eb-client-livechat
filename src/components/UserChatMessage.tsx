@@ -3,6 +3,7 @@ import { AppContext } from "../appContext";
 import {
   ChatMessagePaylodObj,
   ChatSessionPaylodObj,
+  EventPayloadObj,
   MessageByTypeEnum,
 } from "../Models";
 import ChatMessage from "./ChatMessage";
@@ -16,16 +17,16 @@ import ru from "javascript-time-ago/locale/ru";
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 export interface UserChatMessagePropsType {
-  message: ChatMessagePaylodObj;
-  sessionId?: number;
-  nextMessage: ChatMessagePaylodObj | undefined;
+  message: EventPayloadObj;
+  sessionId?: number | string;
+  nextMessage: EventPayloadObj | undefined;
 }
 
 const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
   const parentContext = useContext(AppContext);
 
   useEffect(() => {
-    return () => { };
+    return () => {};
   }, []);
 
   const getMessageTime = () => {
@@ -40,13 +41,12 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
     const from = MessageByTypeEnum[
       props.message.from
     ] as unknown as MessageByTypeEnum;
-    const xyz = props.nextMessage?.from;
+    const xyz = props.nextMessage?.message.from;
     let nextFrom: any;
     if (xyz) nextFrom = MessageByTypeEnum[xyz] as unknown as MessageByTypeEnum;
 
     try {
-      if (true)
-        return false;
+      if (true) return false;
 
       // var canShowUnavailabiltyInCurrentMessage =
       //   from == MessageByTypeEnum.CUSTOMER && props.message.agents_unavailable;
@@ -110,7 +110,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
             <ChatMessage
               sessionId={props.sessionId}
               message={props.message}
-              updateMessage={() => { }}
+              updateMessage={() => {}}
             />
           </li>
         </ul>
@@ -129,11 +129,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
                 marginTop: "5px",
               }}
             >
-              <span className="message-sent-status">
-                {
-                  "sent status"
-                }
-              </span>
+              <span className="message-sent-status">{"sent status"}</span>
             </div>
           </div>
         ) : (

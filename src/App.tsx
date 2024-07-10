@@ -14,6 +14,8 @@ import {
   WIDGET_ACTIVE_TAB,
   PROACTIVE_MESSAGE,
   TENANT_ID,
+  AGENTS_FETCH_URL_PATH,
+  UPDATE_READ_URL_PATH,
 } from "./globals";
 import {
   ActiveSessionObjType,
@@ -190,16 +192,33 @@ const App: React.FunctionComponent = () => {
       alert("evnt received");
     });
 
-    eventBus.on("new_message", function (message) {
+    eventBus.on("new_ticket_message", function (message) {
       let messageSession = sessions.find(function (session) {
-        return session.id == message.ticketId;
+        return session.id == message.ticket.id;
       });
-      messageSession?.messageList.push(message);
+
+      let chatId = getSessionStoragePrefs(OPENED_CHAT);
+      if (chatId && chatId == message.ticket.id) {
+        messageSession?.messageList.push(message);
+        getReq(UPDATE_READ_URL_PATH + "/" + message.ticketId, {}).then(
+          (response) => {
+            console.log("asjhks", response);
+            eventBus.emit("on-ticket-updated", messageSession);
+          }
+        );
+      } else {
+        if (messageSession) {
+          messageSession.lastMessage = message.bodyText;
+          messageSession.lastAgentMessageAt = message.createdTime;
+          messageSession.lastMessageAt = message.createdTime;
+          messageSession.customerUnreadMessagesCount += 1;
+        }
+      }
       setSessions([...sessions]);
     });
 
     return () => {
-      eventBus.off("new_message");
+      eventBus.off("new_ticket_message");
     };
   }, []);
 
@@ -241,34 +260,34 @@ const App: React.FunctionComponent = () => {
       if (prefs.botPrefs && prefs.botPrefs.length > 0)
         prefs.matchedBotPrefs = prefs.botPrefs[0];
 
-      let chatChannelMeta: ChatChannelMeta = {
-        deactivated: false,
-        hideOnMobile: true,
-        hideOnOutsideBusinessHours: true,
-        emailCaptureEnabled: true,
-        emailCaptureEnforcement: false,
-        liveChatAvailability: "always-live-during-business-hours",
-        sendChatTranscript: true,
-        decoration: {
-          headerPictureUrl: "https://example.com/image.png",
-          fontFamily: "Arial",
-          mainColor: "#FFFFFF",
-          conversationColor: "#000000",
-          backgroundStyle: "solid",
-          introductionText: "Welcome to our chat!",
-          offlineIntroductionText: "We are currently offline.",
-          avatarType: "circle",
-          widgetAlignment: "right",
-          widgetAlignmentOffsetX: 10,
-          widgetAlignmentOffsetY: 20,
-          launcherType: "icon",
-          agentAvatarImageType: "image",
-          agentAvatarNameType: "name",
-          botAvatarImage: "https://example.com/bot.png",
-        },
-      };
+      // let chatChannelMeta: ChatChannelMeta = {
+      //   deactivated: false,
+      //   hideOnMobile: true,
+      //   hideOnOutsideBusinessHours: true,
+      //   emailCaptureEnabled: true,
+      //   emailCaptureEnforcement: false,
+      //   liveChatAvailability: "always-live-during-business-hours",
+      //   sendChatTranscript: true,
+      //   decoration: {
+      //     headerPictureUrl: "https://example.com/image.png",
+      //     fontFamily: "Arial",
+      //     mainColor: "#FFFFFF",
+      //     conversationColor: "#000000",
+      //     backgroundStyle: "solid",
+      //     introductionText: "Welcome to our chat!",
+      //     offlineIntroductionText: "We are currently offline.",
+      //     avatarType: "circle",
+      //     widgetAlignment: "right",
+      //     widgetAlignmentOffsetX: 10,
+      //     widgetAlignmentOffsetY: 20,
+      //     launcherType: "icon",
+      //     agentAvatarImageType: "image",
+      //     agentAvatarNameType: "name",
+      //     botAvatarImage: "https://example.com/bot.png",
+      //   },
+      // };
 
-      prefs.meta = chatChannelMeta;
+      // prefs.meta = chatChannelMeta;
 
       setChatPrefs(prefs);
 
@@ -317,7 +336,11 @@ const App: React.FunctionComponent = () => {
 
   const fetchConversationsAndAgents = async () => {
     try {
-      const response = await getReq(CONVERSATIONS_FETCH_URL_PATH, {});
+      const response = await getReq(CONVERSATIONS_FETCH_URL_PATH, {
+        page: 0,
+        size: 20,
+        sort: "lastMessageAt",
+      });
 
       console.log(response);
       // let agentsList = agents;
@@ -346,6 +369,18 @@ const App: React.FunctionComponent = () => {
       if (openedChat) {
         openChat(openedChat);
       }
+
+      // const agentResponse = await getReq(AGENTS_FETCH_URL_PATH, {});
+      // console.log("Agents reacho ", agentResponse);
+      setAgents([
+        {
+          tenantId: "663b158cc77b6d29d332c88d",
+          id: "663b158cc77b6d29d332c88e",
+          name: "Ibrahim",
+          email: "ibrahimkhan40360@gmail.com",
+          userPicURL: null,
+        },
+      ]);
     } catch (e) {
       console.log(e);
     }
@@ -646,8 +681,14 @@ const App: React.FunctionComponent = () => {
     return {
       "--bottom": settings?.length < 2 ? "20px" : "125px",
       "--reduceHeight": settings?.length < 2 ? "135px" : "210px",
-      "--themeColor": "blue",
-      "--themeColor2": "red",
+      "--themeColor":
+        chatPrefs && chatPrefs.meta.decoration.mainColor
+          ? chatPrefs.meta.decoration.mainColor
+          : "blue",
+      "--themeColor2":
+        chatPrefs && chatPrefs.meta.decoration.mainColor
+          ? chatPrefs.meta.decoration.mainColor
+          : "red",
     };
   }, [chatPrefs]);
 

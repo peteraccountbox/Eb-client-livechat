@@ -77,7 +77,7 @@ export interface ChatChannelMeta {
   hideOnMobile: boolean;
   hideOnOutsideBusinessHours: boolean;
   emailCaptureEnabled: boolean;
-  emailCaptureEnforcement: boolean;
+  emailCaptureEnforcement: string;
   decoration: Decoration;
   liveChatAvailability:
     | "always-live-during-business-hours"
@@ -106,6 +106,7 @@ export interface Decoration {
 
 export type ChatPrefsPayloadType = {
   meta: ChatChannelMeta;
+  name: string;
 
   // widget: ChatPrefsWidgetType;
   prechat: ChatPrefsPreChatType;
@@ -167,14 +168,17 @@ export type WebRulesPayloadType = {
 };
 
 export type AgentPaylodObj = {
-  id: number;
+  id: number | string;
+  tenantId?: string;
   name: string;
   email: string;
-  profile_img_url: string;
+  userPicURL?: any;
+  profile_img_url?: string;
 };
 
 export type ChatSessionPaylodObj = {
-  id: number;
+  updatedTime: any;
+  id: number | string;
   visitorId: string;
   createdBy: "CUSTOMER";
   createdSource?: "WEBSITE";
@@ -184,8 +188,12 @@ export type ChatSessionPaylodObj = {
   customerName: string;
   subject: string;
   meta: any;
+  assignedToAgentId?: string;
+  lastMessage: string;
 
-  messageList: ChatMessagePaylodObj[];
+  messageList: EventPayloadObj[];
+
+  customerUnreadMessagesCount: number;
 
   bot_conversation_id: string;
   gpt_bot_id?: number;
@@ -194,7 +202,7 @@ export type ChatSessionPaylodObj = {
   status: string;
   connected_with: ChatSessionConnectedWithEnum;
   created_time: number;
-  updated_time: number;
+  // updated_time: number;
   first_answered_by_user_id: number;
   agent_involved: boolean;
   participant_user_ids: number[];
@@ -204,6 +212,8 @@ export type ChatSessionPaylodObj = {
   typing: boolean;
   typing_alert: number;
   connect_to_agent_on_demand?: boolean;
+  lastMessageAt: string;
+  lastAgentMessageAt?: string;
 };
 
 export type BotDetails = {
@@ -234,6 +244,9 @@ export type ChatMessagePaylodObj = {
   ticketId?: string;
   type?: "PUBLIC";
   from: MessageByTypeEnum;
+  fromName: string;
+  fromEmail: string;
+  bodyHTML: string;
   bodyText: string;
   format: MessageFormatType;
 
@@ -246,6 +259,17 @@ export type ChatMessagePaylodObj = {
   gpt_bot_id?: number;
   system_message_type?: string;
   session_id?: number;
+};
+
+export type EventPayloadObj = {
+  [x: string]: any;
+  id?: string;
+  ticketId?: any;
+  eventType?: string;
+  source?: string;
+  from: MessageByTypeEnum;
+  agentId?: string;
+  message: ChatMessagePaylodObj;
 };
 
 export type BotMessageList = {

@@ -46,32 +46,32 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
   //   }, 3000);
   // }, [props.session.typing_alert])
 
-  const getLatestChat = (): ChatMessagePaylodObj | undefined => {
-    try {
-      // if (props.session.type == "BOT") {
-      return props.session.messageList[props.session.messageList.length - 1];
-      //}
-      // return this.session.messageList[this.session.messageList.length - 1];
-    } catch (error) {
-      return undefined;
-    }
-  };
+  // const getLatestChat = (): ChatMessagePaylodObj | undefined => {
+  //   try {
+  //     // if (props.session.type == "BOT") {
+  //     return props.session.messageList[props.session.messageList.length - 1];
+  //     //}
+  //     // return this.session.messageList[this.session.messageList.length - 1];
+  //   } catch (error) {
+  //     return undefined;
+  //   }
+  // };
 
-  const getLatestMessage = () => {
-    try {
-      let mssg: ChatMessagePaylodObj | undefined = getLatestChat();
-      if (
-        mssg &&
-        mssg.from === MessageByTypeEnum.SYSTEM &&
-        (!mssg.message || mssg.SYSTEM_message_type === "CHAT_SESSION_CLOSED")
-      )
-        return (
-          mssg.SYSTEM_message_type && getSystemMessage(mssg.SYSTEM_message_type)
-        );
+  // const getLatestMessage = () => {
+  //   try {
+  //     let mssg: ChatMessagePaylodObj | undefined = getLatestChat();
+  //     if (
+  //       mssg &&
+  //       mssg.from === MessageByTypeEnum.SYSTEM &&
+  //       (!mssg.message || mssg.SYSTEM_message_type === "CHAT_SESSION_CLOSED")
+  //     )
+  //       return (
+  //         mssg.SYSTEM_message_type && getSystemMessage(mssg.SYSTEM_message_type)
+  //       );
 
-      return mssg?.message;
-    } catch (error) { }
-  };
+  //     return mssg?.message;
+  //   } catch (error) {}
+  // };
 
   // const clickOpenBotConversation = () => {
   //   props.openBotConversation(props.session.conversationId)
@@ -84,13 +84,9 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
 
   const getMessageTime = () => {
     try {
-      if (!props.session.messageList || props.session.messageList.length == 0)
-        return 0;
+      if (!props.session.lastMessageAt) return 0;
 
-      return (
-        props.session.messageList[props.session.messageList.length - 1]
-          .created_time * 1000
-      );
+      return new Date(props.session.lastMessageAt);
     } catch (e) {
       console.log("Issue getMessageTime", e);
       return new Date().getTime();
@@ -98,47 +94,55 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
   };
 
   const getImage = () => {
-    const lastMessage = getLatestChat();
-    if (!lastMessage)
-      return parentContext.chatPrefs.meta.decoration.headerPictureUrl;
+    // const lastMessage = getLatestChat();
+    // if (!lastMessage)
+    // return parentContext.chatPrefs.meta.decoration.headerPictureUrl;
 
-    if (lastMessage.from == MessageByTypeEnum.AGENT) {
+    if (
+      props.session.lastAgentMessageAt &&
+      props.session.lastMessageAt == props.session.lastAgentMessageAt
+    ) {
       const agent = parentContext.agents?.find((agent) => {
-        return agent.id === lastMessage.user_id;
+        return agent.id === props.session.assignedToAgentId;
       });
-      return agent && agent.profile_img_url
-        ? agent.profile_img_url
+      return agent && agent.userPicURL
+        ? agent.userPicURL
         : parentContext.chatPrefs.meta.decoration.headerPictureUrl;
-    } else if (lastMessage.from == MessageByTypeEnum.GPT) {
-      const bot = parentContext.chatPrefs.botPrefs?.find((bot) => {
-        return bot.id === lastMessage.gpt_bot_id;
-      });
-      return bot && bot.settings.chatBotIconURL
-        ? bot.settings.chatBotIconURL
-        : parentContext.chatPrefs.meta.decoration.botAvatarImage;
     }
+    // else if (lastMessage.from == MessageByTypeEnum.GPT) {
+    //   const bot = parentContext.chatPrefs.botPrefs?.find((bot) => {
+    //     return bot.id === lastMessage.gpt_bot_id;
+    //   });
+    //   return bot && bot.settings.chatBotIconURL
+    //     ? bot.settings.chatBotIconURL
+    //     : parentContext.chatPrefs.meta.decoration.botAvatarImage;
+    // }
 
     return parentContext.chatPrefs.meta.decoration.headerPictureUrl;
   };
 
   const getName = (): string => {
-    const lastMessage = getLatestChat();
-    console.log(lastMessage, " lastMessage");
-    if (!lastMessage) return "";
+    // const lastMessage = getLatestChat();
+    // console.log(lastMessage, " lastMessage");
+    // if (!lastMessage) return "";
 
-    if (lastMessage.from == MessageByTypeEnum.AGENT) {
+    if (
+      props.session.lastAgentMessageAt &&
+      props.session.lastMessageAt == props.session.lastAgentMessageAt
+    ) {
       const agent = parentContext.agents?.find((agent) => {
-        return agent.id === lastMessage.user_id;
+        return agent.id == props.session.assignedToAgentId;
       });
       return agent && agent.name ? agent.name : "AGENT";
-    } else if (lastMessage.from == MessageByTypeEnum.GPT) {
-      const bot = parentContext.chatPrefs.botPrefs?.find((bot) => {
-        return bot.id === lastMessage.gpt_bot_id;
-      });
-      return bot && bot.name ? bot.name : "Bot";
-    } else if (lastMessage.from == MessageByTypeEnum.SYSTEM) {
-      return "Operator";
     }
+    // else if (lastMessage.from == MessageByTypeEnum.GPT) {
+    //   const bot = parentContext.chatPrefs.botPrefs?.find((bot) => {
+    //     return bot.id === lastMessage.gpt_bot_id;
+    //   });
+    //   return bot && bot.name ? bot.name : "Bot";
+    // } else if (lastMessage.from == MessageByTypeEnum.SYSTEM) {
+    //   return "Operator";
+    // }
 
     return "You";
   };
@@ -189,17 +193,20 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
 
         <div className="chat__all-messages-item-copy">
           <div className="chat__all-messages-item-main">
-            {props.session.typing ||
-              getLatestChat()?.message_type === "FETCHING" ? (
-              <>
-                <div data-a={JSON.stringify(getLatestChat())}>
-                  {getLatestChat()?.message}
-                </div>
-                <TypingLoader />
-              </>
-            ) : (
-              <>
-                {/* <p className={`${props.session.unRead > 0 ? "unRead" : ""}`}>
+            {/* { */}
+            {/* props.session.typing ||
+            getLatestChat()?.message_type === "FETCHING" ? ( */}
+            <>
+              <div
+              // data-a={JSON.stringify(getLatestChat())}
+              >
+                {props.session.lastMessage}
+              </div>
+              {/* <TypingLoader /> */}
+            </>
+            {/* ) : (
+               <> */}
+            {/* <p className={`${props.session.unRead > 0 ? "unRead" : ""}`}>
                   {getLatestChat()?.message_type == "TEXT" ||
                     from == MessageByTypeEnum.SYSTEM ? (
                     getLatestMessage()
@@ -208,7 +215,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
                   )}
                 </p> */}
 
-                <p>
+            {/* <p>
                   {getLatestChat()?.message_type == "FILE" ? (
                     <>
                       File{" "}
@@ -221,9 +228,10 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
                   ) : (
                     <></>
                   )}
-                </p>
-              </>
-            )}
+                </p> */}
+            {/* </>
+             )
+          } */}
           </div>
           <div className="chat__all-messages-item-header">
             <p className="chat-messages-username"> {getName()}</p>
@@ -239,9 +247,9 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
         </div>
 
         <div>
-          {props.session.unRead > 0 ? (
+          {props.session.customerUnreadMessagesCount > 0 ? (
             <span className="chat__all-btn chat_notifications_count">
-              {props.session.unRead}
+              {props.session.customerUnreadMessagesCount}
             </span>
           ) : (
             <></>

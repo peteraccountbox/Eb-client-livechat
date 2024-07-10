@@ -22,12 +22,20 @@ const REQUEST_PREFIX_PATH = "api/support/jsclient/inbox";
 export const NEW_SESSION_URL_PATH: string =
   REQUEST_PREFIX_PATH + "/new-conversation";
 
+export const ADD_EMAIL_URL_PATH: string = REQUEST_PREFIX_PATH + "/add-email";
+
+export const UPDATE_READ_URL_PATH: string =
+  REQUEST_PREFIX_PATH + "/update-read";
+
 export const MESSAGE_URL_PATH: string = REQUEST_PREFIX_PATH + "/new-message";
 
+export const AGENTS_FETCH_URL_PATH: string =
+  REQUEST_PREFIX_PATH + "/get-agents";
 
 export const CONNECT_TO_AGENT_URL_PATH: string =
   "api/support/jsclient/widget/connect-to-agent/";
-export const TICKETS_FETCH_URL: string = "jsapi/rest/get-tickets/" + VISITOR_UUID;
+export const TICKETS_FETCH_URL: string =
+  "jsapi/rest/get-tickets/" + VISITOR_UUID;
 
 export const TICKET_FETCH_URL: string = "jsapi/rest/ticket/" + VISITOR_UUID;
 export const USERS_FETCH_URL: string = "jsapi/rest/group/users/";

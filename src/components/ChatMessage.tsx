@@ -1,6 +1,10 @@
 import React, { FC, useEffect } from "react";
 import { getTextOfJSDocComment } from "typescript";
-import { ChatMessagePaylodObj, MessageByTypeEnum } from "../Models";
+import {
+  ChatMessagePaylodObj,
+  EventPayloadObj,
+  MessageByTypeEnum,
+} from "../Models";
 import typingAnimationGif from "../assets/img/bot-response.gif";
 import {
   convertEmojis,
@@ -14,15 +18,19 @@ import { GPT_MESSAGE_SCORE_UPDATE_URL_PATH } from "../globals";
 import { postReq } from "../request";
 import Tippy from "@tippyjs/react";
 import ReactTimeAgo from "react-time-ago";
-
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
+import ru from "javascript-time-ago/locale/ru";
+TimeAgo.addDefaultLocale(en);
+TimeAgo.addLocale(ru);
 export interface ChatMessagePropsType {
-  message: ChatMessagePaylodObj;
-  sessionId?: number;
+  message: EventPayloadObj;
+  sessionId?: number | string;
   updateMessage: (message: ChatMessagePaylodObj) => void;
 }
 
 const ChatMessage: FC<ChatMessagePropsType> = (props) => {
-  const format = props.message.format as unknown as string;
+  const format = props.message.message.format as unknown as string;
   // const filename = (message: ChatMessagePaylodObj) => {
   //   return JSON.parse(message.message).fileName;
   // };
@@ -38,13 +46,13 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
     // let dateStr = myDate.getDate() + "/" + (myDate.getMonth() + 1) + "/" + myDate.getFullYear()
     // //+ " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds()
     // return dateStr;
-    return props.message.created_time * 1000;
+    return props.message.createdTime ? new Date(props.message.createdTime) : 0;
   };
 
   const submitGPTFeedback = (feedback: number) => {
     console.log("score");
     props.message.gpt_relavance_score = feedback;
-    props.updateMessage(props.message);
+    props.updateMessage(props.message.message);
 
     // Push to server
     const wait = postReq(
@@ -66,10 +74,9 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   return (
     <Tippy
       content={
-        <></>
-        // <ReactTimeAgo date={getMessageTime()} locale="en-US" tooltip={false} />
+        <ReactTimeAgo date={getMessageTime()} locale="en-US" tooltip={false} />
       }
-      // visible={props.message.session_id ? true : false}
+      // visible={props.message.ticketId ? true : false}
       disabled={
         props.message.id && props.message?.status != "SENDING" ? false : true
       }
@@ -84,7 +91,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                   <span
                     className="actual"
                     dangerouslySetInnerHTML={{
-                      __html: convertEmojis(props.message.bodyText),
+                      __html: convertEmojis(props.message.message.bodyText),
                     }}
                   ></span>
 
@@ -169,16 +176,18 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                       <a
                         className="chat__header-user-name"
                         target="_blank"
-                        href={fileUrl(props.message)}
+                        href={fileUrl(props.message.message)}
                         dangerouslySetInnerHTML={{
-                          __html: createTextLinks_(fileName(props.message)),
+                          __html: createTextLinks_(
+                            fileName(props.message.message)
+                          ),
                         }}
                       ></a>
                       <div
                         className="file-info-name"
                         style={{ marginTop: "5px" }}
                       >
-                        <span>{fileSize(props.message)}</span>
+                        <span>{fileSize(props.message.message)}</span>
                       </div>
                     </div>
                   </div>
@@ -188,7 +197,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
               return (
                 <div>
                   <div className="loading-dots">
-                    {props.message.message}
+                    {/* {props.message.message.bodyText} */}
 
                     <span>
                       <i className="loading-dots--dot"></i>

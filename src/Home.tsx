@@ -19,8 +19,8 @@ const Home = ({
 
   useEffect(() => {
     function compare(a: ChatSessionPaylodObj, b: ChatSessionPaylodObj) {
-      if (a.updated_time < b.updated_time) return 1;
-      if (a.updated_time > b.updated_time) return -1;
+      if (new Date(a.updatedTime) < new Date(b.updatedTime)) return 1;
+      if (new Date(a.updatedTime) > new Date(b.updatedTime)) return -1;
       return 0;
     }
     const sortedSessions = sessions?.sort(compare);
@@ -50,13 +50,7 @@ const Home = ({
             </div>
 
             <div className="home__feeds-home-title">
-              {("welcome message") ? (
-                <>
-                  Welcome message
-                </>
-              ) : (
-                <></>
-              )}
+              {"welcome message" ? <>Welcome message</> : <></>}
             </div>
           </div>
           <div className="home__feeds-cards-main">
@@ -66,8 +60,9 @@ const Home = ({
                   <div className="home__feeds-media">
                     <div className="home__feeds-media-content">
                       <h4
-                        className={`${recentSession.unRead > 0 ? "unRead" : ""
-                          }`}
+                        className={`${
+                          recentSession.unRead > 0 ? "unRead" : ""
+                        }`}
                         style={{ cursor: "auto" }}
                       >
                         Recent conversation
@@ -90,9 +85,7 @@ const Home = ({
               >
                 <div className="home__feeds-media">
                   <div className="home__feeds-media-content">
-                    <h5>
-                      "Send us a message "
-                    </h5>
+                    <h5>"Send us a message "</h5>
                     {/* <p>We typically reply within a day</p> */}
                   </div>
                   <div className="home__feeds-media-icon">

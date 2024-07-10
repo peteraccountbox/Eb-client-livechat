@@ -18,6 +18,7 @@ import {
   AIBotPromptActionEnum,
   AIBotPrefPayloadType,
   BotDetails,
+  EventPayloadObj,
 } from "../Models";
 import {
   getBrowserInfo,
@@ -29,6 +30,7 @@ import {
 } from "../Utils";
 import { AppContext } from "../appContext";
 import {
+  ADD_EMAIL_URL_PATH,
   CHANNEL_ID,
   CONNECT_TO_AGENT_URL_PATH,
   CONVERSATION_MESSAGE_FETCH_URL_PATH,
@@ -38,6 +40,7 @@ import {
   OPENED_CHAT,
   PROACTIVE_MESSAGE,
   TYPING_ALERT_URL_PATH,
+  UPDATE_READ_URL_PATH,
   VISITOR_UUID,
 } from "../globals";
 import React, {
@@ -67,8 +70,53 @@ const Conversation = (props: ConversationProps) => {
   const parentContext = useContext(AppContext);
   const { chatPrefs, sessions, setSessions } = parentContext;
 
+  const fields = [
+    {
+      name: "customerEmail",
+      label: "Drop your email",
+      type: "email",
+      required: true,
+      value: "",
+      placeholder: "reacho@email.com",
+      error: "",
+      is_valid: true,
+      helpText:
+        "Messages and ticket updates will be sent to this email address",
+    },
+    // {
+    //   name: "subject",
+    //   label: "Subject",
+    //   type: "text",
+    //   required: true,
+    //   value: "",
+    //   placeholder: "Subject",
+    //   error: "",
+    //   is_valid: true,
+    // },
+    // {
+    //   name: "description",
+    //   label: "Description",
+    //   type: "textarea",
+    //   required: true,
+    //   value: "",
+    //   placeholder: "Description",
+    //   error: "",
+    //   is_valid: true,
+    // },
+    // {
+    //   name: "date",
+    //   label: "When did the issue occur",
+    //   type: "date",
+    //   required: true,
+    //   value: "",
+    //   placeholder: "",
+    //   error: "",
+    //   is_valid: true,
+    // },
+  ];
+
   const text = useRef<HTMLTextAreaElement>(null);
-  const [formFields, setFormFields] = useState<ChatFromFieldDataPayLoad[]>([]);
+  const [formFields, setFormFields] = useState<any[]>(fields);
   const [typeText, setTypeText] = useState("");
   const [showChatForm, setShowChatForm] = useState(false);
   const [typingTimer, setTypingTimer] = useState<any>();
@@ -79,32 +127,38 @@ const Conversation = (props: ConversationProps) => {
     session.messageList = [];
 
     let initialMessage = getSessionStoragePrefs(PROACTIVE_MESSAGE);
-    if (initialMessage) {
-      session.messageList.push({
-        from: MessageByTypeEnum.SYSTEM,
-        bodyText: initialMessage,
-        format: MessageFormatType.TEXT,
-        session_id: undefined,
-        system_message_type: "PROACTIVE_SYSTEM_MESSAGE",
-        created_time: new Date().getTime() / 1000,
-      } as ChatMessagePaylodObj);
-    }
+    // if (initialMessage) {
+    //   session.messageList.push({
+    //     from: MessageByTypeEnum.SYSTEM,
+    //     bodyText: initialMessage,
+    //     format: MessageFormatType.TEXT,
+    //     session_id: undefined,
+    //     system_message_type: "PROACTIVE_SYSTEM_MESSAGE",
+    //     created_time: new Date().getTime() / 1000,
+    //   } as ChatMessagePaylodObj);
+    // }
 
-    if (
-      chatPrefs.matchedBotPrefs &&
-      chatPrefs.matchedBotPrefs.id &&
-      chatPrefs.matchedBotPrefs.settings.welcomeMessage
-    ) {
-      session.messageList.push({
-        from: MessageByTypeEnum.GPT,
-        bodyText: chatPrefs.matchedBotPrefs.settings.welcomeMessage,
-        format: MessageFormatType.TEXT,
-        session_id: undefined,
-        created_time: new Date().getTime() / 1000,
-      });
-    }
+    // if (
+    //   chatPrefs.matchedBotPrefs &&
+    //   chatPrefs.matchedBotPrefs.id &&
+    //   chatPrefs.matchedBotPrefs.settings.welcomeMessage
+    // ) {
+    //   session.messageList.push({
+    //     from: MessageByTypeEnum.GPT,
+    //     bodyText: chatPrefs.matchedBotPrefs.settings.welcomeMessage,
+    //     format: MessageFormatType.TEXT,
+    //     session_id: undefined,
+    //     created_time: new Date().getTime() / 1000,
+    //   });
+    // }
 
     return session;
+  };
+
+  const isEmailCaptured = (): boolean => {
+    return !session.customerEmail && chatPrefs.meta.emailCaptureEnabled
+      ? false
+      : true;
   };
 
   const getSession = (): ChatSessionPaylodObj => {
@@ -124,7 +178,9 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const [session, setSession] = useState<ChatSessionPaylodObj>(getSession());
-
+  const [emailCaptured, setEmailCaptured] = useState<boolean>(
+    isEmailCaptured()
+  );
   const [matchedBotPrefs, setMatchedBotPrefs] = useState<
     AIBotPrefPayloadType | undefined
   >(undefined);
@@ -156,7 +212,12 @@ const Conversation = (props: ConversationProps) => {
     }
 
     if (session.id) getMessageList();
-  }, []);
+    getReq(UPDATE_READ_URL_PATH + "/" + session.id, {}).then((response) => {
+      session.customerUnreadMessagesCount = 0;
+      setSessions([...sessions]);
+      eventBus.emit("message_read");
+    });
+  }, [session]);
 
   const getMessageList = async () => {
     if (!session.id) return;
@@ -166,7 +227,7 @@ const Conversation = (props: ConversationProps) => {
     try {
       const response = await getReq(
         CONVERSATION_MESSAGE_FETCH_URL_PATH + "/" + session.id,
-        {}
+        { page: 0, size: 50, sort: "createdTime" }
       );
 
       session.messageList = response.data.data;
@@ -189,37 +250,37 @@ const Conversation = (props: ConversationProps) => {
     return chatPrefs.matchedBotPrefs;
   };
 
-  useEffect(() => {
-    let storedFormData: JSONObjectType = {};
-    try {
-      let obj: any = getFormData();
-      if (obj) storedFormData = JSON.parse(obj) as JSONObjectType;
-    } catch (error) {}
+  // useEffect(() => {
+  //   let storedFormData: JSONObjectType = {};
+  //   try {
+  //     let obj: any = getFormData();
+  //     if (obj) storedFormData = JSON.parse(obj) as JSONObjectType;
+  //   } catch (error) {}
 
-    let fields: ChatFromFieldDataPayLoad[] = [];
+  //   let fields: ChatFromFieldDataPayLoad[] = [];
 
-    // chatPrefs.prechat.formData.forEach(
-    //   (field: ChatFromFieldDataPayLoad, index: number) => {
-    //     let fieldClone = JSON.parse(
-    //       JSON.stringify(field)
-    //     ) as ChatFromFieldDataPayLoad;
+  //   // chatPrefs.prechat.formData.forEach(
+  //   //   (field: ChatFromFieldDataPayLoad, index: number) => {
+  //   //     let fieldClone = JSON.parse(
+  //   //       JSON.stringify(field)
+  //   //     ) as ChatFromFieldDataPayLoad;
 
-    //     fieldClone.value =
-    //       storedFormData[fieldClone.name] &&
-    //         !(field.field_type == "SYSTEM" && field.name == "message")
-    //         ? storedFormData[fieldClone.name]
-    //         : "";
-    //     if (fieldClone.type == "multicheckbox" || fieldClone.type == "checkbox")
-    //       fieldClone.valueArr = storedFormData[fieldClone.name]
-    //         ? Array.from(storedFormData[fieldClone.name])
-    //         : [];
-    //     fieldClone.is_valid = false;
-    //     fields.push(fieldClone);
-    //   }
-    // );
+  //   //     fieldClone.value =
+  //   //       storedFormData[fieldClone.name] &&
+  //   //         !(field.field_type == "SYSTEM" && field.name == "message")
+  //   //         ? storedFormData[fieldClone.name]
+  //   //         : "";
+  //   //     if (fieldClone.type == "multicheckbox" || fieldClone.type == "checkbox")
+  //   //       fieldClone.valueArr = storedFormData[fieldClone.name]
+  //   //         ? Array.from(storedFormData[fieldClone.name])
+  //   //         : [];
+  //   //     fieldClone.is_valid = false;
+  //   //     fields.push(fieldClone);
+  //   //   }
+  //   // );
 
-    setFormFields(fields);
-  }, [showChatForm]);
+  //   setFormFields(fields);
+  // }, [showChatForm]);
 
   const publishMessageToChatAgents = (message: any) => {
     if (!session) return;
@@ -257,17 +318,17 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const updateMessage = (message: ChatMessagePaylodObj) => {
-    if (!message.session_id) {
+    if (!message.ticketId) {
       return;
     }
 
     // Get session from session id
-    let session = getSessionById(message.session_id);
+    let session = getSessionById(message.ticketId);
     console.log("updating message session", session);
     if (!session || !session.messageList || session.messageList.length == 0)
       return;
 
-    session.messageList.map((eachmessage: ChatMessagePaylodObj) => {
+    session.messageList.map((eachmessage: EventPayloadObj) => {
       if (message.id === eachmessage.id) return message;
       return eachmessage;
     });
@@ -279,27 +340,27 @@ const Conversation = (props: ConversationProps) => {
   //   setSessions([...sessions]);
   // }
 
-  const getSessionById = (id: number | undefined) => {
+  const getSessionById = (id: string | undefined) => {
     if (!id) return undefined;
 
     return sessions.find(function (session) {
-      return session.id === Number(id);
+      return session.id == id;
     });
   };
 
-  const updateMessageList = (message: ChatMessagePaylodObj) => {
-    if (!message.session_id) {
+  const updateMessageList = (message: EventPayloadObj) => {
+    if (!message.ticketId) {
       return;
     }
 
     // Get session from session id
-    let session = getSessionById(message.session_id);
+    let session = getSessionById(message.ticketId);
     console.log("updating message session", session);
     if (!session) return;
 
     session.messageList = session.messageList.map(
-      (eachmessage: ChatMessagePaylodObj) => {
-        if ("SENDING" === eachmessage.status) return message;
+      (eachmessage: EventPayloadObj) => {
+        if ("SENDING" === eachmessage.message.status) return message;
         return eachmessage;
       }
     );
@@ -338,8 +399,39 @@ const Conversation = (props: ConversationProps) => {
     setShowChatForm(false);
 
     setLocalStoragePrefs(FORM_DATA, JSON.stringify(formData));
+    setSaving(true);
+    if (session && session.id) {
+      const wait = getReq(ADD_EMAIL_URL_PATH, {
+        customerEmail: formData.customerEmail,
+        ticketId: session.id,
+      });
+      wait
+        .then((response: any) => {
+          console.log(response);
 
-    sendMessage(true);
+          let newNession = response.data as ChatSessionPaylodObj;
+          newNession.messageList = session.messageList;
+          updateAndOpenSession(newNession);
+          setSession(newNession);
+          setEmailCaptured(true);
+          setSessionStoragePrefs(OPENED_CHAT, newNession.id);
+        })
+        .catch(() => {});
+      return;
+    }
+    session.customerEmail = formData.customerEmail as string;
+    submitSessionEvent(NEW_SESSION_URL_PATH, session, (response: any) => {
+      // if (newChat) {
+      // Get session
+      let newNession = response.data as ChatSessionPaylodObj;
+      updateAndOpenSession(newNession);
+      setSession(newNession);
+      setEmailCaptured(true);
+      setSessionStoragePrefs(OPENED_CHAT, newNession.id);
+      // } else {
+      //   updateMessageList(response.data);
+      // }
+    });
 
     // Submit form
     // setEnableChatFooter(true);
@@ -357,8 +449,14 @@ const Conversation = (props: ConversationProps) => {
         "Whoops! Something went wrong. Please try again later.";
 
       var data: ChatMessagePaylodObj = getChatMessage(mssg, undefined);
-      data.from = MessageByTypeEnum.SYSTEM;
-      pushMessage(data, session);
+      let event: EventPayloadObj = {
+        ticketId: session?.id,
+        eventType: "MESSAGE",
+        source: "WEBSITE",
+        from: MessageByTypeEnum.CUSTOMER,
+        message: data,
+      };
+      pushMessage(event, session);
 
       setSessions([...sessions]);
     }
@@ -442,9 +540,6 @@ const Conversation = (props: ConversationProps) => {
 
     // Set status sending
     data.status = "SENDING";
-    setSaving(true);
-    data.created_time = parseInt((new Date().getTime() / 1000).toString());
-    data.id = uuidv4();
     try {
       // data.wa_VISITOR_UUID = window.parent.EhAPI.getWAVisitorId();
     } catch (err) {
@@ -453,22 +548,39 @@ const Conversation = (props: ConversationProps) => {
 
     var url = newChat ? NEW_SESSION_URL_PATH : MESSAGE_URL_PATH;
 
+    let event: EventPayloadObj = {
+      ticketId: session?.id,
+      eventType: "MESSAGE",
+      source: "WEBSITE",
+      from: MessageByTypeEnum.CUSTOMER,
+      message: data,
+    };
+
     // Make temp push
     if (newChat) {
       session.channelId = CHANNEL_ID;
       session.visitorId = VISITOR_UUID;
       session.channelType = "CHAT";
       session.createdSource = "WEBSITE";
-      pushMessage(data, session);
+      session.createdBy = MessageByTypeEnum.CUSTOMER;
+      pushMessage(event, session);
     } else {
-      data.session_id = session?.id;
-      pushMessage(data, session);
+      data.ticketId = session?.id + "";
+      pushMessage(event, session);
     }
 
     // Add gpt id in each request, So that can keep ai connection alive with visitor
     if (matchedBotPrefs?.id) {
       session.gpt_bot_id = matchedBotPrefs?.id;
       data.gpt_bot_id = matchedBotPrefs?.id;
+    }
+
+    if (
+      !emailCaptured &&
+      chatPrefs.meta.emailCaptureEnforcement == "required"
+    ) {
+      data.status = "";
+      return;
     }
 
     submitSessionEvent(url, newChat ? session : data, (response: any) => {
@@ -489,18 +601,16 @@ const Conversation = (props: ConversationProps) => {
     type?: MessageFormatType
   ) => {
     let state: ChatMessagePaylodObj = {
-      from: MessageByTypeEnum.CUSTOMER,
       bodyText: msg,
       format: !type ? MessageFormatType.TEXT : type,
       session_id: session?.id,
-      ticketId: session?.id + "",
-      source: "WEBSITE",
+      ticketId: session?.id && session?.id,
       created_time: new Date().getTime(),
     } as ChatMessagePaylodObj;
 
     // Add session id if present
     if (session && session.id && session.type == "LIVECHAT")
-      state.session_id = session.id;
+      state.ticketId = session.id + "";
 
     return state;
   };
@@ -586,39 +696,40 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const getHeaderName = () => {
-    const agent = getOperatorFromSession(session, parentContext.agents);
-    if (agent && agent?.name) return agent?.name;
+    // const agent = getOperatorFromSession(session, parentContext.agents);
+    // if (agent && agent?.name) return agent?.name;
 
-    if (matchedBotPrefs?.id) return matchedBotPrefs?.name;
+    // if (matchedBotPrefs?.id) return matchedBotPrefs?.name;
+    if (parentContext.chatPrefs.name) return parentContext.chatPrefs.name;
 
-    return parentContext.chatPrefs.meta.decoration.introductionText;
+    // return parentContext.chatPrefs.meta.decoration.introductionText;
   };
 
-  const connectToAgent = () => {
-    var url =
-      session && session.id
-        ? CONNECT_TO_AGENT_URL_PATH + session.id
-        : NEW_SESSION_URL_PATH;
+  // const connectToAgent = () => {
+  //   var url =
+  //     session && session.id
+  //       ? CONNECT_TO_AGENT_URL_PATH + session.id
+  //       : NEW_SESSION_URL_PATH;
 
-    // session
-    session.connect_to_agent_on_demand = true;
+  //   // session
+  //   session.connect_to_agent_on_demand = true;
 
-    let formData = getFormMetaData();
-    session.meta = JSON.stringify(getFormMetaData());
+  //   let formData = getFormMetaData();
+  //   session.meta = JSON.stringify(getFormMetaData());
 
-    if (formData && formData.message) {
-      session.messageList.push(
-        getChatMessage(formData.message as string, MessageFormatType.TEXT)
-      );
-    }
+  //   if (formData && formData.message) {
+  //     session.messageList.push(
+  //       getChatMessage(formData.message as string, MessageFormatType.TEXT)
+  //     );
+  //   }
 
-    submitSessionEvent(url, session, (response: any) => {
-      // Get session
-      let newNession = response.data as ChatSessionPaylodObj;
-      // newNession.messageList = session.messageList;
-      updateAndOpenSession(newNession);
-    });
-  };
+  //   submitSessionEvent(url, session, (response: any) => {
+  //     // Get session
+  //     let newNession = response.data as ChatSessionPaylodObj;
+  //     // newNession.messageList = session.messageList;
+  //     updateAndOpenSession(newNession);
+  //   });
+  // };
 
   const executeBotPromptAction = (prompt: AIBotPromptsPayloadType) => {
     switch (prompt.action) {
@@ -629,7 +740,7 @@ const Conversation = (props: ConversationProps) => {
         }
 
         // Connect to agent
-        connectToAgent();
+        // connectToAgent();
         break;
 
       case AIBotPromptActionEnum.MESSAGE:
@@ -754,7 +865,7 @@ const Conversation = (props: ConversationProps) => {
 
               {!showChatForm ? (
                 session?.messageList?.map(
-                  (message: ChatMessagePaylodObj, index: number) => {
+                  (message: EventPayloadObj, index: number) => {
                     return (
                       <div>
                         <div>
@@ -762,9 +873,72 @@ const Conversation = (props: ConversationProps) => {
                             message={message}
                             session={session}
                             nextMessage={session?.messageList[index + 1]}
-                            formFields={formFields}
+                            // formFields={formFields}
                             updateMessage={updateMessage}
                           />
+                          {/* <form className="chat__messages-group chat__messages-group--me">
+                               <div className="chat__messages-bubble">
+                                 <label className="chat__ticket-form-label">
+                                   Drop your email
+                                 </label>
+                                 <div
+                                   className=""
+                                   style={{
+                                     display: "flex",
+                                   }}
+                                 >
+                                   <input
+                                     type="email"
+                                     required={true}
+                                     style={{
+                                       borderTopRightRadius: 0,
+                                       borderBottomRightRadius: 0,
+                                       borderRight: 0,
+                                     }}
+                                     placeholder="reacho@email.com"
+                                     name="customerEmail"
+                                     className="chat__ticket-form-control"
+                                     // value={}
+                                     // onChange={(e) =>
+                                     //   handleFieldValueChange(
+                                     //     e.target.value,
+                                     //     field
+                                     //   )
+                                     // }
+                                   />
+                                   <button
+                                     className="btn btn-outline-primary"
+                                     type="submit"
+                                   >
+                                     <svg
+                                       xmlns="http://www.w3.org/2000/svg"
+                                       width="24"
+                                       height="24"
+                                       viewBox="0 0 16 16"
+                                       fill="none"
+                                     >
+                                       <path
+                                         d="M5.42773 4.70898C5.46387 4.85254 5.53809 4.98828 5.65039 5.10059L8.54932 8L5.64893 10.9004C5.31689 11.2324 5.31689 11.7705 5.64893 12.1025C5.98096 12.4336 6.51904 12.4336 6.85107 12.1025L10.3516 8.60059C10.5591 8.39355 10.6367 8.10449 10.585 7.83691C10.5537 7.67578 10.4761 7.52246 10.3516 7.39844L6.85254 3.89941C6.52051 3.56738 5.98242 3.56738 5.65039 3.89941C5.43066 4.11816 5.35645 4.42871 5.42773 4.70898Z"
+                                         fill="#000000"
+                                       ></path>
+                                     </svg>
+                                   </button>
+                                 </div>
+                               </div>
+                             </form> */}
+                          {index == 0 && !emailCaptured && (
+                            <ChatForm
+                              closeChatForm={() => {
+                                setShowChatForm(false);
+                              }}
+                              // formFields={formFields}
+                              // setFormFields={setFormFields}
+                              submitChatForm={submitChatForm}
+                              typeText={typeText}
+                              setTypeText={setTypeText}
+                              saving={saving}
+                            />
+                          )}
                         </div>
                       </div>
                     );
@@ -779,8 +953,8 @@ const Conversation = (props: ConversationProps) => {
                   closeChatForm={() => {
                     setShowChatForm(false);
                   }}
-                  formFields={formFields}
-                  setformFields={setFormFields}
+                  // formFields={formFields}
+                  // setFormFields={setFormFields}
                   submitChatForm={submitChatForm}
                   typeText={typeText}
                   setTypeText={setTypeText}
@@ -803,7 +977,16 @@ const Conversation = (props: ConversationProps) => {
           </div>
         </div>
 
-        <div className={`chat__footer ${showChatForm ? "hide" : ""}`}>
+        <div
+          className={`chat__footer ${
+            showChatForm ||
+            (chatPrefs.meta.emailCaptureEnforcement == "required" &&
+              !emailCaptured &&
+              session.messageList?.length > 0)
+              ? "hide"
+              : ""
+          }`}
+        >
           {getChatPrompts()}
 
           <div className="chat__form">

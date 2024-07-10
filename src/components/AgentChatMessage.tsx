@@ -1,5 +1,9 @@
 import React, { FC, useContext, useEffect } from "react";
-import { ChatMessagePaylodObj, ChatSessionPaylodObj } from "../Models";
+import {
+  ChatMessagePaylodObj,
+  ChatSessionPaylodObj,
+  EventPayloadObj,
+} from "../Models";
 import ChatMessage from "./ChatMessage";
 import OperatorName from "./OperatorName";
 import boticon from "../assets/img/chatbot-final.png";
@@ -15,21 +19,23 @@ TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
 export interface AgentChatMessagePropsType {
-  message: ChatMessagePaylodObj;
-  sessionId?: number;
+  message: EventPayloadObj;
+  sessionId?: number | string;
   // session: ChatSessionPaylodObj | undefined,
   formatMessageTime(): void;
 }
 
 const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
   const getMessageTime = () => {
-    return props.message.created_time * 1000;
+    return props.message.message.createdTime
+      ? new Date(props.message.message.createdTime)
+      : 0;
   };
 
   const parentContext = useContext(AppContext);
 
   const agent = parentContext.agents?.find((agent) => {
-    return agent.id === props.message.user_id;
+    return agent.id === props.message.agentId;
   });
 
   return (
@@ -67,19 +73,19 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
                 <ChatMessage
                   message={props.message}
                   sessionId={props.sessionId}
-                  updateMessage={() => { }}
+                  updateMessage={() => {}}
                 />
               </li>
             </ul>
           </div>
 
           <div className="chat__messages-timestamp">
-            <>{getMessageTime()}</>
-            {/* <ReactTimeAgo
+            {/* <>{getMessageTime()}</> */}
+            <ReactTimeAgo
               date={getMessageTime()}
               locale="en-US"
               tooltip={false}
-            /> */}
+            />
           </div>
         </div>
       </div>

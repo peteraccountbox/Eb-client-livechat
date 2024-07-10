@@ -21,8 +21,10 @@ const ConversationList = ({
 
   const sortedSessions: ChatSessionPaylodObj[] | undefined = useMemo(() => {
     function compare(a: ChatSessionPaylodObj, b: ChatSessionPaylodObj) {
-      if (a.updated_time < b.updated_time) return 1;
-      if (a.updated_time > b.updated_time) return -1;
+      if (new Date(a.updatedTime).valueOf() < new Date(b.updatedTime).valueOf())
+        return 1;
+      if (new Date(a.updatedTime).valueOf() > new Date(b.updatedTime).valueOf())
+        return -1;
       return 0;
     }
     return sessions?.sort(compare);
@@ -33,8 +35,9 @@ const ConversationList = ({
   };
 
   const getHeaderText = () => {
-    if (parentContext.chatPrefs.matchedBotPrefs?.id)
-      return parentContext.chatPrefs.matchedBotPrefs?.name;
+    // if (parentContext.chatPrefs.matchedBotPrefs?.id)
+    //   return parentContext.chatPrefs.matchedBotPrefs?.name;
+    if (parentContext.chatPrefs.name) return parentContext.chatPrefs.name;
 
     return "Header Text";
   };
@@ -69,7 +72,7 @@ const ConversationList = ({
                     session={session}
                     openChatConversation={openChatConversation}
                     key={session.id}
-                  // updateSession={updateSession}
+                    // updateSession={updateSession}
                   />
                 )
               )}
@@ -85,9 +88,7 @@ const ConversationList = ({
                 alt="No Tickets"
               />
               <h2 className="pad-content-title">No Chats</h2>
-              <p className="pad-text">
-                No Messages
-              </p>
+              <p className="pad-text">No Messages</p>
             </div>
           </div>
         )}
@@ -100,7 +101,8 @@ const ConversationList = ({
       >
         {/* {parentContext.chatPrefs.widget.new_conversation_btn_text} */}
         <span style={{ marginRight: "5px" }}>{getStartConvButtonText()}</span>
-        <svg className="chat_send_icon"
+        <svg
+          className="chat_send_icon"
           id="fi_9290348"
           enable-background="new 0 0 32 32"
           viewBox="0 0 32 32"

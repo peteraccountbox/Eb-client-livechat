@@ -58,9 +58,7 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
             </div>
 
             <div className="chat__header-user-title">
-              <h1 className="chat__header-user-name">
-                title
-              </h1>
+              <h1 className="chat__header-user-name">title</h1>
             </div>
           </div>
         </div>
@@ -84,73 +82,76 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                   </pre>
                 </div>
 
-                {chatPrefs.prechat && chatPrefs.prechat.formData.map((field, index) => {
-                  return (
-                    <>
-                      <div className="chat__messages-form-group">
-                        {(() => {
-                          switch (true) {
-                            case field.type == "textarea" && field.visible:
-                              {
+                {chatPrefs.prechat &&
+                  chatPrefs.prechat.formData.map((field, index) => {
+                    return (
+                      <>
+                        <div className="chat__messages-form-group">
+                          {(() => {
+                            switch (true) {
+                              case field.type == "textarea" && field.visible:
+                                {
+                                  return (
+                                    <textarea
+                                      className="chat_form-control"
+                                      placeholder={field.placeholder}
+                                      required={field.required}
+                                      value={field.value}
+                                      name={field.name}
+                                    ></textarea>
+                                  );
+                                }
+                                break;
+
+                              case field.visible && field.type == "list": {
                                 return (
-                                  <textarea
+                                  <select
                                     className="chat_form-control"
-                                    placeholder={field.placeholder}
+                                    //placeholder={field.placeholder}
                                     required={field.required}
-                                    value={field.value}
                                     name={field.name}
-                                  ></textarea>
+                                    value={field.value}
+                                  >
+                                    <option value="">
+                                      {field.placeholder}
+                                    </option>
+                                    {JSON.parse(field?.options || "[]").map(
+                                      (value: string, index: number) => {
+                                        return (
+                                          <option value={value}>{value}</option>
+                                        );
+                                      }
+                                    )}
+                                  </select>
                                 );
                               }
-                              break;
 
-                            case field.visible && field.type == "list": {
-                              return (
-                                <select
-                                  className="chat_form-control"
-                                  //placeholder={field.placeholder}
-                                  required={field.required}
-                                  name={field.name}
-                                  value={field.value}
-                                >
-                                  <option value="">{field.placeholder}</option>
-                                  {JSON.parse(field?.options || "[]").map(
-                                    (value: string, index: number) => {
-                                      return (
-                                        <option value={value}>{value}</option>
-                                      );
-                                    }
-                                  )}
-                                </select>
-                              );
-                            }
+                              case field.visible && field.type == "checkbox": {
+                                return (
+                                  <div className="chat__form-checkbox">
+                                    <div className="chat__form-check">
+                                      <input
+                                        type="checkbox"
+                                        id={field.options}
+                                        required={field.required}
+                                        value={field.options}
+                                        className="chat__form-check-input"
+                                      />
 
-                            case field.visible && field.type == "checkbox": {
-                              return (
-                                <div className="chat__form-checkbox">
-                                  <div className="chat__form-check">
-                                    <input
-                                      type="checkbox"
-                                      id={field.options}
-                                      required={field.required}
-                                      value={field.options}
-                                      className="chat__form-check-input"
-                                    />
-
-                                    <label
-                                      className="chat__form-check-label"
-                                      htmlFor={field.options}
-                                    >
-                                      {" "}
-                                      {field.placeholder}{" "}
-                                    </label>
+                                      <label
+                                        className="chat__form-check-label"
+                                        htmlFor={field.options}
+                                      >
+                                        {" "}
+                                        {field.placeholder}{" "}
+                                      </label>
+                                    </div>
                                   </div>
-                                </div>
-                              );
-                            }
+                                );
+                              }
 
-                            case field.visible &&
-                              field.type == "multicheckbox": {
+                              case field.visible &&
+                                field.type == "multicheckbox": {
                                 return (
                                   <div className="chat__form-checkbox">
                                     <label className="chat__form-label">
@@ -182,67 +183,68 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                                 );
                               }
 
-                            case field.visible && field.type == "radiobutton": {
-                              return (
-                                <div className="chat__form-checkbox radio">
-                                  <label className="chat__form-label">
-                                    {field.placeholder}
-                                  </label>
-                                  {JSON.parse(field?.options || "[]").map(
-                                    (opt: string, index: number) => {
-                                      return (
-                                        <div className="chat__form-check radio-options">
-                                          <input
-                                            type="radio"
-                                            id={opt}
-                                            value={opt}
-                                            name={field.name}
-                                            required={field.required}
-                                            className="chat__form-check-input"
-                                          />
-                                          <label
-                                            className="chat__form-check-label"
-                                            htmlFor={opt}
-                                          >
-                                            {opt}
-                                          </label>
-                                        </div>
-                                      );
-                                    }
-                                  )}
-                                </div>
-                              );
-                            }
-
-                            case field.visible: {
-                              return (
-                                <input
-                                  className="chat_form-control"
-                                  type={field.type}
-                                  placeholder={field.placeholder}
-                                  required={field.required}
-                                  name={field.name}
-                                  value={field.value}
-                                />
-                              );
-                            }
-
-                            default:
-                              {
-                                return <p>Bye</p>;
+                              case field.visible &&
+                                field.type == "radiobutton": {
+                                return (
+                                  <div className="chat__form-checkbox radio">
+                                    <label className="chat__form-label">
+                                      {field.placeholder}
+                                    </label>
+                                    {JSON.parse(field?.options || "[]").map(
+                                      (opt: string, index: number) => {
+                                        return (
+                                          <div className="chat__form-check radio-options">
+                                            <input
+                                              type="radio"
+                                              id={opt}
+                                              value={opt}
+                                              name={field.name}
+                                              required={field.required}
+                                              className="chat__form-check-input"
+                                            />
+                                            <label
+                                              className="chat__form-check-label"
+                                              htmlFor={opt}
+                                            >
+                                              {opt}
+                                            </label>
+                                          </div>
+                                        );
+                                      }
+                                    )}
+                                  </div>
+                                );
                               }
-                              break;
-                          }
-                        })()}
-                      </div>
-                      {field.error ? (
-                        <div className="error-content">{field.error}</div>
-                      ) : (
-                        <></>
-                      )}
-                    </>
-                  );
-                })}
+
+                              case field.visible: {
+                                return (
+                                  <input
+                                    className="chat_form-control"
+                                    type={field.type}
+                                    placeholder={field.placeholder}
+                                    required={field.required}
+                                    name={field.name}
+                                    value={field.value}
+                                  />
+                                );
+                              }
+
+                              default:
+                                {
+                                  return <p>Bye</p>;
+                                }
+                                break;
+                            }
+                          })()}
+                        </div>
+                        {field.error ? (
+                          <div className="error-content">{field.error}</div>
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                    );
+                  })}
 
                 <a
                   className="chat__messages-btn"
