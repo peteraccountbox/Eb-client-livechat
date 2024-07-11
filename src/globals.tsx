@@ -61,6 +61,16 @@ export const CONVERSATIONS_FETCH_URL_PATH =
 export const CHAT_FLOWS_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/chat-flows/";
 
+export const START_FLOW_URL_PATH =
+  REQUEST_PREFIX_PATH + "/flow/start";
+
+export const EXECUTION_LIST_FETCH_URL_PATH =
+  REQUEST_PREFIX_PATH + "/flow/execution/";
+
+export const EXECUTE_FLOW_NODE_URL_PATH =
+  REQUEST_PREFIX_PATH + "/flow/execute";
+
+
 export const CONVERSATION_MESSAGE_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/get-chat-messages";
 
@@ -79,6 +89,8 @@ export const GET_BIG_TEXT_URL_PATH =
 export const WINDOW_OPEN = "window-open";
 
 export const OPENED_CHAT = "opened-chat";
+
+export const OPENED_FLOW = "opened-flow";
 
 export const OPERATORS = "operators";
 

@@ -106,6 +106,7 @@ export interface Decoration {
 }
 
 export type ChatPrefsPayloadType = {
+  id: string;
   meta: ChatChannelMeta;
   name: string;
 
@@ -179,6 +180,7 @@ export type AgentPaylodObj = {
 
 export type ChatFlowsPayloadObj = {
   name: string;
+  id: string
 };
 
 export type ChatSessionPaylodObj = {

@@ -18,6 +18,7 @@ import {
   UPDATE_READ_URL_PATH,
   FooterTabs,
   CHAT_FLOWS_FETCH_URL_PATH,
+  OPENED_FLOW,
 } from "./globals";
 import {
   ActiveSessionObjType,
@@ -344,7 +345,7 @@ const App: React.FunctionComponent = () => {
     if (!chatPrefs?.meta.flowIds || chatPrefs?.meta.flowIds.length == 0)
       return;
 
-    const response = await getReq(CHAT_FLOWS_FETCH_URL_PATH + "", {
+    const response = await getReq(CHAT_FLOWS_FETCH_URL_PATH + chatPrefs.id, {
       page: 0,
       size: 20,
       sort: "updatedTime",
@@ -490,6 +491,11 @@ const App: React.FunctionComponent = () => {
   const openChat = (id: string) => {
     setSessionStoragePrefs(OPENED_CHAT, id);
 
+    changeActiveTab(widgetFooterTabs.Messages);
+  };
+
+  const startFlow = (id: string) => {
+    setSessionStoragePrefs(OPENED_FLOW, id);
     changeActiveTab(widgetFooterTabs.Messages);
   };
 
@@ -781,6 +787,7 @@ const App: React.FunctionComponent = () => {
                           <Home
                             openChat={openChat}
                             startNewChat={startNewChat}
+                            startFlow={startFlow}
                           />
                         );
                       }

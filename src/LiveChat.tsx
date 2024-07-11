@@ -9,11 +9,14 @@ import {
   removeSessionStoragePrefs,
   setSessionStoragePrefs,
 } from "./Storage";
-import { OPENED_CHAT } from "./globals";
+import { OPENED_CHAT, OPENED_FLOW } from "./globals";
+import Flow from "./components/InteractiveFlow";
+import InteractiveFlow from "./components/InteractiveFlow";
 
 enum LivechatComponentNames {
   ConversationList = "ConversationList",
   Conversation = "Conversation",
+  Flow = "Flow"
 }
 
 export type LivechatComponentProps = {
@@ -32,10 +35,12 @@ export default function LiveChat({
   // const parentContext = useContext(AppContext);
   // const { sessions, setSessions } = parentContext;
 
-  let componentName =
-    getSessionStoragePrefs(OPENED_CHAT) != null
-      ? LivechatComponentNames.Conversation
-      : LivechatComponentNames.ConversationList;
+  let componentName = LivechatComponentNames.ConversationList;
+  if (getSessionStoragePrefs(OPENED_CHAT) != null) {
+    componentName = LivechatComponentNames.Conversation;
+  } else if (getSessionStoragePrefs(OPENED_FLOW) != null) {
+    componentName = LivechatComponentNames.Flow;
+  }
 
   const [activeComponentName, setActiveComponentName] =
     useState<LivechatComponentNames>(
@@ -87,6 +92,12 @@ export default function LiveChat({
                   showChatsList={showChatList}
                   addNewSession={addNewSession}
                 />
+              );
+            } else if (
+              activeComponentName === LivechatComponentNames.Flow
+            ) {
+              return (
+                <InteractiveFlow />
               );
             } else {
               return <>None</>;

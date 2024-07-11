@@ -8,9 +8,11 @@ import CloseWidgetPanel from "./components/CloseWidgetPanel";
 const Home = ({
   openChat,
   startNewChat,
+  startFlow
 }: {
   openChat: (id: string) => void;
   startNewChat: (initialMessage?: string | undefined) => void;
+  startFlow: (id: string) => void
 }) => {
 
   const parentContext = useContext(AppContext);
@@ -65,12 +67,11 @@ const Home = ({
                     <div className="home__feeds-media">
                       <div className="home__feeds-media-content">
 
-                        {chatFlows.map(
-                          (chatFlow: ChatSessionPaylodObj, index: number) => (
+                        {chatFlows.map((chatFlow: ChatFlowsPayloadObj, index: number) => {
 
-                            <div>asasd</div>
+                          return (<div onClick={() => startFlow(chatFlow.id)}>{chatFlow.name}</div>)
 
-                          )
+                        }
                         )}
                       </div>
                     </div>
