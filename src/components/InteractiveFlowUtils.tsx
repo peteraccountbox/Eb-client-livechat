@@ -5,8 +5,8 @@ import Start from "./interactiveNodes/Start";
 export type NodeExecutionPayload = {
   id: string;
   executionMetaId: string;
-  flowId: string
-  info: string
+  flowId: string;
+  info: string;
   nodeType: InteractiveNodeTypes;
   nodeId: string;
   isResponseNeeded: boolean;
@@ -14,24 +14,30 @@ export type NodeExecutionPayload = {
   responseAction: object[];
   isExecuted: boolean;
   nextNodeId: string;
-  node: any
-}
+  node: any;
+  relatedEdges: any;
+};
 
-enum InteractiveNodeTypes {
+export type NodePayLoad = {
+  type: InteractiveNodeTypes;
+  [x: string]: any;
+};
+
+export enum InteractiveNodeTypes {
   START,
-  MULTI_CHOICE,
-  END
+  END,
+  MULTIPLE_CHOICE,
 }
 
 export type InteractiveNodeProps = {
   execution: NodeExecutionPayload;
-  executeNodeOnUserInteraction: (exe: NodeExecutionPayload) => void
-}
+  executeNodeOnUserInteraction: (exe: NodeExecutionPayload) => void;
+};
 
 export const InteractiveFlowNodes: {
-  [key in InteractiveNodeTypes]: React.FC<InteractiveNodeProps>
+  [key: string]: React.FC<InteractiveNodeProps>;
 } = {
-  [InteractiveNodeTypes.START]: Start,
-  [InteractiveNodeTypes.MULTI_CHOICE]: MultiChoice,
-  [InteractiveNodeTypes.END]: End
-}
+  [InteractiveNodeTypes[InteractiveNodeTypes.START]]: Start,
+  [InteractiveNodeTypes[InteractiveNodeTypes.MULTIPLE_CHOICE]]: MultiChoice,
+  [InteractiveNodeTypes[InteractiveNodeTypes.END]]: End,
+};

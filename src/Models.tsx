@@ -80,11 +80,11 @@ export interface ChatChannelMeta {
   emailCaptureEnforcement: string;
   decoration: Decoration;
   liveChatAvailability:
-  | "always-live-during-business-hours"
-  | "auto-based-on-agent-availability"
-  | "offline";
+    | "always-live-during-business-hours"
+    | "auto-based-on-agent-availability"
+    | "offline";
   sendChatTranscript: boolean;
-  flowIds?: string[]
+  flowIds?: string[];
 }
 
 export interface Decoration {
@@ -180,7 +180,8 @@ export type AgentPaylodObj = {
 
 export type ChatFlowsPayloadObj = {
   name: string;
-  id: string
+  id: string;
+  [x: string]: any;
 };
 
 export type ChatSessionPaylodObj = {

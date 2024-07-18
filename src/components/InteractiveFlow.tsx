@@ -1,8 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   getSessionStoragePrefs,
   removeSessionStoragePrefs,
@@ -12,30 +8,42 @@ import CloseWidgetPanel from "./CloseWidgetPanel";
 import { widgetFooterTabs } from "../App";
 import { AppContext } from "../appContext";
 import { ChatFlowsPayloadObj } from "../Models";
-import { InteractiveFlowNodes, NodeExecutionPayload } from "./InteractiveFlowUtils";
-import { EXECUTE_FLOW_NODE_URL_PATH, EXECUTION_LIST_FETCH_URL_PATH, OPENED_FLOW, START_FLOW_URL_PATH } from "../globals";
+import {
+  InteractiveFlowNodes,
+  InteractiveNodeTypes,
+  NodeExecutionPayload,
+} from "./InteractiveFlowUtils";
+import {
+  EXECUTE_FLOW_NODE_URL_PATH,
+  EXECUTION_LIST_FETCH_URL_PATH,
+  OPENED_FLOW,
+  START_FLOW_URL_PATH,
+} from "../globals";
 import { getReq, postReq } from "../request";
 const InteractiveFlow = () => {
-
   const parentContext = useContext(AppContext);
 
   const { chatPrefs, chatFlows, changeActiveTab } = parentContext;
 
-  const detectedChatFlow = chatFlows.find(flow => flow.id === getSessionStoragePrefs(OPENED_FLOW));
+  const detectedChatFlow = chatFlows.find(
+    (flow) => flow.id === getSessionStoragePrefs(OPENED_FLOW)
+  );
   if (!detectedChatFlow) {
     changeActiveTab(widgetFooterTabs.Home);
   }
 
-  const [chatFlow] = useState<ChatFlowsPayloadObj>(detectedChatFlow ? detectedChatFlow : {} as ChatFlowsPayloadObj);
+  const [chatFlow] = useState<ChatFlowsPayloadObj>(
+    detectedChatFlow ? detectedChatFlow : ({} as ChatFlowsPayloadObj)
+  );
 
   const [loading, setLoading] = useState<boolean>(true);
 
   const [executionMeta, setExecutionMeta] = useState<{}>({});
-  const [executionList, setExecutionList] = useState<NodeExecutionPayload[]>([]);
-
+  const [executionList, setExecutionList] = useState<NodeExecutionPayload[]>(
+    []
+  );
 
   useEffect(() => {
-
     // Start chat flow
     let flowExecutionId = getSessionStoragePrefs("flow_execution_id");
     if (flowExecutionId) {
@@ -49,18 +57,19 @@ const InteractiveFlow = () => {
       // Start flow
       startFlowExecution();
     }
-
   }, []);
 
   const getFlowExecution = async (flowExecutionId: string) => {
-
     const wait = getReq(EXECUTION_LIST_FETCH_URL_PATH + flowExecutionId, {});
     wait
       .then((response) => {
-
         setLoading(false);
 
-        if (!response.data || !response.data.executionMeta || !response.data.executionList)
+        if (
+          !response.data ||
+          !response.data.executionMeta ||
+          !response.data.executionList
+        )
           return;
 
         setExecutionMeta({ ...response.data.executionMeta });
@@ -69,57 +78,54 @@ const InteractiveFlow = () => {
       .catch(() => {
         setLoading(false);
       });
-
-  }
+  };
 
   const executeNodeOnUserInteraction = (execution: NodeExecutionPayload) => {
-
     const wait = postReq(EXECUTE_FLOW_NODE_URL_PATH, execution);
     wait
       .then((response) => {
-
         // Write logic to update existing ids, and push new executions
         setExecutionList([...response.data]);
 
         setScrollBottom();
-
       })
       .catch(() => {
         setLoading(false);
       });
-
-
-  }
+  };
 
   const startFlowExecution = async () => {
-
     const wait = postReq(START_FLOW_URL_PATH, {
       id: chatFlow.id,
       channelId: chatPrefs.id,
-      channelType: "CHAT"
+      channelType: "CHAT",
     });
     wait
       .then((response) => {
-
         setLoading(false);
 
-        if (!response.data || !response.data.executionMeta || !response.data.executionList)
+        if (
+          !response.data ||
+          !response.data.executionMeta ||
+          !response.data.executionList
+        )
           return;
 
-        setSessionStoragePrefs("flow_execution_id", response.data.executionMeta.id);
+        setSessionStoragePrefs(
+          "flow_execution_id",
+          response.data.executionMeta.id
+        );
 
         setExecutionMeta({ ...response.data.executionMeta });
 
         setExecutionList([...response.data.executionList]);
 
         setScrollBottom();
-
       })
       .catch(() => {
         setLoading(false);
       });
-
-  }
+  };
 
   const setScrollBottom = () => {
     // setTimeout(() => {
@@ -136,9 +142,7 @@ const InteractiveFlow = () => {
     if (parentContext.chatPrefs.name) return parentContext.chatPrefs.name;
   };
 
-
   const goBack = () => {
-
     // Empty existing
     removeSessionStoragePrefs(OPENED_FLOW);
     removeSessionStoragePrefs("flow_execution_id");
@@ -173,7 +177,6 @@ const InteractiveFlow = () => {
             </svg>
           </div>
           <div className="chat__header-user">
-
             <div>
               <div
                 className="chat__header-user-img"
@@ -196,30 +199,38 @@ const InteractiveFlow = () => {
       <div className="chat__content">
         <div className="chat__messages">
           <div className="chat__messages-track">
-
             <div>
+              {loading && <>Loading...</>}
 
-              {loading && (<>
-                Loading...
-              </>)}
-
-
-              {!loading && executionList && executionList.length && executionList.map(
-                (exe: NodeExecutionPayload, index: number) => {
-                  const Node = InteractiveFlowNodes[exe.nodeType];
-                  return (
-                    <>
-                      {Node ? <Node execution={exe} executeNodeOnUserInteraction={executeNodeOnUserInteraction} /> :
-                        <>
-                          {JSON.stringify(exe)}
-                        </>}
-                      <hr />
-                    </>
-                  );
-                }
-              )
-              }
-
+              {!loading &&
+                executionList &&
+                executionList.length &&
+                executionList.map(
+                  (exe: NodeExecutionPayload, index: number) => {
+                    console.log(InteractiveFlowNodes);
+                    console.log(
+                      exe.node.type as unknown as InteractiveNodeTypes
+                    );
+                    const Node =
+                      exe.node.type !== "ACTION"
+                        ? InteractiveFlowNodes[exe.node.type]
+                        : InteractiveFlowNodes[exe.node.data.nodeType];
+                    return (
+                      <>
+                        {Node ? (
+                          <Node
+                            execution={exe}
+                            executeNodeOnUserInteraction={
+                              executeNodeOnUserInteraction
+                            }
+                          />
+                        ) : (
+                          <>{JSON.stringify(exe)}</>
+                        )}
+                      </>
+                    );
+                  }
+                )}
             </div>
           </div>
 
@@ -233,11 +244,9 @@ const InteractiveFlow = () => {
               EngageBay
             </a>
           </div>
-
         </div>
-
       </div>
-    </div >
+    </div>
   );
 };
 
