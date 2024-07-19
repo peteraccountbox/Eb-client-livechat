@@ -232,7 +232,7 @@ const Conversation = (props: ConversationProps) => {
 
       session.messageList = response.data.data;
       setSessions([...sessions]);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const getMatchedBotPrefs = () => {
@@ -314,7 +314,7 @@ const Conversation = (props: ConversationProps) => {
       .then((response) => {
         console.log("typing");
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const updateMessage = (message: ChatMessagePaylodObj) => {
@@ -416,7 +416,7 @@ const Conversation = (props: ConversationProps) => {
           setEmailCaptured(true);
           setSessionStoragePrefs(OPENED_CHAT, newNession.id);
         })
-        .catch(() => {});
+        .catch(() => { });
       return;
     }
     session.customerEmail = formData.customerEmail as string;
@@ -528,7 +528,7 @@ const Conversation = (props: ConversationProps) => {
 
         if (callback) callback(response);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const postMessage = (data: ChatMessagePaylodObj) => {
@@ -570,10 +570,10 @@ const Conversation = (props: ConversationProps) => {
     }
 
     // Add gpt id in each request, So that can keep ai connection alive with visitor
-    if (matchedBotPrefs?.id) {
-      session.gpt_bot_id = matchedBotPrefs?.id;
-      data.gpt_bot_id = matchedBotPrefs?.id;
-    }
+    // if (matchedBotPrefs?.id) {
+    //   session.gpt_bot_id = matchedBotPrefs?.id;
+    //   data.gpt_bot_id = matchedBotPrefs?.id;
+    // }
 
     if (
       !emailCaptured &&
@@ -583,7 +583,7 @@ const Conversation = (props: ConversationProps) => {
       return;
     }
 
-    submitSessionEvent(url, newChat ? session : data, (response: any) => {
+    submitSessionEvent(url, newChat ? session : event, (response: any) => {
       if (newChat) {
         // Get session
         let newNession = response.data as ChatSessionPaylodObj;
@@ -978,14 +978,13 @@ const Conversation = (props: ConversationProps) => {
         </div>
 
         <div
-          className={`chat__footer ${
-            showChatForm ||
+          className={`chat__footer ${showChatForm ||
             (chatPrefs.meta.emailCaptureEnforcement == "required" &&
               !emailCaptured &&
               session.messageList?.length > 0)
-              ? "hide"
-              : ""
-          }`}
+            ? "hide"
+            : ""
+            }`}
         >
           {getChatPrompts()}
 
@@ -1021,7 +1020,7 @@ const Conversation = (props: ConversationProps) => {
               <Emoji onEmojiSelect={onEmojiSelect} />
 
               {session &&
-              session.connected_with === ChatSessionConnectedWithEnum.AGENT ? (
+                session.connected_with === ChatSessionConnectedWithEnum.AGENT ? (
                 <FileUpload fileUploadCallback={fileUploadCallback} />
               ) : (
                 <></>

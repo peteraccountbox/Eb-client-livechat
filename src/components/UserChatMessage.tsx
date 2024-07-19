@@ -26,7 +26,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
   const parentContext = useContext(AppContext);
 
   useEffect(() => {
-    return () => {};
+    return () => { };
   }, []);
 
   const getMessageTime = () => {
@@ -38,6 +38,9 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
   };
 
   const canShowAnavailableMessage = () => {
+
+    return false;
+
     const from = MessageByTypeEnum[
       props.message.from
     ] as unknown as MessageByTypeEnum;
@@ -110,7 +113,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
             <ChatMessage
               sessionId={props.sessionId}
               message={props.message}
-              updateMessage={() => {}}
+              updateMessage={() => { }}
             />
           </li>
         </ul>
