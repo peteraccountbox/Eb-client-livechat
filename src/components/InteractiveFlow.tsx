@@ -85,7 +85,13 @@ const InteractiveFlow = () => {
     wait
       .then((response) => {
         // Write logic to update existing ids, and push new executions
-        setExecutionList([...response.data]);
+        // executionList.filter((execution => execution.id != response.data[0].id))
+        setExecutionList([
+          ...executionList.filter(
+            (execution) => execution.id != response.data[0].id
+          ),
+          ...response.data,
+        ]);
 
         setScrollBottom();
       })
