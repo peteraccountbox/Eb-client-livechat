@@ -1,6 +1,6 @@
 import React, { FC, useContext, useEffect, useState } from 'react'
 import { AppContext } from '../appContext';
-import { ChatMessagePaylodObj, ChatSessionPaylodObj } from '../Models';
+import { ChatMessagePaylodObj, ChatSessionPaylodObj, EventPayloadObj } from '../Models';
 import { getOperatorName, getSystemMessage } from '../Utils';
 import PromptFooter from './PromptFooter';
 import closePrompt from '../assets/img/close.png';
@@ -24,11 +24,12 @@ const ChatPrompt: FC<ChatPromptProp> = (props) => {
 
 
 
-	const getLatestChat = (): ChatMessagePaylodObj | undefined => {
+	const getLatestChat = (): EventPayloadObj | undefined => {
 
 		try {
 			// if (props.session.type == "BOT") {
-			return props.session?.messageList[props.session.messageList.length - 1];
+			if (true)
+				return props.session?.messageList[props.session.messageList.length - 1];
 			//}
 			// return this.session.messageList[this.session.messageList.length - 1];
 		} catch (error) {

@@ -41,35 +41,35 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
 
     return false;
 
-    const from = MessageByTypeEnum[
-      props.message.from
-    ] as unknown as MessageByTypeEnum;
-    const xyz = props.nextMessage?.message.from;
-    let nextFrom: any;
-    if (xyz) nextFrom = MessageByTypeEnum[xyz] as unknown as MessageByTypeEnum;
+    // const from = MessageByTypeEnum[
+    //   props.message.from
+    // ] as unknown as MessageByTypeEnum;
+    // const xyz = props.nextMessage?.message.from;
+    // let nextFrom: any;
+    // if (xyz) nextFrom = MessageByTypeEnum[xyz] as unknown as MessageByTypeEnum;
 
-    try {
-      if (true) return false;
+    // try {
+    //   if (true) return false;
 
-      // var canShowUnavailabiltyInCurrentMessage =
-      //   from == MessageByTypeEnum.CUSTOMER && props.message.agents_unavailable;
-      // if (
-      //   (!props.message.nextMessage && canShowUnavailabiltyInCurrentMessage) ||
-      //   (canShowUnavailabiltyInCurrentMessage &&
-      //     props.nextMessage &&
-      //     (nextFrom != MessageByTypeEnum.CUSTOMER ||
-      //       !(
-      //         nextFrom == MessageByTypeEnum.CUSTOMER &&
-      //         props.nextMessage.agents_unavailable
-      //       )))
-      // ) {
-      //   return true;
-      // }
+    // var canShowUnavailabiltyInCurrentMessage =
+    //   from == MessageByTypeEnum.CUSTOMER && props.message.agents_unavailable;
+    // if (
+    //   (!props.message.nextMessage && canShowUnavailabiltyInCurrentMessage) ||
+    //   (canShowUnavailabiltyInCurrentMessage &&
+    //     props.nextMessage &&
+    //     (nextFrom != MessageByTypeEnum.CUSTOMER ||
+    //       !(
+    //         nextFrom == MessageByTypeEnum.CUSTOMER &&
+    //         props.nextMessage.agents_unavailable
+    //       )))
+    // ) {
+    //   return true;
+    // }
 
-      // return false;
-    } catch (error) {
-      return false;
-    }
+    // return false;
+    // } catch (error) {
+    //   return false;
+    // }
   };
 
   return (

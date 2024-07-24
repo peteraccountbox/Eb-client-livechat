@@ -630,7 +630,7 @@ const App: React.FunctionComponent = () => {
       if (!chat_message.message) return;
     }
 
-    pushMessage(chat_message, session);
+    pushMessage(event, session);
 
     setSessions([...sessions]);
 

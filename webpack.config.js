@@ -6,13 +6,14 @@ module.exports = {
   devtool: "source-map",
   entry: {
     preview: './src/preview-src/index.js',
-    main: './src/index.tsx',
+    loader: './src/widget-loader.ts',
+    main: './src/widget.tsx',
   },
   output: {
     path: path.resolve(__dirname, "build"),
     clean: true,
     filename: (chunkData) => {
-      return `${chunkData.chunk.name}/${chunkData.chunk.name}.min.js`; // Put the bundles in separate folders
+      return `${chunkData.chunk.name}/main.min.js`; // Put the bundles in separate folders
     },
   },
   resolve: {

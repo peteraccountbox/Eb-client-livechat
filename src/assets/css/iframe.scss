@@ -1,0 +1,18 @@
+.reacho-messenger-frame {
+
+    position: fixed;
+    border: none;
+
+    .collapse {
+        height: 200px;
+        width: 200px;
+    }
+
+    &.bottom.right {
+        bottom: 0;
+        right: 0;
+        width: 500px;
+        height: auto;
+    }
+
+}

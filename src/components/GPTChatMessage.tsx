@@ -1,5 +1,5 @@
 import React, { FC, useContext, useEffect } from "react";
-import { ChatMessagePaylodObj, ChatSessionPaylodObj } from "../Models";
+import { ChatMessagePaylodObj, ChatSessionPaylodObj, EventPayloadObj } from "../Models";
 import ChatMessage from "./ChatMessage";
 // import TimeAgo from 'react-timeago'
 import boticon from "../assets/img/chatbot-final.png";
@@ -14,7 +14,7 @@ TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
 export interface GPTChatMessagePropsType {
-  message: ChatMessagePaylodObj;
+  message: EventPayloadObj;
   sessionId?: number | string;
   formatMessageTime(): void;
   updateMessage: (message: ChatMessagePaylodObj) => void;
@@ -25,7 +25,7 @@ const GPTChatMessage: FC<GPTChatMessagePropsType> = (props) => {
     return props.message.created_time * 1000;
   };
   useEffect(() => {
-    return () => {};
+    return () => { };
   }, []);
 
   const parentContext = useContext(AppContext);
