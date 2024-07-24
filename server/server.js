@@ -18,6 +18,11 @@ app.get('/main/*', (req, res) => {
 });
 
 // A simple route
+app.get('/test/*', (req, res) => {
+    res.sendFile(path.join(__dirname, './test.html'));
+});
+
+// A simple route
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, './../build/loader/main.min.js'));
 });

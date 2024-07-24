@@ -32,7 +32,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --mode development --no-client-overlay",
-    "server": "node server/server.js",
+    "server": "npm run build && node server/server.js",
     "build": "webpack --mode production --progress",
     "build-webpack": "webpack --config webpack.config.js --mode production"
   },

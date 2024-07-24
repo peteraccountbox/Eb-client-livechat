@@ -43,8 +43,17 @@ export const getOperator = (
 
 export const resizeFrame = (type: string) => {
   try {
-    (window as any).parent.EngageBay_Livechat.ref.UI().resize(type);
-  } catch (error) {}
+    let parentDocument = window.parent.document;
+
+    if (!(window as any).FRAME_REF_ID)
+      return;
+
+    let frame = parentDocument.getElementById((window as any).FRAME_REF_ID);
+
+    // frame.addClass("collapase");
+
+    // (window as any).parent.EngageBay_Livechat.ref.UI().resize(type);
+  } catch (error) { }
 };
 
 export const loadBgAssetImage = (url: string) => {
@@ -179,7 +188,7 @@ export const getOperatorFromSession = (
           userId = session.messageList[i].user_id;
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   if (!userId)
     userId =
@@ -238,7 +247,7 @@ export function isValidField(field: ChatFromFieldDataPayLoad) {
   }
   try {
     if (field.value instanceof String) field.value = field.value.trim();
-  } catch (error) {}
+  } catch (error) { }
   if (field.pattern) {
     let pattern = new RegExp(field.pattern);
     if (pattern && field.value && !pattern.test(field.value + "")) {
@@ -275,11 +284,11 @@ export function isValidField(field: ChatFromFieldDataPayLoad) {
     case "url":
       let pattern = new RegExp(
         "^(https?:\\/\\/)?" + // protocol
-          "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
-          "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-          "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
-          "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
-          "(\\#[-a-z\\d_]*)?$",
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+        "(\\#[-a-z\\d_]*)?$",
         "i"
       ); // fragment locator
       if (!pattern.test(field.value + "")) isValid = false;
@@ -374,14 +383,14 @@ export function convertEmojis(text: string) {
 
         return typeof emoji_json[g] != "undefined"
           ? '<span class="engagebay-emoji-picker-image" aria-label="' +
-              emoji_json[g].label +
-              '" style="' +
-              css +
-              '"></span>'
+          emoji_json[g].label +
+          '" style="' +
+          css +
+          '"></span>'
           : g;
       }
     );
-  } catch (error) {}
+  } catch (error) { }
   return text;
 }
 
@@ -429,13 +438,13 @@ export function getSystemMessage(type: string) {
     case "ASK_USER_DETAILS":
       message =
         PARENT_WINDOW_LIVECHAT_REF.ref.settings.SYSTEMMessage[
-          type + "_TO_VISITOR"
+        type + "_TO_VISITOR"
         ];
       break;
     case "CHAT_SESSION_CLOSED":
       message =
         PARENT_WINDOW_LIVECHAT_REF.ref.settings.SYSTEMMessage[
-          type + "_TO_VISITOR"
+        type + "_TO_VISITOR"
         ];
       break;
 

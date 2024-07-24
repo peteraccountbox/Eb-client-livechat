@@ -19,6 +19,7 @@ import {
   FooterTabs,
   CHAT_FLOWS_FETCH_URL_PATH,
   OPENED_FLOW,
+  CHANNEL_PREFS,
 } from "./globals";
 import {
   ActiveSessionObjType,
@@ -94,7 +95,7 @@ const App: React.FunctionComponent = () => {
       if (!FooterTabs.find((footer) => footer.tab == activeTabname)) {
         activeTabname = FooterTabs[0].tab;
       }
-    } catch (error) {}
+    } catch (error) { }
 
     return activeTabname;
   };
@@ -192,7 +193,7 @@ const App: React.FunctionComponent = () => {
     // }
 
     // Subscribe to event bus
-    eventBus.on("reacho-socket-event", function () {});
+    eventBus.on("reacho-socket-event", function () { });
 
     eventBus.on("new_ticket_message", function (message) {
       let messageSession: any = sessions.find(function (session) {
@@ -252,6 +253,14 @@ const App: React.FunctionComponent = () => {
   };
 
   const fetchChatPrefs = async () => {
+
+    if (CHANNEL_PREFS) {
+      setChatPrefs(JSON.parse(CHANNEL_PREFS));
+      setPrefsFetched(true);
+      return;
+    }
+
+
     try {
       const response: AxiosResponse<any, any> = await getReq(
         CHANNEL_PREFS_FETCH_URL_PATH,
@@ -260,8 +269,8 @@ const App: React.FunctionComponent = () => {
 
       let prefs = response.data as ChatPrefsPayloadType;
 
-      if (prefs.botPrefs && prefs.botPrefs.length > 0)
-        prefs.matchedBotPrefs = prefs.botPrefs[0];
+      // if (prefs.botPrefs && prefs.botPrefs.length > 0)
+      //   prefs.matchedBotPrefs = prefs.botPrefs[0];
 
       // let chatChannelMeta: ChatChannelMeta = {
       //   deactivated: false,
@@ -434,7 +443,7 @@ const App: React.FunctionComponent = () => {
               let proactiveMsg = "";
               try {
                 proactiveMsg = JSON.parse(rule.customData).message;
-              } catch (error) {}
+              } catch (error) { }
               // console.log("proactiveMsg", proactiveMsg);
 
               // if (proactiveMsg)
@@ -563,7 +572,7 @@ const App: React.FunctionComponent = () => {
       .then((response) => {
         if (callback) callback(response.data);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const handleMessage = (event: any) => {
@@ -732,9 +741,8 @@ const App: React.FunctionComponent = () => {
       >
         <div
           id="App"
-          className={`engagebay-viewport ${
-            !isOpened && hideChatBubble ? "hide" : ""
-          } `}
+          className={`engagebay-viewport ${!isOpened && hideChatBubble ? "hide" : ""
+            } `}
           style={appThemeStyle}
         >
           {isVisible ? (
@@ -756,24 +764,21 @@ const App: React.FunctionComponent = () => {
               ) : (
                 <div
                   className={`chat ${isOpened ? "is-open" : ""} 
-              ${
-                chatPrefs.meta.decoration.widgetAlignment == "LEFT"
-                  ? "left"
-                  : ""
-              } 
-              ${
-                chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
-                  ? "right"
-                  : ""
-              }`}
+              ${chatPrefs.meta.decoration.widgetAlignment == "LEFT"
+                      ? "left"
+                      : ""
+                    } 
+              ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
+                      ? "right"
+                      : ""
+                    }`}
                   data-target="widget"
                 >
                   <div
                     className="chat__main"
                     style={{
-                      minWidth: `${
-                        promtWidth == PromtWidth.Large ? "700px" : "auto"
-                      }`,
+                      minWidth: `${promtWidth == PromtWidth.Large ? "700px" : "auto"
+                        }`,
                     }}
                   >
                     {(() => {

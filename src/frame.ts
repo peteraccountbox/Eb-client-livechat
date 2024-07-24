@@ -1,4 +1,5 @@
 import './assets/css/iframe.scss';
+import { uuidv4 } from './Utils';
 
 const createEle = function (tag: string, attrs: any) {
     var el = document.createElement(tag);
@@ -16,10 +17,11 @@ export default function loadChat(container: Element, prefs: any) {
     if (renderedFrame && renderedFrame.length > 0)
         return;
 
+    const frameId = uuidv4();
     const iframeEle: HTMLIFrameElement = createEle("iframe", {
-        "class": "reacho-messenger-frame " + prefs.meta.decoration.widgetAlignment,
+        "class": "reacho-messenger-frame " + prefs.meta.decoration.widgetAlignment + " " + prefs.id,
         "name": "reacho-messenger-frame",
-        "id": prefs.id
+        "id": frameId
     }) as HTMLIFrameElement;
 
     container.appendChild(iframeEle);
@@ -27,7 +29,7 @@ export default function loadChat(container: Element, prefs: any) {
     const reachoModulesObject = (window as any).reachoModulesObject || {};
     let SERVER_HOST_DOMAIN_URL = "https://sandbox.reacho.com/";
     if (reachoModulesObject.mode && reachoModulesObject.mode == "local")
-        SERVER_HOST_DOMAIN_URL = "http://localhost:8081/"
+        SERVER_HOST_DOMAIN_URL = "http://localhost:8091/"
 
     let scirptURL = "clouflarurl/version/main.js";
     if (reachoModulesObject.mode && reachoModulesObject.mode == "local")
@@ -43,7 +45,9 @@ export default function loadChat(container: Element, prefs: any) {
         <div id="root"></p>
         <script>
             var TENANT_ID = "${reachoModulesObject.companyId}";
+            var CHANNEL_PREFS = '${JSON.stringify(prefs)}';
             var CHANNEL_ID = "${prefs.id}";
+            var FRAME_REF_ID = "${frameId}";
             var SERVER_HOST_DOMAIN_URL = "${SERVER_HOST_DOMAIN_URL}";
             var VISITOR_UUID = "62716143248343556";
         </script>
