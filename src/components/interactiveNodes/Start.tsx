@@ -5,7 +5,7 @@ const Start: React.FC<InteractiveNodeProps> = ({
   execution,
 }: InteractiveNodeProps) => {
   return (
-    <div className="chat__messages-group chat__messages-group--me">
+    <div className="chat__messages-group--me">
       <div className="chat__messages-group">
         <ul className="chat__messages-list">
           <div className="chat__messages-list-item">
