@@ -16,12 +16,13 @@ import InteractiveFlow from "./components/InteractiveFlow";
 enum LivechatComponentNames {
   ConversationList = "ConversationList",
   Conversation = "Conversation",
-  Flow = "Flow"
+  Flow = "Flow",
 }
 
 export type LivechatComponentProps = {
   loadingSessions: boolean;
   startNewChat: (initialMessage?: string | undefined) => void;
+  backToHome: () => void;
   openChat: (id: string) => void;
   addNewSession: (session: ChatSessionPaylodObj) => void;
 };
@@ -29,6 +30,7 @@ export type LivechatComponentProps = {
 export default function LiveChat({
   loadingSessions,
   startNewChat,
+  backToHome,
   openChat,
   addNewSession,
 }: LivechatComponentProps) {
@@ -54,6 +56,10 @@ export default function LiveChat({
   const showChatList = () => {
     removeSessionStoragePrefs(OPENED_CHAT);
     setActiveComponentName(LivechatComponentNames.ConversationList);
+  };
+
+  const showConversation = () => {
+    setActiveComponentName(LivechatComponentNames.Conversation);
   };
 
   return (
@@ -91,13 +97,16 @@ export default function LiveChat({
                 <Conversation
                   showChatsList={showChatList}
                   addNewSession={addNewSession}
+                  backToHome={backToHome}
                 />
               );
-            } else if (
-              activeComponentName === LivechatComponentNames.Flow
-            ) {
+            } else if (activeComponentName === LivechatComponentNames.Flow) {
               return (
-                <InteractiveFlow />
+                <InteractiveFlow
+                  addNewSession={addNewSession}
+                  showConversation={showConversation}
+                  backToHome={backToHome}
+                />
               );
             } else {
               return <>None</>;

@@ -59,18 +59,15 @@ export const BOT_FETCH_URL_PATH: string = "";
 export const CONVERSATIONS_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/get-chat-conversations/" + VISITOR_UUID;
 
-export const CHAT_FLOWS_FETCH_URL_PATH =
-  REQUEST_PREFIX_PATH + "/chat-flows/";
+export const CHAT_FLOWS_FETCH_URL_PATH = REQUEST_PREFIX_PATH + "/chat-flows/";
 
 export const START_FLOW_URL_PATH =
-  REQUEST_PREFIX_PATH + "/flow/start";
+  REQUEST_PREFIX_PATH + "/flow/start/" + VISITOR_UUID;
 
 export const EXECUTION_LIST_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/flow/execution/";
 
-export const EXECUTE_FLOW_NODE_URL_PATH =
-  REQUEST_PREFIX_PATH + "/flow/execute";
-
+export const EXECUTE_FLOW_NODE_URL_PATH = REQUEST_PREFIX_PATH + "/flow/execute";
 
 export const CONVERSATION_MESSAGE_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/get-chat-messages";

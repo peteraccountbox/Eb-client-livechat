@@ -95,7 +95,7 @@ const App: React.FunctionComponent = () => {
       if (!FooterTabs.find((footer) => footer.tab == activeTabname)) {
         activeTabname = FooterTabs[0].tab;
       }
-    } catch (error) { }
+    } catch (error) {}
 
     return activeTabname;
   };
@@ -193,7 +193,7 @@ const App: React.FunctionComponent = () => {
     // }
 
     // Subscribe to event bus
-    eventBus.on("reacho-socket-event", function () { });
+    eventBus.on("reacho-socket-event", function () {});
 
     eventBus.on("new_ticket_message", function (message) {
       let messageSession: any = sessions.find(function (session) {
@@ -253,13 +253,11 @@ const App: React.FunctionComponent = () => {
   };
 
   const fetchChatPrefs = async () => {
-
     if (CHANNEL_PREFS) {
       setChatPrefs(JSON.parse(CHANNEL_PREFS));
       setPrefsFetched(true);
       return;
     }
-
 
     try {
       const response: AxiosResponse<any, any> = await getReq(
@@ -443,7 +441,7 @@ const App: React.FunctionComponent = () => {
               let proactiveMsg = "";
               try {
                 proactiveMsg = JSON.parse(rule.customData).message;
-              } catch (error) { }
+              } catch (error) {}
               // console.log("proactiveMsg", proactiveMsg);
 
               // if (proactiveMsg)
@@ -497,6 +495,11 @@ const App: React.FunctionComponent = () => {
   const startFlow = (id: string) => {
     setSessionStoragePrefs(OPENED_FLOW, id);
     changeActiveTab(widgetFooterTabs.Messages);
+  };
+
+  const backToHome = () => {
+    removeSessionStoragePrefs(OPENED_CHAT);
+    changeActiveTab(widgetFooterTabs.Home);
   };
 
   const startNewChat = (initialMessage?: string) => {
@@ -572,7 +575,7 @@ const App: React.FunctionComponent = () => {
       .then((response) => {
         if (callback) callback(response.data);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const handleMessage = (event: any) => {
@@ -741,8 +744,9 @@ const App: React.FunctionComponent = () => {
       >
         <div
           id="App"
-          className={`engagebay-viewport ${!isOpened && hideChatBubble ? "hide" : ""
-            } `}
+          className={`engagebay-viewport ${
+            !isOpened && hideChatBubble ? "hide" : ""
+          } `}
           style={appThemeStyle}
         >
           {isVisible ? (
@@ -764,21 +768,24 @@ const App: React.FunctionComponent = () => {
               ) : (
                 <div
                   className={`chat ${isOpened ? "is-open" : ""} 
-              ${chatPrefs.meta.decoration.widgetAlignment == "LEFT"
-                      ? "left"
-                      : ""
-                    } 
-              ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
-                      ? "right"
-                      : ""
-                    }`}
+              ${
+                chatPrefs.meta.decoration.widgetAlignment == "bottom left"
+                  ? "left"
+                  : ""
+              } 
+              ${
+                chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
+                  ? "right"
+                  : ""
+              }`}
                   data-target="widget"
                 >
                   <div
                     className="chat__main"
                     style={{
-                      minWidth: `${promtWidth == PromtWidth.Large ? "700px" : "auto"
-                        }`,
+                      minWidth: `${
+                        promtWidth == PromtWidth.Large ? "700px" : "auto"
+                      }`,
                     }}
                   >
                     {(() => {
@@ -799,6 +806,7 @@ const App: React.FunctionComponent = () => {
                             openChat={openChat}
                             startNewChat={startNewChat}
                             addNewSession={addNewSession}
+                            backToHome={backToHome}
                           />
                         );
                       }

@@ -60,9 +60,11 @@ import {
 } from "../Storage";
 import CloseWidgetPanel from "./CloseWidgetPanel";
 import eventBus from "../eventBus";
+import InteractiveFlowItem from "./InteractiveFlowItem";
 
 export interface ConversationProps {
   showChatsList(): void;
+  backToHome: () => void;
   addNewSession: (arg0: ChatSessionPaylodObj) => void;
 }
 
@@ -211,7 +213,7 @@ const Conversation = (props: ConversationProps) => {
       setMatchedBotPrefs(matchedBot);
     }
 
-    if (session.id) getMessageList();
+    if (session.id && !session.messageList) getMessageList();
     getReq(UPDATE_READ_URL_PATH + "/" + session.id, {}).then((response) => {
       session.customerUnreadMessagesCount = 0;
       setSessions([...sessions]);
@@ -232,7 +234,7 @@ const Conversation = (props: ConversationProps) => {
 
       session.messageList = response.data.data;
       setSessions([...sessions]);
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const getMatchedBotPrefs = () => {
@@ -314,7 +316,7 @@ const Conversation = (props: ConversationProps) => {
       .then((response) => {
         console.log("typing");
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const updateMessage = (message: ChatMessagePaylodObj) => {
@@ -416,7 +418,7 @@ const Conversation = (props: ConversationProps) => {
           setEmailCaptured(true);
           setSessionStoragePrefs(OPENED_CHAT, newNession.id);
         })
-        .catch(() => { });
+        .catch(() => {});
       return;
     }
     session.customerEmail = formData.customerEmail as string;
@@ -528,7 +530,7 @@ const Conversation = (props: ConversationProps) => {
 
         if (callback) callback(response);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const postMessage = (data: ChatMessagePaylodObj) => {
@@ -789,7 +791,7 @@ const Conversation = (props: ConversationProps) => {
       setSessions([...sessions]);
     }
 
-    props.showChatsList();
+    props.backToHome();
   };
 
   return (
@@ -869,13 +871,34 @@ const Conversation = (props: ConversationProps) => {
                     return (
                       <div>
                         <div>
-                          <ConversationItem
-                            message={message}
-                            session={session}
-                            nextMessage={session?.messageList[index + 1]}
-                            // formFields={formFields}
-                            updateMessage={updateMessage}
-                          />
+                          {message.eventType == "INTERACTIVE_FLOW_NODE" ? (
+                            <InteractiveFlowItem
+                              execution={message.meta.executionNode}
+                            />
+                          ) : (
+                            <>
+                              <ConversationItem
+                                message={message}
+                                session={session}
+                                nextMessage={session?.messageList[index + 1]}
+                                // formFields={formFields}
+                                updateMessage={updateMessage}
+                              />
+                              {index == 0 && !emailCaptured && (
+                                <ChatForm
+                                  closeChatForm={() => {
+                                    setShowChatForm(false);
+                                  }}
+                                  // formFields={formFields}
+                                  // setFormFields={setFormFields}
+                                  submitChatForm={submitChatForm}
+                                  typeText={typeText}
+                                  setTypeText={setTypeText}
+                                  saving={saving}
+                                />
+                              )}
+                            </>
+                          )}
                           {/* <form className="chat__messages-group chat__messages-group--me">
                                <div className="chat__messages-bubble">
                                  <label className="chat__ticket-form-label">
@@ -926,19 +949,6 @@ const Conversation = (props: ConversationProps) => {
                                  </div>
                                </div>
                              </form> */}
-                          {index == 0 && !emailCaptured && (
-                            <ChatForm
-                              closeChatForm={() => {
-                                setShowChatForm(false);
-                              }}
-                              // formFields={formFields}
-                              // setFormFields={setFormFields}
-                              submitChatForm={submitChatForm}
-                              typeText={typeText}
-                              setTypeText={setTypeText}
-                              saving={saving}
-                            />
-                          )}
                         </div>
                       </div>
                     );
@@ -978,13 +988,14 @@ const Conversation = (props: ConversationProps) => {
         </div>
 
         <div
-          className={`chat__footer ${showChatForm ||
+          className={`chat__footer ${
+            showChatForm ||
             (chatPrefs.meta.emailCaptureEnforcement == "required" &&
               !emailCaptured &&
               session.messageList?.length > 0)
-            ? "hide"
-            : ""
-            }`}
+              ? "hide"
+              : ""
+          }`}
         >
           {getChatPrompts()}
 
@@ -1020,7 +1031,7 @@ const Conversation = (props: ConversationProps) => {
               <Emoji onEmojiSelect={onEmojiSelect} />
 
               {session &&
-                session.connected_with === ChatSessionConnectedWithEnum.AGENT ? (
+              session.connected_with === ChatSessionConnectedWithEnum.AGENT ? (
                 <FileUpload fileUploadCallback={fileUploadCallback} />
               ) : (
                 <></>

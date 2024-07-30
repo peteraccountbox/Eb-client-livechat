@@ -12,7 +12,7 @@ export interface PreviewComponentProps {
 const Preview: FC<PreviewComponentProps> = (props) => {
   const { chatPrefs } = props;
 
-  const settings = [{ tab: 'Messages' }];
+  const settings = [{ tab: "Messages" }];
 
   const logo = chatPrefs?.meta.decoration.headerPictureUrl
     ? chatPrefs.meta.decoration.headerPictureUrl
@@ -49,14 +49,23 @@ const Preview: FC<PreviewComponentProps> = (props) => {
     chatPrefs && (
       <div
         id="App"
-        className={`engagebay-viewport ${!chatPrefs.meta.deactivated ? "hide" : ""
-          } `}
+        className={`engagebay-viewport ${
+          !chatPrefs.meta.deactivated ? "hide" : ""
+        } `}
         style={appThemeStyle}
       >
         <div
           className={`chat is-open
-              ${chatPrefs.meta.decoration.widgetAlignment == "LEFT" ? "left" : ""} 
-              ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""}`}
+              ${
+                chatPrefs.meta.decoration.widgetAlignment == "bottom left"
+                  ? "left"
+                  : ""
+              } 
+              ${
+                chatPrefs.meta.decoration.widgetAlignment == "bottom right"
+                  ? "right"
+                  : ""
+              }`}
           data-target="widget"
         >
           <div className="chat__main">
@@ -65,9 +74,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                 <div className="chat__ticket">
                   <div className="chat__header">
                     <div className="chat__header-user">
-                      <h3 className="chat__header-user-name">
-                        {tab}
-                      </h3>
+                      <h3 className="chat__header-user-name">{tab}</h3>
                     </div>
                   </div>
                 </div>
@@ -172,8 +179,9 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                   {settings.map((footerTab) => {
                     return (
                       <div
-                        className={`chat__tabs-nav-link ${footerTab.tab == tab ? "active" : ""
-                          }`}
+                        className={`chat__tabs-nav-link ${
+                          footerTab.tab == tab ? "active" : ""
+                        }`}
                         onClick={() => setTab(footerTab.tab)}
                       >
                         <div className="chat__tabs-icon">
@@ -198,9 +206,15 @@ const Preview: FC<PreviewComponentProps> = (props) => {
           </div>
         </div>
         <div
-          className={`chat__trigger ${!chatPrefs.meta.deactivated ? "" : "hide"
-            } ${chatPrefs.meta.decoration.widgetAlignment == "LEFT" ? "left" : ""} ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""
-            } chat-opend`}
+          className={`chat__trigger ${
+            !chatPrefs.meta.deactivated ? "" : "hide"
+          } ${
+            chatPrefs.meta.decoration.widgetAlignment == "bottom left"
+              ? "left"
+              : ""
+          } ${
+            chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""
+          } chat-opend`}
         >
           <div className="close_chat_bubble">
             <svg

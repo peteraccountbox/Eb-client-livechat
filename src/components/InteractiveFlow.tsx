@@ -7,7 +7,7 @@ import {
 import CloseWidgetPanel from "./CloseWidgetPanel";
 import { widgetFooterTabs } from "../App";
 import { AppContext } from "../appContext";
-import { ChatFlowsPayloadObj } from "../Models";
+import { ChatFlowsPayloadObj, ChatSessionPaylodObj } from "../Models";
 import {
   InteractiveFlowNodes,
   InteractiveNodeTypes,
@@ -16,11 +16,21 @@ import {
 import {
   EXECUTE_FLOW_NODE_URL_PATH,
   EXECUTION_LIST_FETCH_URL_PATH,
+  OPENED_CHAT,
   OPENED_FLOW,
   START_FLOW_URL_PATH,
+  VISITOR_UUID,
 } from "../globals";
 import { getReq, postReq } from "../request";
-const InteractiveFlow = () => {
+import CustomerLogin from "./interactiveNodes/CustomerLogin";
+import OrderSelection from "./interactiveNodes/OrderSelection";
+import ItemSelection from "./interactiveNodes/ItemSelection";
+export interface InteractiveFlowProps {
+  showConversation(): void;
+  backToHome: () => void;
+  addNewSession: (arg0: ChatSessionPaylodObj) => void;
+}
+const InteractiveFlow = (props: InteractiveFlowProps) => {
   const parentContext = useContext(AppContext);
 
   const { chatPrefs, chatFlows, changeActiveTab } = parentContext;
@@ -92,6 +102,20 @@ const InteractiveFlow = () => {
           ),
           ...response.data,
         ]);
+        if (response.data[response.data.length - 1].info?.ticket) {
+          const session = response.data[response.data.length - 1].info.ticket;
+          session.messageList =
+            response.data[response.data.length - 1].info?.events;
+          props.addNewSession(session);
+          // setSession(newNession);
+          setSessionStoragePrefs(OPENED_CHAT, session.id);
+          props.showConversation();
+        } else if (
+          response.data[response.data.length - 1].executed &&
+          !response.data[response.data.length - 1].nextNodeId
+        ) {
+          props.backToHome();
+        }
 
         setScrollBottom();
       })
@@ -221,15 +245,22 @@ const InteractiveFlow = () => {
                       exe.node.type !== "ACTION"
                         ? InteractiveFlowNodes[exe.node.type]
                         : InteractiveFlowNodes[exe.node.data.nodeType];
+                    if (
+                      exe.node.data.nodeType == InteractiveNodeTypes.END &&
+                      exe.node.data.formData?.action == "ticket"
+                    )
+                      return <></>;
                     return (
                       <>
                         {Node ? (
-                          <Node
-                            execution={exe}
-                            executeNodeOnUserInteraction={
-                              executeNodeOnUserInteraction
-                            }
-                          />
+                          <>
+                            <Node
+                              execution={exe}
+                              executeNodeOnUserInteraction={
+                                executeNodeOnUserInteraction
+                              }
+                            />
+                          </>
                         ) : (
                           <>{JSON.stringify(exe)}</>
                         )}
@@ -252,6 +283,7 @@ const InteractiveFlow = () => {
           </div>
         </div>
       </div>
+      {/* <ItemSelection /> */}
     </div>
   );
 };
