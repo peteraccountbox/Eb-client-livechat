@@ -7,7 +7,7 @@ import '../assets/css/components/_chat.scss';
 import FormPreview from './FormPreview.tsx';
 window.renderPreview = function (chatPrefs, isForm) {
   console.log("rendering view");
-  const root = ReactDOM.createRoot(document.getElementById('root'));
+  const root = ReactDOM.createRoot(document.getElementById('root-preview'));
   root.render(
     <React.StrictMode>
       {isForm ? <FormPreview chatPrefs={chatPrefs}/> : <Preview chatPrefs={chatPrefs}/>}
