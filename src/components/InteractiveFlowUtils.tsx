@@ -1,7 +1,10 @@
 import Automated from "./interactiveNodes/Automated";
 import CollectTextReply from "./interactiveNodes/CollectTextReply";
+import CustomerIdentification from "./interactiveNodes/CustomerIdentification";
 import End from "./interactiveNodes/End";
+import ItemSelection from "./interactiveNodes/ItemSelection";
 import MultiChoice from "./interactiveNodes/MultiChoice";
+import OrderSelection from "./interactiveNodes/OrderSelection";
 import Start from "./interactiveNodes/Start";
 
 export type NodeExecutionPayload = {
@@ -38,10 +41,14 @@ export enum InteractiveNodeTypes {
   MULTIPLE_CHOICE,
   AUTOMATED_ANSWER,
   COLLECT_TEXT_REPLY,
+  CUSTOMER_IDENTIFICATION,
+  ORDER_SELECTION,
+  ITEM_SELECTION,
 }
 
 export type InteractiveNodeProps = {
   execution: NodeExecutionPayload;
+  executionMeta?: any;
   executeNodeOnUserInteraction: (exe: NodeExecutionPayload) => void;
 };
 
@@ -54,4 +61,8 @@ export const InteractiveFlowNodes: {
   [InteractiveNodeTypes[InteractiveNodeTypes.AUTOMATED_ANSWER]]: Automated,
   [InteractiveNodeTypes[InteractiveNodeTypes.COLLECT_TEXT_REPLY]]:
     CollectTextReply,
+  [InteractiveNodeTypes[InteractiveNodeTypes.CUSTOMER_IDENTIFICATION]]:
+    CustomerIdentification,
+  [InteractiveNodeTypes[InteractiveNodeTypes.ORDER_SELECTION]]: OrderSelection,
+  [InteractiveNodeTypes[InteractiveNodeTypes.ITEM_SELECTION]]: ItemSelection,
 };

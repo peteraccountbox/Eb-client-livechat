@@ -4,7 +4,7 @@ import { ChatFromFieldDataPayLoad, JSONObjectType } from "../Models";
 import { isValidField, isValidTicketField } from "../Utils";
 
 export interface ChatFormPropsType {
-  // formFields: any[];
+  fields: any[];
   // setFormFields(fields: any[]): void;
   submitChatForm: (formData: JSONObjectType) => void;
   closeChatForm: () => void;
@@ -14,54 +14,54 @@ export interface ChatFormPropsType {
 }
 
 const ChatForm: FC<ChatFormPropsType> = (props) => {
-  const { setTypeText, submitChatForm, typeText } = props;
+  const { setTypeText, submitChatForm, fields, typeText } = props;
 
   const parentContext = useContext(AppContext);
   const [saving, setSaving] = useState(false);
-  const fields = [
-    {
-      name: "customerEmail",
-      label: "Drop your email",
-      type: "email",
-      required: true,
-      value: "",
-      placeholder: "reacho@email.com",
-      error: "",
-      is_valid: true,
-      helpText:
-        "Messages and ticket updates will be sent to this email address",
-    },
-    // {
-    //   name: "subject",
-    //   label: "Subject",
-    //   type: "text",
-    //   required: true,
-    //   value: "",
-    //   placeholder: "Subject",
-    //   error: "",
-    //   is_valid: true,
-    // },
-    // {
-    //   name: "description",
-    //   label: "Description",
-    //   type: "textarea",
-    //   required: true,
-    //   value: "",
-    //   placeholder: "Description",
-    //   error: "",
-    //   is_valid: true,
-    // },
-    // {
-    //   name: "date",
-    //   label: "When did the issue occur",
-    //   type: "date",
-    //   required: true,
-    //   value: "",
-    //   placeholder: "",
-    //   error: "",
-    //   is_valid: true,
-    // },
-  ];
+  // const fields = [
+  //   {
+  //     name: "customerEmail",
+  //     label: "Drop your email",
+  //     type: "email",
+  //     required: true,
+  //     value: "",
+  //     placeholder: "reacho@email.com",
+  //     error: "",
+  //     is_valid: true,
+  //     helpText:
+  //       "Messages and ticket updates will be sent to this email address",
+  //   },
+  //   {
+  //     name: "customerName",
+  //     label: "Drop your name",
+  //     type: "text",
+  //     required: true,
+  //     value: "",
+  //     placeholder: "Enter Name",
+  //     error: "",
+  //     is_valid: true,
+  //   },
+  //   {
+  //     name: "query",
+  //     label: "Drop query",
+  //     type: "textarea",
+  //     required: true,
+  //     value: "",
+  //     placeholder: "Drop Query",
+  //     error: "",
+  //     is_valid: true,
+  //   },
+  //   // {
+  //   //   name: "date",
+  //   //   label: "When did the issue occur",
+  //   //   type: "date",
+  //   //   required: true,
+  //   //   value: "",
+  //   //   placeholder: "",
+  //   //   error: "",
+  //   //   is_valid: true,
+  //   // },
+  // ];
 
   const [formFields, setFormFields] = useState<any[]>(fields);
 

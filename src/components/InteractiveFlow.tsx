@@ -22,9 +22,6 @@ import {
   VISITOR_UUID,
 } from "../globals";
 import { getReq, postReq } from "../request";
-import CustomerLogin from "./interactiveNodes/CustomerLogin";
-import OrderSelection from "./interactiveNodes/OrderSelection";
-import ItemSelection from "./interactiveNodes/ItemSelection";
 export interface InteractiveFlowProps {
   showConversation(): void;
   backToHome: () => void;
@@ -94,25 +91,30 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
     const wait = postReq(EXECUTE_FLOW_NODE_URL_PATH, execution);
     wait
       .then((response) => {
+        const newExecutionList = response.data.executionList;
+        setExecutionMeta({ ...response.data.executionMeta });
         // Write logic to update existing ids, and push new executions
         // executionList.filter((execution => execution.id != response.data[0].id))
         setExecutionList([
           ...executionList.filter(
-            (execution) => execution.id != response.data[0].id
+            (execution) => execution.id != newExecutionList[0].id
           ),
-          ...response.data,
+          ...newExecutionList,
         ]);
-        if (response.data[response.data.length - 1].info?.ticket) {
-          const session = response.data[response.data.length - 1].info.ticket;
+        if (newExecutionList[newExecutionList.length - 1].info?.ticket) {
+          const session =
+            newExecutionList[newExecutionList.length - 1].info.ticket;
           session.messageList =
-            response.data[response.data.length - 1].info?.events;
+            newExecutionList[newExecutionList.length - 1].info?.events;
           props.addNewSession(session);
           // setSession(newNession);
           setSessionStoragePrefs(OPENED_CHAT, session.id);
           props.showConversation();
         } else if (
-          response.data[response.data.length - 1].executed &&
-          !response.data[response.data.length - 1].nextNodeId
+          newExecutionList[newExecutionList.length - 1].executed &&
+          !newExecutionList[newExecutionList.length - 1].nextNodeId &&
+          newExecutionList[newExecutionList.length - 1].data.nodeType ==
+            InteractiveNodeTypes.END
         ) {
           props.backToHome();
         }
@@ -256,6 +258,7 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
                           <>
                             <Node
                               execution={exe}
+                              executionMeta={executionMeta}
                               executeNodeOnUserInteraction={
                                 executeNodeOnUserInteraction
                               }
@@ -283,7 +286,6 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
           </div>
         </div>
       </div>
-      {/* <ItemSelection /> */}
     </div>
   );
 };

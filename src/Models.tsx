@@ -1,4 +1,5 @@
 import { type } from "node:os";
+import { BusinessHour } from "./BusinessHours";
 
 // export type ChatPrefsWidgetType = {
 //   position: string;
@@ -79,10 +80,8 @@ export interface ChatChannelMeta {
   emailCaptureEnabled: boolean;
   emailCaptureEnforcement: string;
   decoration: Decoration;
-  liveChatAvailability:
-    | "always-live-during-business-hours"
-    | "auto-based-on-agent-availability"
-    | "offline";
+  liveChatAvailability: "liveChatBusiness" | "liveChat" | "liveChatOffline";
+  storeId: string;
   sendChatTranscript: boolean;
   flowIds?: string[];
 }
@@ -176,6 +175,18 @@ export type AgentPaylodObj = {
   email: string;
   userPicURL?: any;
   profile_img_url?: string;
+};
+
+export type AgentPrefsPayloadType = {
+  available: boolean;
+  businessHours: BusinessHour[];
+  timezone: string;
+  id: string;
+  tenantId: string;
+  userId: string;
+  setCustomDateOverrides: any[];
+  updatedTime: number[];
+  createdTime: number[];
 };
 
 export type ChatFlowsPayloadObj = {

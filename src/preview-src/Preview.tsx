@@ -6,6 +6,7 @@ import PreviewListItem from "./PreviewListItem";
 
 import { ChatPrefsPayloadType } from "../Models";
 import CloseWidgetPanel from "../components/CloseWidgetPanel";
+import PreviewFlowListItem from "./PreviewFlowListItem";
 export interface PreviewComponentProps {
   chatPrefs: ChatPrefsPayloadType;
 }
@@ -239,7 +240,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
       <div
         id="App"
         className={`engagebay-viewport ${
-          !chatPrefs.meta.deactivated ? "hide" : ""
+          !chatPrefs.meta.deactivated ? "" : "hide"
         } `}
         style={appThemeStyle}
       >
@@ -287,8 +288,8 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                     <div className="home__feeds-send-card home__feeds-recent-card">
                       <div className="home__feeds-media">
                         <div className="home__feeds-media-content">
-                          <PreviewListItem />
-                          <PreviewListItem />
+                          <PreviewFlowListItem />
+                          <PreviewFlowListItem />
                         </div>
                       </div>
                     </div>
@@ -302,9 +303,6 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                           >
                             Recent conversation
                           </h4>
-                          <PreviewListItem />
-                          <PreviewListItem />
-                          <PreviewListItem />
                           <PreviewListItem />
                           <PreviewListItem />
                           <PreviewListItem />
@@ -344,7 +342,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
         </div>
         <div
           className={`chat__trigger ${
-            !chatPrefs.meta.deactivated ? "hide" : ""
+            !chatPrefs.meta.deactivated ? "" : "hide"
           } ${
             chatPrefs.meta.decoration.widgetAlignment == "bottom left"
               ? "left"

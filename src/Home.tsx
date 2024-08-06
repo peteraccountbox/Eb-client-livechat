@@ -8,17 +8,18 @@ import CloseWidgetPanel from "./components/CloseWidgetPanel";
 const Home = ({
   openChat,
   startNewChat,
-  startFlow
+  startFlow,
 }: {
   openChat: (id: string) => void;
   startNewChat: (initialMessage?: string | undefined) => void;
-  startFlow: (id: string) => void
+  startFlow: (id: string) => void;
 }) => {
-
   const parentContext = useContext(AppContext);
   const { sessions, chatPrefs, chatFlows } = parentContext;
 
-  const [recentSessions, setRecentSessions] = useState<ChatSessionPaylodObj[]>([]);
+  const [recentSessions, setRecentSessions] = useState<ChatSessionPaylodObj[]>(
+    []
+  );
 
   useEffect(() => {
     function compare(a: ChatSessionPaylodObj, b: ChatSessionPaylodObj) {
@@ -59,59 +60,55 @@ const Home = ({
           </div>
           <div className="home__feeds-cards-main">
             <div className="home__feeds-cards-sec">
-
               {chatFlows && chatFlows.length > 0 && (
-
                 <>
                   <div className="home__feeds-send-card home__feeds-recent-card">
                     <div className="home__feeds-media">
                       <div className="home__feeds-media-content">
-
-                        {chatFlows.map((chatFlow: ChatFlowsPayloadObj, index: number) => {
-
-                          return (<div onClick={() => startFlow(chatFlow.id)}>{chatFlow.name}</div>)
-
-                        }
+                        {chatFlows.map(
+                          (chatFlow: ChatFlowsPayloadObj, index: number) => {
+                            return (
+                              <div onClick={() => startFlow(chatFlow.id)}>
+                                {chatFlow.name}
+                              </div>
+                            );
+                          }
                         )}
                       </div>
                     </div>
                   </div>
                 </>
-
               )}
 
               {recentSessions && recentSessions.length > 0 && (
-
                 <>
                   <div className="home__feeds-send-card home__feeds-recent-card">
                     <div className="home__feeds-media">
                       <div className="home__feeds-media-content">
                         <h4
-                          className={`${false ? "unRead" : ""
-                            }`}
+                          className={`${false ? "unRead" : ""}`}
                           style={{ cursor: "auto" }}
                         >
                           Recent conversation
                         </h4>
                         {recentSessions.map(
-                          (recentSession: ChatSessionPaylodObj, index: number) => (
-
+                          (
+                            recentSession: ChatSessionPaylodObj,
+                            index: number
+                          ) => (
                             <ConversationListItem
                               session={recentSession}
                               openChatConversation={openChat}
                               // openBotConversation={props.openBotConversation}
                               key={recentSession.id}
                             />
-
                           )
                         )}
                       </div>
                     </div>
                   </div>
                 </>
-
               )}
-
 
               <div
                 className="home__feeds-send-card"
@@ -119,7 +116,7 @@ const Home = ({
               >
                 <div className="home__feeds-media">
                   <div className="home__feeds-media-content">
-                    <h5>"Send us a message "</h5>
+                    <h5>Send us a message </h5>
                     {/* <p>We typically reply within a day</p> */}
                   </div>
                   <div className="home__feeds-media-icon">

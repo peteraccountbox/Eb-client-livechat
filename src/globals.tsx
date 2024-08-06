@@ -39,7 +39,12 @@ export const TICKETS_FETCH_URL: string =
   "jsapi/rest/get-tickets/" + VISITOR_UUID;
 
 export const TICKET_FETCH_URL: string = "jsapi/rest/ticket/" + VISITOR_UUID;
-export const USERS_FETCH_URL: string = "jsapi/rest/group/users/";
+
+export const ORDERS_FETCH_URL: string =
+  "api/support/jsclient/inbox/get-store-orders";
+export const ORDER_FETCH_URL: string =
+  "api/support/jsclient/inbox/get-store-order";
+export const USERS_FETCH_URL: string = "jsapi/rest/group/users";
 export const USER_FETCH_URL: string = "jsapi/rest/user/";
 export const TICKET_CREATE_URL: string =
   "jsapi/rest/create-ticket/" + VISITOR_UUID;
@@ -74,6 +79,9 @@ export const CONVERSATION_MESSAGE_FETCH_URL_PATH =
 
 export const CHANNEL_PREFS_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/channel/chat/" + CHANNEL_ID;
+
+export const USER_PREFS_FETCH_URL_PATH =
+  "https://files.reacho.com/app/663b158cc77b6d29d332c88d/user/users-prefs.json";
 
 export const WEB_RULES_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "widget/web-rules";

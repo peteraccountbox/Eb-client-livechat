@@ -61,6 +61,7 @@ import {
 import CloseWidgetPanel from "./CloseWidgetPanel";
 import eventBus from "../eventBus";
 import InteractiveFlowItem from "./InteractiveFlowItem";
+import { isUserBusinessHour } from "../BusinessHours";
 
 export interface ConversationProps {
   showChatsList(): void;
@@ -70,9 +71,9 @@ export interface ConversationProps {
 
 const Conversation = (props: ConversationProps) => {
   const parentContext = useContext(AppContext);
-  const { chatPrefs, sessions, setSessions } = parentContext;
+  const { chatPrefs, sessions, setSessions, agentsPrefs } = parentContext;
 
-  const fields = [
+  const singlefield = [
     {
       name: "customerEmail",
       label: "Drop your email",
@@ -115,6 +116,41 @@ const Conversation = (props: ConversationProps) => {
     //   error: "",
     //   is_valid: true,
     // },
+  ];
+
+  const fields = [
+    {
+      name: "customerEmail",
+      label: "Drop your email",
+      type: "email",
+      required: true,
+      value: "",
+      placeholder: "reacho@email.com",
+      error: "",
+      is_valid: true,
+      helpText:
+        "Messages and ticket updates will be sent to this email address",
+    },
+    {
+      name: "customerName",
+      label: "Drop your name",
+      type: "text",
+      required: true,
+      value: "",
+      placeholder: "Enter Name",
+      error: "",
+      is_valid: true,
+    },
+    {
+      name: "query",
+      label: "Drop query",
+      type: "textarea",
+      required: true,
+      value: "",
+      placeholder: "Drop Query",
+      error: "",
+      is_valid: true,
+    },
   ];
 
   const text = useRef<HTMLTextAreaElement>(null);
@@ -213,6 +249,8 @@ const Conversation = (props: ConversationProps) => {
       setMatchedBotPrefs(matchedBot);
     }
 
+    if (!session.id && !isUserBusinessHour(chatPrefs, agentsPrefs))
+      setShowChatForm(true);
     if (session.id && !session.messageList) getMessageList();
     getReq(UPDATE_READ_URL_PATH + "/" + session.id, {}).then((response) => {
       session.customerUnreadMessagesCount = 0;
@@ -370,6 +408,25 @@ const Conversation = (props: ConversationProps) => {
     setSessions([...sessions]);
   };
 
+  const getChatMessage = (
+    msg: string | string[] | null,
+    type?: MessageFormatType
+  ) => {
+    let state: ChatMessagePaylodObj = {
+      bodyText: msg,
+      format: !type ? MessageFormatType.TEXT : type,
+      session_id: session?.id,
+      ticketId: session?.id && session?.id,
+      created_time: new Date().getTime(),
+    } as ChatMessagePaylodObj;
+
+    // Add session id if present
+    if (session && session.id && session.type == "LIVECHAT")
+      state.ticketId = session.id + "";
+
+    return state;
+  };
+
   const onEmojiSelect = (emoji: any) => {
     if (text.current) {
       const current = text.current;
@@ -422,6 +479,24 @@ const Conversation = (props: ConversationProps) => {
       return;
     }
     session.customerEmail = formData.customerEmail as string;
+    if (formData.query) {
+      var msg: ChatMessagePaylodObj = getChatMessage(formData.query, undefined);
+      let event: EventPayloadObj = {
+        ticketId: session?.id,
+        eventType: "MESSAGE",
+        source: "WEBSITE",
+        from: MessageByTypeEnum.CUSTOMER,
+        message: msg,
+      };
+
+      session.channelId = CHANNEL_ID;
+      session.visitorId = VISITOR_UUID;
+      session.channelType = "CHAT";
+      session.createdSource = "WEBSITE";
+      session.createdBy = MessageByTypeEnum.CUSTOMER;
+      session.unRead = session.unRead ? session.unRead + 1 : 1;
+      session.messageList.push(event);
+    }
     submitSessionEvent(NEW_SESSION_URL_PATH, session, (response: any) => {
       // if (newChat) {
       // Get session
@@ -596,25 +671,6 @@ const Conversation = (props: ConversationProps) => {
         updateMessageList(response.data);
       }
     });
-  };
-
-  const getChatMessage = (
-    msg: string | string[] | null,
-    type?: MessageFormatType
-  ) => {
-    let state: ChatMessagePaylodObj = {
-      bodyText: msg,
-      format: !type ? MessageFormatType.TEXT : type,
-      session_id: session?.id,
-      ticketId: session?.id && session?.id,
-      created_time: new Date().getTime(),
-    } as ChatMessagePaylodObj;
-
-    // Add session id if present
-    if (session && session.id && session.type == "LIVECHAT")
-      state.ticketId = session.id + "";
-
-    return state;
   };
 
   // const agent = getOperatorFromSession(props.session, parentContext.agents);
@@ -889,7 +945,7 @@ const Conversation = (props: ConversationProps) => {
                                   closeChatForm={() => {
                                     setShowChatForm(false);
                                   }}
-                                  // formFields={formFields}
+                                  fields={singlefield}
                                   // setFormFields={setFormFields}
                                   submitChatForm={submitChatForm}
                                   typeText={typeText}
@@ -963,7 +1019,7 @@ const Conversation = (props: ConversationProps) => {
                   closeChatForm={() => {
                     setShowChatForm(false);
                   }}
-                  // formFields={formFields}
+                  fields={fields}
                   // setFormFields={setFormFields}
                   submitChatForm={submitChatForm}
                   typeText={typeText}

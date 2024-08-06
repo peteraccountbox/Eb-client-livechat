@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { AppContext } from "./appContext";
 import ChatBubble from "./components/ChatBubble";
@@ -20,10 +20,12 @@ import {
   CHAT_FLOWS_FETCH_URL_PATH,
   OPENED_FLOW,
   CHANNEL_PREFS,
+  USER_PREFS_FETCH_URL_PATH,
 } from "./globals";
 import {
   ActiveSessionObjType,
   AgentPaylodObj,
+  AgentPrefsPayloadType,
   ChatChannelMeta,
   ChatFlowsPayloadObj,
   ChatFooterDataPayload,
@@ -82,6 +84,8 @@ const App: React.FunctionComponent = () => {
       ? JSON.parse(getSessionStoragePrefs(OPERATORS))
       : []
   );
+
+  const [agentsPrefs, setAgentsPrefs] = useState<AgentPrefsPayloadType[]>([]);
 
   const [sessions, setSessions] = useState<ChatSessionPaylodObj[]>([]);
   const [chatFlows, setChatFlows] = useState<ChatFlowsPayloadObj[]>([]);
@@ -260,12 +264,54 @@ const App: React.FunctionComponent = () => {
     }
 
     try {
-      const response: AxiosResponse<any, any> = await getReq(
-        CHANNEL_PREFS_FETCH_URL_PATH,
-        {}
+      getReq(CHANNEL_PREFS_FETCH_URL_PATH, {}).then(
+        (response: AxiosResponse<any, any>) => {
+          let prefs = response.data as ChatPrefsPayloadType;
+
+          axios(USER_PREFS_FETCH_URL_PATH, {}).then((response: any) => {
+            console.log("res :", response);
+            setAgentsPrefs(response.data);
+          });
+
+          // if (prefs.botPrefs && prefs.botPrefs.length > 0)
+          //   prefs.matchedBotPrefs = prefs.botPrefs[0];
+
+          // let chatChannelMeta: ChatChannelMeta = {
+          //   deactivated: false,
+          //   hideOnMobile: true,
+          //   hideOnOutsideBusinessHours: true,
+          //   emailCaptureEnabled: true,
+          //   emailCaptureEnforcement: false,
+          //   liveChatAvailability: "always-live-during-business-hours",
+          //   sendChatTranscript: true,
+          //   decoration: {
+          //     headerPictureUrl: "https://example.com/image.png",
+          //     fontFamily: "Arial",
+          //     mainColor: "#FFFFFF",
+          //     conversationColor: "#000000",
+          //     backgroundStyle: "solid",
+          //     introductionText: "Welcome to our chat!",
+          //     offlineIntroductionText: "We are currently offline.",
+          //     avatarType: "circle",
+          //     widgetAlignment: "right",
+          //     widgetAlignmentOffsetX: 10,
+          //     widgetAlignmentOffsetY: 20,
+          //     launcherType: "icon",
+          //     agentAvatarImageType: "image",
+          //     agentAvatarNameType: "name",
+          //     botAvatarImage: "https://example.com/bot.png",
+          //   },
+          // };
+
+          // prefs.meta = chatChannelMeta;
+
+          setChatPrefs(prefs);
+
+          setPrefsFetched(true);
+        }
       );
 
-      let prefs = response.data as ChatPrefsPayloadType;
+      // let prefs = response.data as ChatPrefsPayloadType;
 
       // if (prefs.botPrefs && prefs.botPrefs.length > 0)
       //   prefs.matchedBotPrefs = prefs.botPrefs[0];
@@ -299,9 +345,9 @@ const App: React.FunctionComponent = () => {
 
       // prefs.meta = chatChannelMeta;
 
-      setChatPrefs(prefs);
+      // setChatPrefs(prefs);
 
-      setPrefsFetched(true);
+      // setPrefsFetched(true);
     } catch (e) {
       console.log("errr", e);
     }
@@ -393,15 +439,15 @@ const App: React.FunctionComponent = () => {
 
       // const agentResponse = await getReq(AGENTS_FETCH_URL_PATH, {});
       // console.log("Agents reacho ", agentResponse);
-      setAgents([
-        {
-          tenantId: "663b158cc77b6d29d332c88d",
-          id: "663b158cc77b6d29d332c88e",
-          name: "Ibrahim",
-          email: "ibrahimkhan40360@gmail.com",
-          userPicURL: null,
-        },
-      ]);
+      // setAgents([
+      //   {
+      //     tenantId: "663b158cc77b6d29d332c88d",
+      //     id: "663b158cc77b6d29d332c88e",
+      //     name: "Ibrahim",
+      //     email: "ibrahimkhan40360@gmail.com",
+      //     userPicURL: null,
+      //   },
+      // ]);
     } catch (e) {
       console.log(e);
     }
@@ -727,6 +773,8 @@ const App: React.FunctionComponent = () => {
     return (
       <AppContext.Provider
         value={{
+          agentsPrefs,
+          setAgentsPrefs,
           agents,
           setAgents,
           chatPrefs,
