@@ -400,10 +400,13 @@ const Conversation = (props: ConversationProps) => {
 
     session.messageList = session.messageList.map(
       (eachmessage: EventPayloadObj) => {
-        if ("SENDING" === eachmessage.message.status) return message;
+        if (eachmessage.message && "SENDING" === eachmessage.message.status)
+          return message;
         return eachmessage;
       }
     );
+    session.lastMessage = message.message.bodyText;
+    session.lastMessageAt = message.createdTime;
 
     setSessions([...sessions]);
   };
@@ -434,6 +437,7 @@ const Conversation = (props: ConversationProps) => {
       const value = current.value;
       current.textContent =
         value.slice(0, curPos) + emoji + value.slice(curPos);
+      text.current.value = current.textContent;
       setTypeText(current.textContent);
       setTimeout(() => {
         current.selectionStart = current.selectionEnd = curPos + emoji.length;
@@ -485,6 +489,7 @@ const Conversation = (props: ConversationProps) => {
         ticketId: session?.id,
         eventType: "MESSAGE",
         source: "WEBSITE",
+        visibility: "PUBLIC",
         from: MessageByTypeEnum.CUSTOMER,
         message: msg,
       };
@@ -629,6 +634,7 @@ const Conversation = (props: ConversationProps) => {
       ticketId: session?.id,
       eventType: "MESSAGE",
       source: "WEBSITE",
+      visibility: "PUBLIC",
       from: MessageByTypeEnum.CUSTOMER,
       message: data,
     };
@@ -734,6 +740,7 @@ const Conversation = (props: ConversationProps) => {
     // Clear content holder
     if (text.current) {
       text.current.textContent = "";
+      text.current.value = "";
     }
 
     // Stop typing timer
@@ -1055,14 +1062,14 @@ const Conversation = (props: ConversationProps) => {
         >
           {getChatPrompts()}
 
-          <div className="chat__form">
+          <div className={`chat__form`}>
             <textarea
               ref={text}
               rows={1}
               onChange={(e) => setTypeText(e.currentTarget.value)}
               onScroll={(e) => handleScroll(e)}
               className="chat__input chat__textarea"
-              value={typeText}
+              value={text?.current?.value}
               placeholder={
                 !matchedBotPrefs || matchedBotPrefs.botPrompts?.length == 0
                   ? parentContext.chatPrefs.meta.decoration.introductionText

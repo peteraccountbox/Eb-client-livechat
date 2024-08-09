@@ -49,15 +49,17 @@ const End: React.FC<InteractiveNodeProps> = ({
         </div>
       ) : (
         <div className="chat__messages-group--me">
-          <ul className="chat__messages-list">
-            <div className="chat__messages-list-item">
-              <div className="chat__messages-bubble chat__message-type-TEXT">
-                <span className="actual">
-                  {JSON.parse(execution.responseAction[0].data).text}
-                </span>
+          <div className="chat__messages-group">
+            <ul className="chat__messages-list">
+              <div className="chat__messages-list-item">
+                <div className="chat__messages-bubble chat__message-type-TEXT">
+                  <span className="actual">
+                    {JSON.parse(execution.responseAction[0].data).text}
+                  </span>
+                </div>
               </div>
-            </div>
-          </ul>
+            </ul>
+          </div>
         </div>
       )}
     </>

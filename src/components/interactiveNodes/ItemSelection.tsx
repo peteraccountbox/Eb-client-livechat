@@ -13,24 +13,116 @@ const ItemSelection: React.FC<InteractiveNodeProps> = ({
   const parentContext = useContext(AppContext);
   const { chatPrefs } = parentContext;
   useEffect(() => {
-    getReq(ORDER_FETCH_URL, {
-      customerId: executionMeta.info.customerId,
-      storeId: chatPrefs.meta.storeId,
-      orderId: executionMeta.info.orderId,
-    }).then((response) => {
-      setItems(JSON.parse(JSON.parse(response.data.meta).$r_extra).line_items);
-      setOrderDetails(JSON.parse(JSON.parse(response.data.meta).$r_extra));
-      console.log(response.data);
-    });
+    if (executionMeta && !executionMeta.isCompleted)
+      getReq(ORDER_FETCH_URL, {
+        customerId: executionMeta.info.customerId,
+        storeId: chatPrefs.meta.storeId,
+        orderId: executionMeta.info.orderId,
+      }).then((response) => {
+        setItems(
+          JSON.parse(JSON.parse(response.data.meta).$r_extra).line_items
+        );
+        setOrderDetails(JSON.parse(JSON.parse(response.data.meta).$r_extra));
+        console.log(response.data);
+      });
   }, []);
 
   const [items, setItems] = useState<any>([]);
 
   const [orderDetails, setOrderDetails] = useState<any>();
 
-  const selectItem = () => {};
+  const [selectedItems, setSelectedItems] = useState<any>([]);
 
-  return orderDetails ? (
+  const selectItems = () => {
+    const total_price = selectedItems.reduce(
+      (priceAccumulator: number, selectedItem: any) => {
+        const total_tax = selectedItem.tax_lines.reduce(
+          (taxAccumulator: number, tax_line: any) =>
+            taxAccumulator + Number(tax_line.price),
+          0
+        );
+        return (
+          priceAccumulator +
+          selectedItem.quantity * (total_tax + Number(selectedItem.price)) -
+          Number(selectedItem.total_discount)
+        );
+      },
+      0
+    );
+
+    execution.nodeId = execution.node.id;
+    execution.executed = true;
+    const response = {
+      items: selectedItems.map((selectedItem: any) => {
+        return {
+          name: selectedItem.name,
+          id: selectedItem.id,
+          quantity: selectedItem.quantity,
+        };
+      }),
+      total_price: total_price,
+      currency: orderDetails.currency,
+      created_at: orderDetails.created_at,
+      order_id: orderDetails.id,
+      order_number: orderDetails.order_number,
+      name: orderDetails.name,
+      shipping_address: orderDetails.shipping_address,
+    };
+    execution.responseAction = [
+      {
+        id: execution.node.id,
+        type: "item_selection",
+        data: JSON.stringify(response),
+      },
+    ];
+    executeNodeOnUserInteraction(execution);
+  };
+  const onChecked = (checked: boolean, item: any) => {
+    console.log(checked);
+    if (checked) {
+      setSelectedItems([...selectedItems, item]);
+    } else {
+      setSelectedItems(
+        selectedItems.filter((selectedItem: any) => selectedItem.id != item.id)
+      );
+    }
+  };
+
+  const itemsDetails =
+    execution.responseAction && execution.responseAction.length > 0
+      ? JSON.parse(execution.responseAction[0].data)
+      : null;
+
+  return execution.executed && itemsDetails ? (
+    <div className="chat__messages-group--me">
+      <div className="chat__messages-group">
+        <ul className="chat__messages-list">
+          <div className="chat__messages-list-item">
+            <div className="chat__messages-bubble chat__message-type-TEXT">
+              <span className="actual">
+                Order number: {itemsDetails.name}
+                <br />
+                Selected items:
+                <br />
+                {itemsDetails.items.map((item: any) => (
+                  <>
+                    {item.quantity} × {item.name} <br />
+                  </>
+                ))}
+                <br />
+                Total: {itemsDetails.currency}
+                {itemsDetails.total_price}
+                <br />
+                Order Created: {itemsDetails.created_at}
+                <br />
+                Shipping address: {itemsDetails.shipping_address}
+              </span>
+            </div>
+          </div>
+        </ul>
+      </div>
+    </div>
+  ) : orderDetails ? (
     <>
       <header className="collection-header">
         <h2 className="title">Select items</h2>
@@ -67,6 +159,11 @@ const ItemSelection: React.FC<InteractiveNodeProps> = ({
                 padding: "10px 20px",
               }}
             >
+              <input
+                type="checkbox"
+                className="chat__form-check-input"
+                onChange={(e) => onChecked(e.currentTarget.checked, item)}
+              />
               <div className="" style={{ display: "flex", width: "100%" }}>
                 <img
                   style={{ width: "5rem", height: "5rem", borderRadius: "5px" }}
@@ -107,7 +204,7 @@ const ItemSelection: React.FC<InteractiveNodeProps> = ({
       >
         <button
           className="chat__messages-btn"
-          // onClick={submitForm}
+          onClick={selectItems}
           style={{
             display: "flex",
             alignItems: "center",

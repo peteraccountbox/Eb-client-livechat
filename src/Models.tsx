@@ -261,7 +261,6 @@ export type ChatMessagePaylodObj = {
   [x: string]: any;
   id?: string;
   ticketId?: string;
-  type?: "PUBLIC";
   from: MessageByTypeEnum;
   fromName: string;
   fromEmail: string;

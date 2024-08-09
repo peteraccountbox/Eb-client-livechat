@@ -207,7 +207,10 @@ const App: React.FunctionComponent = () => {
       let chatId = getSessionStoragePrefs(OPENED_CHAT);
       if (chatId && chatId == message.ticket.id) {
         // messageSession?.messageList.push(message?.message?.message);
-        pushMessage(message?.message, messageSession);
+        messageSession.lastMessage = message.message.message.bodyText;
+        messageSession.lastAgentMessageAt = message.message.createdTime;
+        messageSession.lastMessageAt = message.message.createdTime;
+        pushMessage(message.message, messageSession);
         getReq(UPDATE_READ_URL_PATH + "/" + message.ticket.id, {}).then(
           (response) => {
             console.log("asjhks", response);
@@ -216,9 +219,9 @@ const App: React.FunctionComponent = () => {
         );
       } else {
         if (messageSession) {
-          messageSession.lastMessage = message.bodyText;
-          messageSession.lastAgentMessageAt = message.createdTime;
-          messageSession.lastMessageAt = message.createdTime;
+          messageSession.lastMessage = message.message.message.bodyText;
+          messageSession.lastAgentMessageAt = message.message.createdTime;
+          messageSession.lastMessageAt = message.message.createdTime;
           messageSession.customerUnreadMessagesCount += 1;
         }
       }

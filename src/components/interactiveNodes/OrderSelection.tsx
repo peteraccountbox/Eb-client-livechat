@@ -14,13 +14,14 @@ const OrderSelection: React.FC<InteractiveNodeProps> = ({
   const parentContext = useContext(AppContext);
   const { chatPrefs } = parentContext;
   useEffect(() => {
-    getReq(ORDERS_FETCH_URL, {
-      customerId: executionMeta.info.customerId,
-      storeId: chatPrefs.meta.storeId,
-    }).then((response) => {
-      console.log(response.data);
-      setOrders(response.data.content);
-    });
+    if (executionMeta && !executionMeta.isCompleted)
+      getReq(ORDERS_FETCH_URL, {
+        customerId: executionMeta.info.customerId,
+        storeId: chatPrefs.meta.storeId,
+      }).then((response) => {
+        console.log(response.data);
+        setOrders(response.data.content);
+      });
   }, []);
 
   const [orders, setOrders] = useState<any>([]);
@@ -28,11 +29,20 @@ const OrderSelection: React.FC<InteractiveNodeProps> = ({
   const selectOrder = (order: any) => {
     execution.nodeId = execution.node.id;
     execution.executed = true;
+    const orderDetails = JSON.parse(JSON.parse(order.meta).$r_extra);
+    const response = {
+      name: orderDetails.name,
+      total_price: orderDetails.total_price,
+      currency: orderDetails.currency,
+      created_at: orderDetails.created_at,
+      order_id: orderDetails.id,
+      order_number: orderDetails.order_number,
+    };
     execution.responseAction = [
       {
         id: execution.node.id,
         type: "order_selection",
-        data: order.meta,
+        data: JSON.stringify(response),
       },
     ];
     executeNodeOnUserInteraction(execution);
@@ -40,22 +50,24 @@ const OrderSelection: React.FC<InteractiveNodeProps> = ({
 
   const orderDetails =
     execution.responseAction && execution.responseAction.length > 0
-      ? JSON.parse(JSON.parse(execution.responseAction[0].data).$r_extra)
+      ? JSON.parse(execution.responseAction[0].data)
       : null;
   return (
     <>
       {execution.executed && orderDetails ? (
         <div className="chat__messages-group--me">
-          <ul className="chat__messages-list">
-            <div className="chat__messages-list-item">
-              <div className="chat__messages-bubble chat__message-type-TEXT">
-                <span className="actual">
-                  {orderDetails.name} - {orderDetails.currency}
-                  {orderDetails.current_total_price} - {orderDetails.created_at}
-                </span>
+          <div className="chat__messages-group">
+            <ul className="chat__messages-list">
+              <div className="chat__messages-list-item">
+                <div className="chat__messages-bubble chat__message-type-TEXT">
+                  <span className="actual">
+                    {orderDetails.name} - {orderDetails.currency}
+                    {orderDetails.total_price} - {orderDetails.created_at}
+                  </span>
+                </div>
               </div>
-            </div>
-          </ul>
+            </ul>
+          </div>
         </div>
       ) : (
         <>

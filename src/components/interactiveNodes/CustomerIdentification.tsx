@@ -132,19 +132,23 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
             </ul>
           </div>
           <div className="chat__messages-group--me">
-            <ul className="chat__messages-list">
-              <div className="chat__messages-list-item">
-                <div
-                  className="chat__messages-bubble chat__message-type-TEXT"
-                  onClick={() => setShowSignIn(true)}
-                >
-                  <span className="actual">Continue to sign in</span>
+            <div className="chat__messages-group">
+              <ul className="chat__messages-list">
+                <div className="chat__messages-list-item">
+                  <div
+                    className="chat__messages-bubble chat__message-type-TEXT"
+                    onClick={() => setShowSignIn(true)}
+                  >
+                    <span className="actual">Continue to sign in</span>
+                  </div>
                 </div>
-              </div>
-            </ul>
+              </ul>
+            </div>
           </div>
         </>
-      ) : !executionMeta.isCompleted && !execution.nextNodeId ? (
+      ) : executionMeta &&
+        !executionMeta.isCompleted &&
+        !execution.nextNodeId ? (
         <div className="chat__ticket-form-main">
           <div className="chat__ticket-form">
             <div className="chat__ticket-form-group">
