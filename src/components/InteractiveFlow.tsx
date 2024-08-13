@@ -94,7 +94,6 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
         const newExecutionList = response.data.executionList;
         setExecutionMeta({ ...response.data.executionMeta });
         // Write logic to update existing ids, and push new executions
-        // executionList.filter((execution => execution.id != response.data[0].id))
         setExecutionList([
           ...executionList.filter(
             (execution) => execution.id != newExecutionList[0].id
@@ -107,7 +106,6 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
           session.messageList =
             newExecutionList[newExecutionList.length - 1].info?.events;
           props.addNewSession(session);
-          // setSession(newNession);
           setSessionStoragePrefs(OPENED_CHAT, session.id);
           props.showConversation();
         } else if (

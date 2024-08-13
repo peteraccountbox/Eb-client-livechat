@@ -407,6 +407,7 @@ const Conversation = (props: ConversationProps) => {
     );
     session.lastMessage = message.message.bodyText;
     session.lastMessageAt = message.createdTime;
+    session.lastCustomerMessageAt = message.createdTime;
 
     setSessions([...sessions]);
   };

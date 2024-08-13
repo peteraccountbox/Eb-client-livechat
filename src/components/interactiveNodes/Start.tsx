@@ -11,7 +11,7 @@ const Start: React.FC<InteractiveNodeProps> = ({
           <div className="chat__messages-list-item">
             <div className="chat__messages-bubble chat__message-type-TEXT">
               <span className="actual">
-                {execution.node.data.formData?.trigger_button}
+                {execution.node.data.formData?.start_message}
               </span>
             </div>
           </div>

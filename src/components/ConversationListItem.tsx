@@ -133,8 +133,14 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
       const agent = parentContext.agents?.find((agent) => {
         return agent.id == props.session.assignedToAgentId;
       });
-      return agent && agent.name ? agent.name : "AGENT";
+      return agent && agent.name ? agent.name : "Agent";
     }
+
+    if (
+      props.session.lastCustomerMessageAt &&
+      props.session.lastMessageAt == props.session.lastCustomerMessageAt
+    )
+      return "You";
     // else if (lastMessage.from == MessageByTypeEnum.GPT) {
     //   const bot = parentContext.chatPrefs.botPrefs?.find((bot) => {
     //     return bot.id === lastMessage.gpt_bot_id;
@@ -144,7 +150,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
     //   return "Operator";
     // }
 
-    return "You";
+    return "System";
   };
 
   useEffect(() => {

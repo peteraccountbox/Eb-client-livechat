@@ -233,6 +233,7 @@ export type ChatSessionPaylodObj = {
   connect_to_agent_on_demand?: boolean;
   lastMessageAt: string;
   lastAgentMessageAt?: string;
+  lastCustomerMessageAt?: string;
 };
 
 export type BotDetails = {
