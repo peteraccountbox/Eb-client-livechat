@@ -31,7 +31,7 @@ export default function loadChat(container: Element, prefs: any) {
     if (reachoModulesObject.mode && reachoModulesObject.mode == "local")
         SERVER_HOST_DOMAIN_URL = "http://localhost:8091/"
 
-    let scirptURL = "clouflarurl/version/main.js";
+    let scirptURL = "https://static.reacho.com/onsite/js/chat/main/main.min.js?v=751";
     if (reachoModulesObject.mode && reachoModulesObject.mode == "local")
         scirptURL = "http://localhost:3031/main/main.min.js?v=311";
 
