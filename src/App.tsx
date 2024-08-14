@@ -174,6 +174,23 @@ const App: React.FunctionComponent = () => {
 
   useEffect(() => {
     console.log("useEffect1");
+    // fetch user prefs
+    new Promise((resolve, reject) => {
+      axios(USER_PREFS_FETCH_URL_PATH, {})
+        .then((response: any) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    })
+      .then((response: any) => {
+        console.log("res :", response);
+        setAgentsPrefs(response.data);
+      })
+      .catch((error) => {
+        console.error("Error ", error);
+      });
 
     // Fetch chat prefs
     fetchChatPrefs();
@@ -266,11 +283,6 @@ const App: React.FunctionComponent = () => {
       getReq(CHANNEL_PREFS_FETCH_URL_PATH, {}).then(
         (response: AxiosResponse<any, any>) => {
           let prefs = response.data as ChatPrefsPayloadType;
-
-          axios(USER_PREFS_FETCH_URL_PATH, {}).then((response: any) => {
-            console.log("res :", response);
-            setAgentsPrefs(response.data);
-          });
 
           // if (prefs.botPrefs && prefs.botPrefs.length > 0)
           //   prefs.matchedBotPrefs = prefs.botPrefs[0];
