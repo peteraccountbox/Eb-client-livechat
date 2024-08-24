@@ -647,6 +647,7 @@ const Conversation = (props: ConversationProps) => {
       session.channelType = "CHAT";
       session.createdSource = "WEBSITE";
       session.createdBy = MessageByTypeEnum.CUSTOMER;
+      session.subject = data.bodyText;
       pushMessage(event, session);
     } else {
       data.ticketId = session?.id + "";
