@@ -582,9 +582,10 @@
 
 					p {
 						color: #666666;
-						font-size: 14px;
+						font-size: 12px;
 						// max-width: 14em;
 						white-space: nowrap;
+						margin-top: 4px;
 					}
 
 				}
@@ -1168,7 +1169,7 @@
 		}
 
 		&-form {
-			text-align: center;
+			text-align: start;
 			padding-top: 0px;
 			padding: 20px 15px;
 			background-color: #ecf6fd;
@@ -1282,7 +1283,7 @@
 				border-radius: 5px;
 				background-color: $color-white;
 				overflow: hidden;
-				margin-bottom: 10px;
+				margin-bottom: 5px;
 			}
 
 			& .error-content {
@@ -1344,16 +1345,17 @@
 
 		&-btn {
 			background-color: $color-primary;
-			padding: 12px 3rem !important;
+			padding: 12px 1.5rem !important;
 			font-weight: bold;
 			border-radius: 10px;
 			transition: all 0.25s;
-			margin-top: 10px;
+			margin-top: 8px;
 			//box-shadow: 0 0 1rem rgba($color-black, 0.25);
 			display: inline-block;
 			text-align: center;
 			@include linkStates($color-white, none);
 			color: #ffffff;
+			cursor: pointer;
 
 			@include atSmall {
 				padding: 5px 1rem;
@@ -2222,9 +2224,25 @@
 
 .chat_send_btn {
 	color: var(--themeColor);
+	background-color: $color-primary;
+	padding: 12px 1.5rem !important;
+	font-weight: bold;
+	border-radius: 10px;
+	transition: all 0.25s;
+	margin-top: 8px;
+	display: inline-block;
+	text-align: center;
+	@include linkStates($color-white, none);
+	color: #ffffff;
+	cursor: pointer;
+
+	@include atSmall {
+		padding: 5px 1rem;
+	}
 
 	&:hover {
-		color: var(--themeColor);
+		background-color: $color-primary;
+		opacity: .85;
 	}
 }
 
@@ -2969,7 +2987,7 @@
 	}
 
 	&-body {
-		padding: 30px 36px 15px;
+		padding: 30px 30px 15px;
 		box-sizing: border-box;
 		background-repeat: no-repeat;
 		position: relative;
@@ -3049,8 +3067,9 @@
 	}
 
 	&-home-title {
-		font-size: 32px;
+		font-size: 28px;
 		line-height: 38px;
+		font-weight: 600;
 
 		h1 {
 			color: white;
@@ -3111,7 +3130,7 @@
 		-webkit-box-pack: justify;
 		justify-content: space-between;
 		box-sizing: border-box;
-		padding: 16px 20px;
+		padding: 16px;
 		-webkit-box-align: center;
 		align-items: center;
 
@@ -3173,6 +3192,58 @@
 			}
 		}
 
+	}
+
+	&-flow-list-card {
+		.home__feeds-media {
+			padding: 0;
+		}
+
+		.home__feeds-media-content {
+			padding: 8px;
+		}
+	}
+
+	&-flow-list {
+		// width: 100%;
+		cursor: pointer;
+		background: white;
+		padding: 8px;
+		border-radius: 4px;
+		display: flex;
+		-webkit-box-align: center;
+		align-items: center;
+		gap: 8px;
+
+		&-title {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+
+			span {
+				color: #000000;
+				font-size: 14px;
+				font-weight: 400;
+				letter-spacing: -0.14px;
+			}
+		}
+
+		&-arrow {
+			margin-left: auto;
+			display: flex;
+			-webkit-box-align: center;
+			align-items: center;
+			gap: 8px;
+
+			svg {
+				height: 18px;
+				width: 18px;
+			}
+		}
+
+		&:hover {
+			background: #f1f5f9;
+		}
 	}
 }
 
@@ -3445,7 +3516,7 @@
 }
 
 .create_ticket_button {
-	padding: 12px 3rem !important;
+	padding: 12px 1.5rem !important;
 }
 
 .chat__create-ticket {
@@ -4471,4 +4542,29 @@
 	pointer-events: none;
 	background: linear-gradient(0deg, rgb(255, 255, 255), rgba(255, 255, 255, 0));
 	height: 90px;
+}
+
+.multi_choice {
+	&-list {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+
+		&-item-btn {
+			font-size: 14px;
+			line-height: 18px;
+			padding: 6px 10px;
+			border-radius: 6px;
+			color: $color-primary;
+			border: 1px solid $color-primary;
+			display: inline-block;
+			cursor: pointer;
+
+			&:hover {
+				background-color: var(--themeColor);
+				color: $color-white;
+			}
+		}
+
+	}
 }

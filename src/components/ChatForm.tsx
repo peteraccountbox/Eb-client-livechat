@@ -136,9 +136,9 @@ const ChatForm: FC<ChatFormPropsType> = (props) => {
         action="javascript:void(0);"
         onSubmit={submitForm}
         className="chat__messages-form chatuserformdata"
-        style={{ paddingTop: "0px", flex: "1" }}
+        style={{ flex: "1" }}
       >
-        <div className="text-left" style={{ marginBottom: "10px" }}>
+        <div className="text-left" style={{ marginBottom: "5px" }}>
           <pre>
             <p className="mb-2">
               {parentContext.chatPrefs.meta.decoration.introductionText}
@@ -371,10 +371,8 @@ const ChatForm: FC<ChatFormPropsType> = (props) => {
           {props.saving ? (
             <span>Sending ...</span>
           ) : (
-            <span
-              style={{ display: "flex", alignItems: "center", gap: "10px" }}
-            >
-              <span> Save </span>
+            <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <span>Send</span>
               <svg
                 className="chat_send_icon"
                 id="fi_9290348"
