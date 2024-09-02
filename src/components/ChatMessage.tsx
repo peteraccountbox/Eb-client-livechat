@@ -42,11 +42,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   // };
 
   const getMessageTime = () => {
-    // let myDate = new Date(props.message.created_time * 1000);
-    // let dateStr = myDate.getDate() + "/" + (myDate.getMonth() + 1) + "/" + myDate.getFullYear()
-    // //+ " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds()
-    // return dateStr;
-    return props.message.createdTime ? new Date(props.message.createdTime) : 0;
+    return props.message.createdTime + "Z";
   };
 
   const submitGPTFeedback = (feedback: number) => {
@@ -74,7 +70,11 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   return (
     <Tippy
       content={
-        <ReactTimeAgo date={getMessageTime()} locale="en-US" tooltip={false} />
+        <ReactTimeAgo
+          date={new Date(getMessageTime())}
+          locale="en-US"
+          tooltip={false}
+        />
       }
       // visible={props.message.ticketId ? true : false}
       disabled={

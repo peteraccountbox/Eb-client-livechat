@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AppContext } from "./appContext";
 import ChatBubble from "./components/ChatBubble";
 import {
@@ -740,21 +740,21 @@ const App: React.FunctionComponent = () => {
     setSessions([...sessions]);
   };
 
-  const addNewSession = (session: ChatSessionPaylodObj) => {
-    let availableIndex = sessions.findIndex((eahSession) => {
-      return eahSession.id == session.id;
+  const addNewSession = useCallback((session: ChatSessionPaylodObj) => {
+    let availableIndex = sessions.findIndex((eachSession) => {
+      return eachSession.id == session.id;
     });
     if (availableIndex > -1) {
       sessions.splice(availableIndex, 1);
     }
-
-    sessions.push(session);
-    setSessions([...sessions]);
+    let sessionsList = sessions;
+    sessionsList.push(session);
+    setSessions([...sessionsList]);
 
     console.log(sessions);
 
     bindPusherSocketEvents();
-  };
+  }, []);
 
   const appThemeStyle: object = useMemo(() => {
     if (!chatPrefs) return {};

@@ -86,7 +86,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
     try {
       if (!props.session.lastMessageAt) return 0;
 
-      return new Date(props.session.lastMessageAt);
+      return new Date(props.session.lastMessageAt + "Z");
     } catch (e) {
       console.log("Issue getMessageTime", e);
       return new Date().getTime();

@@ -27,9 +27,7 @@ export interface AgentChatMessagePropsType {
 
 const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
   const getMessageTime = () => {
-    return props.message.message.createdTime
-      ? new Date(props.message.message.createdTime)
-      : 0;
+    return props.message.createdTime + "Z";
   };
 
   const parentContext = useContext(AppContext);
@@ -82,7 +80,7 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
           <div className="chat__messages-timestamp">
             {/* <>{getMessageTime()}</> */}
             <ReactTimeAgo
-              date={getMessageTime()}
+              date={new Date(getMessageTime())}
               locale="en-US"
               tooltip={false}
             />
