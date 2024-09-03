@@ -4,7 +4,7 @@ import { getSessionStoragePrefs, setSessionStoragePrefs } from "./Storage";
 export const TENANT_ID: string = (window as any).TENANT_ID;
 export const CHANNEL_ID: string = (window as any).CHANNEL_ID;
 export const CHANNEL_PREFS: string = (window as any).CHANNEL_PREFS;
-export const VISITOR_UUID: string = (window as any).VISITOR_UUID;
+export const VISITOR_UUID: string = ((window as any).reachoJSClient) ? (window as any).reachoJSClient.getVisitorId() : (window as any).VISITOR_UUID;
 
 export const SERVER_REQ_HOST_PATH: string =
   (window as any).SERVER_HOST_DOMAIN_URL || "https://sandbox.reacho.com/";

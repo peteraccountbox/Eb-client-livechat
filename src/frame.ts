@@ -1,7 +1,7 @@
 import './assets/css/iframe.scss';
 import { uuidv4 } from './Utils';
 
-const createEle = function (tag: string, attrs: any) {
+export const createEle = function (tag: string, attrs: any) {
     var el = document.createElement(tag);
     if (typeof (attrs) === 'object') {
         for (var key in attrs) {
