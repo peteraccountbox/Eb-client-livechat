@@ -39,16 +39,14 @@ const MultiChoice: React.FC<InteractiveNodeProps> = ({
 
       {!execution.executed ? (
         <div className="chat__messages-group">
-          <ul className="chat__messages-list">
+          <ul className="chat__messages-list multi_choice-list">
             {execution.relatedEdges.map((edge: any) => {
               return (
-                <div className="chat__messages-list-item">
-                  <div
-                    className="chat__messages-bubble chat__message-type-TEXT"
-                    onClick={() => onChoiceSelected(edge)}
-                  >
-                    <span className="actual">{edge.data.displayText}</span>
-                  </div>
+                <div
+                  className="multi_choice-list-item-btn"
+                  onClick={() => onChoiceSelected(edge)}
+                >
+                  <span className="actual">{edge.data.displayText}</span>
                 </div>
               );
             })}
