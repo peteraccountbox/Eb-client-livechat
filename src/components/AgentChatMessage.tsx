@@ -14,6 +14,7 @@ import TimeAgo from "javascript-time-ago";
 
 import en from "javascript-time-ago/locale/en";
 import ru from "javascript-time-ago/locale/ru";
+import { DEFAULT_AGENT_PROFILE_PIC } from "../globals";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -58,11 +59,11 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
             <div className="chat__messages-agent-avatar">
               <img
                 src={
-                  agent?.profile_img_url
-                    ? agent?.profile_img_url
-                    : parentContext.chatPrefs.meta.decoration.headerPictureUrl
+                  agent && agent?.userPicURL
+                    ? agent?.userPicURL
+                    : DEFAULT_AGENT_PROFILE_PIC
                 }
-                alt="Avatar"
+                alt={agent && agent.name ? agent.name : "Agent"}
               />
             </div>
 
@@ -71,7 +72,7 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
                 <ChatMessage
                   message={props.message}
                   sessionId={props.sessionId}
-                  updateMessage={() => {}}
+                  updateMessage={() => { }}
                 />
               </li>
             </ul>

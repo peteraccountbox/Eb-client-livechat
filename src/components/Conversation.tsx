@@ -273,7 +273,7 @@ const Conversation = (props: ConversationProps) => {
 
       session.messageList = response.data.data;
       setSessions([...sessions]);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const getMatchedBotPrefs = () => {
@@ -355,7 +355,7 @@ const Conversation = (props: ConversationProps) => {
       .then((response) => {
         console.log("typing");
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const updateMessage = (message: ChatMessagePaylodObj) => {
@@ -481,7 +481,7 @@ const Conversation = (props: ConversationProps) => {
           setEmailCaptured(true);
           setSessionStoragePrefs(OPENED_CHAT, newNession.id);
         })
-        .catch(() => {});
+        .catch(() => { });
       return;
     }
     session.customerEmail = formData.customerEmail as string;
@@ -612,7 +612,7 @@ const Conversation = (props: ConversationProps) => {
 
         if (callback) callback(response);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const postMessage = (data: ChatMessagePaylodObj) => {
@@ -624,11 +624,7 @@ const Conversation = (props: ConversationProps) => {
 
     // Set status sending
     data.status = "SENDING";
-    try {
-      // data.wa_VISITOR_UUID = window.parent.EhAPI.getWAVisitorId();
-    } catch (err) {
-      JSON.stringify({});
-    }
+
 
     var url = newChat ? NEW_SESSION_URL_PATH : MESSAGE_URL_PATH;
 
@@ -1054,14 +1050,13 @@ const Conversation = (props: ConversationProps) => {
         </div>
 
         <div
-          className={`chat__footer ${
-            showChatForm ||
+          className={`chat__footer ${showChatForm ||
             (chatPrefs.meta.emailCaptureEnforcement == "required" &&
               !emailCaptured &&
               session.messageList?.length > 0)
-              ? "hide"
-              : ""
-          }`}
+            ? "hide"
+            : ""
+            }`}
         >
           {getChatPrompts()}
 
@@ -1097,7 +1092,7 @@ const Conversation = (props: ConversationProps) => {
               <Emoji onEmojiSelect={onEmojiSelect} />
 
               {session &&
-              session.connected_with === ChatSessionConnectedWithEnum.AGENT ? (
+                session.connected_with === ChatSessionConnectedWithEnum.AGENT ? (
                 <FileUpload fileUploadCallback={fileUploadCallback} />
               ) : (
                 <></>

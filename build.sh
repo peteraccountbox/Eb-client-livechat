@@ -14,9 +14,9 @@ cp -r build/* /home/eb137/Documents/reacho-frontend/public/assets/chat-preview/
 # cp -r css $ENGAGEBAY_FOLDER_PATH/src/main/webapp/livechat-preview/css/
 
 npm run build
-# cp -r main.*.css $ENGAGEBAY_FOLDER_PATH/src/main/webapp/livechat-widget/css/main.css
 
 # CDN MAPPING
+<<<<<<< HEAD
 # if [ "$1" ]; then
 #     echo $1
 #     # /bin/bash theme.sh
@@ -44,6 +44,11 @@ npm run build
 # aws cloudfront create-invalidation \
 #   --distribution-id EPERQ90RQTF6Q \
 #   --paths "/livechat-react/$1/*"
+if [ "$1" ]; then
+
+npx wrangler r2 object put reacho-file-repo/onsite/js/chat/loader/main.min.js --file=/Users/vaishnavireddy/Documents/EngageBay/reacho/Reacho-client-livechat/build/loader/main.min.js
+
+npx wrangler r2 object put reacho-file-repo/onsite/js/chat/main/main.min.js --file=/Users/vaishnavireddy/Documents/EngageBay/reacho/Reacho-client-livechat/build/main/main.min.js
 
 # else
 #     echo "No CDN2"  

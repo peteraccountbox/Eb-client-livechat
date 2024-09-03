@@ -203,6 +203,7 @@ export type ChatSessionPaylodObj = {
   updatedTime: any;
   id: number | string;
   visitorId: string;
+  agentId?: string;
   createdBy: "CUSTOMER";
   createdSource?: "WEBSITE";
   channelType: "CHAT";
@@ -449,10 +450,9 @@ export type TicketType = {
   automationStatus: AutomationStatusType[];
   cc_emails: string[];
   count: number;
-  assignee_id?: number;
+  agentId?: number;
   created_by: string;
   created_time: number;
-  owner?: AgentPaylodObj;
   forceUpdate: boolean;
   group_id: number;
   html_body: string;

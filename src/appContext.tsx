@@ -44,7 +44,7 @@ export function App() {
 interface AppContextPayload {
   agentsPrefs: AgentPrefsPayloadType[];
   setAgentsPrefs: (prefs: AgentPrefsPayloadType[]) => void;
-  agents?: AgentPaylodObj[];
+  agents: AgentPaylodObj[];
   setAgents: (prefs: AgentPaylodObj[]) => void;
   sessions: ChatSessionPaylodObj[];
   setSessions: (prefs: ChatSessionPaylodObj[]) => void;

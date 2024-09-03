@@ -1,9 +1,9 @@
 import React, { FC, useContext, useEffect, useState } from "react";
 import { AppContext } from "../appContext";
-import { TICKETS_FETCH_URL } from "../globals";
+import { DEFAULT_AGENT_PROFILE_PIC, TICKETS_FETCH_URL } from "../globals";
 import { getReq } from "../request";
 import CloseWidgetPanel from "./CloseWidgetPanel";
-import { TicketType } from "../Models";
+import { AgentPaylodObj, TicketType } from "../Models";
 
 export interface TicketListComponentProps {
   openTicket: (ticketId: Number) => void;
@@ -33,9 +33,13 @@ const TicketList: FC<TicketListComponentProps> = (props) => {
   }, []);
 
   const getImage = (ticket: TicketType) => {
-    return ticket.owner?.profile_img_url
-      ? ticket.owner?.profile_img_url
-      : parentContext.chatPrefs.meta.decoration.introductionText;
+
+    if (!ticket.agentId || !ticket.agentId || parentContext.agents?.length == 0 || !(parentContext.agents?.find(agent => (agent.id == ticket.agentId))))
+      return DEFAULT_AGENT_PROFILE_PIC;
+
+    const agent: AgentPaylodObj | undefined = parentContext.agents.find(agent => (agent.id == ticket.agentId));
+    return agent?.userPicURL || DEFAULT_AGENT_PROFILE_PIC;
+
   };
 
   return (
