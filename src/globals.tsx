@@ -78,7 +78,11 @@ export const CONVERSATION_MESSAGE_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/get-chat-messages";
 
 export const CHANNEL_PREFS_FETCH_URL_PATH =
-  REQUEST_PREFIX_PATH + "/channel/chat/" + CHANNEL_ID;
+  "https://reacho-chat-worker.peter-13d.workers.dev/?channel_id=" +
+  CHANNEL_ID +
+  "&tenant_id=" +
+  TENANT_ID;
+// REQUEST_PREFIX_PATH + "/channel/chat/" + CHANNEL_ID;
 
 export const USER_PREFS_FETCH_URL_PATH =
   "https://files.reacho.com/app/663b158cc77b6d29d332c88d/user/users-prefs.json";
@@ -97,6 +101,8 @@ export const WINDOW_OPEN = "window-open";
 export const OPENED_CHAT = "opened-chat";
 
 export const OPENED_FLOW = "opened-flow";
+
+export const TRACK_MANAGE = "track-manage";
 
 export const OPERATORS = "operators";
 

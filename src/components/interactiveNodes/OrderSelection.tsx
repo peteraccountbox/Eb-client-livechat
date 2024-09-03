@@ -3,8 +3,7 @@ import { getReq } from "../../request";
 import { ORDERS_FETCH_URL } from "../../globals";
 import { InteractiveNodeProps } from "../InteractiveFlowUtils";
 import { AppContext } from "../../appContext";
-
-const people = [1, 2, 3, 4, 5];
+import Orders from "../manageOrders/Orders";
 
 const OrderSelection: React.FC<InteractiveNodeProps> = ({
   execution,
@@ -29,7 +28,7 @@ const OrderSelection: React.FC<InteractiveNodeProps> = ({
   const selectOrder = (order: any) => {
     execution.nodeId = execution.node.id;
     execution.executed = true;
-    const orderDetails = JSON.parse(JSON.parse(order.meta).$r_extra);
+    const orderDetails = JSON.parse(order.meta);
     const response = {
       name: orderDetails.name,
       total_price: orderDetails.total_price,
@@ -78,9 +77,8 @@ const OrderSelection: React.FC<InteractiveNodeProps> = ({
           <ul className="help__collections-list">
             {orders.length > 0 &&
               orders.map((order: any) => {
-                const orderDetails = JSON.parse(
-                  JSON.parse(order.meta).$r_extra
-                );
+                const orderDetails = JSON.parse(order.meta);
+
                 return (
                   <div
                     className=""
@@ -115,7 +113,7 @@ const OrderSelection: React.FC<InteractiveNodeProps> = ({
                         {orderDetails.currency}
                         {orderDetails.current_total_price}
                       </div>
-                      <span>{orderDetails.financial_status}</span>
+                      <span>{orderDetails.fulfillment_status}</span>
                     </div>
                   </div>
                 );

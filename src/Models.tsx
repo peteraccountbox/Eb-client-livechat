@@ -107,6 +107,8 @@ export interface Decoration {
 export type ChatPrefsPayloadType = {
   id: string;
   meta: ChatChannelMeta;
+  flows: ChatFlowsPayloadObj[];
+  orderManagement: any;
   name: string;
 
   // widget: ChatPrefsWidgetType;
@@ -194,6 +196,8 @@ export type ChatFlowsPayloadObj = {
   id: string;
   [x: string]: any;
 };
+
+export type OrderManagementObj = {};
 
 export type ChatSessionPaylodObj = {
   updatedTime: any;

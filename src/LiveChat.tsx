@@ -9,7 +9,7 @@ import {
   removeSessionStoragePrefs,
   setSessionStoragePrefs,
 } from "./Storage";
-import { OPENED_CHAT, OPENED_FLOW } from "./globals";
+import { OPENED_CHAT, OPENED_FLOW, TRACK_MANAGE } from "./globals";
 import Flow from "./components/InteractiveFlow";
 import InteractiveFlow from "./components/InteractiveFlow";
 
@@ -17,6 +17,7 @@ enum LivechatComponentNames {
   ConversationList = "ConversationList",
   Conversation = "Conversation",
   Flow = "Flow",
+  TrackManage = "TrackManage",
 }
 
 export type LivechatComponentProps = {
@@ -42,6 +43,8 @@ export default function LiveChat({
     componentName = LivechatComponentNames.Conversation;
   } else if (getSessionStoragePrefs(OPENED_FLOW) != null) {
     componentName = LivechatComponentNames.Flow;
+  } else if (getSessionStoragePrefs(TRACK_MANAGE) != null) {
+    componentName = LivechatComponentNames.TrackManage;
   }
 
   const [activeComponentName, setActiveComponentName] =
@@ -101,6 +104,16 @@ export default function LiveChat({
                 />
               );
             } else if (activeComponentName === LivechatComponentNames.Flow) {
+              return (
+                <InteractiveFlow
+                  addNewSession={addNewSession}
+                  showConversation={showConversation}
+                  backToHome={backToHome}
+                />
+              );
+            } else if (
+              activeComponentName === LivechatComponentNames.TrackManage
+            ) {
               return (
                 <InteractiveFlow
                   addNewSession={addNewSession}

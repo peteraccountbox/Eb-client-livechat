@@ -21,6 +21,7 @@ import {
   OPENED_FLOW,
   CHANNEL_PREFS,
   USER_PREFS_FETCH_URL_PATH,
+  TRACK_MANAGE,
 } from "./globals";
 import {
   ActiveSessionObjType,
@@ -139,7 +140,8 @@ const App: React.FunctionComponent = () => {
   const [prefsFetched, setPrefsFetched] = useState<boolean>(false);
   useEffect(() => {
     if (prefsFetched) {
-      fetchChatFlows();
+      //fetchChatFlows();
+      setChatFlows(chatPrefs?.flows || []);
     }
   }, [prefsFetched]);
 
@@ -280,7 +282,7 @@ const App: React.FunctionComponent = () => {
     }
 
     try {
-      getReq(CHANNEL_PREFS_FETCH_URL_PATH, {}).then(
+      axios(CHANNEL_PREFS_FETCH_URL_PATH, {}).then(
         (response: AxiosResponse<any, any>) => {
           let prefs = response.data as ChatPrefsPayloadType;
 
@@ -551,6 +553,11 @@ const App: React.FunctionComponent = () => {
 
   const startFlow = (id: string) => {
     setSessionStoragePrefs(OPENED_FLOW, id);
+    changeActiveTab(widgetFooterTabs.Messages);
+  };
+
+  const openTrackAndManage = (id: string) => {
+    setSessionStoragePrefs(TRACK_MANAGE, "CUSTOMER_IDENTIFICATION");
     changeActiveTab(widgetFooterTabs.Messages);
   };
 

@@ -1,0 +1,8 @@
+export enum OrderManageTypes {
+  ORDERS,
+  ORDER,
+  TRACK,
+  CANCEL,
+  REPORT_ISSUE,
+  CUSTOMER_IDENTIFICATION,
+}

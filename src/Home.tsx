@@ -79,6 +79,17 @@ const Home = ({
                   </div>
                 </>
               )}
+              {chatPrefs.orderManagement && (
+                <>
+                  <div className="home__feeds-send-card home__feeds-recent-card">
+                    <div className="home__feeds-media">
+                      <div className="home__feeds-media-content">
+                        <div>{chatPrefs.orderManagement.name}</div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
 
               {recentSessions && recentSessions.length > 0 && (
                 <>
