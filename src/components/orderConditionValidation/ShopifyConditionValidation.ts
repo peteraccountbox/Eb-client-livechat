@@ -1,6 +1,6 @@
 import validate, { PredicateJoinCondition, PredicateType, validatePrdicateStatus } from "./ConditionValidation";
 
-export type ShopifyOrderModel {
+export type ShopifyOrderModel = {
     id: string;
     email: string;
     name: string;
