@@ -12,6 +12,7 @@ import {
 import { OPENED_CHAT, OPENED_FLOW, TRACK_MANAGE } from "./globals";
 import Flow from "./components/InteractiveFlow";
 import InteractiveFlow from "./components/InteractiveFlow";
+import TrackManage from "./components/TrackManage";
 
 enum LivechatComponentNames {
   ConversationList = "ConversationList",
@@ -114,13 +115,7 @@ export default function LiveChat({
             } else if (
               activeComponentName === LivechatComponentNames.TrackManage
             ) {
-              return (
-                <InteractiveFlow
-                  addNewSession={addNewSession}
-                  showConversation={showConversation}
-                  backToHome={backToHome}
-                />
-              );
+              return <TrackManage />;
             } else {
               return <>None</>;
             }

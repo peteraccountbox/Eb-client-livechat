@@ -58,6 +58,8 @@ interface AppContextPayload {
   changeActiveTab: (tab: widgetFooterTabs) => void;
   promtWidth: PromtWidth;
   setPromtWidth: (tab: PromtWidth) => void;
+  managementComponent: "";
+  setManagementComponent: (prefs: string) => void;
 }
 
 export const AppContext = createContext({
@@ -76,4 +78,6 @@ export const AppContext = createContext({
   changeActiveTab: (tab: widgetFooterTabs) => {},
   promtWidth: "" as PromtWidth,
   setPromtWidth: (tab: PromtWidth) => {},
+  managementComponent: "" as any,
+  setManagementComponent: (prefs: string) => {},
 } as AppContextPayload);

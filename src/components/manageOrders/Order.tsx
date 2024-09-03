@@ -3,7 +3,7 @@ import Address from "./Address";
 import ManageActions from "./ManageActions";
 
 const Order = (props: any) => {
-  const { order, orderManagement } = props;
+  const { data: order, actionCallback } = props;
   const orderDetails = JSON.parse(order.meta);
 
   return (
@@ -17,7 +17,6 @@ const Order = (props: any) => {
       <div
         className=""
         style={{
-          display: "flex",
           justifyContent: "space-between",
           padding: "10px 0px",
           alignItems: "center",
@@ -26,17 +25,16 @@ const Order = (props: any) => {
       >
         <div className="" style={{ display: "flex", alignItems: "center" }}>
           <div>
-            <h2>Order {orderDetails.name}</h2>
+            <h2>Shipment</h2>
           </div>
         </div>
 
         <div style={{ textAlign: "end" }}>
           <span>{orderDetails.fulfillment_status}</span>
         </div>
-        <ManageActions
-          orderManagement={orderManagement}
+        {/* <ManageActions
           orderDetails={orderDetails}
-        />
+        /> */}
 
         {orderDetails.line_items.map((item: any) => (
           <div

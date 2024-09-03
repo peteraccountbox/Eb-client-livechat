@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../../appContext";
 
 const ManageActions = (props: any) => {
-  const { orderManagement, orderDetails } = props;
+  const parentContext = useContext(AppContext);
+  const {
+    chatPrefs: { orderManagement },
+  } = parentContext;
+  const { orderDetails } = props;
   return (
     <>
       {orderManagement.trackOrderPolicy.enabled && (

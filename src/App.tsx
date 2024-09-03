@@ -147,6 +147,10 @@ const App: React.FunctionComponent = () => {
 
   const [loadingSessions, setLoadingSessions] = useState<boolean>(true);
 
+  const [managementComponent, setManagementComponent] = useState<any>(
+    "CUSTOMER_IDENTIFICATION"
+  );
+
   useEffect(() => {
     setActiveTab(getWidgetActiveTabs());
   }, [chatPrefs]);
@@ -557,7 +561,7 @@ const App: React.FunctionComponent = () => {
   };
 
   const openTrackAndManage = (id: string) => {
-    setSessionStoragePrefs(TRACK_MANAGE, "CUSTOMER_IDENTIFICATION");
+    setSessionStoragePrefs(TRACK_MANAGE, id);
     changeActiveTab(widgetFooterTabs.Messages);
   };
 
@@ -806,6 +810,8 @@ const App: React.FunctionComponent = () => {
           setPromtWidth,
           chatFlows,
           setChatFlows,
+          managementComponent,
+          setManagementComponent,
         }}
       >
         <div
@@ -861,6 +867,7 @@ const App: React.FunctionComponent = () => {
                             openChat={openChat}
                             startNewChat={startNewChat}
                             startFlow={startFlow}
+                            openTrackAndManage={openTrackAndManage}
                           />
                         );
                       }
