@@ -69,17 +69,6 @@ export const getFormData = () => {
   let dataJSON: { [key: string]: string } = {};
   if (formData) dataJSON = JSON.parse(formData);
 
-  try {
-    const email = (window.parent as any).EhAccount.getEmail();
-    const name = (window.parent as any).EhAccount.getName();
-
-    if (!dataJSON.email && email) dataJSON.email = email;
-
-    if (!dataJSON.name && name) dataJSON.name = name;
-  } catch (error) {
-    console.log("error", error);
-  }
-
   return JSON.stringify(dataJSON);
 };
 

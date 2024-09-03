@@ -42,7 +42,9 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   // };
 
   const getMessageTime = () => {
-    return props.message.createdTime + "Z";
+    return props.message.createdTime
+      ? props.message.createdTime + "Z"
+      : props.message.message.created_time;
   };
 
   const submitGPTFeedback = (feedback: number) => {

@@ -252,11 +252,12 @@ const Conversation = (props: ConversationProps) => {
     if (!session.id && !isUserBusinessHour(chatPrefs, agentsPrefs))
       setShowChatForm(true);
     if (session.id && !session.messageList) getMessageList();
-    getReq(UPDATE_READ_URL_PATH + "/" + session.id, {}).then((response) => {
-      session.customerUnreadMessagesCount = 0;
-      setSessions([...sessions]);
-      eventBus.emit("message_read");
-    });
+    if (session.id)
+      getReq(UPDATE_READ_URL_PATH + "/" + session.id, {}).then((response) => {
+        session.customerUnreadMessagesCount = 0;
+        setSessions([...sessions]);
+        eventBus.emit("message_read");
+      });
   }, [session]);
 
   const getMessageList = async () => {
