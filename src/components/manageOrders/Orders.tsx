@@ -1,8 +1,30 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ManageActions from "./ManageActions";
+import { getReq } from "../../request";
+import { ORDERS_FETCH_URL } from "../../globals";
+import { AppContext } from "../../appContext";
+import { OrderManageTypes } from "../TrackManageUtils";
 
 const Orders = (props: any) => {
-  const { orders, orderManagement } = props;
+  const {
+    data: { customerId },
+    actionCallback,
+  } = props;
+
+  const [orders, setOrders] = useState<any>([]);
+  const parentContext = useContext(AppContext);
+  const { chatPrefs } = parentContext;
+
+  useEffect(() => {
+    if (customerId)
+      getReq(ORDERS_FETCH_URL, {
+        customerId: customerId,
+        storeId: chatPrefs.meta.storeId,
+      }).then((response) => {
+        console.log(response.data);
+        setOrders(response.data.content);
+      });
+  }, []);
   return (
     <>
       <header className="">
@@ -23,7 +45,7 @@ const Orders = (props: any) => {
                     padding: "10px 0px",
                     alignItems: "center",
                   }}
-                  // onClick={() => selectOrder(order)}
+                  onClick={() => actionCallback(OrderManageTypes.ORDER, order)}
                 >
                   <div
                     className=""
@@ -31,7 +53,7 @@ const Orders = (props: any) => {
                   >
                     <div>
                       <h2>Order {orderDetails.name}</h2>
-                      <div>{orderDetails.created_at}</div>
+                      <div>Shipment</div>
                     </div>
                   </div>
 
@@ -40,13 +62,10 @@ const Orders = (props: any) => {
                       {orderDetails.currency}
                       {orderDetails.current_total_price}
                     </div>
-                    <span>{orderDetails.fulfillment_status}</span>
+                    <div>{orderDetails.fulfillment_status}</div>
                   </div>
                 </div>
-                {/* <ManageActions
-                  orderManagement={orderManagement}
-                  orderDetails={orderDetails}
-                /> */}
+                {/* <ManageActions orderDetails={orderDetails} /> */}
 
                 {orderDetails.line_items.map((item: any) => (
                   <div

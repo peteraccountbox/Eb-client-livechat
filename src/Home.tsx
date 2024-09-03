@@ -9,10 +9,12 @@ const Home = ({
   openChat,
   startNewChat,
   startFlow,
+  openTrackAndManage,
 }: {
   openChat: (id: string) => void;
   startNewChat: (initialMessage?: string | undefined) => void;
   startFlow: (id: string) => void;
+  openTrackAndManage: (id: string) => void;
 }) => {
   const parentContext = useContext(AppContext);
   const { sessions, chatPrefs, chatFlows } = parentContext;
@@ -102,7 +104,12 @@ const Home = ({
                 <>
                   <div className="home__feeds-send-card home__feeds-recent-card">
                     <div className="home__feeds-media">
-                      <div className="home__feeds-media-content">
+                      <div
+                        className="home__feeds-media-content"
+                        onClick={() =>
+                          openTrackAndManage(chatPrefs.orderManagement.id)
+                        }
+                      >
                         <div>{chatPrefs.orderManagement.name}</div>
                       </div>
                     </div>
