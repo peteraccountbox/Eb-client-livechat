@@ -1,6 +1,16 @@
 import validate, { PredicateJoinCondition, PredicateType, validatePrdicateStatus } from "./ConditionValidation";
 
-export default function shopifyValidateRules(shopifyOrder: any, predicates: PredicateType[], joinCondition: PredicateJoinCondition) {
+export type ShopifyOrderModel {
+    id: string;
+    email: string;
+    name: string;
+    cancelled_at: string;
+    created_at: string;
+    fulfillment_status: string;
+    financial_status: string;
+}
+
+export default function shopifyValidateRules(shopifyOrder: ShopifyOrderModel, predicates: PredicateType[], joinCondition: PredicateJoinCondition) {
 
     if (!predicates || predicates.length == 0)
         return true;
@@ -13,8 +23,13 @@ export default function shopifyValidateRules(shopifyOrder: any, predicates: Pred
         let value = "";
         try {
             if (predicate.attribute == "order_date") {
-                value = shopifyOrder.items.val;
+                value = shopifyOrder.created_at;
             }
+
+            if (predicate.attribute == "cancel_date") {
+                value = shopifyOrder.cancelled_at;
+            }
+
         } catch (e) {
         }
 
