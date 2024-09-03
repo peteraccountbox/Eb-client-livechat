@@ -34,7 +34,7 @@ const TicketDetails: FC<TicketDetailsComponentProps> = (props) => {
         else setUsers([...groupUsers]);
       }
     } else if (ticket && ticket.assigned_to == "USER") {
-      let user = getOperator(ticket.assignee_id, groupUsers);
+      let user = getOperator(ticket.agentId, groupUsers);
       if (user) setUsers([user]);
     }
   }, [ticket]);

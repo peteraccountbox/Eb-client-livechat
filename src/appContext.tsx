@@ -44,7 +44,7 @@ export function App() {
 interface AppContextPayload {
   agentsPrefs: AgentPrefsPayloadType[];
   setAgentsPrefs: (prefs: AgentPrefsPayloadType[]) => void;
-  agents?: AgentPaylodObj[];
+  agents: AgentPaylodObj[];
   setAgents: (prefs: AgentPaylodObj[]) => void;
   sessions: ChatSessionPaylodObj[];
   setSessions: (prefs: ChatSessionPaylodObj[]) => void;
@@ -62,18 +62,18 @@ interface AppContextPayload {
 
 export const AppContext = createContext({
   agentsPrefs: [] as AgentPrefsPayloadType[],
-  setAgentsPrefs: (prefs: AgentPrefsPayloadType[]) => {},
+  setAgentsPrefs: (prefs: AgentPrefsPayloadType[]) => { },
   agents: [] as AgentPaylodObj[],
-  setAgents: (prefs: AgentPaylodObj[]) => {},
+  setAgents: (prefs: AgentPaylodObj[]) => { },
   sessions: [] as ChatSessionPaylodObj[],
-  setSessions: (prefs: ChatSessionPaylodObj[]) => {},
+  setSessions: (prefs: ChatSessionPaylodObj[]) => { },
   chatFlows: [] as ChatFlowsPayloadObj[],
-  setChatFlows: (prefs: ChatFlowsPayloadObj[]) => {},
+  setChatFlows: (prefs: ChatFlowsPayloadObj[]) => { },
   chatPrefs: {} as ChatPrefsPayloadType,
-  chatBubbleClicked: () => {},
-  setChatPrefs: (prefs: ChatPrefsPayloadType) => {},
+  chatBubbleClicked: () => { },
+  setChatPrefs: (prefs: ChatPrefsPayloadType) => { },
   activeTab: "" as widgetFooterTabs,
-  changeActiveTab: (tab: widgetFooterTabs) => {},
+  changeActiveTab: (tab: widgetFooterTabs) => { },
   promtWidth: "" as PromtWidth,
-  setPromtWidth: (tab: PromtWidth) => {},
+  setPromtWidth: (tab: PromtWidth) => { },
 } as AppContextPayload);

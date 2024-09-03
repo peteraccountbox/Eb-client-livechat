@@ -44,7 +44,9 @@ export const ORDERS_FETCH_URL: string =
   "api/support/jsclient/inbox/get-store-orders";
 export const ORDER_FETCH_URL: string =
   "api/support/jsclient/inbox/get-store-order";
-export const USERS_FETCH_URL: string = "jsapi/rest/group/users";
+
+export const USERS_FETCH_URL: string = "https://files.reacho.com/app/" + TENANT_ID + "/user/users-info.json";
+
 export const USER_FETCH_URL: string = "jsapi/rest/user/";
 export const TICKET_CREATE_URL: string =
   "jsapi/rest/create-ticket/" + VISITOR_UUID;
@@ -121,6 +123,8 @@ export const HC_ACTIVE_ID = "hc_active_id";
 export const HC_SEARCH_TEXT = "hc_search_text";
 
 export const HC_ACTIVE_COMPONENT = "hc_active_component";
+
+export const DEFAULT_AGENT_PROFILE_PIC = "https://static1.eb-pages.com/uploads/5646021333876736/avatar_new(35).png";
 
 export const IS_NEW_SESSION: boolean = (function () {
   // console.log("Checkingup the session");

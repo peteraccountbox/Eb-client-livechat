@@ -1,19 +1,17 @@
 import React, { FC, useContext, useEffect, useState } from "react";
 import { AppContext } from "../appContext";
 import {
-  ChatMessagePaylodObj,
-  ChatPrefsPayloadType,
+  AgentPaylodObj,
   ChatSessionPaylodObj,
   MessageByTypeEnum,
 } from "../Models";
-import { getOperatorImage, getOperatorName, getSystemMessage } from "../Utils";
-import TypingLoader from "./TypingLoader";
 // import TimeAgo from 'react-timeago'
 import ReactTimeAgo from "react-time-ago";
 import TimeAgo from "javascript-time-ago";
 
 import en from "javascript-time-ago/locale/en";
 import ru from "javascript-time-ago/locale/ru";
+import { DEFAULT_AGENT_PROFILE_PIC } from "../globals";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -94,21 +92,28 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
   };
 
   const getImage = () => {
+
+    if (!props.session.agentId || !props.session.agentId || parentContext.agents?.length == 0 || !(parentContext.agents?.find(agent => (agent.id == props.session.agentId))))
+      return DEFAULT_AGENT_PROFILE_PIC;
+
+    const agent: AgentPaylodObj | undefined = parentContext.agents.find(agent => (agent.id == props.session.agentId));
+    return agent?.userPicURL || DEFAULT_AGENT_PROFILE_PIC;
+
     // const lastMessage = getLatestChat();
     // if (!lastMessage)
     // return parentContext.chatPrefs.meta.decoration.headerPictureUrl;
 
-    if (
-      props.session.lastAgentMessageAt &&
-      props.session.lastMessageAt == props.session.lastAgentMessageAt
-    ) {
-      const agent = parentContext.agents?.find((agent) => {
-        return agent.id === props.session.assignedToAgentId;
-      });
-      return agent && agent.userPicURL
-        ? agent.userPicURL
-        : parentContext.chatPrefs.meta.decoration.headerPictureUrl;
-    }
+    // if (
+    //   props.session.lastAgentMessageAt &&
+    //   props.session.lastMessageAt == props.session.lastAgentMessageAt
+    // ) {
+    //   const agent = parentContext.agents?.find((agent) => {
+    //     return agent.id === props.session.assignedToAgentId;
+    //   });
+    //   return agent && agent.userPicURL
+    //     ? agent.userPicURL
+    //     : DEFAULT_AGENT_PROFILE_PIC;
+    // }
     // else if (lastMessage.from == MessageByTypeEnum.GPT) {
     //   const bot = parentContext.chatPrefs.botPrefs?.find((bot) => {
     //     return bot.id === lastMessage.gpt_bot_id;
@@ -118,7 +123,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
     //     : parentContext.chatPrefs.meta.decoration.botAvatarImage;
     // }
 
-    return parentContext.chatPrefs.meta.decoration.headerPictureUrl;
+    // return parentContext.chatPrefs.meta.decoration.headerPictureUrl;
   };
 
   const getName = (): string => {
