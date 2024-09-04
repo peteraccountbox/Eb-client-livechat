@@ -65,12 +65,10 @@ const LoginForm = (props: any) => {
     }
   };
   return (
-    <div className="chat__ticket-form-main">
-      <div className="chat__ticket-form">
+    <div className="chat__ticket-form-main chat_agent_data chat_flows-login">
+      <div className="chat__ticket-form1 chat_flows-login-form chat__messages-form chatuserformdata">
         <div className="chat__ticket-form-group">
-          <label className="chat__ticket-form-label">
-            {fields[0].label} <span className="theme-color">*</span>
-          </label>
+          <div className="chat_flows-login-title">{fields[0].label}</div>
           <div style={{ display: "flex" }}>
             <div
               className="chat__form-check radio-options"
@@ -114,9 +112,9 @@ const LoginForm = (props: any) => {
           )}
         </div>
         <div className="chat__ticket-form-group">
-          <label className="chat__ticket-form-label">
+          <div className="chat__ticket-form-label">
             {toggleField.label} <span className="theme-color">*</span>
-          </label>
+          </div>
           <input
             type={toggleField.type}
             placeholder={toggleField.placeholder}
@@ -139,20 +137,9 @@ const LoginForm = (props: any) => {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
           }}
         >
-          <button
-            className="chat__messages-btn"
-            onClick={submitForm}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              width: "auto",
-              cursor: "pointer",
-              marginTop: "20px",
-            }}
-          >
+          <button className="chat__messages-btn" onClick={submitForm}>
             {saving ? "Saving ..." : "Sign In"}
           </button>
         </span>

@@ -92,26 +92,24 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
         <>
           <div className="chat__messages-group">
             <ul className="chat__messages-list">
-              <div className="chat__messages-list-item">
+              <li className="chat__messages-list-item">
                 <div className="chat__messages-bubble chat__message-type-TEXT">
                   <span className="actual">Sign in to continue</span>
                 </div>
-              </div>
+              </li>
             </ul>
           </div>
-          <div className="chat__messages-group--me">
-            <div className="chat__messages-group">
-              <ul className="chat__messages-list">
-                <div className="chat__messages-list-item">
-                  <div
-                    className="chat__messages-bubble chat__message-type-TEXT"
-                    onClick={() => setShowSignIn(true)}
-                  >
-                    <span className="actual">Continue to sign in</span>
-                  </div>
+          <div className="chat__messages-group chat__messages-group--me">
+            <ul className="chat__messages-list">
+              <li className="chat__messages-list-item">
+                <div
+                  className="chat__messages-bubble chat__message-type-TEXT"
+                  onClick={() => setShowSignIn(true)}
+                >
+                  <span className="actual">Continue to sign in</span>
                 </div>
-              </ul>
-            </div>
+              </li>
+            </ul>
           </div>
         </>
       ) : executionMeta &&
@@ -120,11 +118,11 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
         <>
           <div className="chat__messages-group">
             <ul className="chat__messages-list">
-              <div className="chat__messages-list-item">
+              <li className="chat__messages-list-item">
                 <div className="chat__messages-bubble chat__message-type-TEXT">
                   <span className="actual">Sign in to continue</span>
                 </div>
-              </div>
+              </li>
             </ul>
           </div>
           <LoginForm
@@ -138,13 +136,13 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
       ) : (
         <div className="chat__messages-group">
           <ul className="chat__messages-list">
-            <div className="chat__messages-list-item">
+            <li className="chat__messages-list-item">
               <div className="chat__messages-bubble chat__message-type-TEXT">
                 <span className="actual">
                   {execution.nextNodeId ? "Signed In" : "Invalid Customer"}
                 </span>
               </div>
-            </div>
+            </li>
           </ul>
         </div>
       )}

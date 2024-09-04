@@ -70,55 +70,57 @@ const OrderSelection: React.FC<InteractiveNodeProps> = ({
         </div>
       ) : (
         <>
-          <header className="">
-            <h2 className="title">My orders </h2>
-            <p className="desc">{execution.node.data.formData?.message}</p>
-          </header>
-          <ul className="help__collections-list">
-            {orders.length > 0 &&
-              orders.map((order: any) => {
-                const orderDetails = JSON.parse(order.meta);
+          <div className="orders_panel">
+            <header className="123">
+              <h2 className="title">My orders </h2>
+              <p className="desc">{execution.node.data.formData?.message}</p>
+            </header>
+            <ul className="help__collections-list">
+              {orders.length > 0 &&
+                orders.map((order: any) => {
+                  const orderDetails = JSON.parse(order.meta);
 
-                return (
-                  <div
-                    className=""
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      padding: "10px 0px",
-                      alignItems: "center",
-                    }}
-                    onClick={() => selectOrder(order)}
-                  >
+                  return (
                     <div
                       className=""
-                      style={{ display: "flex", alignItems: "center" }}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        padding: "10px 0px",
+                        alignItems: "center",
+                      }}
+                      onClick={() => selectOrder(order)}
                     >
-                      <img
-                        style={{
-                          width: "4rem",
-                          height: "4rem",
-                          borderRadius: "5px",
-                        }}
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      />
-                      <div style={{ marginLeft: "10px" }}>
-                        <div>Order {orderDetails.name}</div>
-                        <div>{orderDetails.created_at}</div>
+                      <div
+                        className=""
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <img
+                          style={{
+                            width: "4rem",
+                            height: "4rem",
+                            borderRadius: "5px",
+                          }}
+                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        />
+                        <div style={{ marginLeft: "10px" }}>
+                          <div>Order {orderDetails.name}</div>
+                          <div>{orderDetails.created_at}</div>
+                        </div>
                       </div>
-                    </div>
 
-                    <div style={{ textAlign: "end" }}>
-                      <div>
-                        {orderDetails.currency}
-                        {orderDetails.current_total_price}
+                      <div style={{ textAlign: "end" }}>
+                        <div>
+                          {orderDetails.currency}
+                          {orderDetails.current_total_price}
+                        </div>
+                        <span>{orderDetails.fulfillment_status}</span>
                       </div>
-                      <span>{orderDetails.fulfillment_status}</span>
                     </div>
-                  </div>
-                );
-              })}
-          </ul>
+                  );
+                })}
+            </ul>
+          </div>
         </>
       )}
     </>
