@@ -8,13 +8,16 @@ function initializeChatWidget(container: Element, channelId: string | null) {
         return;
 
     // Get prefs and validate it
-    axios.get("https://files.reacho.com/app/" + (window as any).reachoModulesObject.companyId + "/channel/" + channelId + ".json").then((response) => {
-        if (!response)
-            return;
-        loadChat(container, response.data);
-    }).catch(() => {
+    axios.get("https://reacho-chat-worker.peter-13d.workers.dev/?channel_id=" +
+        channelId +
+        "&tenant_id=" +
+        (window as any).reachoModulesObject.companyId).then((response) => {
+            if (!response)
+                return;
+            loadChat(container, response.data);
+        }).catch(() => {
 
-    });
+        });
 
 }
 
