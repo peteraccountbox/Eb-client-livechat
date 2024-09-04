@@ -71,9 +71,11 @@ const OrderSelection: React.FC<InteractiveNodeProps> = ({
       ) : (
         <>
           <div className="orders_panel">
-            <header className="123">
-              <h2 className="title">My orders </h2>
-              <p className="desc">{execution.node.data.formData?.message}</p>
+            <header>
+              <h2 className="orders_panel-title">My orders </h2>
+              <p className="orders_panel-desc">
+                {execution.node.data.formData?.message}
+              </p>
             </header>
             <ul className="help__collections-list">
               {orders.length > 0 &&
