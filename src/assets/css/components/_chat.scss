@@ -4608,13 +4608,15 @@
 
 }
 
-.orders_panel {
-	background-color: #f9fafb;
-	padding: 16px 20px;
+.orders_collections {
+	background-color: #ffffff;
+	padding: 16px 0px;
 	border-radius: 10px;
 	font-size: 14px;
 	display: block;
 	color: $body-color;
+	border: 1px solid rgba(0, 0, 0, 0.05);
+	box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 4px;
 
 	&-title {
 		font-weight: 600;
@@ -4622,5 +4624,104 @@
 		line-height: 28px;
 		letter-spacing: -0.4px;
 		padding-bottom: 10px;
+		padding-left: 20px;
+	}
+
+	&-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+
+		&-item {
+			display: flex;
+			width: 100%;
+			-webkit-box-pack: justify;
+			justify-content: space-between;
+			-webkit-box-align: center;
+			align-items: center;
+			padding: 16px 20px;
+			cursor: pointer;
+
+			&:hover {
+				background-color: rgba(0, 0, 0, .03);
+			}
+
+			&-avatar {
+				flex-shrink: 0;
+				position: relative;
+				margin-right: 8px;
+				align-self: center;
+			}
+
+			&-profile {
+				margin: 0px auto;
+				display: inline-block;
+				vertical-align: middle;
+				cursor: default;
+				position: relative;
+				width: 40px;
+				height: 40px;
+				line-height: 36px;
+				font-size: 18px;
+				border-radius: 16.7%;
+
+				img {
+					width: 40px;
+					height: 40px;
+					border-radius: 16.7%;
+				}
+			}
+
+			&-content {
+				margin-right: auto;
+				flex: 1 1 0%;
+				font-size: 14px;
+				line-height: 21px;
+				min-width: 0px;
+			}
+
+			&-name {
+				font-size: 14px;
+				font-weight: 600;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+
+			&-timegao {
+				font-size: 13px;
+				font-weight: 400;
+				letter-spacing: -0.01em;
+				color: $color-gray-alt-3;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+
+			&-price-info {
+				margin-left: 8px;
+				align-self: center;
+				text-align: right;
+			}
+
+			&-currency {
+				font-size: 14px;
+				font-weight: 600;
+				line-height: 24px;
+				color: $body-color;
+			}
+
+			&-total-price {
+				margin-left: 2px;
+			}
+
+			&-status {
+				font-size: 13px;
+				font-weight: 400;
+				line-height: 20px;
+				letter-spacing: -0.01em;
+				color: $color-gray-alt-3;
+			}
+		}
 	}
 }
