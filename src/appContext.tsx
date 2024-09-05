@@ -58,8 +58,15 @@ interface AppContextPayload {
   changeActiveTab: (tab: widgetFooterTabs) => void;
   promtWidth: PromtWidth;
   setPromtWidth: (tab: PromtWidth) => void;
-  managementComponent: "";
+}
+
+interface OrderManagementContextPayload {
+  managementComponent: string;
   setManagementComponent: (prefs: string) => void;
+  data: any;
+  setData: (prefs: any) => void;
+  setPrevComponent: (prefs: any) => void;
+  setPrevData: (prefs: any) => void;
 }
 
 export const AppContext = createContext({
@@ -78,6 +85,13 @@ export const AppContext = createContext({
   changeActiveTab: (tab: widgetFooterTabs) => {},
   promtWidth: "" as PromtWidth,
   setPromtWidth: (tab: PromtWidth) => {},
+} as AppContextPayload);
+
+export const OrderManagementContext = createContext({
   managementComponent: "" as any,
   setManagementComponent: (prefs: string) => {},
-} as AppContextPayload);
+  data: {} as any,
+  setData: (prefs: any) => {},
+  setPrevComponent: (prefs: any) => {},
+  setPrevData: (prefs: any) => {},
+} as OrderManagementContextPayload);

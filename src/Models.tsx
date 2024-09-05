@@ -90,6 +90,7 @@ export interface Decoration {
   headerPictureUrl: string;
   fontFamily: string;
   mainColor: string;
+  useMainColorOutsideBusinessHour: boolean;
   conversationColor: string;
   backgroundStyle: string;
   introductionText: string;

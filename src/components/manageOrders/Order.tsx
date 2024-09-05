@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Address from "./Address";
 import ManageActions from "./ManageActions";
+import { OrderManageTypes } from "../TrackManageUtils";
+import { getSessionStoragePrefs } from "../../Storage";
+import { CUSTOMER_ID_ON_TRACK_MANAGE } from "../../globals";
+import { OrderManagementContext } from "../../appContext";
 
-const Order = (props: any) => {
-  const { data: order, actionCallback } = props;
+const Order = () => {
+  const orderManagementContext = useContext(OrderManagementContext);
+  const { setPrevComponent, setPrevData, data: order } = orderManagementContext;
   const orderDetails = JSON.parse(order.meta);
+  useEffect(() => {
+    setPrevComponent(OrderManageTypes.ORDERS);
+    setPrevData({
+      customerId: getSessionStoragePrefs(CUSTOMER_ID_ON_TRACK_MANAGE),
+    });
+  }, []);
 
   return (
     <>
@@ -21,7 +32,6 @@ const Order = (props: any) => {
           padding: "10px 0px",
           alignItems: "center",
         }}
-        // onClick={() => selectOrder(order)}
       >
         <div className="" style={{ display: "flex", alignItems: "center" }}>
           <div>
@@ -32,9 +42,7 @@ const Order = (props: any) => {
         <div style={{ textAlign: "end" }}>
           <span>{orderDetails.fulfillment_status}</span>
         </div>
-        {/* <ManageActions
-          orderDetails={orderDetails}
-        /> */}
+        <ManageActions />
 
         {orderDetails.line_items.map((item: any) => (
           <div
@@ -54,7 +62,11 @@ const Order = (props: any) => {
                   height: "4rem",
                   borderRadius: "5px",
                 }}
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                src={`${
+                  item.product_image_url
+                    ? item.product_image_url
+                    : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                }`}
               />
               <div style={{ marginLeft: "10px" }}>
                 <div>{item.name}</div>

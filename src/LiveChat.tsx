@@ -10,7 +10,6 @@ import {
   setSessionStoragePrefs,
 } from "./Storage";
 import { OPENED_CHAT, OPENED_FLOW, TRACK_MANAGE } from "./globals";
-import Flow from "./components/InteractiveFlow";
 import InteractiveFlow from "./components/InteractiveFlow";
 import TrackManage from "./components/TrackManage";
 
@@ -115,7 +114,7 @@ export default function LiveChat({
             } else if (
               activeComponentName === LivechatComponentNames.TrackManage
             ) {
-              return <TrackManage />;
+              return <TrackManage backToHome={backToHome} />;
             } else {
               return <>None</>;
             }

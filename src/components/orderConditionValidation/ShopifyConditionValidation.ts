@@ -8,6 +8,8 @@ export type ShopifyOrderModel = {
     created_at: string;
     fulfillment_status: string;
     financial_status: string;
+    shipment_status: string;
+    order_status: string;
 }
 
 export default function shopifyValidateRules(shopifyOrder: ShopifyOrderModel, predicates: PredicateType[], joinCondition: PredicateJoinCondition) {
@@ -22,13 +24,22 @@ export default function shopifyValidateRules(shopifyOrder: ShopifyOrderModel, pr
 
         let value = "";
         try {
-            if (predicate.attribute == "order_date") {
-                value = shopifyOrder.created_at;
+            if (predicate.attribute == "financial_status") {
+                value = shopifyOrder.financial_status;
             }
 
-            if (predicate.attribute == "cancel_date") {
-                value = shopifyOrder.cancelled_at;
+            if (predicate.attribute == "fulfillment_status") {
+                value = shopifyOrder.fulfillment_status
             }
+
+            if (predicate.attribute == "shipment_status") {
+                value = shopifyOrder.fulfillment_status
+            }
+
+            if (predicate.attribute == "order_status") {
+                value = shopifyOrder.order_status
+            }
+
 
         } catch (e) {
         }

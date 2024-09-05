@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
+import { OrderManagementContext } from "../../appContext";
 
 const CancelNode = (props: any) => {
-  const { order, cancelOrderPolicy } = props;
+  const { cancelOrderPolicy } = props;
+  const orderManagementContext = useContext(OrderManagementContext);
+  const { data: order } = orderManagementContext;
   const orderDetails = JSON.parse(order.meta);
   const { address1, city, province_code, zip } = orderDetails.shipping_address;
   return (

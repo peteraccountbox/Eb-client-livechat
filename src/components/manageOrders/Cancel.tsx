@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext, OrderManagementContext } from "../../appContext";
 
-const Cancel = (props: any) => {
-  const { order } = props;
+const Cancel = () => {
+  const orderManagementContext = useContext(OrderManagementContext);
+  const { data: order } = orderManagementContext;
   const orderDetails = JSON.parse(order.meta);
+  const parentContext = useContext(AppContext);
+
+  const {
+    chatPrefs: {
+      orderManagement: { cancelOrderPolicy },
+    },
+  } = parentContext;
 
   return (
     <>
