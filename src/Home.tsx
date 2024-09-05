@@ -4,6 +4,7 @@ import ChatTabsList from "./components/ChatTabsList";
 import ConversationListItem from "./components/ConversationListItem";
 import { ChatFlowsPayloadObj, ChatSessionPaylodObj } from "./Models";
 import CloseWidgetPanel from "./components/CloseWidgetPanel";
+import { isUserBusinessHour } from "./BusinessHours";
 
 const Home = ({
   openChat,
@@ -17,7 +18,7 @@ const Home = ({
   openTrackAndManage: (id: string) => void;
 }) => {
   const parentContext = useContext(AppContext);
-  const { sessions, chatPrefs, chatFlows } = parentContext;
+  const { sessions, chatPrefs, chatFlows, agentsPrefs } = parentContext;
 
   const [recentSessions, setRecentSessions] = useState<ChatSessionPaylodObj[]>(
     []
@@ -43,21 +44,24 @@ const Home = ({
           </div>
           <div className="home__feeds-body">
             <div className="home__feeds-header">
-              <div className="home__feeds-logo-brand">
+              {/* <div className="home__feeds-logo-brand">
                 <img
                   src={
                     "https://cdn5.engagebay.com/assets/img/engagebay-brand-logo-white.svg"
                   }
                   alt="Logo"
                 />
-              </div>
+              </div> */}
+              {chatPrefs.name}
               <div className="chat__help-end">
                 <CloseWidgetPanel />
               </div>
             </div>
 
             <div className="home__feeds-home-title">
-              {"welcome message" ? <>Welcome message</> : <></>}
+              {isUserBusinessHour(chatPrefs, agentsPrefs)
+                ? chatPrefs.meta.decoration.introductionText
+                : chatPrefs.meta.decoration.offlineIntroductionText}
             </div>
           </div>
           <div className="home__feeds-cards-main">

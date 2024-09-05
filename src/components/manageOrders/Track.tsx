@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import Address from "./Address";
+import { AppContext, OrderManagementContext } from "../../appContext";
 
-const Track = (props: any) => {
-  const { order, trackOrderPolicy } = props;
+const Track = () => {
+  const orderManagementContext = useContext(OrderManagementContext);
+  const { data: order } = orderManagementContext;
   const orderDetails = JSON.parse(order.meta);
+  const parentContext = useContext(AppContext);
+
+  const {
+    chatPrefs: {
+      orderManagement: { trackOrderPolicy },
+    },
+  } = parentContext;
   return (
     <>
       <div

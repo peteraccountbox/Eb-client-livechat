@@ -1,5 +1,4 @@
-// import boticon from "./assets/img/chatbot-final.png";
-import { FC, useMemo, useState } from "react";
+import { FC, useContext, useMemo, useState } from "react";
 import React from "react";
 import { icons } from "../icons";
 import PreviewListItem from "./PreviewListItem";
@@ -28,10 +27,10 @@ const Preview: FC<PreviewComponentProps> = (props) => {
         chatPrefs && chatPrefs.meta.decoration.mainColor
           ? chatPrefs.meta.decoration.mainColor
           : "blue",
-      "--themeColor2":
-        chatPrefs && chatPrefs.meta.decoration.mainColor
-          ? chatPrefs.meta.decoration.mainColor
-          : "red",
+      // "--themeColor2":
+      //   chatPrefs && chatPrefs.meta.decoration.mainColor
+      //     ? chatPrefs.meta.decoration.mainColor
+      //     : "red",
     };
   }, [chatPrefs]);
   const getStartConvButtonText = () => {
@@ -266,21 +265,22 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                 </div>
                 <div className="home__feeds-body">
                   <div className="home__feeds-header">
-                    <div className="home__feeds-logo-brand">
+                    {/* <div className="home__feeds-logo-brand">
                       <img
                         src={
                           "https://cdn5.engagebay.com/assets/img/engagebay-brand-logo-white.svg"
                         }
                         alt="Logo"
                       />
-                    </div>
+                    </div> */}
+                    {chatPrefs.name}
                     <div className="chat__help-end">
                       <CloseWidgetPanel />
                     </div>
                   </div>
 
                   <div className="home__feeds-home-title">
-                    {"welcome message" ? <>Welcome message</> : <></>}
+                    {chatPrefs.meta.decoration.introductionText}
                   </div>
                 </div>
                 <div className="home__feeds-cards-main">

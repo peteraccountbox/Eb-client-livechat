@@ -2,15 +2,32 @@ import React, { useContext, useEffect, useState } from "react";
 import ManageActions from "./ManageActions";
 import { getReq } from "../../request";
 import { ORDERS_FETCH_URL } from "../../globals";
-import { AppContext } from "../../appContext";
+import { AppContext, OrderManagementContext } from "../../appContext";
 import { OrderManageTypes } from "../TrackManageUtils";
 
-const Orders = (props: any) => {
+const Orders = () => {
+  const orderManagementContext = useContext(OrderManagementContext);
   const {
+    setPrevComponent,
+    setPrevData,
+    setManagementComponent,
     data: { customerId },
-    actionCallback,
-  } = props;
+    setData,
+  } = orderManagementContext;
 
+  useEffect(() => {
+    setPrevComponent("");
+    setPrevData({
+      customerId,
+    });
+  }, []);
+
+  const action = (order: any) => {
+    setPrevComponent(OrderManageTypes.ORDERS);
+    setPrevData({ customerId: customerId });
+    setManagementComponent(OrderManageTypes.ORDER);
+    setData(order);
+  };
   const [orders, setOrders] = useState<any>([]);
   const parentContext = useContext(AppContext);
   const { chatPrefs } = parentContext;
@@ -36,7 +53,7 @@ const Orders = (props: any) => {
             const orderDetails = JSON.parse(order.meta);
 
             return (
-              <>
+              <div onClick={() => action(order)}>
                 <div
                   className=""
                   style={{
@@ -45,7 +62,7 @@ const Orders = (props: any) => {
                     padding: "10px 0px",
                     alignItems: "center",
                   }}
-                  onClick={() => actionCallback(OrderManageTypes.ORDER, order)}
+                  onClick={() => action(order)}
                 >
                   <div
                     className=""
@@ -65,7 +82,7 @@ const Orders = (props: any) => {
                     <div>{orderDetails.fulfillment_status}</div>
                   </div>
                 </div>
-                {/* <ManageActions orderDetails={orderDetails} /> */}
+                <ManageActions />
 
                 {orderDetails.line_items.map((item: any) => (
                   <div
@@ -88,7 +105,11 @@ const Orders = (props: any) => {
                           height: "4rem",
                           borderRadius: "5px",
                         }}
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src={`${
+                          item.product_image_url
+                            ? item.product_image_url
+                            : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        }`}
                       />
                       <div style={{ marginLeft: "10px" }}>
                         <div>{item.name}</div>
@@ -100,7 +121,7 @@ const Orders = (props: any) => {
                     </div>
                   </div>
                 ))}
-              </>
+              </div>
             );
           })}
       </ul>

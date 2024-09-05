@@ -56,6 +56,7 @@ import Loader from "./components/Loader";
 import NewPromptMessage from "./NewPromptMessage";
 import eventBus from "./eventBus";
 import { initalizeSocket } from "./socket";
+import { isUserBusinessHour } from "./BusinessHours";
 
 export enum widgetFooterTabs {
   Home = "Home",
@@ -81,8 +82,7 @@ const App: React.FunctionComponent = () => {
   const [chatPrefs, setChatPrefs] = useState<ChatPrefsPayloadType | undefined>(
     undefined
   );
-  const [agents, setAgents] = useState<AgentPaylodObj[]>([]
-  );
+  const [agents, setAgents] = useState<AgentPaylodObj[]>([]);
 
   const [agentsPrefs, setAgentsPrefs] = useState<AgentPrefsPayloadType[]>([]);
 
@@ -98,7 +98,7 @@ const App: React.FunctionComponent = () => {
       if (!FooterTabs.find((footer) => footer.tab == activeTabname)) {
         activeTabname = FooterTabs[0].tab;
       }
-    } catch (error) { }
+    } catch (error) {}
 
     return activeTabname;
   };
@@ -145,10 +145,6 @@ const App: React.FunctionComponent = () => {
 
   const [loadingSessions, setLoadingSessions] = useState<boolean>(true);
 
-  const [managementComponent, setManagementComponent] = useState<any>(
-    "CUSTOMER_IDENTIFICATION"
-  );
-
   useEffect(() => {
     setActiveTab(getWidgetActiveTabs());
   }, [chatPrefs]);
@@ -182,20 +178,18 @@ const App: React.FunctionComponent = () => {
     const prefsReq = axios.get(USER_PREFS_FETCH_URL_PATH);
     const usersReq = axios.get(USERS_FETCH_URL);
 
-    axios.all([prefsReq, usersReq])
-      .then(axios.spread((prefsRes, usersRes) => {
+    axios
+      .all([prefsReq, usersReq])
+      .then(
+        axios.spread((prefsRes, usersRes) => {
+          if (prefsRes && prefsRes.data) setAgentsPrefs(prefsRes.data);
 
-        if (prefsRes && prefsRes.data)
-          setAgentsPrefs(prefsRes.data);
-
-        if (usersRes && usersRes.data)
-          setAgents(usersRes.data);
-
-      }))
-      .catch(error => {
-        console.error('There was an error!', error);
+          if (usersRes && usersRes.data) setAgents(usersRes.data);
+        })
+      )
+      .catch((error) => {
+        console.error("There was an error!", error);
       });
-
 
     // Fetch chat prefs
     fetchChatPrefs();
@@ -219,7 +213,7 @@ const App: React.FunctionComponent = () => {
     // }
 
     // Subscribe to event bus
-    eventBus.on("reacho-socket-event", function () { });
+    eventBus.on("reacho-socket-event", function () {});
 
     eventBus.on("new_ticket_message", function (message) {
       let messageSession: any = sessions.find(function (session) {
@@ -503,7 +497,7 @@ const App: React.FunctionComponent = () => {
               let proactiveMsg = "";
               try {
                 proactiveMsg = JSON.parse(rule.customData).message;
-              } catch (error) { }
+              } catch (error) {}
               // console.log("proactiveMsg", proactiveMsg);
 
               // if (proactiveMsg)
@@ -642,7 +636,7 @@ const App: React.FunctionComponent = () => {
       .then((response) => {
         if (callback) callback(response.data);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const handleMessage = (event: any) => {
@@ -776,17 +770,24 @@ const App: React.FunctionComponent = () => {
       },
     ];
 
+    const mainColor = chatPrefs && chatPrefs.meta.decoration.mainColor;
+    const offlineColor =
+      chatPrefs &&
+      !chatPrefs.meta.decoration.useMainColorOutsideBusinessHour &&
+      !isUserBusinessHour(chatPrefs, agentsPrefs);
+
     return {
       "--bottom": settings?.length < 2 ? "20px" : "125px",
       "--reduceHeight": settings?.length < 2 ? "135px" : "210px",
-      "--themeColor":
-        chatPrefs && chatPrefs.meta.decoration.mainColor
-          ? chatPrefs.meta.decoration.mainColor
-          : "blue",
-      "--themeColor2":
-        chatPrefs && chatPrefs.meta.decoration.mainColor
-          ? chatPrefs.meta.decoration.mainColor
-          : "red",
+      "--themeColor": offlineColor
+        ? "#dddddd"
+        : mainColor
+        ? chatPrefs.meta.decoration.mainColor
+        : "blue",
+      // "--themeColor2":
+      //   chatPrefs && chatPrefs.meta.decoration.mainColor
+      //     ? chatPrefs.meta.decoration.mainColor
+      //     : "red",
     };
   }, [chatPrefs]);
 
@@ -809,14 +810,13 @@ const App: React.FunctionComponent = () => {
           setPromtWidth,
           chatFlows,
           setChatFlows,
-          managementComponent,
-          setManagementComponent,
         }}
       >
         <div
           id="App"
-          className={`engagebay-viewport ${!isOpened && hideChatBubble ? "hide" : ""
-            } `}
+          className={`engagebay-viewport ${
+            !isOpened && hideChatBubble ? "hide" : ""
+          } `}
           style={appThemeStyle}
         >
           {isVisible ? (
@@ -838,21 +838,24 @@ const App: React.FunctionComponent = () => {
               ) : (
                 <div
                   className={`chat ${isOpened ? "is-open" : ""} 
-              ${chatPrefs.meta.decoration.widgetAlignment == "bottom left"
-                      ? "left"
-                      : ""
-                    } 
-              ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
-                      ? "right"
-                      : ""
-                    }`}
+              ${
+                chatPrefs.meta.decoration.widgetAlignment == "bottom left"
+                  ? "left"
+                  : ""
+              } 
+              ${
+                chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
+                  ? "right"
+                  : ""
+              }`}
                   data-target="widget"
                 >
                   <div
                     className="chat__main"
                     style={{
-                      minWidth: `${promtWidth == PromtWidth.Large ? "700px" : "auto"
-                        }`,
+                      minWidth: `${
+                        promtWidth == PromtWidth.Large ? "700px" : "auto"
+                      }`,
                     }}
                   >
                     {(() => {
