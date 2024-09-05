@@ -2,6 +2,10 @@
 @import '../abstracts/_theme';
 @import '../abstracts/mixins';
 
+* {
+	box-sizing: border-box;
+}
+
 @keyframes grow {
 	0% {
 		transform: none;
@@ -896,8 +900,10 @@
 
 						&-item {
 							position: relative;
-							padding-left: 45px;
-							width: calc(100% - 45px);
+							// padding-left: 45px;
+							// width: calc(100% - 45px);
+							display: flex;
+							flex-direction: row-reverse;
 
 							.chat__messages-bubble {
 								background-color: $color-primary;
@@ -974,8 +980,10 @@
 					&-bot-group {
 						position: relative;
 						text-align: left;
-						padding-left: 45px;
-						width: calc(100% - 45px);
+						// padding-left: 45px;
+						// width: calc(100% - 45px);
+						display: flex;
+						flex-direction: row-reverse;
 
 						&-avatar {
 							position: absolute;
@@ -1283,7 +1291,7 @@
 				border-radius: 5px;
 				background-color: $color-white;
 				overflow: hidden;
-				margin-bottom: 5px;
+				margin-bottom: 10px;
 			}
 
 			& .error-content {
@@ -1347,9 +1355,9 @@
 			background-color: $color-primary;
 			padding: 12px 1.5rem !important;
 			font-weight: bold;
-			border-radius: 10px;
+			border-radius: 0.45rem;
 			transition: all 0.25s;
-			margin-top: 8px;
+			margin-top: 5px;
 			//box-shadow: 0 0 1rem rgba($color-black, 0.25);
 			display: inline-block;
 			text-align: center;
@@ -1799,8 +1807,10 @@
 	.chat__messages-agent {
 		position: relative;
 		text-align: left;
-		padding-left: 45px;
-		width: calc(100% - 45px);
+		// padding-left: 45px;
+		// width: calc(100% - 45px);
+		display: flex;
+		flex-direction: row-reverse;
 
 		.chat__messages-agent-avatar {
 			position: absolute;
@@ -2227,9 +2237,9 @@
 	background-color: $color-primary;
 	padding: 12px 1.5rem !important;
 	font-weight: bold;
-	border-radius: 10px;
+	border-radius: 0.45rem;
 	transition: all 0.25s;
-	margin-top: 8px;
+	margin-top: 5px;
 	display: inline-block;
 	text-align: center;
 	@include linkStates($color-white, none);
@@ -4015,6 +4025,7 @@
 	display: inline-block;
 	padding-left: 0.35rem;
 	color: $body-color;
+	cursor: pointer;
 }
 
 .chat__form-label {
@@ -4555,7 +4566,7 @@
 			font-size: 14px;
 			line-height: 18px;
 			padding: 6px 10px;
-			border-radius: 6px;
+			border-radius: 0.45rem;
 			color: $color-primary;
 			border: 1px solid $color-primary;
 			display: inline-block;
@@ -4567,5 +4578,151 @@
 			}
 		}
 
+	}
+}
+
+.chat_flows-login {
+	display: flex;
+	padding-top: 0 !important;
+
+	&-form {
+		flex: 1 1 0%;
+	}
+
+	&-title {
+		font-weight: 600;
+		font-size: 16px;
+		display: inline-block;
+		margin-bottom: 1rem;
+		color: $body-color;
+
+	}
+
+	.chat__messages-btn {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		cursor: pointer;
+		margin-top: 8px;
+	}
+
+
+}
+
+.orders_collections {
+	background-color: #ffffff;
+	padding: 16px 0px;
+	border-radius: 10px;
+	font-size: 14px;
+	display: block;
+	color: $body-color;
+	border: 1px solid rgba(0, 0, 0, 0.05);
+	box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 4px;
+
+	&-title {
+		font-weight: 600;
+		font-size: 18px;
+		line-height: 28px;
+		letter-spacing: -0.4px;
+		padding-bottom: 10px;
+		padding-left: 20px;
+	}
+
+	&-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+
+		&-item {
+			display: flex;
+			width: 100%;
+			-webkit-box-pack: justify;
+			justify-content: space-between;
+			-webkit-box-align: center;
+			align-items: center;
+			padding: 16px 20px;
+			cursor: pointer;
+
+			&:hover {
+				background-color: rgba(0, 0, 0, .03);
+			}
+
+			&-avatar {
+				flex-shrink: 0;
+				position: relative;
+				margin-right: 8px;
+				align-self: center;
+			}
+
+			&-profile {
+				margin: 0px auto;
+				display: inline-block;
+				vertical-align: middle;
+				cursor: default;
+				position: relative;
+				width: 40px;
+				height: 40px;
+				line-height: 36px;
+				font-size: 18px;
+				border-radius: 16.7%;
+
+				img {
+					width: 40px;
+					height: 40px;
+					border-radius: 16.7%;
+				}
+			}
+
+			&-content {
+				margin-right: auto;
+				flex: 1 1 0%;
+				font-size: 14px;
+				line-height: 21px;
+				min-width: 0px;
+			}
+
+			&-name {
+				font-size: 14px;
+				font-weight: 600;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+
+			&-timegao {
+				font-size: 13px;
+				font-weight: 400;
+				letter-spacing: -0.01em;
+				color: $color-gray-alt-3;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+
+			&-price-info {
+				margin-left: 8px;
+				align-self: center;
+				text-align: right;
+			}
+
+			&-currency {
+				font-size: 14px;
+				font-weight: 600;
+				line-height: 24px;
+				color: $body-color;
+			}
+
+			&-total-price {
+				margin-left: 2px;
+			}
+
+			&-status {
+				font-size: 13px;
+				font-weight: 400;
+				line-height: 20px;
+				letter-spacing: -0.01em;
+				color: $color-gray-alt-3;
+			}
+		}
 	}
 }

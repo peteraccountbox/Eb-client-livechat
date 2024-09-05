@@ -192,6 +192,8 @@ const App: React.FunctionComponent = () => {
       });
 
     // Fetch chat prefs
+    console.log("useEffect 2");
+
     fetchChatPrefs();
 
     // Restore storage prefs
@@ -272,6 +274,10 @@ const App: React.FunctionComponent = () => {
   };
 
   const fetchChatPrefs = async () => {
+
+    console.log("CHANNEL_PREFS", CHANNEL_PREFS);
+
+
     if (CHANNEL_PREFS) {
       setChatPrefs(JSON.parse(CHANNEL_PREFS));
       setPrefsFetched(true);
@@ -279,6 +285,9 @@ const App: React.FunctionComponent = () => {
     }
 
     try {
+
+      console.log("CHANNEL_PREFS_FETCH_URL_PATH", CHANNEL_PREFS_FETCH_URL_PATH);
+
       axios(CHANNEL_PREFS_FETCH_URL_PATH, {}).then(
         (response: AxiosResponse<any, any>) => {
           let prefs = response.data as ChatPrefsPayloadType;

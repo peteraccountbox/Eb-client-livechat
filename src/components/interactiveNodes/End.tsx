@@ -20,7 +20,7 @@ const End: React.FC<InteractiveNodeProps> = ({
   return (
     <>
       <div className="chat__messages-group">
-        <ul className="chat__messages-list">
+        <div className="chat__messages-list">
           <div className="chat__messages-list-item">
             <div className="chat__messages-bubble chat__message-type-TEXT">
               <span className="actual">
@@ -28,29 +28,27 @@ const End: React.FC<InteractiveNodeProps> = ({
               </span>
             </div>
           </div>
-        </ul>
+        </div>
       </div>
       {!execution.executed ? (
         <div className="chat__messages-group">
-          <ul className="chat__messages-list">
+          <div className="chat__messages-list multi_choice-list">
             {execution.node.data.formData?.choice.map((choice: any) => {
               return (
-                <div className="chat__messages-list-item">
-                  <div
-                    className="chat__messages-bubble chat__message-type-TEXT"
-                    onClick={() => onChoiceSelected(choice)}
-                  >
-                    <span className="actual">{choice.text}</span>
-                  </div>
+                <div
+                  className="multi_choice-list-item-btn"
+                  onClick={() => onChoiceSelected(choice)}
+                >
+                  <span className="actual">{choice.text}</span>
                 </div>
               );
             })}
-          </ul>
+          </div>
         </div>
       ) : (
         <div className="chat__messages-group--me">
           <div className="chat__messages-group">
-            <ul className="chat__messages-list">
+            <div className="chat__messages-list">
               <div className="chat__messages-list-item">
                 <div className="chat__messages-bubble chat__message-type-TEXT">
                   <span className="actual">
@@ -58,7 +56,7 @@ const End: React.FC<InteractiveNodeProps> = ({
                   </span>
                 </div>
               </div>
-            </ul>
+            </div>
           </div>
         </div>
       )}

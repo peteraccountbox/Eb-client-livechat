@@ -21,7 +21,7 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
       label: "Sign in",
       type: "radio",
       required: true,
-      value: execution.node.data.formData.sign_in,
+      value: "email",
       placeholder: "",
       error: "",
       is_valid: true,
@@ -53,7 +53,7 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
   ];
   const [formFields, setFormFields] = useState<any[]>([
     fields[0],
-    fields.find((field) => execution.node.data.formData.sign_in == field.name),
+    fields.find((field) => 'email' == field.name),
   ]);
 
   const [saving, setSaving] = useState(false);
@@ -92,26 +92,24 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
         <>
           <div className="chat__messages-group">
             <ul className="chat__messages-list">
-              <div className="chat__messages-list-item">
+              <li className="chat__messages-list-item">
                 <div className="chat__messages-bubble chat__message-type-TEXT">
                   <span className="actual">Sign in to continue</span>
                 </div>
-              </div>
+              </li>
             </ul>
           </div>
-          <div className="chat__messages-group--me">
-            <div className="chat__messages-group">
-              <ul className="chat__messages-list">
-                <div className="chat__messages-list-item">
-                  <div
-                    className="chat__messages-bubble chat__message-type-TEXT"
-                    onClick={() => setShowSignIn(true)}
-                  >
-                    <span className="actual">Continue to sign in</span>
-                  </div>
+          <div className="chat__messages-group chat__messages-group--me">
+            <ul className="chat__messages-list">
+              <li className="chat__messages-list-item">
+                <div
+                  className="chat__messages-bubble chat__message-type-TEXT"
+                  onClick={() => setShowSignIn(true)}
+                >
+                  <span className="actual">Continue to sign in</span>
                 </div>
-              </ul>
-            </div>
+              </li>
+            </ul>
           </div>
         </>
       ) : executionMeta &&
@@ -120,15 +118,15 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
         <>
           <div className="chat__messages-group">
             <ul className="chat__messages-list">
-              <div className="chat__messages-list-item">
+              <li className="chat__messages-list-item">
                 <div className="chat__messages-bubble chat__message-type-TEXT">
                   <span className="actual">Sign in to continue</span>
                 </div>
-              </div>
+              </li>
             </ul>
           </div>
           <LoginForm
-            sign_in={execution.node.data.formData.sign_in}
+            sign_in={"email"}
             submitForm={submitForm}
             formFields={formFields}
             setFormFields={setFormFields}
@@ -138,13 +136,13 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
       ) : (
         <div className="chat__messages-group">
           <ul className="chat__messages-list">
-            <div className="chat__messages-list-item">
+            <li className="chat__messages-list-item">
               <div className="chat__messages-bubble chat__message-type-TEXT">
                 <span className="actual">
                   {execution.nextNodeId ? "Signed In" : "Invalid Customer"}
                 </span>
               </div>
-            </div>
+            </li>
           </ul>
         </div>
       )}

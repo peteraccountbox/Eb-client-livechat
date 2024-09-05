@@ -8,13 +8,13 @@ const Automated: React.FC<InteractiveNodeProps> = ({
   return (
     <div className="chat__messages-group">
       <ul className="chat__messages-list">
-        <div className="chat__messages-list-item">
+        <li className="chat__messages-list-item">
           <div className="chat__messages-bubble chat__message-type-TEXT">
             <span className="actual">
               {execution.node.data.formData?.message}
             </span>
           </div>
-        </div>
+        </li>
       </ul>
       <div className="chat__all-messages-item-header">
         <p className="chat-messages-username"> Automated</p>
