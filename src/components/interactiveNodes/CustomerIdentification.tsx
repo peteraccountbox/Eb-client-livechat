@@ -21,7 +21,7 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
       label: "Sign in",
       type: "radio",
       required: true,
-      value: execution.node.data.formData.sign_in,
+      value: "email",
       placeholder: "",
       error: "",
       is_valid: true,
@@ -53,7 +53,7 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
   ];
   const [formFields, setFormFields] = useState<any[]>([
     fields[0],
-    fields.find((field) => execution.node.data.formData.sign_in == field.name),
+    fields.find((field) => 'email' == field.name),
   ]);
 
   const [saving, setSaving] = useState(false);
@@ -126,7 +126,7 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
             </ul>
           </div>
           <LoginForm
-            sign_in={execution.node.data.formData.sign_in}
+            sign_in={"email"}
             submitForm={submitForm}
             formFields={formFields}
             setFormFields={setFormFields}

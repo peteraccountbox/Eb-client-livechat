@@ -55,11 +55,7 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
     let flowExecutionId = getSessionStoragePrefs("flow_execution_id");
     if (flowExecutionId) {
       // Get exections and set data
-      getFlowExecution(flowExecutionId).then((response: any) => {
-        if (!response.data) {
-          startFlowExecution();
-        }
-      });
+      getFlowExecution(flowExecutionId);
     } else {
       // Start flow
       startFlowExecution();
@@ -70,20 +66,27 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
     const wait = getReq(EXECUTION_LIST_FETCH_URL_PATH + flowExecutionId, {});
     wait
       .then((response) => {
+
         setLoading(false);
+
 
         if (
           !response.data ||
           !response.data.executionMeta ||
           !response.data.executionList
-        )
+        ) {
+          startFlowExecution();
           return;
+        }
 
         setExecutionMeta({ ...response.data.executionMeta });
         setExecutionList([...response.data.executionList]);
+
+        setScrollBottom();
+
       })
       .catch(() => {
-        setLoading(false);
+        startFlowExecution();
       });
   };
 
@@ -112,7 +115,7 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
           newExecutionList[newExecutionList.length - 1].executed &&
           !newExecutionList[newExecutionList.length - 1].nextNodeId &&
           newExecutionList[newExecutionList.length - 1].data.nodeType ==
-            InteractiveNodeTypes.END
+          InteractiveNodeTypes.END
         ) {
           props.backToHome();
         }
