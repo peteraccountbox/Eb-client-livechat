@@ -13,6 +13,7 @@ import {
   ChatFlowsPayloadObj,
   ChatPrefsPayloadType,
   ChatSessionPaylodObj,
+  EventPayloadObj,
 } from "./Models";
 
 export function createCtx<A>(defaultValue: A) {
@@ -53,11 +54,11 @@ interface AppContextPayload {
   chatPrefs: ChatPrefsPayloadType;
   setChatPrefs: (prefs: ChatPrefsPayloadType) => void;
   chatBubbleClicked: () => void;
-  //chatBotStatus: boolean
   activeTab: widgetFooterTabs;
   changeActiveTab: (tab: widgetFooterTabs) => void;
   promtWidth: PromtWidth;
   setPromtWidth: (tab: PromtWidth) => void;
+  createSessionData: any;
 }
 
 interface OrderManagementContextPayload {
@@ -67,6 +68,7 @@ interface OrderManagementContextPayload {
   setData: (prefs: any) => void;
   setPrevComponent: (prefs: any) => void;
   setPrevData: (prefs: any) => void;
+  customer: any;
 }
 
 export const AppContext = createContext({
@@ -85,6 +87,11 @@ export const AppContext = createContext({
   changeActiveTab: (tab: widgetFooterTabs) => {},
   promtWidth: "" as PromtWidth,
   setPromtWidth: (tab: PromtWidth) => {},
+  createSessionData: {
+    messageList: [] as EventPayloadObj[],
+    sessionDetails: {} as any,
+    force: false as boolean,
+  },
 } as AppContextPayload);
 
 export const OrderManagementContext = createContext({
@@ -94,4 +101,5 @@ export const OrderManagementContext = createContext({
   setData: (prefs: any) => {},
   setPrevComponent: (prefs: any) => {},
   setPrevData: (prefs: any) => {},
+  customer: {} as any,
 } as OrderManagementContextPayload);

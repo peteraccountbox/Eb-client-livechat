@@ -30,6 +30,7 @@ const CancelNode = (props: any) => {
                   Tracking Url: {orderDetails.fulfillments[0]?.tracking_url}
                   <br />
                   Order Created: {orderDetails.created_at}
+                  <br />
                   Shipping address: {address1}, {city}, {province_code}, {zip}
                 </span>
               </div>

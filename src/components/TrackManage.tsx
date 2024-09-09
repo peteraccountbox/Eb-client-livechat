@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useState } from "react";
 import { getSessionStoragePrefs } from "../Storage";
-import { CUSTOMER_ID_ON_TRACK_MANAGE, TRACK_MANAGE } from "../globals";
+import { CUSTOMER } from "../globals";
 import { AppContext, OrderManagementContext } from "../appContext";
 import CloseWidgetPanel from "./CloseWidgetPanel";
 import {
@@ -10,20 +10,25 @@ import {
 
 export interface TrackManageProps {
   backToHome: () => void;
+  startNewChat: () => void;
 }
 const TrackManage = (props: TrackManageProps) => {
+  const { backToHome, startNewChat } = props;
   const parentContext = useContext(AppContext);
 
   const [prevComponent, setPrevComponent] = useState<any>("");
+  const customerData = JSON.parse(getSessionStoragePrefs(CUSTOMER));
   const [prevData, setPrevData] = useState<any>({
-    customerId: getSessionStoragePrefs(CUSTOMER_ID_ON_TRACK_MANAGE),
+    customerId: customerData?.id,
   });
-  const customerId = getSessionStoragePrefs(CUSTOMER_ID_ON_TRACK_MANAGE);
   const [data, setData] = useState<any>({
-    customerId,
+    customerId: customerData?.id,
   });
+  const [customer, setCustomer] = useState<any>(
+    JSON.parse(getSessionStoragePrefs(CUSTOMER))
+  );
   const [managementComponent, setManagementComponent] = useState<any>(
-    customerId ? "ORDERS" : "CUSTOMER_IDENTIFICATION"
+    customerData ? "ORDERS" : "CUSTOMER_IDENTIFICATION"
   );
   const Component = OrderManagementComponents[managementComponent];
   const getHeaderIcon = () => {
@@ -35,9 +40,9 @@ const TrackManage = (props: TrackManageProps) => {
   };
   const goBack = useCallback(() => {
     if (!prevComponent) {
-      if (!getSessionStoragePrefs(CUSTOMER_ID_ON_TRACK_MANAGE))
+      if (!getSessionStoragePrefs(CUSTOMER))
         setManagementComponent(OrderManageTypes.CUSTOMER_IDENTIFICATION);
-      props.backToHome();
+      backToHome();
     } else {
       setManagementComponent(prevComponent);
       setData(prevData);
@@ -58,6 +63,7 @@ const TrackManage = (props: TrackManageProps) => {
         setData,
         setPrevComponent,
         setPrevData,
+        customer,
       }}
     >
       <div className="chat__conversation">
@@ -106,7 +112,7 @@ const TrackManage = (props: TrackManageProps) => {
         <div className="chat__content">
           <div className="chat__messages">
             <div className="chat__messages-track">
-              <Component />
+              <Component startNewChat={startNewChat} backToHome={backToHome} />
             </div>
           </div>
         </div>

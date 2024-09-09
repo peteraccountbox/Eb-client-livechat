@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ChatMessagePaylodObj, ChatSessionPaylodObj } from "./Models";
+import { ChatMessagePayloadObj, ChatSessionPaylodObj } from "./Models";
 import {
   convertEmojis,
   createTextLinks_,
@@ -20,8 +20,9 @@ const NewPromptMessage = (props: NewPromptMessageComponentProps) => {
   const { agents, chatPrefs } = parentContext;
   return (
     <div
-      className={`chat_popover ${chatPrefs.meta.decoration.widgetAlignment == "LEFT" ? "left" : "right"
-        } `}
+      className={`chat_popover ${
+        chatPrefs.meta.decoration.widgetAlignment == "LEFT" ? "left" : "right"
+      } `}
     >
       <div className="chat_popover-content chat" onClick={open}>
         <div className="chat_popover-content-close" onClick={close}>
@@ -85,7 +86,7 @@ const NewPromptMessage = (props: NewPromptMessageComponentProps) => {
                             // href={fileUrl(info as ChatMessagePaylodObj)}
                             dangerouslySetInnerHTML={{
                               __html: createTextLinks_(
-                                fileName(info as ChatMessagePaylodObj)
+                                fileName(info as ChatMessagePayloadObj)
                               ),
                             }}
                           ></a>
@@ -94,7 +95,7 @@ const NewPromptMessage = (props: NewPromptMessageComponentProps) => {
                             style={{ marginTop: "5px" }}
                           >
                             <span>
-                              {fileSize(info as ChatMessagePaylodObj)}
+                              {fileSize(info as ChatMessagePayloadObj)}
                             </span>
                           </div>
                         </div>

@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { AppContext, OrderManagementContext } from "../../appContext";
 import { OrderManageTypes } from "../TrackManageUtils";
-import { getSessionStoragePrefs } from "../../Storage";
-import { CUSTOMER_ID_ON_TRACK_MANAGE } from "../../globals";
 
 const ManageActions = () => {
   const orderManagementContext = useContext(OrderManagementContext);
@@ -13,6 +11,7 @@ const ManageActions = () => {
     setManagementComponent,
     data: order,
     setData,
+    customer,
   } = orderManagementContext;
   const parentContext = useContext(AppContext);
   const {
@@ -23,7 +22,7 @@ const ManageActions = () => {
     if (managementComponent === OrderManageTypes.ORDER) setPrevData(order);
     else
       setPrevData({
-        customerId: getSessionStoragePrefs(CUSTOMER_ID_ON_TRACK_MANAGE),
+        customerId: customer?.id,
       });
     setManagementComponent(type);
     setData(order);

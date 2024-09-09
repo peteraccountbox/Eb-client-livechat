@@ -1,9 +1,5 @@
 import React, { FC, useContext, useEffect } from "react";
-import {
-  ChatMessagePaylodObj,
-  ChatSessionPaylodObj,
-  EventPayloadObj,
-} from "../Models";
+import { ChatMessagePayloadObj, EventPayloadObj } from "../Models";
 import ChatMessage from "./ChatMessage";
 import OperatorName from "./OperatorName";
 import boticon from "../assets/img/chatbot-final.png";
@@ -72,7 +68,7 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
                 <ChatMessage
                   message={props.message}
                   sessionId={props.sessionId}
-                  updateMessage={() => { }}
+                  updateMessage={() => {}}
                 />
               </li>
             </ul>

@@ -3,7 +3,7 @@ import Address from "./Address";
 import ManageActions from "./ManageActions";
 import { OrderManageTypes } from "../TrackManageUtils";
 import { getSessionStoragePrefs } from "../../Storage";
-import { CUSTOMER_ID_ON_TRACK_MANAGE } from "../../globals";
+import { CUSTOMER } from "../../globals";
 import { OrderManagementContext } from "../../appContext";
 
 const Order = () => {
@@ -13,7 +13,7 @@ const Order = () => {
   useEffect(() => {
     setPrevComponent(OrderManageTypes.ORDERS);
     setPrevData({
-      customerId: getSessionStoragePrefs(CUSTOMER_ID_ON_TRACK_MANAGE),
+      customerId: JSON.parse(getSessionStoragePrefs(CUSTOMER))?.id,
     });
   }, []);
 

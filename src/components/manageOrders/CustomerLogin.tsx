@@ -2,10 +2,7 @@ import React, { useContext, useState } from "react";
 import { isValidTicketField } from "../../Utils";
 import LoginForm from "../LoginForm";
 import { postReq } from "../../request";
-import {
-  CUSTOMER_ID_ON_TRACK_MANAGE,
-  VALIDATE_CUSTOMER_PATH,
-} from "../../globals";
+import { CUSTOMER, VALIDATE_CUSTOMER_PATH } from "../../globals";
 import { OrderManageTypes } from "../TrackManageUtils";
 import { setSessionStoragePrefs } from "../../Storage";
 import { OrderManagementContext } from "../../appContext";
@@ -71,13 +68,13 @@ const CustomerLogin = () => {
       };
 
       postReq(VALIDATE_CUSTOMER_PATH, data).then((res: any) => {
-        console.log(res.data.customerId);
-        setSessionStoragePrefs(
-          CUSTOMER_ID_ON_TRACK_MANAGE,
-          res.data.customerId
-        );
+        console.log(res.data.id);
+        setSessionStoragePrefs(CUSTOMER, JSON.stringify(res.data));
+        orderManagementContext.customer = res.data;
         setManagementComponent(OrderManageTypes.ORDERS);
-        setData(res.data);
+        setData({
+          customerId: res.data.id,
+        });
       });
     }
   };

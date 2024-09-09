@@ -2,6 +2,7 @@ import Cancel from "./manageOrders/Cancel";
 import CustomerLogin from "./manageOrders/CustomerLogin";
 import Order from "./manageOrders/Order";
 import Orders from "./manageOrders/Orders";
+import RaisedIssue from "./manageOrders/RaisedIssue";
 import ReportIssue from "./manageOrders/ReportIssue";
 import Track from "./manageOrders/Track";
 
@@ -12,6 +13,7 @@ export enum OrderManageTypes {
   CANCEL = "CANCEL",
   REPORT_ISSUE = "REPORT_ISSUE",
   CUSTOMER_IDENTIFICATION = "CUSTOMER_IDENTIFICATION",
+  RAISED_ISSUE = "RAISED_ISSUE",
 }
 
 export const OrderManagementComponents: {
@@ -23,4 +25,5 @@ export const OrderManagementComponents: {
   [OrderManageTypes[OrderManageTypes.CANCEL]]: Cancel,
   [OrderManageTypes[OrderManageTypes.REPORT_ISSUE]]: ReportIssue,
   [OrderManageTypes[OrderManageTypes.CUSTOMER_IDENTIFICATION]]: CustomerLogin,
+  [OrderManageTypes[OrderManageTypes.RAISED_ISSUE]]: RaisedIssue,
 };

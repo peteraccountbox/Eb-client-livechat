@@ -106,7 +106,7 @@ export const GET_BIG_TEXT_URL_PATH =
 
 export const WINDOW_OPEN = "window-open";
 
-export const CUSTOMER_ID_ON_TRACK_MANAGE = "customer-id-on-track-manage";
+export const CUSTOMER = "customer";
 
 export const OPENED_CHAT = "opened-chat";
 

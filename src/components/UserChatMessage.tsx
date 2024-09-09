@@ -1,7 +1,7 @@
 import React, { FC, useContext, useEffect } from "react";
 import { AppContext } from "../appContext";
 import {
-  ChatMessagePaylodObj,
+  ChatMessagePayloadObj,
   ChatSessionPaylodObj,
   EventPayloadObj,
   MessageByTypeEnum,
@@ -25,10 +25,6 @@ export interface UserChatMessagePropsType {
 const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
   const parentContext = useContext(AppContext);
 
-  useEffect(() => {
-    return () => { };
-  }, []);
-
   const getMessageTime = () => {
     // let myDate = new Date(props.message.created_time * 1000);
     // let dateStr = myDate.getDate() + "/" + (myDate.getMonth() + 1) + "/" + myDate.getFullYear()
@@ -38,7 +34,6 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
   };
 
   const canShowAnavailableMessage = () => {
-
     return false;
 
     // const from = MessageByTypeEnum[
@@ -113,7 +108,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
             <ChatMessage
               sessionId={props.sessionId}
               message={props.message}
-              updateMessage={() => { }}
+              updateMessage={() => {}}
             />
           </li>
         </ul>

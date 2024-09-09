@@ -264,7 +264,7 @@ export enum ChatSessionConnectedWithEnum {
   GPT = "GPT",
 }
 
-export type ChatMessagePaylodObj = {
+export type ChatMessagePayloadObj = {
   [x: string]: any;
   id?: string;
   ticketId?: string;
@@ -294,7 +294,7 @@ export type EventPayloadObj = {
   source?: string;
   from: MessageByTypeEnum;
   agentId?: string;
-  message: ChatMessagePaylodObj;
+  message: ChatMessagePayloadObj;
 };
 
 export type BotMessageList = {

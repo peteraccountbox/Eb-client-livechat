@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from "react";
 import { getTextOfJSDocComment } from "typescript";
 import {
-  ChatMessagePaylodObj,
+  ChatMessagePayloadObj,
   EventPayloadObj,
   MessageByTypeEnum,
 } from "../Models";
@@ -26,7 +26,7 @@ TimeAgo.addLocale(ru);
 export interface ChatMessagePropsType {
   message: EventPayloadObj;
   sessionId?: number | string;
-  updateMessage: (message: ChatMessagePaylodObj) => void;
+  updateMessage: (message: ChatMessagePayloadObj) => void;
 }
 
 const ChatMessage: FC<ChatMessagePropsType> = (props) => {

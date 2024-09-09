@@ -6,7 +6,7 @@
 import {
   AgentPaylodObj,
   ChatFromFieldDataPayLoad,
-  ChatMessagePaylodObj,
+  ChatMessagePayloadObj,
   ChatPrefsPayloadType,
   ChatSessionPaylodObj,
   EventPayloadObj,
@@ -409,14 +409,14 @@ export function isGPTEnabled() {
     : false;
 }
 
-export function fileName(message: ChatMessagePaylodObj) {
+export function fileName(message: ChatMessagePayloadObj) {
   return JSON.parse(message.message).fileName;
 }
-export function fileUrl(message: ChatMessagePaylodObj) {
+export function fileUrl(message: ChatMessagePayloadObj) {
   return JSON.parse(message.message).fileUrl;
 }
 
-export function fileSize(message: ChatMessagePaylodObj) {
+export function fileSize(message: ChatMessagePayloadObj) {
   return formatBytes(JSON.parse(message.message).fileSize, 0);
 }
 

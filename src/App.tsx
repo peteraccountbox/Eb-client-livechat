@@ -31,7 +31,7 @@ import {
   ChatChannelMeta,
   ChatFlowsPayloadObj,
   ChatFooterDataPayload,
-  ChatMessagePaylodObj,
+  ChatMessagePayloadObj,
   ChatPrefsPayloadType,
   ChatSessionConnectedWithEnum,
   ChatSessionPaylodObj,
@@ -88,6 +88,7 @@ const App: React.FunctionComponent = () => {
 
   const [sessions, setSessions] = useState<ChatSessionPaylodObj[]>([]);
   const [chatFlows, setChatFlows] = useState<ChatFlowsPayloadObj[]>([]);
+  const [createSessionData, setCreateSessionData] = useState<any>({});
 
   const getWidgetActiveTabs = () => {
     if (!chatPrefs) return [];
@@ -274,9 +275,7 @@ const App: React.FunctionComponent = () => {
   };
 
   const fetchChatPrefs = async () => {
-
     console.log("CHANNEL_PREFS", CHANNEL_PREFS);
-
 
     if (CHANNEL_PREFS) {
       setChatPrefs(JSON.parse(CHANNEL_PREFS));
@@ -285,7 +284,6 @@ const App: React.FunctionComponent = () => {
     }
 
     try {
-
       console.log("CHANNEL_PREFS_FETCH_URL_PATH", CHANNEL_PREFS_FETCH_URL_PATH);
 
       axios(CHANNEL_PREFS_FETCH_URL_PATH, {}).then(
@@ -611,43 +609,6 @@ const App: React.FunctionComponent = () => {
     setChannelConnected(true);
   };
 
-  // const createSocket = () => {
-  //   console.log("connectingsocket again");
-
-  //   // Get user sessions from visitorId
-  //   let channelName = TENANT_ID ? TENANT_ID + "-" + VISITOR_UUID : VISITOR_UUID;
-  //   const pusher = new Pusher("1bd6d84d7a6d517eeee5", {
-  //     cluster: "ap2",
-  //     forceTLS: true,
-  //   });
-  //   var channel = pusher.subscribe(channelName);
-  //   console.log("channelname", channelName);
-  //   setPusherChannel(pusher);
-  // };
-
-  const processIncomingMessage = (event: any) => {
-    // Handle big text messages
-    if (event.event_type == "BIG_TEXT") {
-      getBigMessage(event.BIG_TEXT_ID, function (response: any) {
-        handleMessage(JSON.parse(response.message));
-      });
-      return;
-    }
-    handleMessage(event);
-  };
-
-  const getBigMessage = (messageId: number, callback: Function) => {
-    const wait: Promise<AxiosResponse> = getReq(
-      GET_BIG_TEXT_URL_PATH + messageId,
-      {}
-    );
-    wait
-      .then((response) => {
-        if (callback) callback(response.data);
-      })
-      .catch(() => {});
-  };
-
   const handleMessage = (event: any) => {
     console.log("handleMessage", event);
 
@@ -664,8 +625,8 @@ const App: React.FunctionComponent = () => {
     //     this.handleCallRequest(event.message);
     //     return;
     //   }
-    let chat_message: ChatMessagePaylodObj = event.message
-      .message as ChatMessagePaylodObj;
+    let chat_message: ChatMessagePayloadObj = event.message
+      .message as ChatMessagePayloadObj;
 
     console.log(chat_message);
     if (!chat_message) return;
@@ -719,18 +680,6 @@ const App: React.FunctionComponent = () => {
     }
   };
 
-  // Set prompt session
-  //const setPromptedSession = (sessionId: number) => {
-  // if (newMessageAlert) return;
-  // setNewMessageAlert(true);
-  // setAlertMessageSessionId(sessionId.toString());
-  //};
-
-  //const resetPromptedSession = () => {
-  // setNewMessageAlert(false);
-  // setAlertMessageSessionId("");
-  //};
-
   const handleInboundTyping = (message: any) => {
     // Holding for a moment to make changes live
     // with PUSHER service
@@ -753,21 +702,24 @@ const App: React.FunctionComponent = () => {
     setSessions([...sessions]);
   };
 
-  const addNewSession = useCallback((session: ChatSessionPaylodObj) => {
-    let availableIndex = sessions.findIndex((eachSession) => {
-      return eachSession.id == session.id;
-    });
-    if (availableIndex > -1) {
-      sessions.splice(availableIndex, 1);
-    }
-    let sessionsList = sessions;
-    sessionsList.push(session);
-    setSessions([...sessionsList]);
+  const addNewSession = useCallback(
+    (session: ChatSessionPaylodObj) => {
+      let availableIndex = sessions.findIndex((eachSession) => {
+        return eachSession.id == session.id;
+      });
+      if (availableIndex > -1) {
+        sessions.splice(availableIndex, 1);
+      }
+      let sessionsList = sessions;
+      sessionsList.push(session);
+      setSessions([...sessionsList]);
 
-    console.log(sessions);
+      console.log(sessions);
 
-    bindPusherSocketEvents();
-  }, []);
+      bindPusherSocketEvents();
+    },
+    [sessions]
+  );
 
   const appThemeStyle: object = useMemo(() => {
     if (!chatPrefs) return {};
@@ -819,6 +771,7 @@ const App: React.FunctionComponent = () => {
           setPromtWidth,
           chatFlows,
           setChatFlows,
+          createSessionData,
         }}
       >
         <div

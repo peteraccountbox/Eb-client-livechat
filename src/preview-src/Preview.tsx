@@ -273,7 +273,18 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                         alt="Logo"
                       />
                     </div> */}
-                    {chatPrefs.name}
+                    {chatPrefs.meta.decoration.headerPictureUrl ? (
+                      <img
+                        style={{
+                          width: "4rem",
+                          height: "4rem",
+                          borderRadius: "5px",
+                        }}
+                        src={chatPrefs.meta.decoration.headerPictureUrl}
+                      />
+                    ) : (
+                      chatPrefs.name
+                    )}
                     <div className="chat__help-end">
                       <CloseWidgetPanel />
                     </div>

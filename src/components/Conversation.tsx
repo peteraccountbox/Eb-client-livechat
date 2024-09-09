@@ -6,7 +6,7 @@ import Emoji from "./Emoji";
 import FileUpload from "./FileUpload";
 import {
   ChatFromFieldDataPayLoad,
-  ChatMessagePaylodObj,
+  ChatMessagePayloadObj,
   ChatSessionPaylodObj,
   ActiveSessionObjType,
   MessageByTypeEnum,
@@ -71,7 +71,8 @@ export interface ConversationProps {
 
 const Conversation = (props: ConversationProps) => {
   const parentContext = useContext(AppContext);
-  const { chatPrefs, sessions, setSessions, agentsPrefs } = parentContext;
+  const { chatPrefs, sessions, setSessions, agentsPrefs, createSessionData } =
+    parentContext;
 
   const singlefield = [
     {
@@ -86,36 +87,6 @@ const Conversation = (props: ConversationProps) => {
       helpText:
         "Messages and ticket updates will be sent to this email address",
     },
-    // {
-    //   name: "subject",
-    //   label: "Subject",
-    //   type: "text",
-    //   required: true,
-    //   value: "",
-    //   placeholder: "Subject",
-    //   error: "",
-    //   is_valid: true,
-    // },
-    // {
-    //   name: "description",
-    //   label: "Description",
-    //   type: "textarea",
-    //   required: true,
-    //   value: "",
-    //   placeholder: "Description",
-    //   error: "",
-    //   is_valid: true,
-    // },
-    // {
-    //   name: "date",
-    //   label: "When did the issue occur",
-    //   type: "date",
-    //   required: true,
-    //   value: "",
-    //   placeholder: "",
-    //   error: "",
-    //   is_valid: true,
-    // },
   ];
 
   const fields = [
@@ -159,6 +130,9 @@ const Conversation = (props: ConversationProps) => {
   const [showChatForm, setShowChatForm] = useState(false);
   const [typingTimer, setTypingTimer] = useState<any>();
   const [saving, setSaving] = useState<boolean>(false);
+  useEffect(() => {
+    if (!session?.messageList) setSession(getSession());
+  }, [sessions]);
 
   const getEmptySession = () => {
     let session = {} as ChatSessionPaylodObj;
@@ -189,6 +163,33 @@ const Conversation = (props: ConversationProps) => {
     //     created_time: new Date().getTime() / 1000,
     //   });
     // }
+    if (createSessionData.force) {
+      session.messageList = createSessionData.messageList;
+      session.channelId = createSessionData.sessionDetails.channelId;
+      session.visitorId = createSessionData.sessionDetails.visitorId;
+      session.channelType = createSessionData.sessionDetails.channelType;
+      session.createdSource = createSessionData.sessionDetails.createdSource;
+      session.createdBy = createSessionData.sessionDetails.createdBy;
+      session.customerEmail = createSessionData.sessionDetails.customerEmail;
+      session.customerName = createSessionData.sessionDetails.customerName;
+
+      const wait = postReq(NEW_SESSION_URL_PATH, session);
+      wait
+        .then((response: any) => {
+          let newNession = response.data as ChatSessionPaylodObj;
+
+          console.log(response);
+
+          newNession.customerUnreadMessagesCount = 0;
+          setSessionStoragePrefs(OPENED_CHAT, newNession.id);
+          updateAndOpenSession(newNession);
+          setSession(newNession);
+        })
+        .catch(() => {});
+      createSessionData.force = false;
+      createSessionData.messageList = [];
+      createSessionData.sessionDetails = {};
+    }
 
     return session;
   };
@@ -228,10 +229,6 @@ const Conversation = (props: ConversationProps) => {
   }, [session?.messageList]);
 
   useEffect(() => {
-    setSession(getSession());
-  }, [sessions]);
-
-  useEffect(() => {
     let chatId = getSessionStoragePrefs(OPENED_CHAT);
     if (
       (!session ||
@@ -249,7 +246,11 @@ const Conversation = (props: ConversationProps) => {
       setMatchedBotPrefs(matchedBot);
     }
 
-    if (!session.id && !isUserBusinessHour(chatPrefs, agentsPrefs))
+    if (
+      !session.id &&
+      !session.messageList.length &&
+      !isUserBusinessHour(chatPrefs, agentsPrefs)
+    )
       setShowChatForm(true);
     if (session.id && !session.messageList) getMessageList();
     if (session.id)
@@ -358,7 +359,7 @@ const Conversation = (props: ConversationProps) => {
       .catch(() => {});
   };
 
-  const updateMessage = (message: ChatMessagePaylodObj) => {
+  const updateMessage = (message: ChatMessagePayloadObj) => {
     if (!message.ticketId) {
       return;
     }
@@ -417,13 +418,12 @@ const Conversation = (props: ConversationProps) => {
     msg: string | string[] | null,
     type?: MessageFormatType
   ) => {
-    let state: ChatMessagePaylodObj = {
+    let state: ChatMessagePayloadObj = {
       bodyText: msg,
       format: !type ? MessageFormatType.TEXT : type,
-      session_id: session?.id,
       ticketId: session?.id && session?.id,
       created_time: new Date().getTime(),
-    } as ChatMessagePaylodObj;
+    } as ChatMessagePayloadObj;
 
     // Add session id if present
     if (session && session.id && session.type == "LIVECHAT")
@@ -487,7 +487,10 @@ const Conversation = (props: ConversationProps) => {
     session.customerEmail = formData.customerEmail as string;
     session.customerName = formData.customerName as string;
     if (formData.query) {
-      var msg: ChatMessagePaylodObj = getChatMessage(formData.query, undefined);
+      var msg: ChatMessagePayloadObj = getChatMessage(
+        formData.query,
+        undefined
+      );
       let event: EventPayloadObj = {
         ticketId: session?.id,
         eventType: "MESSAGE",
@@ -533,7 +536,7 @@ const Conversation = (props: ConversationProps) => {
         file.error_mssg ||
         "Whoops! Something went wrong. Please try again later.";
 
-      var data: ChatMessagePaylodObj = getChatMessage(mssg, undefined);
+      var data: ChatMessagePayloadObj = getChatMessage(mssg, undefined);
       let event: EventPayloadObj = {
         ticketId: session?.id,
         eventType: "MESSAGE",
@@ -603,9 +606,6 @@ const Conversation = (props: ConversationProps) => {
       data.meta_data = JSON.stringify(getFormMetaData());
     }
 
-    // Send connected bot id in every request
-    if (matchedBotPrefs) data.gpt_bot_id = matchedBotPrefs.id;
-
     const wait = postReq(url, data);
     wait
       .then((response: any) => {
@@ -616,7 +616,7 @@ const Conversation = (props: ConversationProps) => {
       .catch(() => {});
   };
 
-  const postMessage = (data: ChatMessagePaylodObj) => {
+  const postMessage = (data: ChatMessagePayloadObj) => {
     if (!session) return;
 
     //
@@ -651,12 +651,6 @@ const Conversation = (props: ConversationProps) => {
       pushMessage(event, session);
     }
 
-    // Add gpt id in each request, So that can keep ai connection alive with visitor
-    // if (matchedBotPrefs?.id) {
-    //   session.gpt_bot_id = matchedBotPrefs?.id;
-    //   data.gpt_bot_id = matchedBotPrefs?.id;
-    // }
-
     if (
       !emailCaptured &&
       chatPrefs.meta.emailCaptureEnforcement == "required"
@@ -677,8 +671,6 @@ const Conversation = (props: ConversationProps) => {
       }
     });
   };
-
-  // const agent = getOperatorFromSession(props.session, parentContext.agents);
 
   const handleKeyPress = (e: React.FormEvent<HTMLTextAreaElement>) => {
     // console.log(e.currentTarget.textContent);
@@ -760,40 +752,8 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const getHeaderName = () => {
-    // const agent = getOperatorFromSession(session, parentContext.agents);
-    // if (agent && agent?.name) return agent?.name;
-
-    // if (matchedBotPrefs?.id) return matchedBotPrefs?.name;
     if (parentContext.chatPrefs.name) return parentContext.chatPrefs.name;
-
-    // return parentContext.chatPrefs.meta.decoration.introductionText;
   };
-
-  // const connectToAgent = () => {
-  //   var url =
-  //     session && session.id
-  //       ? CONNECT_TO_AGENT_URL_PATH + session.id
-  //       : NEW_SESSION_URL_PATH;
-
-  //   // session
-  //   session.connect_to_agent_on_demand = true;
-
-  //   let formData = getFormMetaData();
-  //   session.meta = JSON.stringify(getFormMetaData());
-
-  //   if (formData && formData.message) {
-  //     session.messageList.push(
-  //       getChatMessage(formData.message as string, MessageFormatType.TEXT)
-  //     );
-  //   }
-
-  //   submitSessionEvent(url, session, (response: any) => {
-  //     // Get session
-  //     let newNession = response.data as ChatSessionPaylodObj;
-  //     // newNession.messageList = session.messageList;
-  //     updateAndOpenSession(newNession);
-  //   });
-  // };
 
   const executeBotPromptAction = (prompt: AIBotPromptsPayloadType) => {
     switch (prompt.action) {
@@ -803,21 +763,16 @@ const Conversation = (props: ConversationProps) => {
           return;
         }
 
-        // Connect to agent
-        // connectToAgent();
         break;
 
       case AIBotPromptActionEnum.MESSAGE:
-        let message: ChatMessagePaylodObj = getChatMessage(
+        let message: ChatMessagePayloadObj = getChatMessage(
           prompt.message,
           MessageFormatType.TEXT
         );
         message.from = MessageByTypeEnum.CUSTOMER;
 
         console.log("in", message);
-
-        // Push message
-        // props.pushMessage(message);
 
         postMessage(getChatMessage(message.message, undefined));
         setScrollBottom();
@@ -883,10 +838,6 @@ const Conversation = (props: ConversationProps) => {
             </svg>
           </div>
           <div className="chat__header-user">
-            {/* <div className="chat__header-user-img" style={{ 'backgroundImage': 'url("' + agent ? agent?.profile_img_url : parentContext.chatPrefs.widget.default_profile_image + '")' }}>
-              &nbsp;
-            </div> */}
-
             <div>
               <div
                 className="chat__header-user-img"
@@ -909,24 +860,7 @@ const Conversation = (props: ConversationProps) => {
       <div className="chat__content">
         <div className="chat__messages">
           <div className="chat__messages-track">
-            {/* <div >
-              <div className="chat__conversation-loader" >
-                <img
-                  src="https://doxhze3l6s7v9.cloudfront.net/app/static/img/ajax-loader-cursor.gif"
-                />
-              </div>
-            </div> */}
-
             <div>
-              {/* {
-                (showChatBot &&
-                  (botDetails.conversationId ||
-                    (props.session_id && props.session_type === 'BOT') ||
-                    (props.isChatBotEnabled && !props.session_id))) ?
-                  <ChatBot botDetails={botDetails} session={props.session} setBotDetails={setBotDetails} enableOnlyBotInputs={enableOnlyBotInputs} contactSupport={contactSupport} /> :
-                  <></>
-              } */}
-
               {!showChatForm ? (
                 session?.messageList?.map(
                   (message: EventPayloadObj, index: number) => {
@@ -943,7 +877,6 @@ const Conversation = (props: ConversationProps) => {
                                 message={message}
                                 session={session}
                                 nextMessage={session?.messageList[index + 1]}
-                                // formFields={formFields}
                                 updateMessage={updateMessage}
                               />
                               {index == 0 && !emailCaptured && (
@@ -952,7 +885,6 @@ const Conversation = (props: ConversationProps) => {
                                     setShowChatForm(false);
                                   }}
                                   fields={singlefield}
-                                  // setFormFields={setFormFields}
                                   submitChatForm={submitChatForm}
                                   typeText={typeText}
                                   setTypeText={setTypeText}
@@ -961,56 +893,6 @@ const Conversation = (props: ConversationProps) => {
                               )}
                             </>
                           )}
-                          {/* <form className="chat__messages-group chat__messages-group--me">
-                               <div className="chat__messages-bubble">
-                                 <label className="chat__ticket-form-label">
-                                   Drop your email
-                                 </label>
-                                 <div
-                                   className=""
-                                   style={{
-                                     display: "flex",
-                                   }}
-                                 >
-                                   <input
-                                     type="email"
-                                     required={true}
-                                     style={{
-                                       borderTopRightRadius: 0,
-                                       borderBottomRightRadius: 0,
-                                       borderRight: 0,
-                                     }}
-                                     placeholder="reacho@email.com"
-                                     name="customerEmail"
-                                     className="chat__ticket-form-control"
-                                     // value={}
-                                     // onChange={(e) =>
-                                     //   handleFieldValueChange(
-                                     //     e.target.value,
-                                     //     field
-                                     //   )
-                                     // }
-                                   />
-                                   <button
-                                     className="btn btn-outline-primary"
-                                     type="submit"
-                                   >
-                                     <svg
-                                       xmlns="http://www.w3.org/2000/svg"
-                                       width="24"
-                                       height="24"
-                                       viewBox="0 0 16 16"
-                                       fill="none"
-                                     >
-                                       <path
-                                         d="M5.42773 4.70898C5.46387 4.85254 5.53809 4.98828 5.65039 5.10059L8.54932 8L5.64893 10.9004C5.31689 11.2324 5.31689 11.7705 5.64893 12.1025C5.98096 12.4336 6.51904 12.4336 6.85107 12.1025L10.3516 8.60059C10.5591 8.39355 10.6367 8.10449 10.585 7.83691C10.5537 7.67578 10.4761 7.52246 10.3516 7.39844L6.85254 3.89941C6.52051 3.56738 5.98242 3.56738 5.65039 3.89941C5.43066 4.11816 5.35645 4.42871 5.42773 4.70898Z"
-                                         fill="#000000"
-                                       ></path>
-                                     </svg>
-                                   </button>
-                                 </div>
-                               </div>
-                             </form> */}
                         </div>
                       </div>
                     );
@@ -1026,7 +908,6 @@ const Conversation = (props: ConversationProps) => {
                     setShowChatForm(false);
                   }}
                   fields={fields}
-                  // setFormFields={setFormFields}
                   submitChatForm={submitChatForm}
                   typeText={typeText}
                   setTypeText={setTypeText}
@@ -1052,6 +933,7 @@ const Conversation = (props: ConversationProps) => {
         <div
           className={`chat__footer ${
             showChatForm ||
+            (!session.id && session.messageList?.length > 0) ||
             (chatPrefs.meta.emailCaptureEnforcement == "required" &&
               !emailCaptured &&
               session.messageList?.length > 0)

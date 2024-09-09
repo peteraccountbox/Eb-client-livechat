@@ -3,7 +3,7 @@ import { AppContext } from "./appContext";
 import ChatTabsList from "./components/ChatTabsList";
 import Conversation from "./components/Conversation";
 import ConversationList from "./components/ConversationList";
-import { ChatMessagePaylodObj, ChatSessionPaylodObj } from "./Models";
+import { ChatMessagePayloadObj, ChatSessionPaylodObj } from "./Models";
 import {
   getSessionStoragePrefs,
   removeSessionStoragePrefs,
@@ -114,7 +114,12 @@ export default function LiveChat({
             } else if (
               activeComponentName === LivechatComponentNames.TrackManage
             ) {
-              return <TrackManage backToHome={backToHome} />;
+              return (
+                <TrackManage
+                  backToHome={backToHome}
+                  startNewChat={startNewChat}
+                />
+              );
             } else {
               return <>None</>;
             }

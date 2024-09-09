@@ -1,14 +1,13 @@
 import React, { FC } from "react";
 import {
   ChatFromFieldDataPayLoad,
-  ChatMessagePaylodObj,
-  ChatSessionPaylodObj,
+  ChatMessagePayloadObj,
   MessageByTypeEnum,
 } from "../Models";
 import { getSystemMessage } from "../Utils";
 
 export interface NoticePropsType {
-  message: ChatMessagePaylodObj;
+  message: ChatMessagePayloadObj;
   // session: ChatSessionPaylodObj | undefined,
   // formFields: ChatFromFieldDataPayLoad[],
 }
