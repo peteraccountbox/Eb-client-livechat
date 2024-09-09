@@ -1,4 +1,5 @@
 import './assets/css/iframe.scss';
+import { ChatPrefsPayloadType } from './Models';
 import { uuidv4 } from './Utils';
 
 export const createEle = function (tag: string, attrs: any) {
@@ -11,7 +12,15 @@ export const createEle = function (tag: string, attrs: any) {
     return el;
 }
 
-export default function loadChat(container: Element, prefs: any) {
+const isMobileDevice = () => {
+    return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+};
+
+export default function loadChat(container: Element, prefs: ChatPrefsPayloadType) {
+
+    // Validate contitions
+    if (!prefs || prefs.meta.deactivated || (prefs.meta.hideOnMobile && isMobileDevice()))
+        return;
 
     const renderedFrame = container.getElementsByTagName("iframe");
     if (renderedFrame && renderedFrame.length > 0)
