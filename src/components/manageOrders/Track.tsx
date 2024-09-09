@@ -48,7 +48,9 @@ const Track = () => {
       <div>{trackOrderPolicy.unfulfilledMessage}</div>
       <div>Confirmed</div>
       <div>Last updated Time Ago {orderDetails.updated_at}</div>
-      <Address type={"Shipping"} address={orderDetails.shipping_address} />
+      {orderDetails.shipping_address && (
+        <Address type={"Shipping"} address={orderDetails.shipping_address} />
+      )}
     </>
   );
 };
