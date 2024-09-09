@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import AgentChatMessage from "./AgentChatMessage";
-import GPTChatMessage from "./GPTChatMessage";
 import UserChatMessage from "./UserChatMessage";
 import Notice from "./Notice";
 import {
