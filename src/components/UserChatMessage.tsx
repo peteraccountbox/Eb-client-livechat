@@ -8,14 +8,7 @@ import {
 } from "../Models";
 import ChatMessage from "./ChatMessage";
 // import TimeAgo from 'react-timeago';
-import ReactTimeAgo from "react-time-ago";
-import TimeAgo from "javascript-time-ago";
 
-import en from "javascript-time-ago/locale/en";
-import ru from "javascript-time-ago/locale/ru";
-
-TimeAgo.addDefaultLocale(en);
-TimeAgo.addLocale(ru);
 export interface UserChatMessagePropsType {
   message: EventPayloadObj;
   sessionId?: number | string;

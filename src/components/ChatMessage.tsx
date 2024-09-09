@@ -17,12 +17,8 @@ import {
 import { GPT_MESSAGE_SCORE_UPDATE_URL_PATH } from "../globals";
 import { postReq } from "../request";
 import Tippy from "@tippyjs/react";
-import ReactTimeAgo from "react-time-ago";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en";
-import ru from "javascript-time-ago/locale/ru";
-TimeAgo.addDefaultLocale(en);
-TimeAgo.addLocale(ru);
+import TimeAgo from "./TimeAgo";
+
 export interface ChatMessagePropsType {
   message: EventPayloadObj;
   sessionId?: number | string;
@@ -71,13 +67,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
 
   return (
     <Tippy
-      content={
-        <ReactTimeAgo
-          date={new Date(getMessageTime())}
-          locale="en-US"
-          tooltip={false}
-        />
-      }
+      content={<TimeAgo date={new Date(getMessageTime())} />}
       // visible={props.message.ticketId ? true : false}
       disabled={
         props.message.id && props.message?.status != "SENDING" ? false : true
