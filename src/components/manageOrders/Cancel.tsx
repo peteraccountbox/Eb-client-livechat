@@ -34,7 +34,7 @@ const Cancel = (props: any) => {
           I'd like to cancel the following fulfillment:
           <br />
           ---------------------------------------
-          <OrderDetails order={order} />
+          {orderDetails && <OrderDetails order={order} />}
         </>
       ),
       bodyText: renderToString(
@@ -42,7 +42,7 @@ const Cancel = (props: any) => {
           I'd like to cancel the following fulfillment:
           <br />
           ---------------------------------------
-          <OrderDetails order={order} />
+          {orderDetails && <OrderDetails order={order} />}
         </>
       ),
       format: MessageFormatType.TEXT,
