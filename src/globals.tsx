@@ -3,7 +3,14 @@ import { getSessionStoragePrefs, setSessionStoragePrefs } from "./Storage";
 
 export const TENANT_ID: string = (window as any).TENANT_ID;
 export const CHANNEL_ID: string = (window as any).CHANNEL_ID;
-export const CHANNEL_PREFS: string = (window as any).CHANNEL_PREFS;
+
+let prefs;
+try {
+  prefs = (window as any).parent.reachoModulesObject.ChatPrefs[CHANNEL_ID];
+} catch (e) {
+}
+export const CHANNEL_PREFS: ChatPrefsPayloadType | undefined = prefs;
+
 export const VISITOR_UUID: string = (window as any).reachoJSClient
   ? (window as any).reachoJSClient.getVisitorId()
   : (window as any).VISITOR_UUID;

@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import AgentChatMessage from "./AgentChatMessage";
-import GPTChatMessage from "./GPTChatMessage";
 import UserChatMessage from "./UserChatMessage";
 import Notice from "./Notice";
 import {
@@ -42,7 +41,7 @@ const ConversationItem: FC<ConversationItemPropsType> = (props) => {
       )}
 
       {from === MessageByTypeEnum.SYSTEM &&
-      props.message.SYSTEM_message_type === "PROACTIVE_SYSTEM_MESSAGE" ? (
+        props.message.SYSTEM_message_type === "PROACTIVE_SYSTEM_MESSAGE" ? (
         <AgentChatMessage
           sessionId={props.session?.id}
           message={props.message}
@@ -75,10 +74,10 @@ const ConversationItem: FC<ConversationItemPropsType> = (props) => {
       )}
 
       {from === MessageByTypeEnum.SYSTEM &&
-      props.message.SYSTEM_message_type != "PROACTIVE_SYSTEM_MESSAGE" ? (
+        props.message.SYSTEM_message_type != "PROACTIVE_SYSTEM_MESSAGE" ? (
         <Notice
           message={props.message.message}
-          //  formFields={props.formFields}
+        //  formFields={props.formFields}
         />
       ) : (
         <></>
