@@ -99,7 +99,7 @@ const App: React.FunctionComponent = () => {
       if (!FooterTabs.find((footer) => footer.tab == activeTabname)) {
         activeTabname = FooterTabs[0].tab;
       }
-    } catch (error) {}
+    } catch (error) { }
 
     return activeTabname;
   };
@@ -216,7 +216,7 @@ const App: React.FunctionComponent = () => {
     // }
 
     // Subscribe to event bus
-    eventBus.on("reacho-socket-event", function () {});
+    eventBus.on("reacho-socket-event", function () { });
 
     eventBus.on("new_ticket_message", function (message) {
       let messageSession: any = sessions.find(function (session) {
@@ -278,7 +278,7 @@ const App: React.FunctionComponent = () => {
     console.log("CHANNEL_PREFS", CHANNEL_PREFS);
 
     if (CHANNEL_PREFS) {
-      setChatPrefs(JSON.parse(CHANNEL_PREFS));
+      setChatPrefs(CHANNEL_PREFS);
       setPrefsFetched(true);
       return;
     }
@@ -504,7 +504,7 @@ const App: React.FunctionComponent = () => {
               let proactiveMsg = "";
               try {
                 proactiveMsg = JSON.parse(rule.customData).message;
-              } catch (error) {}
+              } catch (error) { }
               // console.log("proactiveMsg", proactiveMsg);
 
               // if (proactiveMsg)
@@ -743,8 +743,8 @@ const App: React.FunctionComponent = () => {
       "--themeColor": offlineColor
         ? "#111827"
         : mainColor
-        ? chatPrefs.meta.decoration.mainColor
-        : "blue",
+          ? chatPrefs.meta.decoration.mainColor
+          : "blue",
       // "--themeColor2":
       //   chatPrefs && chatPrefs.meta.decoration.mainColor
       //     ? chatPrefs.meta.decoration.mainColor
@@ -776,9 +776,8 @@ const App: React.FunctionComponent = () => {
       >
         <div
           id="App"
-          className={`engagebay-viewport ${
-            !isOpened && hideChatBubble ? "hide" : ""
-          } `}
+          className={`engagebay-viewport ${!isOpened && hideChatBubble ? "hide" : ""
+            } `}
           style={appThemeStyle}
         >
           {isVisible ? (
@@ -800,24 +799,21 @@ const App: React.FunctionComponent = () => {
               ) : (
                 <div
                   className={`chat ${isOpened ? "is-open" : ""} 
-              ${
-                chatPrefs.meta.decoration.widgetAlignment == "bottom left"
-                  ? "left"
-                  : ""
-              } 
-              ${
-                chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
-                  ? "right"
-                  : ""
-              }`}
+              ${chatPrefs.meta.decoration.widgetAlignment == "bottom left"
+                      ? "left"
+                      : ""
+                    } 
+              ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
+                      ? "right"
+                      : ""
+                    }`}
                   data-target="widget"
                 >
                   <div
                     className="chat__main"
                     style={{
-                      minWidth: `${
-                        promtWidth == PromtWidth.Large ? "700px" : "auto"
-                      }`,
+                      minWidth: `${promtWidth == PromtWidth.Large ? "700px" : "auto"
+                        }`,
                     }}
                   >
                     {(() => {

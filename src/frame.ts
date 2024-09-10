@@ -44,6 +44,14 @@ export default function loadChat(container: Element, prefs: ChatPrefsPayloadType
     if (reachoModulesObject.mode && reachoModulesObject.mode == "local")
         scirptURL = "http://localhost:3031/main/main.min.js?v=311";
 
+    reachoModulesObject.ChatPrefs = {};
+    reachoModulesObject.ChatPrefs[prefs.id] = prefs;
+
+    Object.defineProperty(window, "reachoModulesObject", {
+        value: reachoModulesObject,
+        enumerable: false
+    });
+
     let content = `
     <!DOCTYPE html>
     <html>
@@ -52,9 +60,9 @@ export default function loadChat(container: Element, prefs: ChatPrefsPayloadType
     </head>
     <body>
         <div id="root"></p>
-        <script>
+        <script >
             var TENANT_ID = "${reachoModulesObject.companyId}";
-            var CHANNEL_PREFS = '${JSON.stringify(prefs)}';
+            // var CHANNEL_PREFS = '${JSON.stringify(prefs)}';
             var CHANNEL_ID = "${prefs.id}";
             var FRAME_REF_ID = "${frameId}";
             var SERVER_HOST_DOMAIN_URL = "${SERVER_HOST_DOMAIN_URL}";
