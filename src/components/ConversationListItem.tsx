@@ -6,15 +6,9 @@ import {
   MessageByTypeEnum,
 } from "../Models";
 // import TimeAgo from 'react-timeago'
-import ReactTimeAgo from "react-time-ago";
-import TimeAgo from "javascript-time-ago";
 
-import en from "javascript-time-ago/locale/en";
-import ru from "javascript-time-ago/locale/ru";
 import { DEFAULT_AGENT_PROFILE_PIC } from "../globals";
-
-TimeAgo.addDefaultLocale(en);
-TimeAgo.addLocale(ru);
+import TimeAgo from "./TimeAgo";
 
 interface ConversationListItemProp {
   session: ChatSessionPaylodObj;
@@ -92,11 +86,17 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
   };
 
   const getImage = () => {
-
-    if (!props.session.agentId || !props.session.agentId || parentContext.agents?.length == 0 || !(parentContext.agents?.find(agent => (agent.id == props.session.agentId))))
+    if (
+      !props.session.agentId ||
+      !props.session.agentId ||
+      parentContext.agents?.length == 0 ||
+      !parentContext.agents?.find((agent) => agent.id == props.session.agentId)
+    )
       return DEFAULT_AGENT_PROFILE_PIC;
 
-    const agent: AgentPaylodObj | undefined = parentContext.agents.find(agent => (agent.id == props.session.agentId));
+    const agent: AgentPaylodObj | undefined = parentContext.agents.find(
+      (agent) => agent.id == props.session.agentId
+    );
     return agent?.userPicURL || DEFAULT_AGENT_PROFILE_PIC;
 
     // const lastMessage = getLatestChat();
@@ -247,12 +247,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
           <div className="chat__all-messages-item-header">
             <p className="chat-messages-username"> {getName()}</p>
             <p className="chat__all-messages-item-header-timegao">
-              •{" "}
-              <ReactTimeAgo
-                date={getMessageTime()}
-                locale="en-US"
-                tooltip={false}
-              />
+              <TimeAgo date={getMessageTime()} />
             </p>
           </div>
         </div>

@@ -4,16 +4,8 @@ import ChatMessage from "./ChatMessage";
 import OperatorName from "./OperatorName";
 import boticon from "../assets/img/chatbot-final.png";
 import { AppContext } from "../appContext";
-// import Timeago from "react-timeago";
-import ReactTimeAgo from "react-time-ago";
-import TimeAgo from "javascript-time-ago";
-
-import en from "javascript-time-ago/locale/en";
-import ru from "javascript-time-ago/locale/ru";
 import { DEFAULT_AGENT_PROFILE_PIC } from "../globals";
-
-TimeAgo.addDefaultLocale(en);
-TimeAgo.addLocale(ru);
+import TimeAgo from "./TimeAgo";
 
 export interface AgentChatMessagePropsType {
   message: EventPayloadObj;
@@ -76,11 +68,7 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
 
           <div className="chat__messages-timestamp">
             {/* <>{getMessageTime()}</> */}
-            <ReactTimeAgo
-              date={new Date(getMessageTime())}
-              locale="en-US"
-              tooltip={false}
-            />
+            <TimeAgo date={new Date(getMessageTime())} />
           </div>
         </div>
       </div>

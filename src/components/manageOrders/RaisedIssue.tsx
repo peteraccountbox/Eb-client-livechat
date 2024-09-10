@@ -24,6 +24,7 @@ const RaisedIssue = (props: any) => {
     setData,
     customer,
   } = orderManagementContext;
+  const orderDetails = JSON.parse(order.meta);
 
   const createTicket = () => {
     let message: ChatMessagePayloadObj = {
@@ -32,7 +33,7 @@ const RaisedIssue = (props: any) => {
           {reason.title}
           <br />
           ---------------------------------------
-          <OrderDetails order={order} />
+          {orderDetails && <OrderDetails order={order} />}
         </>
       ),
       bodyText: renderToString(
@@ -40,7 +41,7 @@ const RaisedIssue = (props: any) => {
           {reason.title}
           <br />
           ---------------------------------------
-          <OrderDetails order={order} />
+          {orderDetails && <OrderDetails order={order} />}
         </>
       ),
       format: MessageFormatType.TEXT,
@@ -92,7 +93,9 @@ const RaisedIssue = (props: any) => {
                   {reason.title}
                   <br />
                   ---------------------------------------
-                  <OrderDetails order={order} />
+                  {orderDetails.shipping_address && (
+                    <OrderDetails order={order} />
+                  )}
                 </span>
               </div>
             </div>

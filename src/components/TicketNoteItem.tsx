@@ -1,16 +1,11 @@
 import React, { FC, useEffect } from "react";
-import ReactTimeAgo from "react-time-ago";
-import TimeAgo from "javascript-time-ago";
+
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
-import en from "javascript-time-ago/locale/en";
-import ru from "javascript-time-ago/locale/ru";
 import Attachment from "./Attachment";
 import { TicketNoteType, TicketType } from "../Models";
 
-TimeAgo.addDefaultLocale(en);
-TimeAgo.addLocale(ru);
 export interface TicketNoteItemComponentProps {
   note: TicketNoteType;
   ticket: TicketType;
@@ -63,7 +58,7 @@ const TicketNoteItem: FC<TicketNoteItemComponentProps> = (props) => {
 
           <div
             className="chat__messages-timestamp ticket_conversations_timeago"
-          // style={{ display: "none" }}
+            // style={{ display: "none" }}
           >
             {/* <ReactTimeAgo
               date={getMessageTime()}

@@ -79,9 +79,13 @@ const Order = () => {
           </div>
         ))}
 
-        <Address type={"Shipping"} address={orderDetails.shipping_address} />
+        {orderDetails.shipping_address && (
+          <Address type={"Shipping"} address={orderDetails.shipping_address} />
+        )}
 
-        <Address type={"Billing"} address={orderDetails.billing_address} />
+        {orderDetails.billing_address && (
+          <Address type={"Billing"} address={orderDetails.billing_address} />
+        )}
       </div>
     </>
   );

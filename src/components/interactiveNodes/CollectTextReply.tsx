@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { InteractiveNodeProps } from "../InteractiveFlowUtils";
-import ReactTimeAgo from "react-time-ago";
+import TimeAgo from "../TimeAgo";
 
 const CollectTextReply: React.FC<InteractiveNodeProps> = ({
   execution,
@@ -190,12 +190,7 @@ const CollectTextReply: React.FC<InteractiveNodeProps> = ({
             <div className="chat__all-messages-item-header">
               <p className="chat-messages-username"> Automated</p>
               <p className="chat__all-messages-item-header-timegao">
-                •{" "}
-                <ReactTimeAgo
-                  date={new Date(execution?.createdTime)}
-                  locale="en-US"
-                  tooltip={false}
-                />
+                <TimeAgo date={new Date(execution?.createdTime)} />
               </p>
             </div>
           </div>

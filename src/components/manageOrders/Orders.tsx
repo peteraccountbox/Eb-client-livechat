@@ -49,8 +49,12 @@ const Orders = () => {
       </header>
       <ul className="help__collections-list">
         {orders.length > 0 &&
+          orders &&
           orders.map((order: any) => {
             const orderDetails = JSON.parse(order.meta);
+
+            if (!orderDetails.line_items || orderDetails.line_items.length == 0)
+              return <></>;
 
             return (
               <div onClick={() => action(order)}>
@@ -84,43 +88,44 @@ const Orders = () => {
                 </div>
                 <ManageActions />
 
-                {orderDetails.line_items.map((item: any) => (
-                  <div
-                    className=""
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      padding: "10px 0px",
-                      alignItems: "center",
-                    }}
-                    // onClick={() => selectOrder(order)}
-                  >
+                {orderDetails.line_items &&
+                  orderDetails.line_items.map((item: any) => (
                     <div
                       className=""
-                      style={{ display: "flex", alignItems: "center" }}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        padding: "10px 0px",
+                        alignItems: "center",
+                      }}
+                      // onClick={() => selectOrder(order)}
                     >
-                      <img
-                        style={{
-                          width: "4rem",
-                          height: "4rem",
-                          borderRadius: "5px",
-                        }}
-                        src={`${
-                          item.product_image_url
-                            ? item.product_image_url
-                            : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        }`}
-                      />
-                      <div style={{ marginLeft: "10px" }}>
-                        <div>{item.name}</div>
-                        <div>
-                          {item.price}
-                          {orderDetails.currency} x{item.quantity}
+                      <div
+                        className=""
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <img
+                          style={{
+                            width: "4rem",
+                            height: "4rem",
+                            borderRadius: "5px",
+                          }}
+                          src={`${
+                            item.product_image_url
+                              ? item.product_image_url
+                              : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          }`}
+                        />
+                        <div style={{ marginLeft: "10px" }}>
+                          <div>{item.name}</div>
+                          <div>
+                            {item.price}
+                            {orderDetails.currency} x{item.quantity}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             );
           })}

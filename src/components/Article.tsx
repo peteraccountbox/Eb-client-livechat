@@ -1,10 +1,5 @@
 import React, { FC, UIEvent, useContext, useEffect, useState } from "react";
-// import TimeAgo from 'react-timeago';
-import ReactTimeAgo from "react-time-ago";
-import TimeAgo from "javascript-time-ago";
 
-import en from "javascript-time-ago/locale/en";
-import ru from "javascript-time-ago/locale/ru";
 import {
   HC_ACTIVE_ID,
   HC_ACTIVE_COMPONENT,
@@ -17,8 +12,6 @@ import { getSessionStoragePrefs, removeSessionStoragePrefs } from "../Storage";
 import CloseWidgetPanel from "./CloseWidgetPanel";
 import { resizeFrame } from "../Utils";
 import { AgentPaylodObj, ArticleType } from "../Models";
-TimeAgo.addDefaultLocale(en);
-TimeAgo.addLocale(ru);
 
 export interface ArticleComponentProps {
   articleId: Number | undefined;
@@ -105,8 +98,9 @@ const Article: FC<ArticleComponentProps> = (props) => {
                 </div>
                 <div className="chat__header-user">
                   <h3
-                    className={`chat__header-user-name ${article.title ? "article-header" : ""
-                      }`}
+                    className={`chat__header-user-name ${
+                      article.title ? "article-header" : ""
+                    }`}
                     ref={titleRef}
                   >
                     {article.title}
