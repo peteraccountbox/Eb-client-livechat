@@ -16,11 +16,15 @@ import ru from "javascript-time-ago/locale/ru";
 TimeAgoJS.addDefaultLocale(en);
 TimeAgoJS.addLocale(ru);
 
-const TimeAgo = ({ date }: { date: Date }) => {
+const TimeAgo = ({ date }: { date: Date | undefined }) => {
   // date = date + "";
   // if (date && date.indexOf("Z") == -1) date = date + "Z";
 
-  return <ReactTimeAgo date={date} locale="en-US" tooltip={false} />;
+
+
+  return <>{
+    date && <ReactTimeAgo date={date} locale="en-US" tooltip={false} />
+  }</>;
 };
 
 export default TimeAgo;
