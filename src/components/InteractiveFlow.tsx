@@ -66,9 +66,7 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
     const wait = getReq(EXECUTION_LIST_FETCH_URL_PATH + flowExecutionId, {});
     wait
       .then((response) => {
-
         setLoading(false);
-
 
         if (
           !response.data ||
@@ -83,7 +81,6 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
         setExecutionList([...response.data.executionList]);
 
         setScrollBottom();
-
       })
       .catch(() => {
         startFlowExecution();
@@ -115,7 +112,7 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
           newExecutionList[newExecutionList.length - 1].executed &&
           !newExecutionList[newExecutionList.length - 1].nextNodeId &&
           newExecutionList[newExecutionList.length - 1].data.nodeType ==
-          InteractiveNodeTypes.END
+            InteractiveNodeTypes.END
         ) {
           props.backToHome();
         }
