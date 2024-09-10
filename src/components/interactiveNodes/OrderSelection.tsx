@@ -70,51 +70,51 @@ const OrderSelection: React.FC<InteractiveNodeProps> = ({
         </div>
       ) : (
         <>
-          <div className="orders_collections">
+          <div className="flows_collections">
             <header>
-              <h2 className="orders_collections-title">My orders </h2>
-              <p className="orders_collections-desc">
+              <h2 className="flows_collections-title">My orders </h2>
+              <p className="flows_collections-desc">
                 {execution.node.data.formData?.message}
               </p>
             </header>
-            <ul className="orders_collections-list">
+            <ul className="flows_collections-list">
               {orders.length > 0 &&
                 orders.map((order: any) => {
                   const orderDetails = JSON.parse(order.meta);
 
                   return (
                     <li
-                      className="orders_collections-list-item"
+                      className="flows_collections-list-item"
                       onClick={() => selectOrder(order)}
                     >
-                      <div className="orders_collections-list-item-avatar">
-                        <div className="orders_collections-list-item-profile">
+                      <div className="flows_collections-list-item-avatar">
+                        <div className="flows_collections-list-item-profile">
                           <img
                             alt="image"
                             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                           />
                         </div>
                       </div>
-                      <div className="orders_collections-list-item-content">
-                        <div className="orders_collections-list-item-name">
+                      <div className="flows_collections-list-item-content">
+                        <div className="flows_collections-list-item-name">
                           Order {orderDetails.name}
                         </div>
-                        <div className="orders_collections-list-item-timegao">
+                        <div className="flows_collections-list-item-timegao">
                           {orderDetails.created_at}
                         </div>
                       </div>
 
-                      <div className="orders_collections-list-item-price-info">
+                      <div className="flows_collections-list-item-price-info">
                         {orderDetails.currency && (
-                          <div className="orders_collections-list-item-currency">
+                          <div className="flows_collections-list-item-currency">
                             {orderDetails.currency}
-                            <span className="orders_collections-list-item-total-price">
+                            <span className="flows_collections-list-item-total-price">
                               {orderDetails.current_total_price}
                             </span>
                           </div>
                         )}
 
-                        <div className="orders_collections-list-item-status">
+                        <div className="flows_collections-list-item-status">
                           {orderDetails.fulfillment_status}
                         </div>
                       </div>

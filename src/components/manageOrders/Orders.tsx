@@ -44,92 +44,95 @@ const Orders = () => {
   }, []);
   return (
     <>
-      <header className="">
-        <h2 className="title">My orders </h2>
-      </header>
-      <ul className="help__collections-list">
-        {orders.length > 0 &&
-          orders &&
-          orders.map((order: any) => {
-            const orderDetails = JSON.parse(order.meta);
+      <div className="orders__collections">
+        <h2 className="orders__collections-title">My orders </h2>
+        <div className="help__collections-list orders__collections-list">
+          {orders.length > 0 &&
+            orders &&
+            orders.map((order: any) => {
+              const orderDetails = JSON.parse(order.meta);
 
-            if (!orderDetails.line_items || orderDetails.line_items.length == 0)
-              return <></>;
+              if (
+                !orderDetails.line_items ||
+                orderDetails.line_items.length == 0
+              )
+                return <></>;
 
-            return (
-              <div onClick={() => action(order)}>
-                <div
-                  className=""
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "10px 0px",
-                    alignItems: "center",
-                  }}
-                  onClick={() => action(order)}
-                >
+              return (
+                <div onClick={() => action(order)}>
                   <div
                     className=""
-                    style={{ display: "flex", alignItems: "center" }}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      padding: "10px 0px",
+                      alignItems: "center",
+                    }}
+                    onClick={() => action(order)}
                   >
-                    <div>
-                      <h2>Order {orderDetails.name}</h2>
-                      <div>Shipment</div>
-                    </div>
-                  </div>
-
-                  <div style={{ textAlign: "end" }}>
-                    <div>
-                      {orderDetails.currency}
-                      {orderDetails.current_total_price}
-                    </div>
-                    <div>{orderDetails.fulfillment_status}</div>
-                  </div>
-                </div>
-                <ManageActions />
-
-                {orderDetails.line_items &&
-                  orderDetails.line_items.map((item: any) => (
                     <div
                       className=""
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        padding: "10px 0px",
-                        alignItems: "center",
-                      }}
-                      // onClick={() => selectOrder(order)}
+                      style={{ display: "flex", alignItems: "center" }}
                     >
+                      <div>
+                        <h2>Order {orderDetails.name}</h2>
+                        <div>Shipment</div>
+                      </div>
+                    </div>
+
+                    <div style={{ textAlign: "end" }}>
+                      <div>
+                        {orderDetails.currency}
+                        {orderDetails.current_total_price}
+                      </div>
+                      <div>{orderDetails.fulfillment_status}</div>
+                    </div>
+                  </div>
+                  <ManageActions />
+
+                  {orderDetails.line_items &&
+                    orderDetails.line_items.map((item: any) => (
                       <div
                         className=""
-                        style={{ display: "flex", alignItems: "center" }}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          padding: "10px 0px",
+                          alignItems: "center",
+                        }}
+                        // onClick={() => selectOrder(order)}
                       >
-                        <img
-                          style={{
-                            width: "4rem",
-                            height: "4rem",
-                            borderRadius: "5px",
-                          }}
-                          src={`${
-                            item.product_image_url
-                              ? item.product_image_url
-                              : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          }`}
-                        />
-                        <div style={{ marginLeft: "10px" }}>
-                          <div>{item.name}</div>
-                          <div>
-                            {item.price}
-                            {orderDetails.currency} x{item.quantity}
+                        <div
+                          className=""
+                          style={{ display: "flex", alignItems: "center" }}
+                        >
+                          <img
+                            style={{
+                              width: "4rem",
+                              height: "4rem",
+                              borderRadius: "5px",
+                            }}
+                            src={`${
+                              item.product_image_url
+                                ? item.product_image_url
+                                : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                            }`}
+                          />
+                          <div style={{ marginLeft: "10px" }}>
+                            <div>{item.name}</div>
+                            <div>
+                              {item.price}
+                              {orderDetails.currency} x{item.quantity}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-              </div>
-            );
-          })}
-      </ul>
+                    ))}
+                </div>
+              );
+            })}
+        </div>
+      </div>
     </>
   );
 };

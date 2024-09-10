@@ -68,7 +68,7 @@ const TrackManage = (props: TrackManageProps) => {
     >
       <div className="chat__conversation">
         <div className="chat__header">
-          <div className="chat__header-action">
+          <div className="chat__header-action chat__logout-panel-header">
             <div
               data-trigger="all"
               className="chat__header-back"
@@ -92,16 +92,43 @@ const TrackManage = (props: TrackManageProps) => {
               </svg>
             </div>
             <div className="chat__header-user">
-              <div>
+              {/* <div>
                 <div
                   className="chat__header-user-img"
                   style={{ backgroundImage: 'url("' + getHeaderIcon() + '")' }}
                 ></div>
-              </div>
+              </div> */}
 
               <div className="chat__header-user-title">
                 <h1 className="chat__header-user-name"> {getHeaderName()} </h1>
               </div>
+            </div>
+
+            <div className="chat__logout-panel">
+              <button
+                type="button"
+                aria-label="Log out"
+                className="chat__logout-btn"
+              >
+                <span className="chat__logout-btn-icon">
+                  <svg
+                    width="20"
+                    height="20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    role="img"
+                  >
+                    <path
+                      d="M4.167 4.167h5A.836.836 0 0010 3.333a.836.836 0 00-.833-.833h-5C3.25 2.5 2.5 3.25 2.5 4.167v11.666c0 .917.75 1.667 1.667 1.667h5a.836.836 0 00.833-.833.836.836 0 00-.833-.834h-5V4.167z"
+                      fill="#fff"
+                    ></path>
+                    <path
+                      d="M17.208 9.708l-2.325-2.325a.417.417 0 00-.716.292v1.492H8.333A.836.836 0 007.5 10c0 .458.375.833.833.833h5.834v1.492c0 .375.45.558.708.292l2.325-2.325a.41.41 0 00.008-.584z"
+                      fill="#fff"
+                    ></path>
+                  </svg>
+                </span>
+              </button>
             </div>
           </div>
 
