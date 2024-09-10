@@ -78,7 +78,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
     try {
       if (!props.session.lastMessageAt) return 0;
 
-      return new Date(props.session.lastMessageAt + "Z");
+      return props.session.lastMessageAt + "Z";
     } catch (e) {
       console.log("Issue getMessageTime", e);
       return new Date().getTime();
@@ -247,7 +247,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
           <div className="chat__all-messages-item-header">
             <p className="chat-messages-username"> {getName()}</p>
             <p className="chat__all-messages-item-header-timegao">
-              <TimeAgo date={getMessageTime()} />
+              <TimeAgo date={new Date(getMessageTime())} />
             </p>
           </div>
         </div>
