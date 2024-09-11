@@ -2,13 +2,6 @@
 @import '../abstracts/_theme';
 @import '../abstracts/mixins';
 
-* {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-	outline: none;
-}
-
 @keyframes grow {
 	0% {
 		transform: none;
@@ -5048,12 +5041,47 @@
 	justify-content: space-between;
 }
 
-.no__order_data {
+.no__order_data_wrapper {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	height: 100%;
 	font-size: 14px;
+}
+
+.no__order_data_content {
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	-webkit-box-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	justify-content: center;
+	gap: 10px;
+}
+
+.no__order_data_wrapper .pad-no-content-img {
+	max-width: 120px;
+	margin-bottom: 12px;
+}
+
+.no__order_data_wrapper .pad-content-title {
+	font-size: 18px;
+	line-height: 24px;
+	font-weight: 600;
+	color: var(--themeColor);
+}
+
+.no__order_data_wrapper .pad-text {
+	color: $color-gray;
+	font-weight: 400;
+	line-height: 20px;
+	font-size: 14px;
+	text-align: center;
+}
+
+.no__order_data_wrapper .no_messages_content p {
+	font-size: 13px;
 }
 
 .line__dashed {
