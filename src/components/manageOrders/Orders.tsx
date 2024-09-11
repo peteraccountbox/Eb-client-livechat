@@ -29,10 +29,12 @@ const Orders = () => {
     setData(order);
   };
   const [orders, setOrders] = useState<any>([]);
+  const [fetching, setFetching] = useState<any>([]);
   const parentContext = useContext(AppContext);
   const { chatPrefs } = parentContext;
 
   useEffect(() => {
+    setFetching(true);
     if (customerId)
       getReq(ORDERS_FETCH_URL, {
         customerId: customerId,
@@ -40,11 +42,12 @@ const Orders = () => {
       }).then((response) => {
         console.log(response.data);
         setOrders(response.data.content);
+        setFetching(false);
       });
   }, []);
   return (
     <>
-      {orders.length === 0 ? (
+      {!fetching && orders.length === 0 ? (
         <>
           <div className="no__order_data">No orders found</div>
         </>
@@ -105,11 +108,10 @@ const Orders = () => {
                           <div className="orders__collections-line-items">
                             <div className="orders__collections-line-items-avatar">
                               <img
-                                src={`${
-                                  item.product_image_url
-                                    ? item.product_image_url
-                                    : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                }`}
+                                src={`${item.product_image_url
+                                  ? item.product_image_url
+                                  : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                  }`}
                               />
                             </div>
                             <div className="orders__collections-line-items-details">
