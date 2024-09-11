@@ -42,7 +42,7 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
 
     </div> */}
 
-        <div className="chat__messages-agent-info">
+        <div className="chat__messages-agent-info chat__messages-agent-item">
           <div className="chat__messages-agent">
             <div className="chat__messages-agent-avatar">
               <img
