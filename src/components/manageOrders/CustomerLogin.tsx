@@ -11,6 +11,8 @@ const CustomerLogin = () => {
   const orderManagementContext = useContext(OrderManagementContext);
   const { setManagementComponent, setData } = orderManagementContext;
 
+  const [error, setError] = useState<string>("");
+
   const fields = [
     {
       name: "sign_in",
@@ -60,6 +62,10 @@ const CustomerLogin = () => {
   };
 
   const submitForm = () => {
+
+    // Clear error
+    setError("");
+
     if (isvalidForm() && !saving) {
       setSaving(true);
       let data = {
@@ -68,26 +74,40 @@ const CustomerLogin = () => {
       };
 
       postReq(VALIDATE_CUSTOMER_PATH, data).then((res: any) => {
-        console.log(res.data.id);
+        console.log("VALIDATE_CUSTOMER_PATH", res);
+
+        if (!res || !res.data) {
+          setSaving(false);
+          setError("Sorry, No customer associated with these details");
+          return;
+        }
+
         setSessionStoragePrefs(CUSTOMER, JSON.stringify(res.data));
         orderManagementContext.customer = res.data;
         setManagementComponent(OrderManageTypes.ORDERS);
+
         setData({
           customerId: res.data.id,
         });
+
+      }).catch((e) => {
+        console.log("VALIDATE_CUSTOMER_PATH error", e);
+        setSaving(false);
+        setError("Sorry, No customer associated with these details");
       });
     }
   };
   const [saving, setSaving] = useState(false);
 
   return (
-    <LoginForm
-      sign_in={"email"}
-      submitForm={submitForm}
-      formFields={formFields}
-      setFormFields={setFormFields}
-      saving={saving}
-    />
+    <> {error && <p className="">{error}</p>}
+      <LoginForm
+        sign_in={"email"}
+        submitForm={submitForm}
+        formFields={formFields}
+        setFormFields={setFormFields}
+        saving={saving}
+      /></>
   );
 };
 
