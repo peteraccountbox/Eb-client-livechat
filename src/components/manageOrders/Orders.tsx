@@ -49,7 +49,17 @@ const Orders = () => {
     <>
       {!fetching && orders.length === 0 ? (
         <>
-          <div className="no__order_data">No orders found</div>
+          <div className="no__order_data_wrapper">
+            <div className="no__order_data_content">
+              <img
+                className="pad-no-content-img"
+                src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/no-chats-yet.svg"
+                alt="No Orders"
+              />
+              <h2 className="pad-content-title">No Orders</h2>
+              <p className="pad-text">There is no record of previous orders.</p>
+            </div>
+          </div>
         </>
       ) : (
         <div className="orders__collections">
