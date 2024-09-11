@@ -28,7 +28,7 @@ const TrackManage = (props: TrackManageProps) => {
     JSON.parse(getSessionStoragePrefs(CUSTOMER))
   );
   const [managementComponent, setManagementComponent] = useState<any>(
-    customerData ? "ORDERS" : "CUSTOMER_IDENTIFICATION"
+    OrderManageTypes.CUSTOMER_IDENTIFICATION
   );
   const Component = OrderManagementComponents[managementComponent];
   const getHeaderIcon = () => {

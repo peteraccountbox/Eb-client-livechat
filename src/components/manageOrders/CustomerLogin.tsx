@@ -4,8 +4,13 @@ import LoginForm from "../LoginForm";
 import { postReq } from "../../request";
 import { CUSTOMER, VALIDATE_CUSTOMER_PATH } from "../../globals";
 import { OrderManageTypes } from "../TrackManageUtils";
-import { setSessionStoragePrefs } from "../../Storage";
+import {
+  getSessionStoragePrefs,
+  removeSessionStoragePrefs,
+  setSessionStoragePrefs,
+} from "../../Storage";
 import { OrderManagementContext } from "../../appContext";
+import ContinuedSignIn from "../ContinuedSignIn";
 
 const CustomerLogin = () => {
   const orderManagementContext = useContext(OrderManagementContext);
@@ -78,16 +83,40 @@ const CustomerLogin = () => {
       });
     }
   };
+
+  const action = (check: boolean) => {
+    if (check) {
+      setManagementComponent(OrderManageTypes.ORDERS);
+      setData({
+        customerId: JSON.parse(getSessionStoragePrefs(CUSTOMER)).id,
+      });
+    } else {
+      removeSessionStoragePrefs(CUSTOMER);
+      setManagementComponent(OrderManageTypes.CUSTOMER_IDENTIFICATION);
+      setData({
+        customerId: undefined,
+      });
+    }
+  };
   const [saving, setSaving] = useState(false);
 
   return (
-    <LoginForm
-      sign_in={"email"}
-      submitForm={submitForm}
-      formFields={formFields}
-      setFormFields={setFormFields}
-      saving={saving}
-    />
+    <>
+      {getSessionStoragePrefs(CUSTOMER) ? (
+        <ContinuedSignIn
+          action={action}
+          email={JSON.parse(getSessionStoragePrefs(CUSTOMER)).email}
+        />
+      ) : (
+        <LoginForm
+          sign_in={"email"}
+          submitForm={submitForm}
+          formFields={formFields}
+          setFormFields={setFormFields}
+          saving={saving}
+        />
+      )}
+    </>
   );
 };
 

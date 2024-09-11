@@ -4,6 +4,12 @@ import React, { FC, useContext, useState } from "react";
 import { isValidTicketField } from "../../Utils";
 import { InteractiveNodeProps } from "../InteractiveFlowUtils";
 import LoginForm from "../LoginForm";
+import {
+  getSessionStoragePrefs,
+  removeSessionStoragePrefs,
+} from "../../Storage";
+import ContinuedSignIn from "../ContinuedSignIn";
+import { CUSTOMER } from "../../globals";
 export interface TicketFormComponentProps {
   openTicket: (ticketId: Number) => void;
   backToList: () => void;
@@ -53,7 +59,7 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
   ];
   const [formFields, setFormFields] = useState<any[]>([
     fields[0],
-    fields.find((field) => 'email' == field.name),
+    fields.find((field) => "email" == field.name),
   ]);
 
   const [saving, setSaving] = useState(false);
@@ -85,6 +91,22 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
     });
     setFormFields(results);
     return isValid;
+  };
+  const action = (check: boolean) => {
+    if (check) {
+      execution.nodeId = execution.node.id;
+      execution.executed = true;
+      execution.responseAction = [
+        {
+          id: execution.node.id,
+          type: "customerId",
+          data: JSON.parse(getSessionStoragePrefs(CUSTOMER)).id,
+        },
+      ];
+      executeNodeOnUserInteraction(execution);
+    } else {
+      removeSessionStoragePrefs(CUSTOMER);
+    }
   };
   return (
     <>
@@ -125,13 +147,20 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
               </li>
             </ul>
           </div>
-          <LoginForm
-            sign_in={"email"}
-            submitForm={submitForm}
-            formFields={formFields}
-            setFormFields={setFormFields}
-            saving={saving}
-          />
+          {getSessionStoragePrefs(CUSTOMER) ? (
+            <ContinuedSignIn
+              action={action}
+              email={JSON.parse(getSessionStoragePrefs(CUSTOMER)).email}
+            />
+          ) : (
+            <LoginForm
+              sign_in={"email"}
+              submitForm={submitForm}
+              formFields={formFields}
+              setFormFields={setFormFields}
+              saving={saving}
+            />
+          )}
         </>
       ) : (
         <div className="chat__messages-group">
