@@ -89,14 +89,16 @@ const Cancel = (props: any) => {
           <h2 className="orders__collections-title">Cancel fulfillment</h2>
         </header>
         <div className="orders__collections-list">
-          <div className="orders__collections-list-order-header">
+          <div className="orders__collections-list-order-header pb-2">
             <div className="orders__collections-list-order-header-title">
               Order {orderDetails.name}
             </div>
             <div className="orders__collections-list-fulfillment-header-status">
-              <span className="orders__collections-list-fulfillment-header-badge">
-                {orderDetails.fulfillment_status}
-              </span>
+              {orderDetails.fulfillment_status && (
+                <span className="orders__collections-list-fulfillment-header-badge">
+                  {orderDetails.fulfillment_status}
+                </span>
+              )}
             </div>
           </div>
 

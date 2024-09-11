@@ -35,11 +35,32 @@ const Track = () => {
             </div>
           </div>
         </div>
-        <div>Order placed</div>
-        <div>{orderDetails.created_at}</div>
-        <div>{trackOrderPolicy.unfulfilledMessage}</div>
-        <div>Confirmed</div>
-        <div>Last updated Time Ago {orderDetails.updated_at}</div>
+
+        <div className="timeline__block-container">
+          <div className="timeline__block timeline__block-right">
+            <div className="marker active">
+              {/* <i className="fa fa-check active" aria-hidden="true"></i> */}
+            </div>
+            <div className="timeline__block-content">
+              <h3>Order placed</h3>
+              <span>{orderDetails.created_at}</span>
+              {trackOrderPolicy.unfulfilledMessage && (
+                <p>{trackOrderPolicy.unfulfilledMessage}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="timeline__block timeline__block-left">
+            <div className="marker">
+              {/* <i className="fa fa-check" aria-hidden="true"></i> */}
+            </div>
+            <div className="timeline__block-content">
+              <h3>Confirmed</h3>
+              <span>Last updated Time Ago {orderDetails.updated_at}</span>
+            </div>
+          </div>
+        </div>
+
         {orderDetails.shipping_address && (
           <Address type={"Shipping"} address={orderDetails.shipping_address} />
         )}
