@@ -4797,6 +4797,10 @@
 
 .chat__logout-panel-header {
 	width: 100%;
+
+	.chat__header-user {
+		padding-left: 10px;
+	}
 }
 
 .chat__logout-panel {
@@ -4813,6 +4817,7 @@
 	background: transparent;
 	outline: 0px;
 	cursor: pointer;
+	display: none;
 
 	&:hover {
 		background: rgba(255, 255, 255, 0.1);
@@ -4829,13 +4834,241 @@
 	}
 }
 
-.orders_collections {
+.orders__collections {
+	color: $body-color;
+
 	&-title {
-		font-weight: 600;
+		font-weight: bold;
 		font-size: 18px;
 		line-height: 28px;
 		letter-spacing: -0.4px;
-		padding-bottom: 10px;
-		padding-left: 20px;
+		padding-bottom: 8px;
+		color: $body-color;
+	}
+
+	&-desc {
+		font-weight: 400;
+		font-size: 14px;
+		padding-bottom: 20px;
+		color: $color-gray-alt-3;
+	}
+
+	&-list {
+		cursor: pointer;
+		padding: 16px 0px;
+
+		&-item:not(:last-child) {
+			border-bottom: 1px dashed #d7dae0;
+			padding-bottom: 20px;
+			margin-bottom: 30px;
+		}
+
+		&-order-header {
+			display: flex;
+			-webkit-box-pack: justify;
+			justify-content: space-between;
+			-webkit-box-align: center;
+			align-items: center;
+			font-size: 14px;
+			padding-bottom: 18px;
+
+			&-title {
+				color: $body-color;
+				font-weight: bold;
+				font-size: 16px;
+				word-break: break-all;
+
+			}
+
+			&-end {
+				display: flex;
+				text-align: right;
+				font-size: 14px;
+				font-weight: 600;
+			}
+		}
+
+		&-fulfillment-header {
+			margin-bottom: 16px;
+			display: flex;
+			-webkit-box-pack: justify;
+			justify-content: space-between;
+
+			&-title {
+				color: rgba($color-black, 0.6);
+				font-size: 14px;
+				font-weight: 600;
+				line-height: 20px;
+				letter-spacing: -0.14px;
+			}
+
+			&-status {
+				display: flex;
+				flex-direction: row;
+				-webkit-box-pack: end;
+				justify-content: flex-end;
+				-webkit-box-align: center;
+				align-items: center;
+			}
+
+			&-badge {
+				display: flex;
+				padding: 2px 8px;
+				-webkit-box-pack: center;
+				justify-content: center;
+				-webkit-box-align: center;
+				align-items: center;
+				width: fit-content;
+				border-radius: 100px;
+				font-size: 11px;
+				font-weight: 600;
+				line-height: 14px;
+				letter-spacing: 0.55px;
+				text-transform: uppercase;
+				text-align: center;
+				background-color: rgba($color-gray-lgt, 0.2);
+				color: rgb(106, 106, 106);
+			}
+		}
+	}
+
+	&-action-buttons-list {
+		margin-top: 15px;
+		display: flex;
+		gap: 4px;
+
+		&-type {
+			display: flex;
+			gap: 8px;
+
+			&-btn {
+				cursor: pointer;
+				font-size: 14px;
+				font-weight: 600;
+				border: 0px;
+				border-radius: 4px;
+				user-select: none;
+				padding: 10px 16px;
+				color: $body-color;
+				background-color: rgba($body-color, 0.09);
+
+				&:hover {
+					background-color: rgba($body-color, 0.15);
+				}
+			}
+		}
+	}
+
+	&-line-items-group {
+		padding: 0;
+		margin-top: 16px;
+	}
+
+	&-line-items {
+		margin-bottom: 16px;
+		display: flex;
+		gap: 8px;
+		align-items: center;
+
+		&-avatar {
+			position: relative;
+			box-sizing: border-box;
+			width: 50px;
+			height: 50px;
+			border: 1px solid #f6f6f6;
+			border-radius: 4px;
+			overflow: hidden;
+
+			img {
+				width: 50px;
+				height: 50px;
+				object-fit: contain;
+				border-radius: 4px;
+			}
+		}
+
+		&-details {
+			min-width: 0;
+			overflow: hidden;
+		}
+
+		&-name {
+			font-size: 14px;
+			font-weight: 600;
+			color: $body-color;
+			margin-bottom: 8px;
+			overflow: hidden;
+		}
+
+		&-currency {
+			font-size: 13px;
+			line-height: 1rem;
+			color: #556885;
+		}
+	}
+
+	&-cancellation-btn {
+		display: grid;
+		margin-top: 20px;
+	}
+}
+
+.order__reportissue-header {
+	&-title {
+		font-weight: bold;
+		font-size: 18px;
+		line-height: 28px;
+		letter-spacing: -0.4px;
+		padding-bottom: 16px;
+		color: $body-color;
+	}
+}
+
+.track__orders-details {
+	padding: 0;
+}
+
+.track__orders-list-item {
+	flex-direction: row-reverse;
+	justify-content: space-between;
+}
+
+.no__order_data {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	font-size: 14px;
+}
+
+.line__dashed {
+	border: 0;
+	border-top: 1px dashed #d7dae0;
+	margin-bottom: 25px;
+	margin-top: 25px;
+}
+
+.order__address-section {
+	// border-top: 1px dashed #d7dae0;
+	// padding-top: 20px;
+	// margin-bottom: 30px;
+
+	// &:first-child {
+	// 	margin-top: 30px;
+	// }
+
+	&-title {
+		font-size: 16px;
+		font-weight: 600;
+		line-height: 24px;
+		color: $body-color;
+		margin: 0px 0px 20px;
+	}
+
+	p {
+		font-size: 14px;
+		line-height: 20px;
+		color: $body-color;
+		margin-bottom: 8px;
 	}
 }

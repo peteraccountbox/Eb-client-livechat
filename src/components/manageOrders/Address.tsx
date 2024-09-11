@@ -15,16 +15,19 @@ const Address = (props: any) => {
   } = props;
   return (
     <>
-      <header className="">
-        <h2 className="title">{type} information</h2>
-      </header>
-      <div>
-        {first_name} {last_name}
+      <hr className="line__dashed" />
+      <div className="order__address-section">
+        <header>
+          <h2 className="order__address-section-title">{type} information</h2>
+        </header>
+        <p>
+          {first_name} {last_name}
+        </p>
+        <p>
+          {address1}, {city}, {province_code}, {zip}
+        </p>
+        <p>{country}</p>
       </div>
-      <div>
-        {address1}, {city}, {province_code}, {zip}
-      </div>
-      <div>{country}</div>
     </>
   );
 };

@@ -84,70 +84,58 @@ const Cancel = (props: any) => {
 
   return (
     <>
-      <header className="">
-        <h2 className="title">Cancel fulfillment</h2>
-      </header>
-      <div
-        className=""
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "10px 0px",
-          alignItems: "center",
-        }}
-        // onClick={() => selectOrder(order)}
-      >
-        <div className="" style={{ display: "flex", alignItems: "center" }}>
-          <div>
-            <h2>Order {orderDetails.name}</h2>
-          </div>
-        </div>
-
-        <div style={{ textAlign: "end" }}>
-          <span>{orderDetails.fulfillment_status}</span>
-        </div>
-      </div>
-      {orderDetails.line_items.map((item: any) => (
-        <div
-          className=""
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            padding: "10px 0px",
-            alignItems: "center",
-          }}
-          // onClick={() => selectOrder(order)}
-        >
-          <div className="" style={{ display: "flex", alignItems: "center" }}>
-            <img
-              style={{
-                width: "4rem",
-                height: "4rem",
-                borderRadius: "5px",
-              }}
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            />
-            <div style={{ marginLeft: "10px" }}>
-              <div>{item.name}</div>
-              <div>
-                {item.price}
-                {orderDetails.currency} x{item.quantity}
-              </div>
+      <div className="orders__collections">
+        <header>
+          <h2 className="orders__collections-title">Cancel fulfillment</h2>
+        </header>
+        <div className="orders__collections-list">
+          <div className="orders__collections-list-order-header">
+            <div className="orders__collections-list-order-header-title">
+              Order {orderDetails.name}
+            </div>
+            <div className="orders__collections-list-fulfillment-header-status">
+              <span className="orders__collections-list-fulfillment-header-badge">
+                {orderDetails.fulfillment_status}
+              </span>
             </div>
           </div>
-        </div>
-      ))}
 
-      <span
-        style={{
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <button className="chat__messages-btn" onClick={() => createTicket()}>
-          Request Cancellation
-        </button>
-      </span>
+          {orderDetails.line_items.map((item: any) => (
+            <div className="orders__collections-line-items-group">
+              <div className="orders__collections-line-items">
+                <div className="orders__collections-line-items-avatar">
+                  <img
+                    style={{
+                      width: "4rem",
+                      height: "4rem",
+                      borderRadius: "5px",
+                    }}
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  />
+                </div>
+                <div className="orders__collections-line-items-details">
+                  <div className="orders__collections-line-items-name">
+                    {item.name}
+                  </div>
+                  <div className="orders__collections-line-items-currency">
+                    {orderDetails.currency}
+                    {item.price} <span>x{item.quantity}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <div className="orders__collections-cancellation-btn">
+            <button
+              className="chat__messages-btn"
+              onClick={() => createTicket()}
+            >
+              Request Cancellation
+            </button>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

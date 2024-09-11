@@ -44,95 +44,92 @@ const Orders = () => {
   }, []);
   return (
     <>
-      <div className="orders__collections">
-        <h2 className="orders__collections-title">My orders </h2>
-        <div className="help__collections-list orders__collections-list">
-          {orders.length > 0 &&
-            orders &&
-            orders.map((order: any) => {
-              const orderDetails = JSON.parse(order.meta);
+      {orders.length === 0 ? (
+        <>
+          <div className="no__order_data">No orders found</div>
+        </>
+      ) : (
+        <div className="orders__collections">
+          <header>
+            <h2 className="orders__collections-title">My orders</h2>
+          </header>
+          <div className="orders__collections-list">
+            {orders.length > 0 &&
+              orders &&
+              orders.map((order: any) => {
+                const orderDetails = JSON.parse(order.meta);
 
-              if (
-                !orderDetails.line_items ||
-                orderDetails.line_items.length == 0
-              )
-                return <></>;
+                if (
+                  !orderDetails.line_items ||
+                  orderDetails.line_items.length == 0
+                )
+                  return <></>;
 
-              return (
-                <div onClick={() => action(order)}>
+                return (
                   <div
-                    className=""
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      padding: "10px 0px",
-                      alignItems: "center",
-                    }}
+                    className="orders__collections-list-item"
                     onClick={() => action(order)}
                   >
                     <div
-                      className=""
-                      style={{ display: "flex", alignItems: "center" }}
+                      className="orders__collections-list-order-header"
+                      onClick={() => action(order)}
                     >
-                      <div>
-                        <h2>Order {orderDetails.name}</h2>
-                        <div>Shipment</div>
+                      <div className="orders__collections-list-order-header-title">
+                        Order {orderDetails.name}
+                      </div>
+
+                      <div className="orders__collections-list-order-header-end">
+                        <span>
+                          {orderDetails.currency}
+                          {orderDetails.current_total_price}
+                        </span>
                       </div>
                     </div>
-
-                    <div style={{ textAlign: "end" }}>
-                      <div>
-                        {orderDetails.currency}
-                        {orderDetails.current_total_price}
+                    <div className="orders__collections-list-fulfillment-header">
+                      <div className="orders__collections-list-fulfillment-header-title">
+                        Shipment
                       </div>
-                      <div>{orderDetails.fulfillment_status}</div>
+                      <div className="orders__collections-list-fulfillment-header-status">
+                        {orderDetails.fulfillment_status && (
+                          <span className="orders__collections-list-fulfillment-header-badge">
+                            {orderDetails.fulfillment_status}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <ManageActions />
+                    <ManageActions />
 
-                  {orderDetails.line_items &&
-                    orderDetails.line_items.map((item: any) => (
-                      <div
-                        className=""
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          padding: "10px 0px",
-                          alignItems: "center",
-                        }}
-                        // onClick={() => selectOrder(order)}
-                      >
-                        <div
-                          className=""
-                          style={{ display: "flex", alignItems: "center" }}
-                        >
-                          <img
-                            style={{
-                              width: "4rem",
-                              height: "4rem",
-                              borderRadius: "5px",
-                            }}
-                            src={`${
-                              item.product_image_url
-                                ? item.product_image_url
-                                : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                            }`}
-                          />
-                          <div style={{ marginLeft: "10px" }}>
-                            <div>{item.name}</div>
-                            <div>
-                              {item.price}
-                              {orderDetails.currency} x{item.quantity}
+                    {orderDetails.line_items &&
+                      orderDetails.line_items.map((item: any) => (
+                        <div className="orders__collections-line-items-group">
+                          <div className="orders__collections-line-items">
+                            <div className="orders__collections-line-items-avatar">
+                              <img
+                                src={`${
+                                  item.product_image_url
+                                    ? item.product_image_url
+                                    : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                }`}
+                              />
+                            </div>
+                            <div className="orders__collections-line-items-details">
+                              <div className="orders__collections-line-items-name">
+                                {item.name}
+                              </div>
+                              <div className="orders__collections-line-items-currency">
+                                {orderDetails.currency}
+                                {item.price} <span>x{item.quantity}</span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                </div>
-              );
-            })}
+                      ))}
+                  </div>
+                );
+              })}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

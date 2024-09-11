@@ -29,78 +29,50 @@ const ManageActions = () => {
   };
   return (
     <>
-      {/* {orderManagement.trackOrderPolicy.enabled && ( */}
-      <span
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        onClick={() => action(OrderManageTypes.TRACK)}
-      >
-        <button
-          className="chat__messages-btn"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            width: "auto",
-            cursor: "pointer",
-            marginTop: "20px",
-          }}
+      <div className="orders__collections-action-buttons-list">
+        {/* {orderManagement.trackOrderPolicy.enabled && ( */}
+        <span
+          className="orders__collections-action-buttons-list-type"
+          onClick={() => action(OrderManageTypes.TRACK)}
         >
-          Track
-        </button>
-      </span>
-      {/* )} */}
+          <button
+            type="button"
+            className="orders__collections-action-buttons-list-type-btn"
+          >
+            Track
+          </button>
+        </span>
+        {/* )} */}
 
-      {/* {orderManagement.cancelOrderPolicy.enabled &&
+        {/* {orderManagement.cancelOrderPolicy.enabled &&
         orderManagement.cancelOrderPolicy.eligibilities[0].value ===
           orderDetails.fulfillment_status && ( */}
-      <span
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        onClick={() => action(OrderManageTypes.CANCEL)}
-      >
-        <button
-          className="chat__messages-btn"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            width: "auto",
-            cursor: "pointer",
-            marginTop: "20px",
-          }}
+        <span
+          className="orders__collections-action-buttons-list-type"
+          onClick={() => action(OrderManageTypes.CANCEL)}
         >
-          Cancel
-        </button>
-      </span>
-      {/* )} */}
-      {/* {orderManagement.reportIssuePolicy.enabled && ( */}
-      <span
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-        onClick={() => action(OrderManageTypes.REPORT_ISSUE)}
-      >
-        <button
-          className="chat__messages-btn"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            width: "auto",
-            cursor: "pointer",
-            marginTop: "20px",
-          }}
+          <button
+            type="button"
+            className="orders__collections-action-buttons-list-type-btn"
+          >
+            Cancel
+          </button>
+        </span>
+        {/* )} */}
+        {/* {orderManagement.reportIssuePolicy.enabled && ( */}
+        <span
+          className="orders__collections-action-buttons-list-type"
+          onClick={() => action(OrderManageTypes.REPORT_ISSUE)}
         >
-          Report issue
-        </button>
-      </span>
-      {/* )} */}
+          <button
+            type="button"
+            className="orders__collections-action-buttons-list-type-btn"
+          >
+            Report issue
+          </button>
+        </span>
+        {/* )} */}
+      </div>
     </>
   );
 };

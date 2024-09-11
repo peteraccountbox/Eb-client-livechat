@@ -44,8 +44,10 @@ const ReportIssue = () => {
     <>
       {scenario ? (
         <>
-          <header className="">
-            <h2 className="title">{scenario.title}</h2>
+          <header className="order__reportissue-header">
+            <h2 className="order__reportissue-header-title">
+              {scenario.title}
+            </h2>
           </header>
 
           <div className="home__feeds-media-content">
