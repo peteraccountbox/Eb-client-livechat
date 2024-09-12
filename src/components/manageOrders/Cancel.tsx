@@ -10,6 +10,7 @@ import { renderToString } from "react-dom/server";
 import OrderDetails from "./OrderDetails";
 import { CHANNEL_ID, CUSTOMER, VISITOR_UUID } from "../../globals";
 import { getSessionStoragePrefs } from "../../Storage";
+import OrderComponent from "./OrderComponent";
 
 const Cancel = (props: any) => {
   const orderManagementContext = useContext(OrderManagementContext);
@@ -102,7 +103,7 @@ const Cancel = (props: any) => {
             </div>
           </div>
 
-          {orderDetails.line_items.map((item: any) => (
+          {/* {orderDetails.line_items.map((item: any) => (
             <div className="orders__collections-line-items-group">
               <div className="orders__collections-line-items">
                 <div className="orders__collections-line-items-avatar">
@@ -126,7 +127,8 @@ const Cancel = (props: any) => {
                 </div>
               </div>
             </div>
-          ))}
+          ))} */}
+          <OrderComponent order={order} headers={false} />
 
           <div className="orders__collections-cancellation-btn">
             <button

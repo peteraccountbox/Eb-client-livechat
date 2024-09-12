@@ -1,27 +1,49 @@
 import React from "react";
 
 const OrderDetails = (props: any) => {
-  const { order } = props;
+  const { order, returnItems } = props;
   const orderDetails = JSON.parse(order.meta);
-  const { address1, city, province_code, zip } = orderDetails.shipping_address;
-
+  const { shipping_address } = orderDetails;
+  var total = 0;
+  const date = new Date(orderDetails.created_at);
   return (
     <>
       <br />
       Order number: {orderDetails.name}
       <br />
-      Fulfillment: {orderDetails.name}.0
-      <br />
-      Item names:
-      {orderDetails.line_items.map((item: any, index: number) =>
-        index > 0 ? ", " : "" + item.name
+      {!returnItems && (
+        <>
+          Fulfillment: {orderDetails.name}.0 <br />
+        </>
       )}
+      {returnItems ? "Items requested for return" : "Item names"}:
+      {orderDetails.line_items.map((item: any, index: number) => {
+        const quantity = returnItems.find(
+          (rItem: any) => rItem.id == item.id && rItem.isSelect
+        )?.quantity;
+        total += quantity ? quantity * item.price : 0;
+        return quantity
+          ? (index > 0 ? ", " : "") + (quantity + "x " + item.name)
+          : "";
+      })}
       <br />
-      Tracking Url: {orderDetails.fulfillments[0]?.tracking_url}
+      {returnItems
+        ? "Total: " + orderDetails.currency + total
+        : "Tracking Url: " + orderDetails.fulfillments[0]?.tracking_url}
       <br />
-      Order Created: {orderDetails.created_at}
+      Order Created:{" "}
+      {`${date.toLocaleString()} ${date.getHours() >= 12 ? " PM" : " AM"}`}
       <br />
-      Shipping address: {address1}, {city}, {province_code}, {zip}
+      Shipping address:{" "}
+      {shipping_address
+        ? shipping_address.address1 +
+          ", " +
+          shipping_address.city +
+          ", " +
+          shipping_address.province_code +
+          ", " +
+          shipping_address.zip
+        : "/"}
     </>
   );
 };

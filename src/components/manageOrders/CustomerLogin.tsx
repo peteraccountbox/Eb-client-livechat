@@ -18,6 +18,10 @@ const CustomerLogin = () => {
 
   const [error, setError] = useState<string>("");
 
+  const customer = getSessionStoragePrefs(CUSTOMER)
+    ? JSON.parse(getSessionStoragePrefs(CUSTOMER))
+    : undefined;
+
   const fields = [
     {
       name: "sign_in",
@@ -107,7 +111,7 @@ const CustomerLogin = () => {
     if (check) {
       setManagementComponent(OrderManageTypes.ORDERS);
       setData({
-        customerId: JSON.parse(getSessionStoragePrefs(CUSTOMER)).id,
+        customerId: customer.id,
       });
     } else {
       removeSessionStoragePrefs(CUSTOMER);
@@ -121,11 +125,8 @@ const CustomerLogin = () => {
 
   return (
     <>
-      {getSessionStoragePrefs(CUSTOMER) ? (
-        <ContinuedSignIn
-          action={action}
-          email={JSON.parse(getSessionStoragePrefs(CUSTOMER)).email}
-        />
+      {customer ? (
+        <ContinuedSignIn action={action} email={customer.email} />
       ) : (
         <>
           {error && <p className="">{error}</p>}

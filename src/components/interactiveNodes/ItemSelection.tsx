@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { InteractiveNodeProps } from "../InteractiveFlowUtils";
 import { getReq } from "../../request";
-import { ORDER_FETCH_URL } from "../../globals";
+import { OPENED_FLOW, ORDER_FETCH_URL } from "../../globals";
 import { AppContext } from "../../appContext";
+import { getSessionStoragePrefs } from "../../Storage";
 const people = [1, 2, 3, 4, 5];
 
 const ItemSelection: React.FC<InteractiveNodeProps> = ({
@@ -11,12 +12,15 @@ const ItemSelection: React.FC<InteractiveNodeProps> = ({
   executionMeta,
 }: InteractiveNodeProps) => {
   const parentContext = useContext(AppContext);
-  const { chatPrefs } = parentContext;
+  const { chatFlows } = parentContext;
+  const chatFlow = chatFlows.find(
+    (flow) => flow.id === getSessionStoragePrefs(OPENED_FLOW)
+  );
   useEffect(() => {
     if (executionMeta && !executionMeta.isCompleted)
       getReq(ORDER_FETCH_URL, {
         customerId: executionMeta.info.customerId,
-        storeId: chatPrefs.meta.storeId,
+        storeId: chatFlow?.storeId,
         orderId: executionMeta.info.orderId,
       }).then((response) => {
         setItems(

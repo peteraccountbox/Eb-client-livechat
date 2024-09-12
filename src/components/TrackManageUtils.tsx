@@ -4,6 +4,7 @@ import Order from "./manageOrders/Order";
 import Orders from "./manageOrders/Orders";
 import RaisedIssue from "./manageOrders/RaisedIssue";
 import ReportIssue from "./manageOrders/ReportIssue";
+import Return from "./manageOrders/Return";
 import Track from "./manageOrders/Track";
 
 export enum OrderManageTypes {
@@ -14,6 +15,7 @@ export enum OrderManageTypes {
   REPORT_ISSUE = "REPORT_ISSUE",
   CUSTOMER_IDENTIFICATION = "CUSTOMER_IDENTIFICATION",
   RAISED_ISSUE = "RAISED_ISSUE",
+  RETURN = "RETURN",
 }
 
 export const OrderManagementComponents: {
@@ -26,4 +28,5 @@ export const OrderManagementComponents: {
   [OrderManageTypes[OrderManageTypes.REPORT_ISSUE]]: ReportIssue,
   [OrderManageTypes[OrderManageTypes.CUSTOMER_IDENTIFICATION]]: CustomerLogin,
   [OrderManageTypes[OrderManageTypes.RAISED_ISSUE]]: RaisedIssue,
+  [OrderManageTypes[OrderManageTypes.RETURN]]: Return,
 };
