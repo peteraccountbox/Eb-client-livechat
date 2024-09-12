@@ -129,7 +129,9 @@ const CustomerLogin = () => {
         <ContinuedSignIn action={action} email={customer.email} />
       ) : (
         <>
-          {error && <p className="">{error}</p>}
+          {error && (
+            <p className="error__field_text login__error__field">{error}</p>
+          )}
           <LoginForm
             sign_in={"email"}
             submitForm={submitForm}
