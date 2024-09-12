@@ -59,38 +59,36 @@ const ManageActions = (props: any) => {
   return (
     <>
       <div className="orders__collections-action-buttons-list">
-        {/* {orderManagement.trackOrderPolicy.enabled && ( */}
-        <span
-          className="orders__collections-action-buttons-list-type"
-          onClick={() => action(OrderManageTypes.TRACK)}
-        >
-          <button
-            type="button"
-            className="orders__collections-action-buttons-list-type-btn"
+        {trackOrderPolicy.enabled && (
+          <span
+            className="orders__collections-action-buttons-list-type"
+            onClick={() => action(OrderManageTypes.TRACK)}
           >
-            Track
-          </button>
-        </span>
-        {/* )} */}
+            <button
+              type="button"
+              className="orders__collections-action-buttons-list-type-btn"
+            >
+              Track
+            </button>
+          </span>
+        )}
 
-        {/* {orderManagement.cancelOrderPolicy.enabled &&
-        orderManagement.cancelOrderPolicy.eligibilities[0].value ===
-          orderDetails.fulfillment_status && ( */}
-        <span
-          className="orders__collections-action-buttons-list-type"
-          onClick={() => action(OrderManageTypes.CANCEL)}
-        >
-          <button
-            type="button"
-            className="orders__collections-action-buttons-list-type-btn"
+        {cancelOrderPolicy.enabled && (
+          <span
+            className="orders__collections-action-buttons-list-type"
+            onClick={() => action(OrderManageTypes.CANCEL)}
           >
-            Cancel
-          </button>
-        </span>
-        {/* )} */}
+            <button
+              type="button"
+              className="orders__collections-action-buttons-list-type-btn"
+            >
+              Cancel
+            </button>
+          </span>
+        )}
         {order &&
           fulfillment &&
-          fulfillment.status !== "cancelled" &&
+          fulfillment.status == "success" &&
           isValidReturn() && (
             <span
               className="orders__collections-action-buttons-list-type"
@@ -104,19 +102,19 @@ const ManageActions = (props: any) => {
               </button>
             </span>
           )}
-        {/* {orderManagement.reportIssuePolicy.enabled && ( */}
-        <span
-          className="orders__collections-action-buttons-list-type"
-          onClick={() => action(OrderManageTypes.REPORT_ISSUE)}
-        >
-          <button
-            type="button"
-            className="orders__collections-action-buttons-list-type-btn"
+        {reportIssuePolicy.enabled && (
+          <span
+            className="orders__collections-action-buttons-list-type"
+            onClick={() => action(OrderManageTypes.REPORT_ISSUE)}
           >
-            Report issue
-          </button>
-        </span>
-        {/* )} */}
+            <button
+              type="button"
+              className="orders__collections-action-buttons-list-type-btn"
+            >
+              Report issue
+            </button>
+          </span>
+        )}
       </div>
     </>
   );
