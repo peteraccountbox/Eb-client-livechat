@@ -4,7 +4,9 @@ import { AppContext, OrderManagementContext } from "../../appContext";
 
 const Track = () => {
   const orderManagementContext = useContext(OrderManagementContext);
-  const { data: order } = orderManagementContext;
+  const {
+    data: { order },
+  } = orderManagementContext;
   const orderDetails = JSON.parse(order.meta);
   const parentContext = useContext(AppContext);
 

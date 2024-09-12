@@ -14,7 +14,9 @@ import OrderComponent from "./OrderComponent";
 
 const Cancel = (props: any) => {
   const orderManagementContext = useContext(OrderManagementContext);
-  const { data: order } = orderManagementContext;
+  const {
+    data: { order, fulfillment },
+  } = orderManagementContext;
   const orderDetails = JSON.parse(order.meta);
   const parentContext = useContext(AppContext);
   const { startNewChat } = props;
@@ -35,7 +37,9 @@ const Cancel = (props: any) => {
           I'd like to cancel the following fulfillment:
           <br />
           ---------------------------------------
-          {orderDetails && <OrderDetails order={order} />}
+          {orderDetails && (
+            <OrderDetails order={order} fulfillment={fulfillment} />
+          )}
         </>
       ),
       bodyText: renderToString(
@@ -43,7 +47,9 @@ const Cancel = (props: any) => {
           I'd like to cancel the following fulfillment:
           <br />
           ---------------------------------------
-          {orderDetails && <OrderDetails order={order} />}
+          {orderDetails && (
+            <OrderDetails order={order} fulfillment={fulfillment} />
+          )}
         </>
       ),
       format: MessageFormatType.TEXT,

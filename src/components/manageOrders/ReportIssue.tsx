@@ -11,7 +11,7 @@ const ReportIssue = () => {
     setPrevData,
     managementComponent,
     setManagementComponent,
-    data: order,
+    data: { order, fulfillment },
     setData,
   } = orderManagementContext;
   const parentContext = useContext(AppContext);
@@ -34,7 +34,7 @@ const ReportIssue = () => {
     setPrevComponent(managementComponent);
     setPrevData(order);
     setManagementComponent(OrderManageTypes.RAISED_ISSUE);
-    setData({ order: order, reason: reason });
+    setData({ order: order, reason: reason, fulfillment });
   };
   useEffect(() => {
     setPrevComponent(OrderManageTypes.ORDER);

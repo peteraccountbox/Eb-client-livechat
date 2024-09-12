@@ -26,7 +26,7 @@ const Order = () => {
             Order {orderDetails.name}
           </h2>
           <div className="orders__collections-desc">
-            {orderDetails.created_at}
+            {new Date(orderDetails.created_at).toLocaleDateString()}
           </div>
         </header>
         <div className="orders__collections-list-order-header">

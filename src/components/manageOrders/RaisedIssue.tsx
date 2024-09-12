@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AppContext, OrderManagementContext } from "../../appContext";
 import OrderDetails from "./OrderDetails";
 import { CHANNEL_ID, VISITOR_UUID } from "../../globals";
@@ -9,6 +9,7 @@ import {
   MessageFormatType,
 } from "../../Models";
 import { renderToString } from "react-dom/server";
+import { OrderManageTypes } from "../TrackManageUtils";
 
 const RaisedIssue = (props: any) => {
   const orderManagementContext = useContext(OrderManagementContext);
@@ -20,7 +21,7 @@ const RaisedIssue = (props: any) => {
     setPrevData,
     managementComponent,
     setManagementComponent,
-    data: { order, reason },
+    data: { order, reason, fulfillment },
     setData,
     customer,
   } = orderManagementContext;
@@ -33,7 +34,9 @@ const RaisedIssue = (props: any) => {
           {reason.title}
           <br />
           ---------------------------------------
-          {orderDetails && <OrderDetails order={order} />}
+          {orderDetails && (
+            <OrderDetails order={order} fulfillment={fulfillment} />
+          )}
         </>
       ),
       bodyText: renderToString(
@@ -41,7 +44,9 @@ const RaisedIssue = (props: any) => {
           {reason.title}
           <br />
           ---------------------------------------
-          {orderDetails && <OrderDetails order={order} />}
+          {orderDetails && (
+            <OrderDetails order={order} fulfillment={fulfillment} />
+          )}
         </>
       ),
       format: MessageFormatType.TEXT,
@@ -82,6 +87,11 @@ const RaisedIssue = (props: any) => {
     createSessionData.force = true;
     startNewChat();
   };
+
+  useEffect(() => {
+    setPrevComponent(OrderManageTypes.REPORT_ISSUE);
+    setPrevData({ order, reason, fulfillment });
+  }, []);
   return (
     <>
       <div className="chat__messages-group--me">
@@ -94,7 +104,7 @@ const RaisedIssue = (props: any) => {
                   <br />
                   ---------------------------------------
                   {orderDetails.shipping_address && (
-                    <OrderDetails order={order} />
+                    <OrderDetails order={order} fulfillment={fulfillment} />
                   )}
                 </span>
               </div>

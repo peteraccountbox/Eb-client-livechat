@@ -13,7 +13,9 @@ import { getSessionStoragePrefs } from "../../Storage";
 
 const Return = (props: any) => {
   const orderManagementContext = useContext(OrderManagementContext);
-  const { data: order } = orderManagementContext;
+  const {
+    data: { order, fulfillment },
+  } = orderManagementContext;
   const orderDetails = JSON.parse(order.meta);
   const parentContext = useContext(AppContext);
   const { startNewChat } = props;
@@ -58,7 +60,7 @@ const Return = (props: any) => {
         break;
     }
   };
-  const initialState = orderDetails.line_items.reduce((acc: [], item: any) => {
+  const initialState = fulfillment.line_items.reduce((acc: [], item: any) => {
     return [...acc, { quantity: item.quantity, isSelect: false, id: item.id }];
   }, []);
   const [returnItems, dispatch] = useReducer(reducer, initialState);
@@ -94,7 +96,11 @@ const Return = (props: any) => {
           <br />
           ---------------------------------------
           {orderDetails && (
-            <OrderDetails order={order} returnItems={returnItems} />
+            <OrderDetails
+              order={order}
+              returnItems={returnItems}
+              fulfillment={fulfillment}
+            />
           )}
         </>
       ),
@@ -104,7 +110,11 @@ const Return = (props: any) => {
           <br />
           ---------------------------------------
           {orderDetails && (
-            <OrderDetails order={order} returnItems={returnItems} />
+            <OrderDetails
+              order={order}
+              returnItems={returnItems}
+              fulfillment={fulfillment}
+            />
           )}
         </>
       ),
@@ -173,7 +183,7 @@ const Return = (props: any) => {
             checked={selectAll}
             onChange={(e) => handleSelectAll(e)}
           />
-          {orderDetails.line_items.map((item: any) => {
+          {fulfillment.line_items.map((item: any) => {
             const quantity = returnItems?.find(
               (rItem: any) => rItem.id == item.id
             ).quantity;

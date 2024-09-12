@@ -54,7 +54,7 @@ const ManageActions = (props: any) => {
         customerId: customer?.id,
       });
     setManagementComponent(type);
-    setData(order);
+    setData({ order, fulfillment });
   };
   return (
     <>
@@ -89,7 +89,8 @@ const ManageActions = (props: any) => {
         </span>
         {/* )} */}
         {order &&
-          orderDetails.fulfillment_status == "fulfilled" &&
+          fulfillment &&
+          fulfillment.status !== "cancelled" &&
           isValidReturn() && (
             <span
               className="orders__collections-action-buttons-list-type"
