@@ -4,9 +4,17 @@ import { getSessionStoragePrefs, setSessionStoragePrefs } from "./Storage";
 export const TENANT_ID: string = (window as any).TENANT_ID;
 export const CHANNEL_ID: string = (window as any).CHANNEL_ID;
 
+export function getReachoModule() {
+  let prefs;
+  try {
+    prefs = (window as any).parent.reachoModulesObject;
+  } catch (e) {}
+  return prefs;
+}
+
 let prefs;
 try {
-  prefs = (window as any).parent.reachoModulesObject.ChatPrefs[CHANNEL_ID];
+  prefs = getReachoModule().ChatPrefs[CHANNEL_ID];
 } catch (e) {}
 export const CHANNEL_PREFS: ChatPrefsPayloadType | undefined = prefs;
 
@@ -15,7 +23,10 @@ export const VISITOR_UUID: string = (window as any).reachoJSClient
   : (window as any).VISITOR_UUID;
 
 export const SERVER_REQ_HOST_PATH: string =
-  (window as any).SERVER_HOST_DOMAIN_URL || "http://localhost:8091/";
+  (window as any).SERVER_HOST_DOMAIN_URL ||
+  (getReachoModule() && getReachoModule().mode
+    ? "https://" + getReachoModule().mode + ".reacho.com/"
+    : "https://live.reacho.com/");
 
 export const PARENT_WINDOW = (window as any).parent;
 export const PARENT_WINDOW_LIVECHAT_REF = PARENT_WINDOW

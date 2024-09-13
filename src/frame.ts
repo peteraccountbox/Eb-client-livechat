@@ -36,7 +36,11 @@ export default function loadChat(container: Element, prefs: ChatPrefsPayloadType
     container.appendChild(iframeEle);
 
     const reachoModulesObject = (window as any).reachoModulesObject || {};
+<<<<<<< HEAD
     let SERVER_HOST_DOMAIN_URL = "http://localhost:8091/";
+=======
+    let SERVER_HOST_DOMAIN_URL = "https://" + ((reachoModulesObject && reachoModulesObject.mode) ? reachoModulesObject.mode : "live") + ".reacho.com/";
+>>>>>>> 591a6701ea33c080873aa227a17162c8eb60ebc3
     if (reachoModulesObject.mode && reachoModulesObject.mode == "local")
         SERVER_HOST_DOMAIN_URL = "http://localhost:8091/"
 
