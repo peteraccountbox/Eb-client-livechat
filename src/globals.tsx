@@ -7,8 +7,7 @@ export const CHANNEL_ID: string = (window as any).CHANNEL_ID;
 let prefs;
 try {
   prefs = (window as any).parent.reachoModulesObject.ChatPrefs[CHANNEL_ID];
-} catch (e) {
-}
+} catch (e) {}
 export const CHANNEL_PREFS: ChatPrefsPayloadType | undefined = prefs;
 
 export const VISITOR_UUID: string = (window as any).reachoJSClient
@@ -16,7 +15,7 @@ export const VISITOR_UUID: string = (window as any).reachoJSClient
   : (window as any).VISITOR_UUID;
 
 export const SERVER_REQ_HOST_PATH: string =
-  (window as any).SERVER_HOST_DOMAIN_URL || "https://sandbox.reacho.com/";
+  (window as any).SERVER_HOST_DOMAIN_URL || "http://localhost:8091/";
 
 export const PARENT_WINDOW = (window as any).parent;
 export const PARENT_WINDOW_LIVECHAT_REF = PARENT_WINDOW
@@ -100,7 +99,7 @@ export const CHANNEL_PREFS_FETCH_URL_PATH =
 // REQUEST_PREFIX_PATH + "/channel/chat/" + CHANNEL_ID;
 
 export const USER_PREFS_FETCH_URL_PATH =
-  "https://files.reacho.com/app/663b158cc77b6d29d332c88d/user/users-prefs.json";
+  "https://files.reacho.com/app/" + TENANT_ID + "/user/users-prefs.json";
 
 export const WEB_RULES_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "widget/web-rules";
