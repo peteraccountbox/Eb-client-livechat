@@ -26,7 +26,8 @@ const ReportIssue = () => {
     return shopifyValidateRules(
       order,
       scenario.predicate,
-      PredicateJoinCondition.OR
+      PredicateJoinCondition.OR,
+      {}
     );
   });
 

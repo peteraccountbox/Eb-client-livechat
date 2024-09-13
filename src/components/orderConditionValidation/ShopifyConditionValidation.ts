@@ -10,9 +10,10 @@ export type ShopifyOrderModel = {
     financial_status: string;
     shipment_status: string;
     order_status: string;
+    status: string;
 }
 
-export default function shopifyValidateRules(shopifyOrder: ShopifyOrderModel, predicates: PredicateType[], joinCondition: PredicateJoinCondition) {
+export default function shopifyValidateRules(shopifyOrder: ShopifyOrderModel, predicates: PredicateType[], joinCondition: PredicateJoinCondition, fulfillment: any) {
 
     if (!predicates || predicates.length == 0)
         return true;
@@ -29,15 +30,19 @@ export default function shopifyValidateRules(shopifyOrder: ShopifyOrderModel, pr
             }
 
             if (predicate.attribute == "fulfillment_status") {
-                value = shopifyOrder.fulfillment_status
+                value = fulfillment?.status
+            }
+
+            if(predicate.attribute == "order_status") {
+                value = getShopifyOrderStatus(shopifyOrder, predicate.value);
             }
 
             if (predicate.attribute == "shipment_status") {
-                value = shopifyOrder.fulfillment_status
+                value = fulfillment?.shipment_status
             }
 
             if (predicate.attribute == "order_status") {
-                value = shopifyOrder.order_status
+                value = getOrderStatus(fulfillment, predicate.value);
             }
 
 
@@ -51,3 +56,33 @@ export default function shopifyValidateRules(shopifyOrder: ShopifyOrderModel, pr
 
 }
 
+const getOrderStatus = (fulfillment: any, rhs: string) => {
+
+
+    switch (rhs) {
+        case "processing_fulfillment":
+          return fulfillment && fulfillment.status == "open" ? "processing_fulfillment" : "";
+          break;
+        case "unfulfilled":
+          return !fulfillment || (fulfillment && fulfillment.status == "pending") ? "unfulfilled" : "" ;
+          break;
+        case "pending_delivery":
+          return fulfillment && fulfillment.status == "success" ?  "pending_delivery": "";
+        default:
+          break;
+      }
+
+      return "";
+}
+
+const getShopifyOrderStatus = (shopifyOrder: ShopifyOrderModel, rhs: string) => {
+    switch (rhs) {
+        case "cancelled":
+            return shopifyOrder.cancelled_at ? "cancelled" : ""
+            break;
+    
+        default:
+            break;
+    }
+    return "";
+}

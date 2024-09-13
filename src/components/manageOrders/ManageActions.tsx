@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import { AppContext, OrderManagementContext } from "../../appContext";
 import { OrderManageTypes } from "../TrackManageUtils";
+import shopifyValidateRules from "../orderConditionValidation/ShopifyConditionValidation";
+import { PredicateJoinCondition } from "../orderConditionValidation/ConditionValidation";
 
 const ManageActions = (props: any) => {
   const orderManagementContext = useContext(OrderManagementContext);
@@ -46,6 +48,31 @@ const ManageActions = (props: any) => {
     }
   };
 
+  // const isValidCancel = () => {
+
+  //   // Iterate
+
+  //   switch (cancelOrderPolicy.eligibilities[0].value) {
+  //     case "processing_fulfillment":
+  //       return fulfillment ? fulfillment.status == "open" : false;
+  //       break;
+  //     case "unfulfilled":
+  //       return fulfillment ? fulfillment.status == "pending" : true;
+  //       break;
+  //     case "pending_delivery":
+  //       return fulfillment ? fulfillment.status == "success" : false;
+  //     default:
+  //       break;
+  //   }
+  // };
+
+  const isValidCancel = shopifyValidateRules(
+    order,
+    cancelOrderPolicy.eligibilities,
+    PredicateJoinCondition.OR,
+    fulfillment
+  );
+
   const action = (type: string) => {
     setPrevComponent(managementComponent);
     if (managementComponent === OrderManageTypes.ORDER) setPrevData(order);
@@ -73,7 +100,7 @@ const ManageActions = (props: any) => {
           </span>
         )}
 
-        {cancelOrderPolicy.enabled && (
+        {cancelOrderPolicy.enabled && isValidCancel && (
           <span
             className="orders__collections-action-buttons-list-type"
             onClick={() => action(OrderManageTypes.CANCEL)}
