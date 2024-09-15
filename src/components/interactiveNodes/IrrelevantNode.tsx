@@ -1,8 +1,11 @@
 import React from "react";
 import { removeSessionStoragePrefs } from "../../Storage";
 import { OPENED_CHAT } from "../../globals";
-
-const NoCustomer = (props: any) => {
+export interface NonRelevantNodeProps {
+  backToHome(): void;
+  content: string;
+}
+const IrrelevantNode = (props: NonRelevantNodeProps) => {
   const back = () => {
     removeSessionStoragePrefs(OPENED_CHAT);
     removeSessionStoragePrefs("flow_execution_id");
@@ -14,9 +17,7 @@ const NoCustomer = (props: any) => {
         <ul className="chat__messages-list">
           <div className="chat__messages-list-item">
             <div className="chat__messages-bubble chat__message-type-TEXT">
-              <span className="actual">
-                No customer available to fetch orders and items for
-              </span>
+              <span className="actual">{props.content}</span>
             </div>
           </div>
         </ul>
@@ -32,4 +33,4 @@ const NoCustomer = (props: any) => {
   );
 };
 
-export default NoCustomer;
+export default IrrelevantNode;

@@ -4,7 +4,6 @@ import { getReq } from "../../request";
 import { OPENED_FLOW, ORDER_FETCH_URL } from "../../globals";
 import { AppContext } from "../../appContext";
 import { getSessionStoragePrefs } from "../../Storage";
-const people = [1, 2, 3, 4, 5];
 
 const ItemSelection: React.FC<InteractiveNodeProps> = ({
   execution,

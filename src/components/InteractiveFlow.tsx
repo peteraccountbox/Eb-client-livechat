@@ -23,7 +23,7 @@ import {
   VISITOR_UUID,
 } from "../globals";
 import { getReq, postReq } from "../request";
-import NoCustomer from "./interactiveNodes/NoCustomer";
+import IrrelevantNode from "./interactiveNodes/IrrelevantNode";
 export interface InteractiveFlowProps {
   showConversation(): void;
   backToHome: () => void;
@@ -268,7 +268,28 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
                       executionMeta.info &&
                       !executionMeta.info.customerId
                     ) {
-                      return <NoCustomer backToHome={props.backToHome} />;
+                      return (
+                        <IrrelevantNode
+                          backToHome={props.backToHome}
+                          content={
+                            "No customer available to fetch orders and items for"
+                          }
+                        />
+                      );
+                    }
+                    if (
+                      exe.node.data.nodeType ==
+                        InteractiveNodeTypes.ITEM_SELECTION &&
+                      executionMeta &&
+                      executionMeta.info &&
+                      !executionMeta.info.orderId
+                    ) {
+                      return (
+                        <IrrelevantNode
+                          backToHome={props.backToHome}
+                          content={"No order available to select items from"}
+                        />
+                      );
                     }
                     return (
                       <>
