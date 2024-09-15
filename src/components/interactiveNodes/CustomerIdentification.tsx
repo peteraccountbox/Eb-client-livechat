@@ -62,6 +62,12 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
     fields.find((field) => "email" == field.name),
   ]);
 
+  const [customer, setCustomer] = useState(
+    getSessionStoragePrefs(CUSTOMER)
+      ? JSON.parse(getSessionStoragePrefs(CUSTOMER))
+      : undefined
+  );
+
   const [saving, setSaving] = useState(false);
 
   const [showSignIn, setShowSignIn] = useState(true);
@@ -106,6 +112,7 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
       executeNodeOnUserInteraction(execution);
     } else {
       removeSessionStoragePrefs(CUSTOMER);
+      setCustomer(undefined);
     }
   };
   return (
@@ -147,11 +154,8 @@ const CustomerIdentification: React.FC<InteractiveNodeProps> = ({
               </li>
             </ul>
           </div>
-          {getSessionStoragePrefs(CUSTOMER) ? (
-            <ContinuedSignIn
-              action={action}
-              email={JSON.parse(getSessionStoragePrefs(CUSTOMER)).email}
-            />
+          {customer ? (
+            <ContinuedSignIn action={action} email={customer.email} />
           ) : (
             <LoginForm
               sign_in={"email"}

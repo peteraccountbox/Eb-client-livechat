@@ -1,5 +1,11 @@
 import axios, { AxiosResponse } from "axios";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { AppContext } from "./appContext";
 import ChatBubble from "./components/ChatBubble";
 import {
@@ -87,9 +93,12 @@ const App: React.FunctionComponent = () => {
   const [agentsPrefs, setAgentsPrefs] = useState<AgentPrefsPayloadType[]>([]);
 
   const [sessions, setSessions] = useState<ChatSessionPaylodObj[]>([]);
+  const sessionsRef = useRef(sessions);
   const [chatFlows, setChatFlows] = useState<ChatFlowsPayloadObj[]>([]);
   const [createSessionData, setCreateSessionData] = useState<any>({});
-
+  useEffect(() => {
+    sessionsRef.current = sessions;
+  }, [sessions]);
   const getWidgetActiveTabs = () => {
     if (!chatPrefs) return [];
 
@@ -99,7 +108,7 @@ const App: React.FunctionComponent = () => {
       if (!FooterTabs.find((footer) => footer.tab == activeTabname)) {
         activeTabname = FooterTabs[0].tab;
       }
-    } catch (error) { }
+    } catch (error) {}
 
     return activeTabname;
   };
@@ -216,22 +225,24 @@ const App: React.FunctionComponent = () => {
     // }
 
     // Subscribe to event bus
-    eventBus.on("reacho-socket-event", function () { });
+    eventBus.on("reacho-socket-event", function () {});
 
     eventBus.on("new_ticket_message", function (message) {
-      let messageSession: any = sessions.find(function (session) {
-        return session.id == message.ticket.id;
-      });
+      let messageSession: ChatSessionPaylodObj | undefined =
+        sessionsRef.current.find(function (session) {
+          return session.id == message.ticket.id;
+        });
 
       let chatId = getSessionStoragePrefs(OPENED_CHAT);
-      messageSession.lastMessage = message.message.message.bodyText;
-      messageSession.lastAgentMessageAt = message.message.createdTime;
-      messageSession.lastMessageAt = message.message.createdTime;
-      pushMessage(message.message, messageSession);
+      if (messageSession) {
+        messageSession.lastMessage = message.message.message.bodyText;
+        messageSession.lastAgentMessageAt = message.message.createdTime;
+        messageSession.lastMessageAt = message.message.createdTime;
+        pushMessage(message.message, messageSession);
+      }
       if (chatId && chatId == message.ticket.id) {
         getReq(UPDATE_READ_URL_PATH + "/" + message.ticket.id, {}).then(
           (response) => {
-            console.log("asjhks", response);
             eventBus.emit("on-ticket-updated", messageSession);
           }
         );
@@ -240,7 +251,7 @@ const App: React.FunctionComponent = () => {
           messageSession.customerUnreadMessagesCount += 1;
         }
       }
-      setSessions([...sessions]);
+      setSessions([...sessionsRef.current]);
     });
 
     return () => {
@@ -504,7 +515,7 @@ const App: React.FunctionComponent = () => {
               let proactiveMsg = "";
               try {
                 proactiveMsg = JSON.parse(rule.customData).message;
-              } catch (error) { }
+              } catch (error) {}
               // console.log("proactiveMsg", proactiveMsg);
 
               // if (proactiveMsg)
@@ -743,8 +754,8 @@ const App: React.FunctionComponent = () => {
       "--themeColor": offlineColor
         ? "#111827"
         : mainColor
-          ? chatPrefs.meta.decoration.mainColor
-          : "blue",
+        ? chatPrefs.meta.decoration.mainColor
+        : "blue",
       // "--themeColor2":
       //   chatPrefs && chatPrefs.meta.decoration.mainColor
       //     ? chatPrefs.meta.decoration.mainColor
@@ -776,8 +787,9 @@ const App: React.FunctionComponent = () => {
       >
         <div
           id="App"
-          className={`engagebay-viewport ${!isOpened && hideChatBubble ? "hide" : ""
-            } `}
+          className={`engagebay-viewport ${
+            !isOpened && hideChatBubble ? "hide" : ""
+          } `}
           style={appThemeStyle}
         >
           {isVisible ? (
@@ -799,21 +811,24 @@ const App: React.FunctionComponent = () => {
               ) : (
                 <div
                   className={`chat ${isOpened ? "is-open" : ""} 
-              ${chatPrefs.meta.decoration.widgetAlignment == "bottom left"
-                      ? "left"
-                      : ""
-                    } 
-              ${chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
-                      ? "right"
-                      : ""
-                    }`}
+              ${
+                chatPrefs.meta.decoration.widgetAlignment == "bottom left"
+                  ? "left"
+                  : ""
+              } 
+              ${
+                chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
+                  ? "right"
+                  : ""
+              }`}
                   data-target="widget"
                 >
                   <div
                     className="chat__main"
                     style={{
-                      minWidth: `${promtWidth == PromtWidth.Large ? "700px" : "auto"
-                        }`,
+                      minWidth: `${
+                        promtWidth == PromtWidth.Large ? "700px" : "auto"
+                      }`,
                     }}
                   >
                     {(() => {

@@ -137,14 +137,20 @@ export const pushMessage = (
 
   // Push message
   let matchFound = false;
-  session.messageList.forEach(function (eachMessage, index) {
-    if (eachMessage.id == event.id && session) {
-      matchFound = true;
-      session.messageList[index] = event;
-    }
-  });
+  session.messageList &&
+    session.messageList.length &&
+    session.messageList.forEach(function (eachMessage, index) {
+      if (eachMessage.id == event.id && session) {
+        matchFound = true;
+        session.messageList[index] = event;
+      }
+    });
 
-  if (!matchFound) session.messageList.push(event);
+  if (
+    !matchFound &&
+    (!session.id || (session.messageList && session.messageList.length))
+  )
+    session.messageList.push(event);
 
   //if (message.from != "Visitor") {
   // Play sound

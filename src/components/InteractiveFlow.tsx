@@ -14,6 +14,7 @@ import {
   NodeExecutionPayload,
 } from "./InteractiveFlowUtils";
 import {
+  CUSTOMER,
   EXECUTE_FLOW_NODE_URL_PATH,
   EXECUTION_LIST_FETCH_URL_PATH,
   OPENED_CHAT,
@@ -22,6 +23,7 @@ import {
   VISITOR_UUID,
 } from "../globals";
 import { getReq, postReq } from "../request";
+import NoCustomer from "./interactiveNodes/NoCustomer";
 export interface InteractiveFlowProps {
   showConversation(): void;
   backToHome: () => void;
@@ -45,7 +47,7 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
 
   const [loading, setLoading] = useState<boolean>(true);
 
-  const [executionMeta, setExecutionMeta] = useState<{}>({});
+  const [executionMeta, setExecutionMeta] = useState<any>({});
   const [executionList, setExecutionList] = useState<NodeExecutionPayload[]>(
     []
   );
@@ -93,6 +95,11 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
       .then((response) => {
         const newExecutionList = response.data.executionList;
         setExecutionMeta({ ...response.data.executionMeta });
+        if (response.data.executionMeta?.info?.customer)
+          setSessionStoragePrefs(
+            CUSTOMER,
+            JSON.stringify(response.data.executionMeta?.info?.customer)
+          );
         // Write logic to update existing ids, and push new executions
         setExecutionList([
           ...executionList.filter(
@@ -111,9 +118,11 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
         } else if (
           newExecutionList[newExecutionList.length - 1].executed &&
           !newExecutionList[newExecutionList.length - 1].nextNodeId &&
-          newExecutionList[newExecutionList.length - 1].data.nodeType ==
+          newExecutionList[newExecutionList.length - 1].node.data.nodeType ==
             InteractiveNodeTypes.END
         ) {
+          removeSessionStoragePrefs(OPENED_CHAT);
+          removeSessionStoragePrefs("flow_execution_id");
           props.backToHome();
         }
 
@@ -250,6 +259,17 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
                       exe.node.data.formData?.action == "ticket"
                     )
                       return <></>;
+                    if (
+                      (exe.node.data.nodeType ==
+                        InteractiveNodeTypes.ORDER_SELECTION ||
+                        exe.node.data.nodeType ==
+                          InteractiveNodeTypes.ITEM_SELECTION) &&
+                      executionMeta &&
+                      executionMeta.info &&
+                      !executionMeta.info.customerId
+                    ) {
+                      return <NoCustomer backToHome={props.backToHome} />;
+                    }
                     return (
                       <>
                         {Node ? (

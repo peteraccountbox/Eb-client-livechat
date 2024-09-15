@@ -1,6 +1,4 @@
-import { CHANNEL_ID } from "./globals";
-
-const prefix = "reacho-" + CHANNEL_ID + "-";
+const prefix = "reacho-" + (window as any).CHANNEL_ID + "-";
 
 export const setLocalStoragePrefs: Function = (key: any, value: any) => {
   if (key === undefined || value === undefined) return null;
@@ -23,7 +21,7 @@ export const setSessionStoragePrefs: Function = (key: any, value: any) => {
 export const removeSessionStoragePrefs: Function = (key: any) => {
   try {
     sessionStorage.removeItem(prefix + key);
-  } catch (error) { }
+  } catch (error) {}
 };
 
 export const getSessionStoragePrefs: Function = (key: any) => {
