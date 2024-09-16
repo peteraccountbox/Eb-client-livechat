@@ -22,10 +22,10 @@ const ItemSelection: React.FC<InteractiveNodeProps> = ({
         storeId: chatFlow?.storeId,
         orderId: executionMeta.info.orderId,
       }).then((response) => {
-        setItems(
-          JSON.parse(JSON.parse(response.data.meta).$r_extra).line_items
-        );
-        setOrderDetails(JSON.parse(JSON.parse(response.data.meta).$r_extra));
+        if (response.data.meta) {
+          setItems(JSON.parse(response.data.meta)?.line_items);
+          setOrderDetails(JSON.parse(response.data.meta));
+        }
         console.log(response.data);
       });
   }, []);
@@ -95,7 +95,7 @@ const ItemSelection: React.FC<InteractiveNodeProps> = ({
     execution.responseAction && execution.responseAction.length > 0
       ? JSON.parse(execution.responseAction[0].data)
       : null;
-
+  const { address1, city, province_code, zip } = itemsDetails?.shipping_address;
   return execution.executed && itemsDetails ? (
     <div className="chat__messages-group--me">
       <div className="chat__messages-group">
@@ -118,7 +118,13 @@ const ItemSelection: React.FC<InteractiveNodeProps> = ({
                 <br />
                 Order Created: {itemsDetails.created_at}
                 <br />
-                Shipping address: {itemsDetails.shipping_address}
+                Shipping address:{" "}
+                {itemsDetails.shipping_address
+                  ? `${address1},` +
+                    `${city}, ` +
+                    `${province_code}, ` +
+                    `${zip}`
+                  : "/"}
               </span>
             </div>
           </div>
@@ -147,7 +153,7 @@ const ItemSelection: React.FC<InteractiveNodeProps> = ({
               {orderDetails.currency}
               {orderDetails.current_total_price}
             </h2>
-            <p className="desc">selected Items count</p>
+            <p className="desc">{selectedItems.length} selected Items</p>
           </div>
         </div>
       </header>
@@ -198,27 +204,31 @@ const ItemSelection: React.FC<InteractiveNodeProps> = ({
             </div>
           ))}
       </ul>
-      <span
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <button
-          className="chat__messages-btn"
-          onClick={selectItems}
+      {selectedItems.length ? (
+        <span
           style={{
             display: "flex",
             alignItems: "center",
-            width: "auto",
-            cursor: "pointer",
-            marginTop: "20px",
+            justifyContent: "center",
           }}
         >
-          Select Items
-        </button>
-      </span>
+          <button
+            className="chat__messages-btn"
+            onClick={selectItems}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "auto",
+              cursor: "pointer",
+              marginTop: "20px",
+            }}
+          >
+            Select Items
+          </button>
+        </span>
+      ) : (
+        <></>
+      )}
     </>
   ) : (
     <></>

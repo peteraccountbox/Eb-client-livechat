@@ -53,7 +53,7 @@ const MultiChoice: React.FC<InteractiveNodeProps> = ({
           </ul>
         </div>
       ) : (
-        <div className="chat__messages-group--me">
+        <div className="chat__messages-group chat__messages-group--me">
           <ul className="chat__messages-list">
             <div className="chat__messages-list-item">
               <div className="chat__messages-bubble chat__message-type-TEXT">
