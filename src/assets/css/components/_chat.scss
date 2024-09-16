@@ -5342,6 +5342,10 @@
 	.orders__collections-line-items-currency:not(:last-child) {
 		margin-bottom: 6px;
 	}
+
+	.orders__collections-line-items-details {
+		margin-left: 6px;
+	}
 }
 
 input[type="checkbox"] {
