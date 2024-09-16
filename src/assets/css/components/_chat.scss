@@ -1374,6 +1374,12 @@
 				background-color: $color-primary;
 				opacity: .85;
 			}
+
+			&:disabled {
+				background-color: rgba($body-color, 0.08);
+				color: #b9bec3;
+				cursor: not-allowed;
+			}
 		}
 
 		&-sign {
@@ -4603,7 +4609,7 @@
 		font-size: 18px;
 		display: inline-block;
 		margin-bottom: 1rem;
-		color: var(--themeColor);
+		color: $body-color;
 
 	}
 
@@ -4788,7 +4794,7 @@
 		}
 
 		&-name {
-			color: var(--themeColor);
+			color: $body-color;
 			font-size: 14px;
 			font-weight: bold;
 			letter-spacing: -0.14px;
@@ -4845,7 +4851,7 @@
 }
 
 .orders__collections {
-	color: var(--themeColor);
+	color: $body-color;
 
 	&-title {
 		font-weight: bold;
@@ -4853,7 +4859,7 @@
 		line-height: 28px;
 		letter-spacing: -0.4px;
 		padding-bottom: 8px;
-		color: var(--themeColor);
+		color: $body-color;
 	}
 
 	&-desc {
@@ -4887,7 +4893,7 @@
 			}
 
 			&-title {
-				color: var(--themeColor);
+				color: $body-color;
 				font-weight: bold;
 				font-size: 16px;
 				word-break: break-all;
@@ -4963,7 +4969,7 @@
 				border-radius: 4px;
 				user-select: none;
 				padding: 10px 16px;
-				color: var(--themeColor);
+				color: $body-color;
 				background-color: rgba($body-color, 0.09);
 
 				&:hover {
@@ -5009,7 +5015,7 @@
 		&-name {
 			font-size: 14px;
 			font-weight: 600;
-			color: var(--themeColor);
+			color: $body-color;
 			margin-bottom: 8px;
 			overflow: hidden;
 		}
@@ -5034,7 +5040,7 @@
 		line-height: 28px;
 		letter-spacing: -0.4px;
 		padding-bottom: 16px;
-		color: var(--themeColor);
+		color: $body-color;
 	}
 }
 
@@ -5083,7 +5089,7 @@
 	font-size: 18px;
 	line-height: 24px;
 	font-weight: 600;
-	color: var(--themeColor);
+	color: $body-color;
 }
 
 .no__order_data_wrapper .pad-text {
@@ -5118,14 +5124,14 @@
 		font-size: 16px;
 		font-weight: 600;
 		line-height: 24px;
-		color: var(--themeColor);
+		color: $body-color;
 		margin: 0px 0px 20px;
 	}
 
 	p {
 		font-size: 14px;
 		line-height: 20px;
-		color: var(--themeColor);
+		color: $body-color;
 		margin-bottom: 8px;
 	}
 }
@@ -5175,10 +5181,10 @@
 		// margin-top: 10px;
 		z-index: 9999;
 		text-align: center;
-		position: relative;
+		position: absolute;
 		left: 1px;
-		width: 18px;
-		height: 18px;
+		width: 16px;
+		height: 16px;
 		background-color: #d1d5db;
 		border-radius: 50%;
 		box-shadow: none;
@@ -5207,6 +5213,7 @@
 	color: #666;
 	position: relative;
 	top: -3px;
+	padding-left: 34px;
 
 	h3 {
 		// margin-bottom: 5px;
@@ -5275,8 +5282,9 @@
 	&-email-text {
 		font-weight: 400;
 		font-size: 14px;
-		color: var(--themeColor);
+		color: $body-color;
 		padding-top: 5px;
+		line-height: 20px;
 	}
 
 	&-email-btn {
@@ -5285,8 +5293,8 @@
 	}
 
 	&-accounts-text {
-		font-weight: 400;
-		color: #377dff;
+		font-weight: 500;
+		color: var(--themeColor);
 		text-align: center;
 		font-size: 14px;
 		cursor: pointer;
@@ -5295,4 +5303,50 @@
 			text-decoration: underline;
 		}
 	}
+}
+
+.selected__all-group {
+	display: flex;
+	align-items: center;
+	padding-top: 15px;
+}
+
+.select__all-label {
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 20px;
+	cursor: pointer;
+	color: $body-color;
+	margin-left: 8px;
+}
+
+.order__return__collections--list {
+	cursor: inherit;
+}
+
+.order__return-items-group {
+	margin-bottom: 4px;
+	list-style: none;
+	padding: 0;
+}
+
+.order__return-items {
+	padding: 16px 0;
+	border-bottom: 1px dashed #d7dae0;
+	margin-bottom: 0;
+
+	.orders__collections-line-items-name {
+		margin-bottom: 5px;
+	}
+
+	.orders__collections-line-items-currency:not(:last-child) {
+		margin-bottom: 6px;
+	}
+}
+
+input[type="checkbox"] {
+	vertical-align: middle;
+	// margin-right: 8px;
+	width: 16px;
+	height: 16px;
 }

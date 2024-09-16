@@ -89,6 +89,8 @@ const Return = (props: any) => {
   const customer = JSON.parse(getSessionStoragePrefs(CUSTOMER));
 
   const createTicket = () => {
+    if (!returnItems || returnItems?.length == 0) return;
+
     let message: ChatMessagePayloadObj = {
       bodyHTML: renderToString(
         <>
@@ -165,40 +167,39 @@ const Return = (props: any) => {
         <header>
           <h2 className="orders__collections-title">Return items</h2>
         </header>
-        <div className="orders__collections-list">
+        <div className="orders__collections-list order__return__collections--list">
           <div className="orders__collections-list-order-header pb-2">
             <div className="orders__collections-list-order-header-title">
               Order {orderDetails.name}
             </div>
-            {/* <div className="orders__collections-list-fulfillment-header-status">
-              {orderDetails.fulfillment_status && (
-                <span className="orders__collections-list-fulfillment-header-badge">
-                  {orderDetails.fulfillment_status}
-                </span>
-              )}
-            </div> */}
           </div>
-          <input
-            type="checkbox"
-            checked={selectAll}
-            onChange={(e) => handleSelectAll(e)}
-          />
-          {fulfillment.line_items.map((item: any) => {
-            const quantity = returnItems?.find(
-              (rItem: any) => rItem.id == item.id
-            ).quantity;
-            const isChecked = returnItems?.find(
-              (rItem: any) => rItem.id == item.id && rItem.isSelect == true
-            );
-            return (
-              <>
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={(e) => handleSelect(e, item.id)}
-                />
-                <div className="orders__collections-line-items-group">
-                  <div className="orders__collections-line-items">
+          <div className="selected__all-group">
+            <input
+              type="checkbox"
+              id="select-all"
+              checked={selectAll}
+              onChange={(e) => handleSelectAll(e)}
+            />
+            <label className="select__all-label" htmlFor="select-all">
+              Select all
+            </label>
+          </div>
+          <ul className="orders__collections-line-items-group order__return-items-group">
+            {fulfillment.line_items.map((item: any) => {
+              const quantity = returnItems?.find(
+                (rItem: any) => rItem.id == item.id
+              ).quantity;
+              const isChecked = returnItems?.find(
+                (rItem: any) => rItem.id == item.id && rItem.isSelect == true
+              );
+              return (
+                <>
+                  <li className="orders__collections-line-items order__return-items">
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={(e) => handleSelect(e, item.id)}
+                    />
                     <div className="orders__collections-line-items-avatar">
                       <img
                         style={{
@@ -221,45 +222,25 @@ const Return = (props: any) => {
                         Quantity:
                         {item.quantity}
                       </div>
-                      {isChecked && (
-                        <div>
-                          {quantity > 1 && (
-                            <span
-                              onClick={() =>
-                                dispatch({ type: "decr", id: item.id })
-                              }
-                            >
-                              -
-                            </span>
-                          )}{" "}
-                          {quantity}{" "}
-                          {quantity < item.quantity && (
-                            <span
-                              onClick={() =>
-                                dispatch({ type: "incr", id: item.id })
-                              }
-                            >
-                              +
-                            </span>
-                          )}
-                        </div>
-                      )}
                     </div>
-                  </div>
-                </div>
-              </>
-            );
-          })}
+                  </li>
+                </>
+              );
+            })}
+          </ul>
 
           <div className="orders__collections-cancellation-btn">
-            {select && (
-              <button
-                className="chat__messages-btn"
-                onClick={() => createTicket()}
-              >
-                Request Return
-              </button>
-            )}
+            <button
+              className="chat__messages-btn"
+              onClick={() => createTicket()}
+              disabled={
+                !returnItems ||
+                returnItems?.length === 0 ||
+                !returnItems.find((returnItem) => returnItem.isSelect)
+              }
+            >
+              Request Return
+            </button>
           </div>
         </div>
       </div>
