@@ -73,7 +73,11 @@ const ManageActions = (props: any) => {
     fulfillment
   );
 
-  const action = (type: string) => {
+  const action = (
+    event: React.MouseEvent<HTMLSpanElement, MouseEvent>,
+    type: string
+  ) => {
+    event.stopPropagation();
     setPrevComponent(managementComponent);
     if (managementComponent === OrderManageTypes.ORDER) setPrevData(order);
     else
@@ -89,7 +93,7 @@ const ManageActions = (props: any) => {
         {trackOrderPolicy.enabled && (
           <span
             className="orders__collections-action-buttons-list-type"
-            onClick={() => action(OrderManageTypes.TRACK)}
+            onClick={(e) => action(e, OrderManageTypes.TRACK)}
           >
             <button
               type="button"
@@ -103,7 +107,7 @@ const ManageActions = (props: any) => {
         {cancelOrderPolicy.enabled && isValidCancel && (
           <span
             className="orders__collections-action-buttons-list-type"
-            onClick={() => action(OrderManageTypes.CANCEL)}
+            onClick={(e) => action(e, OrderManageTypes.CANCEL)}
           >
             <button
               type="button"
@@ -119,7 +123,7 @@ const ManageActions = (props: any) => {
           isValidReturn() && (
             <span
               className="orders__collections-action-buttons-list-type"
-              onClick={() => action(OrderManageTypes.RETURN)}
+              onClick={(e) => action(e, OrderManageTypes.RETURN)}
             >
               <button
                 type="button"
@@ -132,7 +136,7 @@ const ManageActions = (props: any) => {
         {reportIssuePolicy.enabled && (
           <span
             className="orders__collections-action-buttons-list-type"
-            onClick={() => action(OrderManageTypes.REPORT_ISSUE)}
+            onClick={(e) => action(e, OrderManageTypes.REPORT_ISSUE)}
           >
             <button
               type="button"
