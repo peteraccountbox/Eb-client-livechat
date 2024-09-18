@@ -733,7 +733,7 @@ const App: React.FunctionComponent = () => {
   );
 
   const appThemeStyle: object = useMemo(() => {
-    if (!chatPrefs) return {};
+    if (!chatPrefs || !agentsPrefs.length) return {};
 
     const settings = [
       {
@@ -761,7 +761,7 @@ const App: React.FunctionComponent = () => {
       //     ? chatPrefs.meta.decoration.mainColor
       //     : "red",
     };
-  }, [chatPrefs]);
+  }, [chatPrefs, agentsPrefs]);
 
   if (prefsFetched && chatPrefs && !chatPrefs.meta.deactivated) {
     return (
