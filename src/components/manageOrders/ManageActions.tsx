@@ -22,9 +22,10 @@ const ManageActions = (props: any) => {
       orderManagement: {
         cancelOrderPolicy,
         reportIssuePolicy,
-        returnOrderPolicy: {
-          eligibilities: [eligibility],
-        },
+        returnOrderPolicy,
+        // : {
+        //   eligibilities: [eligibility],
+        // }
         trackOrderPolicy,
       },
     },
@@ -32,21 +33,21 @@ const ManageActions = (props: any) => {
   const orderDetails = JSON.parse(order.meta);
   const date = new Date(orderDetails.created_at);
   const fulfillmentDate = new Date(fulfillment?.created_at);
-  const isValidReturn = () => {
-    switch (eligibility.attribute) {
-      case "order_created":
-        return new Date().getDay() - date.getDay() < eligibility.value;
-        break;
-      case "order_delivered":
-        return (
-          fulfillment &&
-          new Date().getDay() - fulfillmentDate.getDay() < eligibility.value
-        );
-        break;
-      default:
-        break;
-    }
-  };
+  // const isValidReturn = () => {
+  //   switch (eligibility.attribute) {
+  //     case "order_created":
+  //       return new Date().getDay() - date.getDay() < eligibility.value;
+  //       break;
+  //     case "order_delivered":
+  //       return (
+  //         fulfillment &&
+  //         new Date().getDay() - fulfillmentDate.getDay() < eligibility.value
+  //       );
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   // const isValidCancel = () => {
 
@@ -70,9 +71,29 @@ const ManageActions = (props: any) => {
     order,
     cancelOrderPolicy.eligibilities,
     PredicateJoinCondition.OR,
-    fulfillment
+    fulfillment,
+    ""
   );
 
+  const isValidReturn = shopifyValidateRules(
+    order,
+    returnOrderPolicy.eligibilities,
+    PredicateJoinCondition.OR,
+    fulfillment,
+    ""
+  );
+
+  const isValidReport = reportIssuePolicy.scenarios.some((scenario: any) => {
+    return (
+      shopifyValidateRules(
+        order,
+        scenario.predicate,
+        scenario.joinOperator,
+        fulfillment,
+        "shopify"
+      ) == true
+    );
+  });
   const action = (
     event: React.MouseEvent<HTMLSpanElement, MouseEvent>,
     type: string
@@ -120,7 +141,7 @@ const ManageActions = (props: any) => {
         {order &&
           fulfillment &&
           fulfillment.status == "success" &&
-          isValidReturn() && (
+          isValidReturn && (
             <span
               className="orders__collections-action-buttons-list-type"
               onClick={(e) => action(e, OrderManageTypes.RETURN)}
@@ -133,7 +154,7 @@ const ManageActions = (props: any) => {
               </button>
             </span>
           )}
-        {reportIssuePolicy.enabled && (
+        {reportIssuePolicy.enabled && isValidReport && (
           <span
             className="orders__collections-action-buttons-list-type"
             onClick={(e) => action(e, OrderManageTypes.REPORT_ISSUE)}

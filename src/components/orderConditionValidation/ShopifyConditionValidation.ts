@@ -11,13 +11,14 @@ export type ShopifyOrderModel = {
     shipment_status: string;
     order_status: string;
     status: string;
+    meta: any;
 }
 
-export default function shopifyValidateRules(shopifyOrder: ShopifyOrderModel, predicates: PredicateType[], joinCondition: PredicateJoinCondition, fulfillment: any) {
+export default function shopifyValidateRules(shopifyOrder: ShopifyOrderModel, predicates: PredicateType[], joinCondition: PredicateJoinCondition, fulfillment: any, type: string) {
 
     if (!predicates || predicates.length == 0)
         return true;
-
+    const orderDetails = JSON.parse(shopifyOrder.meta);
     let validationResults: boolean[] = [];
     for (let index = 0; index < predicates.length; index++) {
 
@@ -25,8 +26,11 @@ export default function shopifyValidateRules(shopifyOrder: ShopifyOrderModel, pr
 
         let value = "";
         try {
+            if(predicate.attribute == "order_created" || predicate.attribute == "order_delivered") {
+                value = getOrderCreateOrDelivery(shopifyOrder, predicate, fulfillment);
+            }
             if (predicate.attribute == "financial_status") {
-                value = shopifyOrder.financial_status;
+                value = orderDetails.financial_status;
             }
 
             if (predicate.attribute == "fulfillment_status") {
@@ -34,16 +38,13 @@ export default function shopifyValidateRules(shopifyOrder: ShopifyOrderModel, pr
             }
 
             if(predicate.attribute == "order_status") {
-                value = getShopifyOrderStatus(shopifyOrder, predicate.value);
+                value = type == "shopify" ? getShopifyOrderStatus(shopifyOrder, predicate.value) : getOrderStatus(fulfillment, predicate.value);
             }
 
             if (predicate.attribute == "shipment_status") {
                 value = fulfillment?.shipment_status
             }
 
-            if (predicate.attribute == "order_status") {
-                value = getOrderStatus(fulfillment, predicate.value);
-            }
 
 
         } catch (e) {
@@ -76,9 +77,10 @@ const getOrderStatus = (fulfillment: any, rhs: string) => {
 }
 
 const getShopifyOrderStatus = (shopifyOrder: ShopifyOrderModel, rhs: string) => {
-    switch (rhs) {
+  const orderDetails = JSON.parse(shopifyOrder.meta);  
+  switch (rhs) {
         case "cancelled":
-            return shopifyOrder.cancelled_at ? "cancelled" : ""
+            return orderDetails.cancelled_at ? "cancelled" : ""
             break;
     
         default:
@@ -86,3 +88,23 @@ const getShopifyOrderStatus = (shopifyOrder: ShopifyOrderModel, rhs: string) => 
     }
     return "";
 }
+
+const getOrderCreateOrDelivery = (shopifyOrder: ShopifyOrderModel, predicate: any, fulfillment: any) => {
+    const orderDetails = JSON.parse(shopifyOrder.meta);
+    const date = new Date(orderDetails.created_at);
+    const fulfillmentDate = new Date(fulfillment?.created_at);
+    switch (predicate.attribute) {
+      case "order_created":
+        return new Date().getDay() - date.getDay();
+        break;
+      case "order_delivered":
+        return (
+          fulfillment ?
+          new Date().getDay() - fulfillmentDate.getDay() : predicate.value
+        );
+        break;
+      default:
+        break;
+    }
+    return predicate.value;
+  };
