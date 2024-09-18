@@ -134,11 +134,14 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
   };
 
   const startFlowExecution = async () => {
-    const wait = postReq(START_FLOW_URL_PATH, {
-      id: chatFlow.id,
-      channelId: chatPrefs.id,
-      channelType: "CHAT",
-    });
+    const wait = postReq(
+      START_FLOW_URL_PATH + "/" + chatFlow.id + "/" + VISITOR_UUID,
+      {
+        id: chatFlow.id,
+        channelId: chatPrefs.id,
+        channelType: "CHAT",
+      }
+    );
     wait
       .then((response) => {
         setLoading(false);

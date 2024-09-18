@@ -91,8 +91,7 @@ export const CONVERSATIONS_FETCH_URL_PATH =
 
 export const CHAT_FLOWS_FETCH_URL_PATH = REQUEST_PREFIX_PATH + "/chat-flows/";
 
-export const START_FLOW_URL_PATH =
-  REQUEST_PREFIX_PATH + "/flow/start/" + VISITOR_UUID;
+export const START_FLOW_URL_PATH = REQUEST_PREFIX_PATH + "/flow/start";
 
 export const EXECUTION_LIST_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/flow/execution/";
