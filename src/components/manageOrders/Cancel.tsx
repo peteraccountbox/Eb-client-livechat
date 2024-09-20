@@ -15,7 +15,7 @@ import OrderComponent from "./OrderComponent";
 const Cancel = (props: any) => {
   const orderManagementContext = useContext(OrderManagementContext);
   const {
-    data: { order, fulfillment },
+    data: { order, fulfillment, item },
   } = orderManagementContext;
   const orderDetails = JSON.parse(order.meta);
   const parentContext = useContext(AppContext);
@@ -38,7 +38,7 @@ const Cancel = (props: any) => {
           <br />
           ---------------------------------------
           {orderDetails && (
-            <OrderDetails order={order} fulfillment={fulfillment} />
+            <OrderDetails order={order} fulfillment={fulfillment} item={item} />
           )}
         </>
       ),
@@ -48,7 +48,7 @@ const Cancel = (props: any) => {
           <br />
           ---------------------------------------
           {orderDetails && (
-            <OrderDetails order={order} fulfillment={fulfillment} />
+            <OrderDetails order={order} fulfillment={fulfillment} item={item} />
           )}
         </>
       ),
@@ -101,9 +101,9 @@ const Cancel = (props: any) => {
               Order {orderDetails.name}
             </div>
             <div className="orders__collections-list-fulfillment-header-status">
-              {orderDetails.fulfillment_status && (
+              {item.fulfillment_status && (
                 <span className="orders__collections-list-fulfillment-header-badge">
-                  {orderDetails.fulfillment_status}
+                  {item.fulfillment_status}
                 </span>
               )}
             </div>
@@ -134,7 +134,7 @@ const Cancel = (props: any) => {
               </div>
             </div>
           ))} */}
-          <OrderComponent order={order} headers={false} />
+          <OrderComponent order={order} headers={false} item={item} />
 
           <div className="orders__collections-cancellation-btn">
             <button

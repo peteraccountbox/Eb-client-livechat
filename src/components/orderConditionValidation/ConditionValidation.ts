@@ -16,7 +16,7 @@ export enum FilterPredicateConditions {
     is_one_of = "is_one_of",
     is_empty = "is_empty",
     less_than = "less_than",
-    equals = "equals"
+    equals = "eq"
 }
 
 export enum FilterPredicateDataType {
@@ -37,7 +37,7 @@ export default function validate(predicate: PredicateType, value?: any) {
         case FilterPredicateConditions.is_empty:
             return (!value) ? true : false;
         case FilterPredicateConditions.less_than:
-            return (value && predicate.value && value > predicate.value)
+            return (value != null && predicate.value && value < predicate.value)
         default:
             return false;
     }

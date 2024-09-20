@@ -15,7 +15,7 @@ const ManageActions = (props: any) => {
     setData,
     customer,
   } = orderManagementContext;
-  const { order, fulfillment } = props;
+  const { order, fulfillment, item, itemfulfillment } = props;
   const parentContext = useContext(AppContext);
   const {
     chatPrefs: {
@@ -31,8 +31,8 @@ const ManageActions = (props: any) => {
     },
   } = parentContext;
   const orderDetails = JSON.parse(order.meta);
-  const date = new Date(orderDetails.created_at);
-  const fulfillmentDate = new Date(fulfillment?.created_at);
+  // const date = new Date(orderDetails.created_at);
+  // const fulfillmentDate = new Date(fulfillment?.created_at);
   // const isValidReturn = () => {
   //   switch (eligibility.attribute) {
   //     case "order_created":
@@ -71,7 +71,7 @@ const ManageActions = (props: any) => {
     order,
     cancelOrderPolicy.eligibilities,
     PredicateJoinCondition.OR,
-    fulfillment,
+    itemfulfillment,
     ""
   );
 
@@ -79,7 +79,7 @@ const ManageActions = (props: any) => {
     order,
     returnOrderPolicy.eligibilities,
     PredicateJoinCondition.OR,
-    fulfillment,
+    itemfulfillment,
     ""
   );
 
@@ -89,7 +89,7 @@ const ManageActions = (props: any) => {
         order,
         scenario.predicate,
         scenario.joinOperator,
-        fulfillment,
+        itemfulfillment,
         "shopify"
       ) == true
     );
@@ -106,7 +106,7 @@ const ManageActions = (props: any) => {
         customerId: customer?.id,
       });
     setManagementComponent(type);
-    setData({ order, fulfillment });
+    setData({ order, fulfillment, item });
   };
   return (
     <>
@@ -139,8 +139,8 @@ const ManageActions = (props: any) => {
           </span>
         )}
         {order &&
-          fulfillment &&
-          fulfillment.status == "success" &&
+          itemfulfillment &&
+          itemfulfillment.status == "success" &&
           isValidReturn && (
             <span
               className="orders__collections-action-buttons-list-type"

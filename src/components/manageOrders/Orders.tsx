@@ -40,6 +40,7 @@ const Orders = () => {
       getReq(ORDERS_FETCH_URL, {
         customerId: customerId,
         storeId: chatPrefs.orderManagement.storeId,
+        sort: "createdTime,DESC",
       }).then((response) => {
         console.log(response.data);
         setOrders(response.data.content);
@@ -198,7 +199,7 @@ const Orders = () => {
                               ))}
                           </>
                         )} */}
-                        <OrderComponent order={order} headers={true} />
+                        {/* <OrderComponent order={order} headers={true} /> */}
                       </div>
                     );
                   })}

@@ -21,7 +21,7 @@ const RaisedIssue = (props: any) => {
     setPrevData,
     managementComponent,
     setManagementComponent,
-    data: { order, reason, fulfillment },
+    data: { order, reason, fulfillment, item },
     setData,
     customer,
   } = orderManagementContext;
@@ -35,7 +35,7 @@ const RaisedIssue = (props: any) => {
           <br />
           ---------------------------------------
           {orderDetails && (
-            <OrderDetails order={order} fulfillment={fulfillment} />
+            <OrderDetails order={order} fulfillment={fulfillment} item={item} />
           )}
         </>
       ),
@@ -45,7 +45,7 @@ const RaisedIssue = (props: any) => {
           <br />
           ---------------------------------------
           {orderDetails && (
-            <OrderDetails order={order} fulfillment={fulfillment} />
+            <OrderDetails order={order} fulfillment={fulfillment} item={item} />
           )}
         </>
       ),
@@ -103,8 +103,12 @@ const RaisedIssue = (props: any) => {
                   {reason.title}
                   <br />
                   ---------------------------------------
-                  {orderDetails.shipping_address && (
-                    <OrderDetails order={order} fulfillment={fulfillment} />
+                  {orderDetails && (
+                    <OrderDetails
+                      order={order}
+                      fulfillment={fulfillment}
+                      item={item}
+                    />
                   )}
                 </span>
               </div>

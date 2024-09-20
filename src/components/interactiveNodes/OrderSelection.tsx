@@ -22,6 +22,7 @@ const OrderSelection: React.FC<InteractiveNodeProps> = ({
       getReq(ORDERS_FETCH_URL, {
         customerId: executionMeta.info.customerId,
         storeId: chatFlow?.storeId,
+        sort: "createdTime,DESC",
       }).then((response) => {
         console.log(response.data);
         setOrders(response.data.content);

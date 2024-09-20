@@ -27,7 +27,7 @@ export default function shopifyValidateRules(shopifyOrder: ShopifyOrderModel, pr
         let value = "";
         try {
             if(predicate.attribute == "order_created" || predicate.attribute == "order_delivered") {
-                value = getOrderCreateOrDelivery(shopifyOrder, predicate, fulfillment);
+                value = getOrderCreateOrDelivery(shopifyOrder, predicate);
             }
             if (predicate.attribute == "financial_status") {
                 value = orderDetails.financial_status;
@@ -68,7 +68,7 @@ const getOrderStatus = (fulfillment: any, rhs: string) => {
           return !fulfillment || (fulfillment && fulfillment.status == "pending") ? "unfulfilled" : "" ;
           break;
         case "pending_delivery":
-          return fulfillment && fulfillment.status == "success" ?  "pending_delivery": "";
+          return fulfillment && fulfillment.status == "success" ? "pending_delivery" : "";
         default:
           break;
       }
@@ -82,27 +82,32 @@ const getShopifyOrderStatus = (shopifyOrder: ShopifyOrderModel, rhs: string) => 
         case "cancelled":
             return orderDetails.cancelled_at ? "cancelled" : ""
             break;
-    
+        case "archived":
+            return orderDetails.closed_at ? "archived" : ""
+            break;
+        case "open":
+            return !orderDetails.cancelled_at && !orderDetails.closed_at ? "open" : ""
+            break;  
         default:
             break;
     }
     return "";
 }
 
-const getOrderCreateOrDelivery = (shopifyOrder: ShopifyOrderModel, predicate: any, fulfillment: any) => {
+const getOrderCreateOrDelivery = (shopifyOrder: ShopifyOrderModel, predicate: any) => {
     const orderDetails = JSON.parse(shopifyOrder.meta);
     const date = new Date(orderDetails.created_at);
-    const fulfillmentDate = new Date(fulfillment?.created_at);
+    // const fulfillmentDate = new Date(fulfillment?.delivered_at);
     switch (predicate.attribute) {
       case "order_created":
         return new Date().getDay() - date.getDay();
         break;
-      case "order_delivered":
-        return (
-          fulfillment ?
-          new Date().getDay() - fulfillmentDate.getDay() : predicate.value
-        );
-        break;
+      // case "order_delivered":
+      //   return (
+      //     fulfillment?.delivered_at ?
+      //     new Date().getDay() - fulfillmentDate.getDay() : 0
+      //   );
+      //   break;
       default:
         break;
     }

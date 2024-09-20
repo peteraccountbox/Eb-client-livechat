@@ -14,7 +14,7 @@ import { getSessionStoragePrefs } from "../../Storage";
 const Return = (props: any) => {
   const orderManagementContext = useContext(OrderManagementContext);
   const {
-    data: { order, fulfillment },
+    data: { order, fulfillment, item },
   } = orderManagementContext;
   const orderDetails = JSON.parse(order.meta);
   const parentContext = useContext(AppContext);
@@ -60,9 +60,15 @@ const Return = (props: any) => {
         break;
     }
   };
-  const initialState = fulfillment.line_items.reduce((acc: [], item: any) => {
-    return [...acc, { quantity: item.quantity, isSelect: false, id: item.id }];
-  }, []);
+  const initialState = [
+    { quantity: item.quantity, isSelect: false, id: item.id },
+  ];
+  // fulfillment.line_items.reduce((acc: [], item: any) => {
+  //   item = orderDetails.line_items.find(
+  //     (line_item: any) => line_item.id == item.id
+  //   );
+  //   return [...acc, { quantity: item.quantity, isSelect: false, id: item.id }];
+  // }, []);
   const [returnItems, dispatch] = useReducer(reducer, initialState);
   console.log(returnItems);
 
@@ -102,6 +108,7 @@ const Return = (props: any) => {
               order={order}
               returnItems={returnItems}
               fulfillment={fulfillment}
+              item={item}
             />
           )}
         </>
@@ -116,6 +123,7 @@ const Return = (props: any) => {
               order={order}
               returnItems={returnItems}
               fulfillment={fulfillment}
+              item={item}
             />
           )}
         </>
@@ -160,6 +168,13 @@ const Return = (props: any) => {
   const selectAll = returnItems?.every((item: any) => item.isSelect == true);
 
   const select = returnItems?.some((item: any) => item.isSelect == true);
+  const isChecked = returnItems?.find(
+    (rItem: any) => rItem.id == item.id && rItem.isSelect == true
+  );
+
+  const quantity = returnItems?.find(
+    (rItem: any) => rItem.id == item.id
+  ).quantity;
 
   return (
     <>
@@ -185,48 +200,71 @@ const Return = (props: any) => {
             </label>
           </div>
           <ul className="orders__collections-line-items-group order__return-items-group">
-            {fulfillment.line_items.map((item: any) => {
+            {/* {
+            fulfillment.line_items.map((item: any) => {
               const quantity = returnItems?.find(
                 (rItem: any) => rItem.id == item.id
               ).quantity;
               const isChecked = returnItems?.find(
                 (rItem: any) => rItem.id == item.id && rItem.isSelect == true
               );
-              return (
-                <>
-                  <li className="orders__collections-line-items order__return-items">
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={(e) => handleSelect(e, item.id)}
-                    />
-                    <div className="orders__collections-line-items-avatar">
-                      <img
-                        style={{
-                          width: "4rem",
-                          height: "4rem",
-                          borderRadius: "5px",
-                        }}
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      />
-                    </div>
-                    <div className="orders__collections-line-items-details">
-                      <div className="orders__collections-line-items-name">
-                        {item.name}
-                      </div>
-                      <div className="orders__collections-line-items-currency">
-                        {orderDetails.currency}
-                        {item.price}
-                      </div>
-                      <div className="orders__collections-line-items-currency">
-                        Quantity:
-                        {item.quantity}
-                      </div>
-                    </div>
-                  </li>
-                </>
+              item = orderDetails.line_items.find(
+                (line_item: any) => line_item.id == item.id
               );
-            })}
+              return (
+                <> */}
+            <li className="orders__collections-line-items order__return-items">
+              <input
+                type="checkbox"
+                checked={isChecked}
+                onChange={(e) => handleSelect(e, item.id)}
+              />
+              <div className="orders__collections-line-items-avatar">
+                <img
+                  style={{
+                    width: "4rem",
+                    height: "4rem",
+                    borderRadius: "5px",
+                  }}
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                />
+              </div>
+              <div className="orders__collections-line-items-details">
+                <div className="orders__collections-line-items-name">
+                  {item.name}
+                </div>
+                <div className="orders__collections-line-items-currency">
+                  {orderDetails.currency}
+                  {item.price}
+                </div>
+                <div className="orders__collections-line-items-currency">
+                  Quantity:
+                  {item.quantity}
+                </div>
+                {isChecked && (
+                  <div>
+                    {quantity > 1 && (
+                      <span
+                        onClick={() => dispatch({ type: "decr", id: item.id })}
+                      >
+                        -
+                      </span>
+                    )}{" "}
+                    {quantity}{" "}
+                    {quantity < item.quantity && (
+                      <span
+                        onClick={() => dispatch({ type: "incr", id: item.id })}
+                      >
+                        +
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </li>
+            {/* </>
+              );
+            })} */}
           </ul>
 
           <div className="orders__collections-cancellation-btn">

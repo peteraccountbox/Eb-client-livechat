@@ -1,12 +1,22 @@
 import React from "react";
 
 const OrderDetails = (props: any) => {
-  const { order, returnItems, fulfillment } = props;
+  const { order, returnItems, fulfillment, item } = props;
   const orderDetails = JSON.parse(order.meta);
   const { shipping_address } = orderDetails;
   var total = 0;
   const date = new Date(orderDetails.created_at);
-  const items = fulfillment ? fulfillment.line_items : orderDetails.line_items;
+  const items = fulfillment
+    ? orderDetails.line_items.filter(
+        (line_item: any) =>
+          fulfillment.line_items.some((item: any) => item.id == line_item.id) ==
+          true
+      )
+    : orderDetails.line_items;
+  const quantity = returnItems?.find(
+    (rItem: any) => rItem.id == item.id && rItem.isSelect
+  )?.quantity;
+  total += quantity ? quantity * item.price : 0;
   return (
     <>
       <br />
@@ -18,7 +28,7 @@ const OrderDetails = (props: any) => {
         </>
       )}
       {returnItems ? "Items requested for return" : "Item names"}:
-      {items.map((item: any, index: number) => {
+      {/* {items.map((item: any, index: number) => {
         const quantity = returnItems?.find(
           (rItem: any) => rItem.id == item.id && rItem.isSelect
         )?.quantity;
@@ -28,7 +38,8 @@ const OrderDetails = (props: any) => {
             ? (index > 0 ? ", " : "") + (quantity + "x " + item.name)
             : ""
           : (index > 0 ? ", " : "") + item.name;
-      })}
+      })} */}
+      {returnItems ? (quantity ? quantity + "x " + item.name : "") : item.name}
       <br />
       {returnItems
         ? "Total: " + orderDetails.currency + total

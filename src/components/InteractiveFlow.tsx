@@ -112,6 +112,8 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
             newExecutionList[newExecutionList.length - 1].info.ticket;
           session.messageList =
             newExecutionList[newExecutionList.length - 1].info?.events;
+          removeSessionStoragePrefs(OPENED_CHAT);
+          removeSessionStoragePrefs("flow_execution_id");
           props.addNewSession(session);
           setSessionStoragePrefs(OPENED_CHAT, session.id);
           props.showConversation();
