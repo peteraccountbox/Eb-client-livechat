@@ -190,7 +190,7 @@ const CollectTextReply: React.FC<InteractiveNodeProps> = ({
             <div className="chat__all-messages-item-header">
               <p className="chat-messages-username"> Automated</p>
               <p className="chat__all-messages-item-header-timegao">
-                <TimeAgo date={new Date(execution?.createdTime)} />
+                <TimeAgo time={execution?.createdTime} />
               </p>
             </div>
           </div>

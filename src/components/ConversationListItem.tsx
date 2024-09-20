@@ -247,7 +247,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
           <div className="chat__all-messages-item-header">
             <p className="chat-messages-username"> {getName()}</p>
             <p className="chat__all-messages-item-header-timegao">
-              <TimeAgo date={getMessageTime()} />
+              <TimeAgo time={props.session.lastMessageAt} />
             </p>
           </div>
         </div>

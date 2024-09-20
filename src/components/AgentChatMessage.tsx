@@ -68,7 +68,7 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
 
           <div className="chat__messages-timestamp">
             {/* <>{getMessageTime()}</> */}
-            <TimeAgo date={new Date(getMessageTime())} />
+            <TimeAgo time={props.message.createdTime} />
           </div>
         </div>
       </div>
