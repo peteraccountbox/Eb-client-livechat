@@ -91,7 +91,7 @@ const LoginForm = (props: any) => {
             <div className="chat__form-check radio-options">
               <input
                 type="radio"
-                id="sms"
+                id="phone"
                 value="phone"
                 required={fields[0].required}
                 name={fields[0].name}
@@ -99,8 +99,8 @@ const LoginForm = (props: any) => {
                 onChange={(e: any) => onToggle(e.target.value)}
                 className="chat__form-check-input"
               />
-              <label className="chat__form-check-label" htmlFor={"sms"}>
-                SMS
+              <label className="chat__form-check-label" htmlFor={"phone"}>
+                Phone
               </label>
             </div>
           </div>
