@@ -73,6 +73,7 @@ const Conversation = (props: ConversationProps) => {
   const parentContext = useContext(AppContext);
   const { chatPrefs, sessions, setSessions, agentsPrefs, createSessionData } =
     parentContext;
+  const customerProfile = (window as any).reachoJSClient.getCustomerProfile();
 
   const singlefield = [
     {
@@ -80,7 +81,8 @@ const Conversation = (props: ConversationProps) => {
       label: "Drop your email",
       type: "email",
       required: true,
-      value: "",
+      value:
+        customerProfile && customerProfile.email ? customerProfile.email : "",
       placeholder: "reacho@email.com",
       error: "",
       is_valid: true,
@@ -95,7 +97,8 @@ const Conversation = (props: ConversationProps) => {
       label: "Drop your email",
       type: "email",
       required: true,
-      value: "",
+      value:
+        customerProfile && customerProfile.email ? customerProfile.email : "",
       placeholder: "reacho@email.com",
       error: "",
       is_valid: true,
@@ -465,6 +468,10 @@ const Conversation = (props: ConversationProps) => {
 
     setLocalStoragePrefs(FORM_DATA, JSON.stringify(formData));
     setSaving(true);
+    (window as any)._reachoOnsite.push([
+      "identify",
+      { email: formData.customerEmail },
+    ]);
     if (session && session.id) {
       const wait = getReq(ADD_EMAIL_URL_PATH, {
         customerEmail: formData.customerEmail,
@@ -936,6 +943,7 @@ const Conversation = (props: ConversationProps) => {
             (!session.id && session.messageList?.length > 0) ||
             (chatPrefs.meta.emailCaptureEnforcement == "required" &&
               !emailCaptured &&
+              !session.id &&
               session.messageList?.length > 0)
               ? "hide"
               : ""
