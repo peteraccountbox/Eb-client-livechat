@@ -15,7 +15,7 @@ export const initalizeSocket = () => {
         let channelName = TENANT_ID + "-" + VISITOR_UUID;
         console.log("channelName", channelName);
         // const pusher = new Pusher("9efc22b651b6b9401c10", {
-        const pusher = new Pusher('9efc22b651b6b9401c10', {
+        const pusher = new Pusher('153e2ac356caa07e4f18', {
             cluster: 'mt1',
             forceTLS: true,
         });
