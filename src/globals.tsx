@@ -8,19 +8,17 @@ export function getReachoModule() {
   let prefs;
   try {
     prefs = (window as any).parent.reachoModulesObject;
-  } catch (e) {}
+  } catch (e) { }
   return prefs;
 }
 
 let prefs;
 try {
   prefs = getReachoModule().ChatPrefs[CHANNEL_ID];
-} catch (e) {}
+} catch (e) { }
 export const CHANNEL_PREFS: ChatPrefsPayloadType | undefined = prefs;
 
-export const VISITOR_UUID: string = (window as any).reachoJSClient
-  ? (window as any).reachoJSClient.getVisitorId()
-  : (window as any).VISITOR_UUID;
+export const VISITOR_UUID: string = (window as any).VISITOR_UUID;
 
 export const SERVER_REQ_HOST_PATH: string =
   (window as any).SERVER_HOST_DOMAIN_URL ||
