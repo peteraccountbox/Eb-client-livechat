@@ -160,6 +160,7 @@ const ChatForm: FC<ChatFormPropsType> = (props) => {
                           field.value = typeText;
                         return (
                           <textarea
+                          rows={12}
                             className="chat_form-control"
                             placeholder={field.placeholder}
                             required={field.required}

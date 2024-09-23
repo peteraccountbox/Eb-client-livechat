@@ -118,7 +118,7 @@ const CollectTextReply: React.FC<InteractiveNodeProps> = ({
             </div>
             <div className="chat__messages-form-group">
               <textarea
-                rows={2}
+                rows={5}
                 onChange={(e) => setTypeText(e.currentTarget.value)}
                 // onScroll={(e) => handleScroll(e)}
                 className="chat_form-control"

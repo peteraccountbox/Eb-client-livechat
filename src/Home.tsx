@@ -55,7 +55,7 @@ const Home = ({
               {chatPrefs.meta.decoration.headerPictureUrl ? (
                 <img src={chatPrefs.meta.decoration.headerPictureUrl} />
               ) : (
-                chatPrefs.name
+                <span className="home__feeds-chat-name">{chatPrefs.name}</span>
               )}
               <div className="chat__help-end">
                 <div className="chat__logout-panel">
