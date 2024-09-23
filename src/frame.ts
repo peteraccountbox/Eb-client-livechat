@@ -1,4 +1,5 @@
 import './assets/css/iframe.scss';
+import { VISITOR_UUID } from './globals';
 import { ChatPrefsPayloadType } from './Models';
 import { uuidv4 } from './Utils';
 
@@ -66,7 +67,7 @@ export default function loadChat(container: Element, prefs: ChatPrefsPayloadType
             var CHANNEL_ID = "${prefs.id}";
             var FRAME_REF_ID = "${frameId}";
             var SERVER_HOST_DOMAIN_URL = "${SERVER_HOST_DOMAIN_URL}";
-            var VISITOR_UUID = "62716143248343556";
+            var VISITOR_UUID = "${VISITOR_UUID}";
         </script>
         <script src="${scirptURL}"></script>
     </body>
