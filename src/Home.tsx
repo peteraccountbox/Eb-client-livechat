@@ -26,8 +26,8 @@ const Home = ({
 
   useEffect(() => {
     function compare(a: ChatSessionPaylodObj, b: ChatSessionPaylodObj) {
-      if (new Date(a.updatedTime) < new Date(b.updatedTime)) return 1;
-      if (new Date(a.updatedTime) > new Date(b.updatedTime)) return -1;
+      if (new Date(a.lastMessageAt) < new Date(b.lastMessageAt)) return 1;
+      if (new Date(a.lastMessageAt) > new Date(b.lastMessageAt)) return -1;
       return 0;
     }
     const sortedSessions = sessions?.sort(compare);
