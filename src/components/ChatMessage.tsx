@@ -6,6 +6,8 @@ import {
   MessageByTypeEnum,
 } from "../Models";
 import typingAnimationGif from "../assets/img/bot-response.gif";
+import Linkify from "linkify-react";
+import ReactDOMServer from "react-dom/server";
 import {
   convertEmojis,
   createTextLinks_,
@@ -83,7 +85,11 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                   <span
                     className="actual"
                     dangerouslySetInnerHTML={{
-                      __html: convertEmojis(props.message.message.bodyText),
+                      __html: ReactDOMServer.renderToString(
+                        <Linkify options={{ target: "_blank" }}>
+                          {convertEmojis(props.message.message.bodyText)}
+                        </Linkify>
+                      ),
                     }}
                   ></span>
 
