@@ -53,6 +53,8 @@ export default function loadChat(container: Element, prefs: ChatPrefsPayloadType
         enumerable: false
     });
 
+    const vId = (window as any).reachoJSClient.getVisitorId();
+
     let content = `
     <!DOCTYPE html>
     <html>
@@ -67,7 +69,7 @@ export default function loadChat(container: Element, prefs: ChatPrefsPayloadType
             var CHANNEL_ID = "${prefs.id}";
             var FRAME_REF_ID = "${frameId}";
             var SERVER_HOST_DOMAIN_URL = "${SERVER_HOST_DOMAIN_URL}";
-            var VISITOR_UUID = "${VISITOR_UUID}";
+            var VISITOR_UUID = "${vId}";
         </script>
         <script src="${scirptURL}"></script>
     </body>
