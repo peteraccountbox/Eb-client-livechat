@@ -181,7 +181,7 @@ export type AgentPaylodObj = {
 };
 
 export type AgentPrefsPayloadType = {
-  available: boolean;
+  availability: string;
   businessHours: BusinessHour[];
   timezone: string;
   id: string;

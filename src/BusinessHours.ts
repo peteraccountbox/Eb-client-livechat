@@ -7,7 +7,7 @@ interface Session {
 }
 
 export enum DAYS {
-  SUNDAY,MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY
+  SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY
 }
 
 export interface BusinessHour {
@@ -22,24 +22,24 @@ export interface UserBusinessData {
 
 export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs: AgentPrefsPayloadType[]): boolean => {
   const liveChatAvailability = chatprefs.meta.liveChatAvailability;
-  if(liveChatAvailability == "liveChat") {
-    return agentsPrefs.some((agentPref)=> agentPref.available);
+  if (liveChatAvailability == "liveChat") {
+    return agentsPrefs.some((agentPref) => (agentPref.availability && agentPref.availability == "ONLINE"));
   }
-  if(liveChatAvailability == "liveChatBusiness") {
-    return agentsPrefs.some((agentPref : AgentPrefsPayloadType)=> {
+  if (liveChatAvailability == "liveChatBusiness") {
+    return agentsPrefs.some((agentPref: AgentPrefsPayloadType) => {
       const timezone = agentPref.timezone;
       const now = moment.tz(timezone);
       const currentDay = now.day(); // 0 (Sunday) to 6 (Saturday)
       const currentTime = now.format('HH:mm');
       const todayBusinessHours = agentPref.businessHours[DAYS[currentDay] as any];
 
-    if (todayBusinessHours.enabledDay) {
-      return todayBusinessHours.sessions.some(session => {
-        const { startTime, endTime } = session;
-        return currentTime >= startTime && currentTime <= endTime;
-      });
-    }
-    return false;
+      if (todayBusinessHours.enabledDay) {
+        return todayBusinessHours.sessions.some(session => {
+          const { startTime, endTime } = session;
+          return currentTime >= startTime && currentTime <= endTime;
+        });
+      }
+      return false;
     })
   }
   return false;
