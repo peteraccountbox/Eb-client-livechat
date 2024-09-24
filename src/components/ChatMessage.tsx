@@ -28,6 +28,7 @@ export interface ChatMessagePropsType {
 
 const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   const format = props.message.message.format as unknown as string;
+  const attachments = props.message.message.attachments as unknown as [];
   // const filename = (message: ChatMessagePaylodObj) => {
   //   return JSON.parse(message.message).fileName;
   // };
@@ -90,6 +91,20 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                       ),
                     }}
                   ></span>
+                  {attachments && attachments.length && attachments.map((attachment: any) => {
+                                                    return (
+                                                        <div className="inbox-attachment-item" key={attachment}>
+                                                            <a className="inbox-attachment-filename"
+                                                                href={attachment.url} target="_blank" rel="noreferrer">
+                                                                
+                                                                <span>{attachment.fileName || attachment.name}</span>
+                                                            </a>
+                                                            {/* <div className="inbox-attachment-toolbar">
+                                                                <XMarkIcon className="w-3.5 h-3.5"></XMarkIcon>
+                                                            </div> */}
+                                                        </div>
+                                                    );
+                                                })}
 
                   {props.message.from === MessageByTypeEnum.GPT &&
                   props.message.sources &&
