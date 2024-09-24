@@ -73,7 +73,9 @@ const Conversation = (props: ConversationProps) => {
   const parentContext = useContext(AppContext);
   const { chatPrefs, sessions, setSessions, agentsPrefs, createSessionData } =
     parentContext;
-  const customerProfile = (window as any).reachoJSClient.getCustomerProfile();
+  const customerProfile =
+    (window as any).reachoJSClient &&
+    (window as any).reachoJSClient.getCustomerProfile();
 
   const singlefield = [
     {
@@ -468,10 +470,11 @@ const Conversation = (props: ConversationProps) => {
 
     setLocalStoragePrefs(FORM_DATA, JSON.stringify(formData));
     setSaving(true);
-    (window as any)._reachoOnsite.push([
-      "identify",
-      { email: formData.customerEmail },
-    ]);
+    if ((window as any)._reachoOnsite)
+      (window as any)._reachoOnsite.push([
+        "identify",
+        { email: formData.customerEmail },
+      ]);
     if (session && session.id) {
       const wait = getReq(ADD_EMAIL_URL_PATH, {
         customerEmail: formData.customerEmail,
