@@ -66,10 +66,10 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
             </ul>
           </div>
 
-          <div className="chat__messages-timestamp">
+          {/* <div className="chat__messages-timestamp"> */}
             {/* <>{getMessageTime()}</> */}
-            <TimeAgo time={props.message.createdTime} />
-          </div>
+            {/* <TimeAgo time={props.message.createdTime} /> */}
+          {/* </div> */}
         </div>
       </div>
     </>
