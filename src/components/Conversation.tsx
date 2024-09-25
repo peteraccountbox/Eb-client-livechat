@@ -665,7 +665,7 @@ const Conversation = (props: ConversationProps) => {
       pushMessage(event, session);
     }
 
-    if (
+    if (newChat &&
       !emailCaptured &&
       chatPrefs.meta.emailCaptureEnforcement == "required"
     ) {

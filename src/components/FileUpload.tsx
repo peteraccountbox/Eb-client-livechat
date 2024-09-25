@@ -180,7 +180,7 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
       <label htmlFor="attachments" className="chat__actions-item-trigger">
         {status !== "uploading" ? (
           <svg
-            onClick={(e: any) => uploadFile(postReq, (status, data) => {
+            onClick={(e: any) => uploadFile(postReq, (status: string, data:any) => {
               props.fileUploadCallback(status, data);
             })}
             width="16"
