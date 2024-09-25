@@ -27,8 +27,8 @@ reachoAPI.interceptors.request.use(
 
 const getServerHost = (path: string) => {
 
-  if (path.indexOf("api/ecommerce/") > -1)
-    return "http://localhost:8084/" + path;
+  // if (path.indexOf("api/ecommerce/") > -1)
+  //   return "http://localhost:8084/" + path;
 
   try {
     if (path && path.indexOf("/hc/") > -1 && !(window.parent as any).EhAccount.version) {
