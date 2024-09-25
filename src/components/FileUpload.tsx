@@ -3,6 +3,7 @@ import attach from "../assets/img/attach.png";
 import loader from "../assets/img/loader.gif";
 import { FILE_UPLOAD_URL_PATH } from "../globals";
 import { postReq } from "../request";
+import uploadFile from "../FileUpload";
 
 interface FileUploadProps {
   fileUploadCallback(status: string, file: any): void;
@@ -22,9 +23,9 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
     return status !== "uploading" ? attach : loader;
   };
   useEffect(() => {
-    return () => {};
+    return () => { };
   }, []);
-  const uploadFile = (input: any) => {
+  const uploadFile1 = (input: any) => {
     setFiles(input.files);
     setFilesCount(input.files.length);
 
@@ -53,7 +54,7 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
         file.file_resource = response.data.fileURL;
         uploadToAWSBucket(getFileData(file), file);
       })
-      .catch(() => {});
+      .catch(() => { });
     //this.sync(this.getRestURL("api/panel/contentbox/repo/getFilePath?file=" +file.file_resource) ,{"fileUrl":file.file_resource},function(data){
 
     //	file.file_resource = data.fileURL;
@@ -72,7 +73,7 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
 
     // Construct http request for post request
     var xhr = new window.XMLHttpRequest();
-    xhr.upload.addEventListener("progress", function (evt) {}, false);
+    xhr.upload.addEventListener("progress", function (evt) { }, false);
     xhr.addEventListener(
       "load",
       function (evt: any) {
@@ -175,17 +176,13 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
 
   return (
     <div className="chat__actions-item chat__attachments">
-      <input
-        ref={input}
-        type="file"
-        multiple
-        id="attachments"
-        value={""}
-        onChange={(e: any) => uploadFile(e.currentTarget)}
-      />
+
       <label htmlFor="attachments" className="chat__actions-item-trigger">
         {status !== "uploading" ? (
           <svg
+            onClick={(e: any) => uploadFile(postReq, (status, data) => {
+              props.fileUploadCallback(status, data);
+            })}
             width="16"
             height="16"
             fill="#757575"

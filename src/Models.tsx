@@ -264,6 +264,12 @@ export enum ChatSessionConnectedWithEnum {
   GPT = "GPT",
 }
 
+export type AttachmentType = {
+  url: string;
+  fileName: string;
+  name: string;
+}
+
 export type ChatMessagePayloadObj = {
   [x: string]: any;
   id?: string;
@@ -278,6 +284,7 @@ export type ChatMessagePayloadObj = {
   sources?: string;
   user_id?: number;
   created_time: number;
+  attachments?: AttachmentType[];
   misc_info?: string;
   meta_data?: string;
   gpt_relavance_score?: number;

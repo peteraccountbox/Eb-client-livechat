@@ -19,6 +19,7 @@ import {
   AIBotPrefPayloadType,
   BotDetails,
   EventPayloadObj,
+  AttachmentType,
 } from "../Models";
 import {
   getBrowserInfo,
@@ -190,7 +191,7 @@ const Conversation = (props: ConversationProps) => {
           updateAndOpenSession(newNession);
           setSession(newNession);
         })
-        .catch(() => {});
+        .catch(() => { });
       createSessionData.force = false;
       createSessionData.messageList = [];
       createSessionData.sessionDetails = {};
@@ -279,7 +280,7 @@ const Conversation = (props: ConversationProps) => {
 
       session.messageList = response.data.data;
       setSessions([...sessions]);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const getMatchedBotPrefs = () => {
@@ -361,7 +362,7 @@ const Conversation = (props: ConversationProps) => {
       .then((response) => {
         console.log("typing");
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const updateMessage = (message: ChatMessagePayloadObj) => {
@@ -421,13 +422,15 @@ const Conversation = (props: ConversationProps) => {
 
   const getChatMessage = (
     msg: string | string[] | null,
-    type?: MessageFormatType
+    type?: MessageFormatType,
+    attachments?: AttachmentType[]
   ) => {
     let state: ChatMessagePayloadObj = {
       bodyText: msg,
       format: !type ? MessageFormatType.TEXT : type,
       ticketId: session?.id && session?.id,
       created_time: new Date().getTime(),
+      attachments: attachments
     } as ChatMessagePayloadObj;
 
     // Add session id if present
@@ -491,7 +494,7 @@ const Conversation = (props: ConversationProps) => {
           setEmailCaptured(true);
           setSessionStoragePrefs(OPENED_CHAT, newNession.id);
         })
-        .catch(() => {});
+        .catch(() => { });
       return;
     }
     session.customerEmail = formData.customerEmail as string;
@@ -563,19 +566,20 @@ const Conversation = (props: ConversationProps) => {
   /**
    * Send uploaded file
    */
-  const sendFileUploadMessage = (file: any) => {
+  const sendFileUploadMessage = (file: AttachmentType) => {
+
     if (!file) return;
 
-    // Message as JSON for file upload
-    var message: any = {};
-    message.fileName = file.name;
-    message.fileUrl = file.bucketURL + file.file_resource;
-    message.fileSize = file.size;
-    message.fileType = file.type;
+    // // Message as JSON for file upload
+    // var message: any = {};
+    // message.fileName = file.name;
+    // message.fileUrl = file.bucketURL + file.file_resource;
+    // message.fileSize = file.size;
+    // message.fileType = file.type;
 
     // Send message
     postMessage(
-      getChatMessage(JSON.stringify(message), MessageFormatType.FILE)
+      getChatMessage("", MessageFormatType.TEXT, [file])
     );
   };
 
@@ -623,7 +627,7 @@ const Conversation = (props: ConversationProps) => {
 
         if (callback) callback(response);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const postMessage = (data: ChatMessagePayloadObj) => {
@@ -941,16 +945,15 @@ const Conversation = (props: ConversationProps) => {
         </div>
 
         <div
-          className={`chat__footer ${
-            showChatForm ||
+          className={`chat__footer ${showChatForm ||
             (!session.id && session.messageList?.length > 0) ||
             (chatPrefs.meta.emailCaptureEnforcement == "required" &&
               !emailCaptured &&
               !session.id &&
               session.messageList?.length > 0)
-              ? "hide"
-              : ""
-          }`}
+            ? "hide"
+            : ""
+            }`}
         >
           {getChatPrompts()}
 
@@ -986,7 +989,7 @@ const Conversation = (props: ConversationProps) => {
               <Emoji onEmojiSelect={onEmojiSelect} />
 
               {session &&
-              session.connected_with === ChatSessionConnectedWithEnum.AGENT ? (
+                session.id ? (
                 <FileUpload fileUploadCallback={fileUploadCallback} />
               ) : (
                 <></>

@@ -8,7 +8,8 @@ export const baseReqService = axios;
 export const reachoAPI = baseReqService.create({
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': TENANT_ID,
+    // 'Authorization': TENANT_ID,
+    'X-JS-Client-Key': TENANT_ID,
   },
 });
 
@@ -25,6 +26,9 @@ reachoAPI.interceptors.request.use(
 
 
 const getServerHost = (path: string) => {
+
+  if (path.indexOf("api/ecommerce/") > -1)
+    return "http://localhost:8084/" + path;
 
   try {
     if (path && path.indexOf("/hc/") > -1 && !(window.parent as any).EhAccount.version) {
@@ -49,8 +53,8 @@ export const getReq = async (
 
 };
 
-export const postReq = async (path: string, data: object) => {
-  const headers = {
+export const postReq = async (path: string, data: object, headers?: object) => {
+  headers = (headers) ? headers : {
     "Content-Type": "application/json",
     // Authorization: API_KEY,
   };

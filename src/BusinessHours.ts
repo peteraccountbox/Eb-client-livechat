@@ -26,21 +26,30 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
     return agentsPrefs.some((agentPref) => (agentPref.availability && agentPref.availability == "ONLINE"));
   }
   if (liveChatAvailability == "liveChatBusiness") {
-    return agentsPrefs.some((agentPref: AgentPrefsPayloadType) => {
-      const timezone = agentPref.timezone;
-      const now = moment.tz(timezone);
-      const currentDay = now.day(); // 0 (Sunday) to 6 (Saturday)
-      const currentTime = now.format('HH:mm');
-      const todayBusinessHours = agentPref.businessHours[DAYS[currentDay] as any];
 
-      if (todayBusinessHours.enabledDay) {
-        return todayBusinessHours.sessions.some(session => {
-          const { startTime, endTime } = session;
-          return currentTime >= startTime && currentTime <= endTime;
-        });
-      }
-      return false;
-    })
+    try {
+
+      return agentsPrefs.some((agentPref: AgentPrefsPayloadType) => {
+        const timezone = agentPref.timezone;
+        const now = moment.tz(timezone);
+        const currentDay = now.day(); // 0 (Sunday) to 6 (Saturday)
+        const currentTime = now.format('HH:mm');
+        const todayBusinessHours = agentPref.businessHours[DAYS[currentDay] as any];
+
+        if (todayBusinessHours.enabledDay) {
+          return todayBusinessHours.sessions.some(session => {
+            const { startTime, endTime } = session;
+            return currentTime >= startTime && currentTime <= endTime;
+          });
+        }
+        return false;
+      })
+
+    } catch (error) {
+
+    }
+
+    return true;
   }
   return false;
 };
