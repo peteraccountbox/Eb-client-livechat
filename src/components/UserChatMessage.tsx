@@ -103,7 +103,9 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
               message={props.message}
               updateMessage={() => {}}
             />
+            
           </li>
+          {!props.message.id && <div>Sending ...</div>}
         </ul>
 
         {canShowAnavailableMessage() ? (

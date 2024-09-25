@@ -408,7 +408,7 @@ const Conversation = (props: ConversationProps) => {
 
     session.messageList = session.messageList.map(
       (eachmessage: EventPayloadObj) => {
-        if (eachmessage.message && "SENDING" === eachmessage.message.status)
+        if (eachmessage.tempId &&  eachmessage.tempId == message.tempId)
           return message;
         return eachmessage;
       }
@@ -638,7 +638,6 @@ const Conversation = (props: ConversationProps) => {
     if (session && session.id) newChat = false;
 
     // Set status sending
-    data.status = "SENDING";
 
     var url = newChat ? NEW_SESSION_URL_PATH : MESSAGE_URL_PATH;
 
@@ -649,6 +648,7 @@ const Conversation = (props: ConversationProps) => {
       visibility: "PUBLIC",
       from: MessageByTypeEnum.CUSTOMER,
       message: data,
+      tempId:  uuidv4(),
     };
 
     // Make temp push
@@ -669,7 +669,7 @@ const Conversation = (props: ConversationProps) => {
       !emailCaptured &&
       chatPrefs.meta.emailCaptureEnforcement == "required"
     ) {
-      data.status = "";
+      // data.status = "";
       return;
     }
 

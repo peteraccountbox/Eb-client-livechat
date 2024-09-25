@@ -69,10 +69,10 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
 
   return (
     <Tippy
-      content={<TimeAgo date={new Date(getMessageTime())} />}
+      content={props.message.createdTime && <TimeAgo time={props.message.createdTime} />}
       // visible={props.message.ticketId ? true : false}
       disabled={
-        props.message.id && props.message?.status != "SENDING" ? false : true
+        props.message.id ? false : true
       }
     >
       <div className={`chat__messages-bubble chat__message-type-${format}`}>
