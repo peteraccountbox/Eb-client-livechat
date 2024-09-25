@@ -121,7 +121,6 @@ export const pushMessage = (
   // Get session from session id
   // let session = getSessionById(message.session_id);
   console.log("having session", session);
-  if (!session) return;
 
   // Update time of the session
   // session.updated_time = parseInt((new Date().getTime() / 1000).toString());
@@ -140,7 +139,7 @@ export const pushMessage = (
   session.messageList &&
     session.messageList.length &&
     session.messageList.forEach(function (eachMessage, index) {
-      if (eachMessage.id == event.id && session) {
+      if (eachMessage.id && eachMessage.id == event.id) {
         matchFound = true;
         session.messageList[index] = event;
       }

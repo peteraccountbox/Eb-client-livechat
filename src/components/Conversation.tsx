@@ -546,7 +546,6 @@ const Conversation = (props: ConversationProps) => {
       sendFileUploadMessage(file);
     } else {
       var mssg =
-        file.error_mssg ||
         "Whoops! Something went wrong. Please try again later.";
 
       var data: ChatMessagePayloadObj = getChatMessage(mssg, undefined);
@@ -559,7 +558,6 @@ const Conversation = (props: ConversationProps) => {
       };
       pushMessage(event, session);
 
-      setSessions([...sessions]);
     }
   };
 

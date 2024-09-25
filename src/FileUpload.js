@@ -46,11 +46,11 @@ export default function uploadFile(getRequest, callback) {
       callback(data); // Execute the callback with the response data
 
     })
-      .catch(() => {
+      .catch((error) => {
 
         if (callback) callback("fail", JSON.stringify(error));
 
-        console.error('Error uploading file:', error);
+        console.log('Error uploading file:', error);
 
       });
 
