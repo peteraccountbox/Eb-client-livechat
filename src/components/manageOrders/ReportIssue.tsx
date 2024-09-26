@@ -84,7 +84,15 @@ const ReportIssue = () => {
           </>
         ))
       ) : (
-        <>Loading...</>
+       
+            <p style={{ marginTop: "60px", textAlign: "center" }}>
+                <div className="chat__form-loader1">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                </div>
+                </p>
       )}
     </>
   );

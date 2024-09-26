@@ -244,7 +244,15 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
         <div className="chat__messages">
           <div className="chat__messages-track">
             <div>
-              {loading && <>Loading...</>}
+              {loading && <p style={{ marginTop: "60px", textAlign: "center" }}>
+                <div className="chat__form-loader1">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                </div>
+                </p>
+                }
 
               {!loading &&
                 executionList &&

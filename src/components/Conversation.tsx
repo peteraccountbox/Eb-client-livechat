@@ -877,7 +877,7 @@ const Conversation = (props: ConversationProps) => {
           <div className="chat__messages-track">
             <div>
               {!showChatForm ? (
-                session?.messageList?.map(
+                session?.messageList ? session?.messageList?.map(
                   (message: EventPayloadObj, index: number) => {
                     return (
                       <div>
@@ -912,7 +912,16 @@ const Conversation = (props: ConversationProps) => {
                       </div>
                     );
                   }
-                )
+                ) : 
+                
+            <p style={{ marginTop: "60px", textAlign: "center" }}>
+                <div className="chat__form-loader1">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                </div>
+                </p>
               ) : (
                 <></>
               )}
