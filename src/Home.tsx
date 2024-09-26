@@ -52,15 +52,16 @@ const Home = ({
                   alt="Logo"
                 />
               </div> */}
-              {chatPrefs.meta.decoration.headerPictureUrl ? (
-                <img style={{
-                  width: "4rem",
-                  height: "4rem",
-                  borderRadius: "5px",
-                }} src={chatPrefs.meta.decoration.headerPictureUrl} />
-              ) : (
+
+              <div>
+                <div className="home__feeds-chat-header-logo">
+                  <img src={chatPrefs.meta.decoration.headerPictureUrl} />
+                </div>
+              </div>
+              <div className="home__feeds-chat-header-name">
                 <span className="home__feeds-chat-name">{chatPrefs.name}</span>
-              )}
+              </div>
+
               <div className="chat__help-end">
                 <div className="chat__logout-panel">
                   <button
