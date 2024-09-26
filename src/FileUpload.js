@@ -1,5 +1,5 @@
 // Function to handle file upload
-export default function uploadFile(getRequest, callback) {
+export default function uploadFile(getRequest, setStatus, callback) {
 
   // Dynamically create the file input element
   const fileInput = document.createElement('input');
@@ -15,6 +15,7 @@ export default function uploadFile(getRequest, callback) {
     const file = event.target.files[0]; // Get the selected file
     if (file) {
       // Call uploadFile and provide a callback function
+      setStatus("uploading");
       upload(file);
     }
     document.body.removeChild(fileInput);
@@ -40,10 +41,10 @@ export default function uploadFile(getRequest, callback) {
 
       if (callback) callback("success", response.data);
 
-      console.log('File uploaded successfully:', data);
+      console.log('File uploaded successfully:', response.data);
 
       // Remove the file input element after upload
-      callback(data); // Execute the callback with the response data
+      // callback(data); // Execute the callback with the response data
 
     })
       .catch((error) => {

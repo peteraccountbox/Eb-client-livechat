@@ -53,7 +53,11 @@ const Home = ({
                 />
               </div> */}
               {chatPrefs.meta.decoration.headerPictureUrl ? (
-                <img src={chatPrefs.meta.decoration.headerPictureUrl} />
+                <img style={{
+                  width: "4rem",
+                  height: "4rem",
+                  borderRadius: "5px",
+                }} src={chatPrefs.meta.decoration.headerPictureUrl} />
               ) : (
                 <span className="home__feeds-chat-name">{chatPrefs.name}</span>
               )}

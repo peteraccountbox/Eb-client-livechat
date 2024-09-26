@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useMemo } from "react";
 import { getTextOfJSDocComment } from "typescript";
 import {
   ChatMessagePayloadObj,
@@ -29,6 +29,12 @@ export interface ChatMessagePropsType {
 const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   const format = props.message.message.format as unknown as string;
   const attachments = props.message.message.attachments as unknown as [];
+
+  const errorStyle = useMemo(() => {
+    return !props.message.id && !props.message.tempId ? 
+     {backgroundColor: "red"} : {}
+  }
+, [!props.message.id])
   // const filename = (message: ChatMessagePaylodObj) => {
   //   return JSON.parse(message.message).fileName;
   // };
@@ -75,7 +81,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
         props.message.id ? false : true
       }
     >
-      <div className={`chat__messages-bubble chat__message-type-${format}`}>
+      <div className={`chat__messages-bubble chat__message-type-${format}`} style={errorStyle}>
         {(() => {
           setScrollBottom();
           switch (format) {

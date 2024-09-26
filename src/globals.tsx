@@ -147,7 +147,7 @@ export const HC_SEARCH_TEXT = "hc_search_text";
 export const HC_ACTIVE_COMPONENT = "hc_active_component";
 
 export const DEFAULT_AGENT_PROFILE_PIC =
-  "https://static1.eb-pages.com/uploads/5646021333876736/avatar_new(35).png";
+  "https://files.reacho.com/images/app-images/profile-1.png";
 
 export const IS_NEW_SESSION: boolean = (function () {
   // console.log("Checkingup the session");

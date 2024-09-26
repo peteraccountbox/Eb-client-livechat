@@ -35,6 +35,7 @@ import {
   CHANNEL_ID,
   CONNECT_TO_AGENT_URL_PATH,
   CONVERSATION_MESSAGE_FETCH_URL_PATH,
+  DEFAULT_AGENT_PROFILE_PIC,
   FORM_DATA,
   MESSAGE_URL_PATH,
   NEW_SESSION_URL_PATH,
@@ -558,6 +559,8 @@ const Conversation = (props: ConversationProps) => {
       };
       pushMessage(event, session);
 
+      setSessions([...sessions]);
+
     }
   };
 
@@ -760,7 +763,7 @@ const Conversation = (props: ConversationProps) => {
 
     if (matchedBotPrefs?.id) return matchedBotPrefs?.settings.chatBotIconURL;
 
-    return parentContext.chatPrefs.meta.decoration.headerPictureUrl;
+    return parentContext.chatPrefs.meta.decoration.headerPictureUrl || DEFAULT_AGENT_PROFILE_PIC;
   };
 
   const getHeaderName = () => {
