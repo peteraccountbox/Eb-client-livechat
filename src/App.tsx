@@ -434,7 +434,7 @@ const App: React.FunctionComponent = () => {
       const response = await getReq(CONVERSATIONS_FETCH_URL_PATH, {
         page: 0,
         size: 20,
-        sort: "-lastMessageAt",
+        sort: "lastMessageAt,DESC",
       });
 
       console.log(response);
