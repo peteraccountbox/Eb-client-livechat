@@ -211,7 +211,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
               <div
               // data-a={JSON.stringify(getLatestChat())}
               >
-                {props.session.lastMessage}
+                {props.session.lastMessage ? props.session.lastMessage : "File"}
               </div>
               {/* <TypingLoader /> */}
             </>
