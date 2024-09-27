@@ -95,7 +95,7 @@
 }
 
 .chat {
-	width: calc(100% - 40px);
+	width: calc(100% - 20px);
 	position: fixed;
 	bottom: 82px;
 	right: auto;
@@ -685,6 +685,21 @@
 			//margin-right: 1.333rem;
 			// margin-left: 0.85rem;
 			line-height: 1;
+			width: 28px;
+			height: 28px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 4px;
+
+			&:hover {
+				background-color: rgb(0 0 0 / .15);
+			}
+
+			svg {
+				width: 22px;
+				height: 22px;
+			}
 
 			@include atSmall {
 				//margin-right: 1rem;
@@ -5359,6 +5374,17 @@ input[type="checkbox"] {
 	min-width: 0;
 }
 
+.home__feeds-chat-header-logo {
+	width: 32px;
+	height: 32px;
+
+	img {
+		width: auto;
+		height: 32px;
+		border-radius: 50px;
+	}
+}
+
 .home__feeds-chat-name {
 	font-size: 16px;
 	font-weight: 600;
@@ -5371,16 +5397,4 @@ input[type="checkbox"] {
 	white-space: nowrap;
 	overflow: hidden;
 	display: block;
-}
-
-
-.home__feeds-chat-header-logo {
-	width: 32px;
-	height: 32px;
-
-	img {
-		width: auto;
-		height: 32px;
-		border-radius: 5px;
-	}
 }
