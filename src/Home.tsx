@@ -221,44 +221,75 @@ const Home = ({
                   </div>
                 </>
               )}
-
-              <div
-                className="home__feeds-send-card"
-                onClick={() => startNewChat()}
-              >
-                <div className="home__feeds-media">
-                  <div className="home__feeds-media-content">
-                    <h5>Send us a message </h5>
-                    {/* <p>We typically reply within a day</p> */}
-                  </div>
-                  <div className="home__feeds-media-icon">
-                    <svg
-                      className="chat_send_icon"
-                      id="fi_9290348"
-                      enable-background="new 0 0 32 32"
-                      viewBox="0 0 32 32"
-                      style={{ fill: "white" }}
-                      width={18}
-                      height={18}
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path d="m21.1646194 29.9911366c-1.0395126.0777702-2.0082016-.2969723-2.7011948-.9899673-.6219101-.2503929-4.0971422-8.8551025-4.4971895-9.5459404l6.646821-6.646822c.395977-.395978.3889008-1.0253134 0-1.4142132-.3959789-.395978-1.0182362-.395978-1.4142132 0l-6.646822 6.6468201-8.4994373-3.7759256c-1.3576331-.6081448-2.1566238-1.9445429-2.0435059-3.4294939.1201961-1.4778719 1.1243188-2.6799183 2.552645-3.0617409l21.0859309-5.6568974c1.2091236-.3181636 2.4607162.0141559 3.3446007.8980393.8768063.8768055 1.2091255 2.1283982.8909607 3.3375232l-5.6568527 21.0859737c-.3818227 1.4283253-1.5839139 2.4324051-3.0617429 2.5526444z"></path>
-                    </svg>
+              {!chatPrefs.orderManagement &&
+              (!recentSessions || !recentSessions.length) &&
+              (!chatFlows || !chatFlows.length) ? (
+                <div className="home__feeds-no-data-send-card">
+                  <h5 className="home__feeds-no-data-send-card-title">
+                    Begin the Conversation
+                  </h5>
+                  <div
+                    className="home__feeds-send-card"
+                    onClick={() => startNewChat()}
+                  >
+                    <div className="home__feeds-media">
+                      <div className="home__feeds-media-content">
+                        <h5>Send us a message </h5>
+                        {/* <p>We typically reply within a day</p> */}
+                      </div>
+                      <div className="home__feeds-media-icon">
+                        <svg
+                          className="chat_send_icon"
+                          id="fi_9290348"
+                          enable-background="new 0 0 32 32"
+                          viewBox="0 0 32 32"
+                          style={{ fill: "white" }}
+                          width={18}
+                          height={18}
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="m21.1646194 29.9911366c-1.0395126.0777702-2.0082016-.2969723-2.7011948-.9899673-.6219101-.2503929-4.0971422-8.8551025-4.4971895-9.5459404l6.646821-6.646822c.395977-.395978.3889008-1.0253134 0-1.4142132-.3959789-.395978-1.0182362-.395978-1.4142132 0l-6.646822 6.6468201-8.4994373-3.7759256c-1.3576331-.6081448-2.1566238-1.9445429-2.0435059-3.4294939.1201961-1.4778719 1.1243188-2.6799183 2.552645-3.0617409l21.0859309-5.6568974c1.2091236-.3181636 2.4607162.0141559 3.3446007.8980393.8768063.8768055 1.2091255 2.1283982.8909607 3.3375232l-5.6568527 21.0859737c-.3818227 1.4283253-1.5839139 2.4324051-3.0617429 2.5526444z"></path>
+                        </svg>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div
+                  className="home__feeds-send-card"
+                  onClick={() => startNewChat()}
+                >
+                  <div className="home__feeds-media">
+                    <div className="home__feeds-media-content">
+                      <h5>Send us a message </h5>
+                      {/* <p>We typically reply within a day</p> */}
+                    </div>
+                    <div className="home__feeds-media-icon">
+                      <svg
+                        className="chat_send_icon"
+                        id="fi_9290348"
+                        enable-background="new 0 0 32 32"
+                        viewBox="0 0 32 32"
+                        style={{ fill: "white" }}
+                        width={18}
+                        height={18}
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="m21.1646194 29.9911366c-1.0395126.0777702-2.0082016-.2969723-2.7011948-.9899673-.6219101-.2503929-4.0971422-8.8551025-4.4971895-9.5459404l6.646821-6.646822c.395977-.395978.3889008-1.0253134 0-1.4142132-.3959789-.395978-1.0182362-.395978-1.4142132 0l-6.646822 6.6468201-8.4994373-3.7759256c-1.3576331-.6081448-2.1566238-1.9445429-2.0435059-3.4294939.1201961-1.4778719 1.1243188-2.6799183 2.552645-3.0617409l21.0859309-5.6568974c1.2091236-.3181636 2.4607162.0141559 3.3446007.8980393.8768063.8768055 1.2091255 2.1283982.8909607 3.3375232l-5.6568527 21.0859737c-.3818227 1.4283253-1.5839139 2.4324051-3.0617429 2.5526444z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-          <div className="chat__tabs-footer">
-      <div className="chat__powered__by-footer">
-              <a
-                target="_blank"
-                href="https://www.reacho.com"
-              >
+          <div className="chat__tabs-footer" style={{ display: "none" }}>
+            <div className="chat__powered__by-footer">
+              <a target="_blank" href="https://www.reacho.com">
                 Powered by Reacho
               </a>
             </div>
-            </div>
+          </div>
         </div>
       </div>
 

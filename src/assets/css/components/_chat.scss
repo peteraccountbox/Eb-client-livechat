@@ -4269,7 +4269,7 @@
 		a {
 			text-decoration: none !important;
 			color: #000000;
-            opacity: .5;
+			opacity: .5;
 
 			// &:hover {
 			// 	color: #2d2f31;
@@ -5397,7 +5397,7 @@ input[type="checkbox"] {
 	display: flex;
 	-webkit-box-align: center;
 	align-items: center;
-	padding-left: 10px;
+	// padding-left: 10px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
@@ -5414,10 +5414,33 @@ input[type="checkbox"] {
 	&-avatr {
 		width: 30px;
 		height: 30px;
+		margin-right: 10px;
 	}
 
 	.chat__header-user-img {
 		display: inline-block;
 		margin-left: 0px;
+	}
+}
+
+.home__feeds-no-data-send-card {
+	padding: 20px;
+	min-height: 160px;
+	background-color: #ffffff;
+	border-radius: 10px;
+	display: flex;
+	align-items: start;
+	justify-content: center;
+	flex-direction: column;
+	margin-top: 50px;
+
+	&-title {
+		font-size: 20px;
+		margin-bottom: 20px;
+
+	}
+
+	.home__feeds-send-card {
+		width: 100%;
 	}
 }
