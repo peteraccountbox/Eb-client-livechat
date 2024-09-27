@@ -180,3 +180,11 @@ export const getCustomerProfile = () => {
   return undefined;
 
 }
+
+export const getReachoOnsite = () => {
+  try {
+    return (window as any)._reachoOnsite;
+  } catch (error) {
+    return undefined;
+  }
+}
