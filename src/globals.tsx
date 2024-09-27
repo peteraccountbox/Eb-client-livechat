@@ -171,3 +171,20 @@ export const FooterTabs = [
     enable: true,
   },
 ];
+
+export const getCustomerProfile = () => {
+
+  try {
+    return (window as any).parent.reachoJSClient.getCustomerProfile();
+  } catch (e) { }
+  return undefined;
+
+}
+
+export const getReachoOnsite = () => {
+  try {
+    return (window as any).parent._reachoOnsite;
+  } catch (error) {
+    return undefined;
+  }
+}
