@@ -171,3 +171,12 @@ export const FooterTabs = [
     enable: true,
   },
 ];
+
+export const getCustomerProfile = () => {
+
+  try {
+    return (window as any).reachoJSClient.getCustomerProfile();
+  } catch (e) { }
+  return undefined;
+
+}

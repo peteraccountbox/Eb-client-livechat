@@ -37,6 +37,8 @@ import {
   CONVERSATION_MESSAGE_FETCH_URL_PATH,
   DEFAULT_AGENT_PROFILE_PIC,
   FORM_DATA,
+  getCustomerProfile,
+  getReachoOnsite,
   MESSAGE_URL_PATH,
   NEW_SESSION_URL_PATH,
   OPENED_CHAT,
@@ -76,8 +78,9 @@ const Conversation = (props: ConversationProps) => {
   const { chatPrefs, sessions, setSessions, agentsPrefs, createSessionData } =
     parentContext;
   const customerProfile =
-    (window as any).reachoJSClient &&
-    (window as any).reachoJSClient.getCustomerProfile();
+  getCustomerProfile()
+
+  const _reachoOnsite =  getReachoOnsite();
 
   const singlefield = [
     {
@@ -474,8 +477,8 @@ const Conversation = (props: ConversationProps) => {
 
     setLocalStoragePrefs(FORM_DATA, JSON.stringify(formData));
     setSaving(true);
-    if ((window as any)._reachoOnsite)
-      (window as any)._reachoOnsite.push([
+    if (_reachoOnsite)
+      _reachoOnsite.push([
         "identify",
         { email: formData.customerEmail, name: formData.customerName },
       ]);
