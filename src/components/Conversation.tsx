@@ -114,7 +114,7 @@ const Conversation = (props: ConversationProps) => {
       label: "Drop your name",
       type: "text",
       required: true,
-      value: "",
+      value: customerProfile && customerProfile.name ? customerProfile.name : "",
       placeholder: "Enter Name",
       error: "",
       is_valid: true,
@@ -660,6 +660,12 @@ const Conversation = (props: ConversationProps) => {
       session.createdSource = "WEBSITE";
       session.createdBy = MessageByTypeEnum.CUSTOMER;
       session.subject = data.bodyText;
+      if(customerProfile.email) {
+      session.customerEmail = customerProfile.email;
+      setEmailCaptured(emailCaptured => true);
+      }
+      if(customerProfile.name) 
+        session.customerName = customerProfile.name;
       pushMessage(event, session);
     } else {
       data.ticketId = session?.id + "";
@@ -669,10 +675,9 @@ const Conversation = (props: ConversationProps) => {
     if (newChat &&
       !emailCaptured &&
       chatPrefs.meta.emailCaptureEnforcement == "required"
-    ) {
-      // data.status = "";
+    ) 
       return;
-    }
+    
 
     submitSessionEvent(url, newChat ? session : event, (response: any) => {
       if (newChat) {
