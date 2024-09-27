@@ -512,6 +512,7 @@ const Conversation = (props: ConversationProps) => {
         visibility: "PUBLIC",
         from: MessageByTypeEnum.CUSTOMER,
         message: msg,
+        tempId:  uuidv4(),
       };
 
       session.channelId = CHANNEL_ID;
