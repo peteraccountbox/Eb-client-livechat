@@ -5354,11 +5354,33 @@ input[type="checkbox"] {
 	width: 16px;
 	height: 16px;
 }
+
+.home__feeds-chat-header-name {
+	min-width: 0;
+}
+
 .home__feeds-chat-name {
 	font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
+	font-weight: 600;
+	line-height: 24px;
+	display: flex;
+	-webkit-box-align: center;
+	align-items: center;
+	padding-left: 10px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	display: block;
+}
+
+
+.home__feeds-chat-header-logo {
+	width: 32px;
+	height: 32px;
+
+	img {
+		width: auto;
+		height: 32px;
+		border-radius: 5px;
+	}
 }
