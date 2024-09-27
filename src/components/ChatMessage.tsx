@@ -19,6 +19,7 @@ import { GPT_MESSAGE_SCORE_UPDATE_URL_PATH } from "../globals";
 import { postReq } from "../request";
 import Tippy from "@tippyjs/react";
 import TimeAgo from "./TimeAgo";
+import 'tippy.js/dist/tippy.css';
 
 export interface ChatMessagePropsType {
   message: EventPayloadObj;
