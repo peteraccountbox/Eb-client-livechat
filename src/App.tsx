@@ -751,10 +751,10 @@ const App: React.FunctionComponent = () => {
       "--bottom": settings?.length < 2 ? "20px" : "125px",
       "--reduceHeight": settings?.length < 2 ? "135px" : "210px",
       "--themeColor": offlineColor
-        ? "#111827"
+        ? "#959ba8"
         : mainColor
         ? chatPrefs.meta.decoration.mainColor
-        : "blue",
+        : "#345BD7",
       // "--themeColor2":
       //   chatPrefs && chatPrefs.meta.decoration.mainColor
       //     ? chatPrefs.meta.decoration.mainColor

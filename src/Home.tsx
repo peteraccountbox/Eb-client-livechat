@@ -245,10 +245,20 @@ const Home = ({
               </div>
             </div>
           </div>
+          <div className="chat__tabs-footer">
+      <div className="chat__powered__by-footer">
+              <a
+                target="_blank"
+                href="https://www.reacho.com"
+              >
+                Powered by Reacho
+              </a>
+            </div>
+            </div>
         </div>
       </div>
 
-      <ChatTabsList />
+      {/* <ChatTabsList /> */}
     </>
   );
 };
