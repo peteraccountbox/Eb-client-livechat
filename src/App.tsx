@@ -57,7 +57,6 @@ import Home from "./Home";
 import LiveChat from "./LiveChat";
 import { pushMessage, resizeFrame } from "./Utils";
 import HelpCenter from "./HelpCenter";
-import Tickets from "./Tickets";
 import Loader from "./components/Loader";
 import NewPromptMessage from "./NewPromptMessage";
 import eventBus from "./eventBus";
@@ -859,9 +858,7 @@ const App: React.FunctionComponent = () => {
                         return <Loader />;
                       }
 
-                      if (widgetFooterTabs.Tickets == activeTab) {
-                        return <Tickets />;
-                      }
+                      
 
                       if (widgetFooterTabs.Help == activeTab) {
                         return <HelpCenter />;

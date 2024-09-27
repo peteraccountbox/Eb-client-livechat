@@ -15,10 +15,6 @@ const Preview: FC<PreviewComponentProps> = (props) => {
 
   const settings = [{ tab: "Messages" }];
 
-  const logo = chatPrefs?.meta.decoration.headerPictureUrl
-    ? chatPrefs.meta.decoration.headerPictureUrl
-    : "https://cdn5.engagebay.com/assets/img/engagebay-brand-logo-white.svg";
-  const [tab, setTab] = useState(settings ? settings[0]?.tab : "Messages");
   const appThemeStyle: Object = useMemo(() => {
     return {
       "--bottom": settings?.length < 2 ? "20px" : "125px",
