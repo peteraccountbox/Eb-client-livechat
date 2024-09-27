@@ -218,6 +218,8 @@ export type ChatSessionPaylodObj = {
 
   messageList: EventPayloadObj[];
 
+  identifiers: any;
+
   customerUnreadMessagesCount: number;
 
   bot_conversation_id: string;

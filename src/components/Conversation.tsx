@@ -202,7 +202,7 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const isEmailCaptured = (): boolean => {
-    return !session.customerEmail && chatPrefs.meta.emailCaptureEnabled
+    return !session.identifiers?.email && chatPrefs.meta.emailCaptureEnabled
       ? false
       : true;
   };
@@ -477,7 +477,7 @@ const Conversation = (props: ConversationProps) => {
     if ((window as any)._reachoOnsite)
       (window as any)._reachoOnsite.push([
         "identify",
-        { email: formData.customerEmail },
+        { email: formData.customerEmail, name: formData.customerName },
       ]);
     if (session && session.id) {
       const wait = getReq(ADD_EMAIL_URL_PATH, {
