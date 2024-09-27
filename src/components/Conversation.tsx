@@ -114,7 +114,8 @@ const Conversation = (props: ConversationProps) => {
       label: "Drop your name",
       type: "text",
       required: true,
-      value: customerProfile && customerProfile.name ? customerProfile.name : "",
+      value:
+        customerProfile && customerProfile.name ? customerProfile.name : "",
       placeholder: "Enter Name",
       error: "",
       is_valid: true,
@@ -192,7 +193,7 @@ const Conversation = (props: ConversationProps) => {
           updateAndOpenSession(newNession);
           setSession(newNession);
         })
-        .catch(() => { });
+        .catch(() => {});
       createSessionData.force = false;
       createSessionData.messageList = [];
       createSessionData.sessionDetails = {};
@@ -281,7 +282,7 @@ const Conversation = (props: ConversationProps) => {
 
       session.messageList = response.data.data;
       setSessions([...sessions]);
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const getMatchedBotPrefs = () => {
@@ -363,7 +364,7 @@ const Conversation = (props: ConversationProps) => {
       .then((response) => {
         console.log("typing");
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const updateMessage = (message: ChatMessagePayloadObj) => {
@@ -409,7 +410,7 @@ const Conversation = (props: ConversationProps) => {
 
     session.messageList = session.messageList.map(
       (eachmessage: EventPayloadObj) => {
-        if (eachmessage.tempId &&  eachmessage.tempId == message.tempId)
+        if (eachmessage.tempId && eachmessage.tempId == message.tempId)
           return message;
         return eachmessage;
       }
@@ -431,7 +432,7 @@ const Conversation = (props: ConversationProps) => {
       format: !type ? MessageFormatType.TEXT : type,
       ticketId: session?.id && session?.id,
       created_time: new Date().getTime(),
-      attachments: attachments
+      attachments: attachments,
     } as ChatMessagePayloadObj;
 
     // Add session id if present
@@ -495,7 +496,7 @@ const Conversation = (props: ConversationProps) => {
           setEmailCaptured(true);
           setSessionStoragePrefs(OPENED_CHAT, newNession.id);
         })
-        .catch(() => { });
+        .catch(() => {});
       return;
     }
     session.customerEmail = formData.customerEmail as string;
@@ -512,7 +513,7 @@ const Conversation = (props: ConversationProps) => {
         visibility: "PUBLIC",
         from: MessageByTypeEnum.CUSTOMER,
         message: msg,
-        tempId:  uuidv4(),
+        tempId: uuidv4(),
       };
 
       session.channelId = CHANNEL_ID;
@@ -547,8 +548,7 @@ const Conversation = (props: ConversationProps) => {
     if (status == "success") {
       sendFileUploadMessage(file);
     } else {
-      var mssg =
-        "Whoops! Something went wrong. Please try again later.";
+      var mssg = "Whoops! Something went wrong. Please try again later.";
 
       var data: ChatMessagePayloadObj = getChatMessage(mssg, undefined);
       let event: EventPayloadObj = {
@@ -561,7 +561,6 @@ const Conversation = (props: ConversationProps) => {
       pushMessage(event, session);
 
       setSessions([...sessions]);
-
     }
   };
 
@@ -569,7 +568,6 @@ const Conversation = (props: ConversationProps) => {
    * Send uploaded file
    */
   const sendFileUploadMessage = (file: AttachmentType) => {
-
     if (!file) return;
 
     // // Message as JSON for file upload
@@ -580,9 +578,7 @@ const Conversation = (props: ConversationProps) => {
     // message.fileType = file.type;
 
     // Send message
-    postMessage(
-      getChatMessage("", MessageFormatType.TEXT, [file])
-    );
+    postMessage(getChatMessage("", MessageFormatType.TEXT, [file]));
   };
 
   const getFormMetaData = () => {
@@ -629,7 +625,7 @@ const Conversation = (props: ConversationProps) => {
 
         if (callback) callback(response);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const postMessage = (data: ChatMessagePayloadObj) => {
@@ -650,7 +646,7 @@ const Conversation = (props: ConversationProps) => {
       visibility: "PUBLIC",
       from: MessageByTypeEnum.CUSTOMER,
       message: data,
-      tempId:  uuidv4(),
+      tempId: uuidv4(),
     };
 
     // Make temp push
@@ -661,11 +657,11 @@ const Conversation = (props: ConversationProps) => {
       session.createdSource = "WEBSITE";
       session.createdBy = MessageByTypeEnum.CUSTOMER;
       session.subject = data.bodyText;
-      if(customerProfile && customerProfile.email) {
-      session.customerEmail = customerProfile.email;
-      setEmailCaptured(emailCaptured => true);
+      if (customerProfile && customerProfile.email) {
+        session.customerEmail = customerProfile.email;
+        setEmailCaptured((emailCaptured) => true);
       }
-      if(customerProfile && customerProfile.name) 
+      if (customerProfile && customerProfile.name)
         session.customerName = customerProfile.name;
       pushMessage(event, session);
     } else {
@@ -673,12 +669,12 @@ const Conversation = (props: ConversationProps) => {
       pushMessage(event, session);
     }
 
-    if (newChat &&
+    if (
+      newChat &&
       !emailCaptured &&
       chatPrefs.meta.emailCaptureEnforcement == "required"
-    ) 
+    )
       return;
-    
 
     submitSessionEvent(url, newChat ? session : event, (response: any) => {
       if (newChat) {
@@ -769,7 +765,10 @@ const Conversation = (props: ConversationProps) => {
 
     if (matchedBotPrefs?.id) return matchedBotPrefs?.settings.chatBotIconURL;
 
-    return parentContext.chatPrefs.meta.decoration.headerPictureUrl || DEFAULT_AGENT_PROFILE_PIC;
+    return (
+      parentContext.chatPrefs.meta.decoration.headerPictureUrl ||
+      DEFAULT_AGENT_PROFILE_PIC
+    );
   };
 
   const getHeaderName = () => {
@@ -881,8 +880,9 @@ const Conversation = (props: ConversationProps) => {
       <div className="chat__content">
         <div className="chat__messages">
           <div className="chat__messages-track">
-              {!showChatForm ? (
-                session?.messageList ? session?.messageList?.map(
+            {!showChatForm ? (
+              session?.messageList ? (
+                session?.messageList?.map(
                   (message: EventPayloadObj, index: number) => {
                     return (
                       <div>
@@ -917,34 +917,35 @@ const Conversation = (props: ConversationProps) => {
                       </div>
                     );
                   }
-                ) : 
-                
-            <p style={{ marginTop: "60px", textAlign: "center" }}>
-                <div className="chat__form-loader1">
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                </div>
+                )
+              ) : (
+                <p style={{ marginTop: "60px", textAlign: "center" }}>
+                  <div className="chat__form-loader1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
                 </p>
-              ) : (
-                <></>
-              )}
+              )
+            ) : (
+              <></>
+            )}
 
-              {showChatForm ? (
-                <ChatForm
-                  closeChatForm={() => {
-                    setShowChatForm(false);
-                  }}
-                  fields={fields}
-                  submitChatForm={submitChatForm}
-                  typeText={typeText}
-                  setTypeText={setTypeText}
-                  saving={saving}
-                />
-              ) : (
-                <></>
-              )}
+            {showChatForm ? (
+              <ChatForm
+                closeChatForm={() => {
+                  setShowChatForm(false);
+                }}
+                fields={fields}
+                submitChatForm={submitChatForm}
+                typeText={typeText}
+                setTypeText={setTypeText}
+                saving={saving}
+              />
+            ) : (
+              <></>
+            )}
           </div>
           <div className="chat__messages-sign hide">
             <a target="_blank">
@@ -959,15 +960,16 @@ const Conversation = (props: ConversationProps) => {
         </div>
 
         <div
-          className={`chat__footer ${showChatForm ||
+          className={`chat__footer ${
+            showChatForm ||
             (!session.id && session.messageList?.length > 0) ||
             (chatPrefs.meta.emailCaptureEnforcement == "required" &&
               !emailCaptured &&
               !session.id &&
               session.messageList?.length > 0)
-            ? "hide"
-            : ""
-            }`}
+              ? "hide"
+              : ""
+          }`}
         >
           {getChatPrompts()}
 
@@ -1002,8 +1004,7 @@ const Conversation = (props: ConversationProps) => {
             <div className="chat__actions">
               <Emoji onEmojiSelect={onEmojiSelect} />
 
-              {session &&
-                session.id ? (
+              {session && session.id ? (
                 <FileUpload fileUploadCallback={fileUploadCallback} />
               ) : (
                 <></>
@@ -1011,7 +1012,7 @@ const Conversation = (props: ConversationProps) => {
 
               {typeText ? (
                 <button
-                  className="chat__btn chat_send_btn"
+                  className="chat__btn chat_send_btn1 chat_send_btn-icon"
                   onClick={() => sendMessage(false)}
                 >
                   <svg

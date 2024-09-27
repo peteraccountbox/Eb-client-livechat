@@ -31,10 +31,10 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   const attachments = props.message.message.attachments as unknown as [];
 
   const errorStyle = useMemo(() => {
-    return !props.message.id && !props.message.tempId ? 
-     {backgroundColor: "red"} : {}
-  }
-, [!props.message.id])
+    return !props.message.id && !props.message.tempId
+      ? { backgroundColor: "red" }
+      : {};
+  }, [!props.message.id]);
   // const filename = (message: ChatMessagePaylodObj) => {
   //   return JSON.parse(message.message).fileName;
   // };
@@ -75,13 +75,18 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
 
   return (
     <Tippy
-      content={props.message.createdTime && <TimeAgo time={props.message.createdTime} />}
-      // visible={props.message.ticketId ? true : false}
-      disabled={
-        props.message.id ? false : true
+      content={
+        props.message.createdTime && (
+          <TimeAgo time={props.message.createdTime} />
+        )
       }
+      // visible={props.message.ticketId ? true : false}
+      disabled={props.message.id ? false : true}
     >
-      <div className={`chat__messages-bubble chat__message-type-${format}`} style={errorStyle}>
+      <div
+        className={`chat__messages-bubble chat__message-type-${format}`}
+        style={errorStyle}
+      >
         {(() => {
           setScrollBottom();
           switch (format) {
@@ -97,20 +102,34 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                       ),
                     }}
                   ></span>
-                  {attachments && attachments.length && attachments.map((attachment: any) => {
-                                                    return (
-                                                        <div className="inbox-attachment-item" key={attachment}>
-                                                            <a className="inbox-attachment-filename"
-                                                                href={attachment.url} target="_blank" rel="noreferrer">
-                                                                
-                                                                <span>{attachment.fileName || attachment.name}</span>
-                                                            </a>
-                                                            {/* <div className="inbox-attachment-toolbar">
+                  {attachments &&
+                    attachments.length &&
+                    attachments.map((attachment: any) => {
+                      return (
+                        <div className="inbox-attachment-item" key={attachment}>
+                          <div className="inbox-attachment-item-body">
+                            <div className="inbox-attachment-item-avatr">
+                              <div className="chat__header-user-img chat__header-user-file-img">
+                                <img src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/chatfile.png" />
+                              </div>
+                            </div>
+                            <a
+                              className="inbox-attachment-filename chat__header-user-table-cell"
+                              href={attachment.url}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              <span>
+                                {attachment.fileName || attachment.name}
+                              </span>
+                            </a>
+                            {/* <div className="inbox-attachment-toolbar">
                                                                 <XMarkIcon className="w-3.5 h-3.5"></XMarkIcon>
                                                             </div> */}
-                                                        </div>
-                                                    );
-                                                })}
+                          </div>
+                        </div>
+                      );
+                    })}
 
                   {props.message.from === MessageByTypeEnum.GPT &&
                   props.message.sources &&

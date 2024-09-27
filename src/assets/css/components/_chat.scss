@@ -2284,6 +2284,10 @@
 	}
 }
 
+.chat_send_btn-icon {
+	color: var(--themeColor);
+}
+
 .chat_notifications_count {
 	position: absolute;
 	left: auto;
@@ -5397,4 +5401,22 @@ input[type="checkbox"] {
 	white-space: nowrap;
 	overflow: hidden;
 	display: block;
+}
+
+.inbox-attachment-item {
+	&-body {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	&-avatr {
+		width: 30px;
+		height: 30px;
+	}
+
+	.chat__header-user-img {
+		display: inline-block;
+		margin-left: 0px;
+	}
 }
