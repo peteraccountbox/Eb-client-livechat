@@ -661,11 +661,11 @@ const Conversation = (props: ConversationProps) => {
       session.createdSource = "WEBSITE";
       session.createdBy = MessageByTypeEnum.CUSTOMER;
       session.subject = data.bodyText;
-      if(customerProfile.email) {
+      if(customerProfile && customerProfile.email) {
       session.customerEmail = customerProfile.email;
       setEmailCaptured(emailCaptured => true);
       }
-      if(customerProfile.name) 
+      if(customerProfile && customerProfile.name) 
         session.customerName = customerProfile.name;
       pushMessage(event, session);
     } else {
