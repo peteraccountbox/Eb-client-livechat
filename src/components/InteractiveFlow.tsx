@@ -333,7 +333,7 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
                 src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/love-icon.svg"
                 width="12px"
               />
-              EngageBay
+              Reacho
             </a>
           </div>
         </div>
