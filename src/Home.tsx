@@ -221,7 +221,7 @@ const Home = ({
                   </div>
                 </>
               )}
-              {!chatPrefs.orderManagement &&
+              {chatPrefs.orderManagement &&
               (!recentSessions || !recentSessions.length) &&
               (!chatFlows || !chatFlows.length) ? (
                 <div className="home__feeds-no-data-send-card">
@@ -283,7 +283,7 @@ const Home = ({
               )}
             </div>
           </div>
-          <div className="chat__tabs-footer" style={{ display: "none" }}>
+          <div className="chat__tabs-footer">
             <div className="chat__powered__by-footer">
               <a target="_blank" href="https://www.reacho.com">
                 Powered by Reacho
