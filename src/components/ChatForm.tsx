@@ -141,7 +141,7 @@ const ChatForm: FC<ChatFormPropsType> = (props) => {
         <div className="text-left" style={{ marginBottom: "5px" }}>
           <pre>
             <p className="mb-2">
-              {parentContext.chatPrefs.meta.decoration.introductionText}
+            {formFields && formFields.length && (formFields.length >  1  ? "Enter Details" : "Drop your email")}
             </p>
           </pre>
         </div>

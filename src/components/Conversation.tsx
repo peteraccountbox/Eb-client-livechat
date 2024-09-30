@@ -888,8 +888,7 @@ const Conversation = (props: ConversationProps) => {
                 session?.messageList?.map(
                   (message: EventPayloadObj, index: number) => {
                     return (
-                      <div>
-                        <div>
+                      <>
                           {message.eventType == "INTERACTIVE_FLOW_NODE" ? (
                             <InteractiveFlowItem
                               execution={message.meta.executionNode}
@@ -916,8 +915,7 @@ const Conversation = (props: ConversationProps) => {
                               )}
                             </>
                           )}
-                        </div>
-                      </div>
+                      </>
                     );
                   }
                 )
