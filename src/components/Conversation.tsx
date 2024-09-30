@@ -902,7 +902,7 @@ const Conversation = (props: ConversationProps) => {
                                 nextMessage={session?.messageList[index + 1]}
                                 updateMessage={updateMessage}
                               />
-                              {index == 0 && !emailCaptured && (
+                              {index == 0 && !emailCaptured && message.id && (
                                 <ChatForm
                                   closeChatForm={() => {
                                     setShowChatForm(false);
