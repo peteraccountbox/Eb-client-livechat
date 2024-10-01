@@ -221,7 +221,7 @@ const Home = ({
                   </div>
                 </>
               )}
-              {chatPrefs.orderManagement &&
+              {!chatPrefs.orderManagement &&
               (!recentSessions || !recentSessions.length) &&
               (!chatFlows || !chatFlows.length) ? (
                 <div className="home__feeds-no-data-send-card">
