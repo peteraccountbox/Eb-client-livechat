@@ -7,6 +7,7 @@ import {
   MessageByTypeEnum,
 } from "../Models";
 import ChatMessage from "./ChatMessage";
+import { getCustomerProfile } from "../globals";
 // import TimeAgo from 'react-timeago';
 
 export interface UserChatMessagePropsType {
@@ -20,7 +21,8 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
 
   const { chatPrefs, sessions, setSessions, agentsPrefs, createSessionData } =
     parentContext;
-
+    const customerProfile =
+    getCustomerProfile()
   const getMessageTime = () => {
     // let myDate = new Date(props.message.created_time * 1000);
     // let dateStr = myDate.getDate() + "/" + (myDate.getMonth() + 1) + "/" + myDate.getFullYear()
@@ -108,7 +110,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
             />
             
           </li>
-          {!props.message.id && props.message.tempId && (chatPrefs.meta.emailCaptureEnforcement != "required" || props.message.ticketId) && <div>Sending ...</div>}
+          {!props.message.id && props.message.tempId && (chatPrefs.meta.emailCaptureEnforcement != "required" || props.message.ticketId || (customerProfile && customerProfile.email)) && <div>Sending ...</div>}
         </ul>
 
         {canShowAnavailableMessage() ? (
