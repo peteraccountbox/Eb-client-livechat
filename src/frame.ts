@@ -19,6 +19,14 @@ const isMobileDevice = () => {
 
 export default function loadChat(container: Element, prefs: ChatPrefsPayloadType) {
 
+    if(!(window as any).reachoJSClient){
+        console.log("waiting for reachoJSClient");
+        setTimeout(() => {
+            loadChat(container, prefs);
+        }, 20);
+        return;
+    }
+    
     // Validate contitions
     if (!prefs || prefs.meta.deactivated || (prefs.meta.hideOnMobile && isMobileDevice()))
         return;
@@ -52,6 +60,7 @@ export default function loadChat(container: Element, prefs: ChatPrefsPayloadType
         value: reachoModulesObject,
         enumerable: false
     });
+
 
     const vId = (window as any).reachoJSClient.getVisitorId();
 
