@@ -18,6 +18,9 @@ export interface UserChatMessagePropsType {
 const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
   const parentContext = useContext(AppContext);
 
+  const { chatPrefs, sessions, setSessions, agentsPrefs, createSessionData } =
+    parentContext;
+
   const getMessageTime = () => {
     // let myDate = new Date(props.message.created_time * 1000);
     // let dateStr = myDate.getDate() + "/" + (myDate.getMonth() + 1) + "/" + myDate.getFullYear()
@@ -105,7 +108,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
             />
             
           </li>
-          {!props.message.id && props.message.tempId && <div>Sending ...</div>}
+          {!props.message.id && props.message.tempId && (chatPrefs.meta.emailCaptureEnforcement != "required" || props.message.ticketId) && <div>Sending ...</div>}
         </ul>
 
         {canShowAnavailableMessage() ? (

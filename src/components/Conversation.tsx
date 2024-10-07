@@ -675,6 +675,7 @@ const Conversation = (props: ConversationProps) => {
     if (
       newChat &&
       !emailCaptured &&
+      !session.customerEmail &&
       chatPrefs.meta.emailCaptureEnforcement == "required"
     )
       return;
@@ -901,7 +902,7 @@ const Conversation = (props: ConversationProps) => {
                                 nextMessage={session?.messageList[index + 1]}
                                 updateMessage={updateMessage}
                               />
-                              {index == 0 && !emailCaptured && message.id && (
+                              {index == 0 && !emailCaptured && (message.id || message.tempId) && (
                                 <ChatForm
                                   closeChatForm={() => {
                                     setShowChatForm(false);
