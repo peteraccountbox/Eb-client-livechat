@@ -979,6 +979,7 @@ const Conversation = (props: ConversationProps) => {
             <textarea
               ref={text}
               rows={1}
+              maxLength={5000}
               onChange={(e) => setTypeText(e.currentTarget.value)}
               onScroll={(e) => handleScroll(e)}
               className="chat__input chat__textarea"
