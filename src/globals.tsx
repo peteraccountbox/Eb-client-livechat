@@ -181,6 +181,33 @@ export const getCustomerProfile = () => {
 
 }
 
+export const getClientBrowserInfo = () => {
+ 
+  try {
+    return (window as any).parent.reachoJSClient.getBrowserInfo();
+  } catch (e) { }
+  return undefined;
+  
+}
+
+export const getClientInfo = () => {
+
+  try {
+    return (window as any).parent.reachoJSClient.getClientInfo();
+  } catch (e) { }
+  return undefined;
+
+}
+
+export const getClientLocationInfo = () => {
+
+  try {
+    return (window as any).parent.reachoModulesObject.clientInfo;
+  } catch (e) { }
+  return undefined;
+
+}
+
 export const getReachoOnsite = () => {
   try {
     return (window as any).parent._reachoOnsite;

@@ -37,6 +37,9 @@ import {
   CONVERSATION_MESSAGE_FETCH_URL_PATH,
   DEFAULT_AGENT_PROFILE_PIC,
   FORM_DATA,
+  getClientBrowserInfo,
+  getClientInfo,
+  getClientLocationInfo,
   getCustomerProfile,
   getReachoOnsite,
   MESSAGE_URL_PATH,
@@ -666,6 +669,11 @@ const Conversation = (props: ConversationProps) => {
       }
       if (customerProfile && customerProfile.name)
         session.customerName = customerProfile.name;
+      session.meta = {
+        location : getClientLocationInfo(),
+        browserInfo: getClientBrowserInfo(),
+        clientInfo: getClientInfo(),
+      }
       pushMessage(event, session);
     } else {
       data.ticketId = session?.id + "";
