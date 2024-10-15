@@ -670,7 +670,7 @@ const Conversation = (props: ConversationProps) => {
       if (customerProfile && customerProfile.name)
         session.customerName = customerProfile.name;
       session.meta = {
-        location : getClientLocationInfo(),
+        locationInfo : getClientLocationInfo(),
         browserInfo: getClientBrowserInfo(),
         clientInfo: getClientInfo(),
       }
