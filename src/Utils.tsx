@@ -43,15 +43,20 @@ export const getOperator = (
 
 export const resizeFrame = (type: string) => {
   try {
-    let parentDocument = window.parent.document;
+    // let parentDocument = window.parent.document;
 
-    if (!(window as any).FRAME_REF_ID) return;
+    // if (!(window as any).FRAME_REF_ID) return;
 
-    let frame = parentDocument.getElementById((window as any).FRAME_REF_ID);
+    // let frame = parentDocument.getElementById((window as any).FRAME_REF_ID);
 
     // frame.addClass("collapase");
 
     // (window as any).parent.EngageBay_Livechat.ref.UI().resize(type);
+    const iframeElement: any = document.querySelector('iframe[name="reacho-messenger-frame"]')
+    if (iframeElement) {
+      iframeElement.style.width = type == "WINDOW_OPENED" ? "500px" : "100px";
+      iframeElement.style.height = type == "WINDOW_OPENED" ? "calc(100vh - 100px - 0rem)" : "100px"; 
+    }
   } catch (error) {}
 };
 
