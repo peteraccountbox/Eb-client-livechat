@@ -388,15 +388,9 @@ const App: React.FunctionComponent = () => {
         info: undefined,
         id: undefined,
       });
-      setTimeout(() => {
-        resizeFrame(
-          isOpened
-            ? "WINDOW_OPENED"
-            : "WINDOW_CLOSED"
-        );
-      }, 2000);
-      
-     if(isOpened) {
+    if (!isOpened) 
+      resizeFrame("WINDOW_OPENED");
+    else {
       setIsOpened(!isOpened);
       setTimeout(() => {
         // resizeFrame("WINDOW_CLOSED");
