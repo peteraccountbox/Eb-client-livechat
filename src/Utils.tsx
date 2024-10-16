@@ -52,7 +52,7 @@ export const resizeFrame = (type: string) => {
     // frame.addClass("collapase");
 
     // (window as any).parent.EngageBay_Livechat.ref.UI().resize(type);
-    const iframeElement: any = document.querySelector('iframe[name="reacho-messenger-frame"]')
+    const iframeElement: any = (window as any).parent.document.querySelector('iframe[name="reacho-messenger-frame"]')
     if (iframeElement) {
       iframeElement.style.width = type == "WINDOW_OPENED" ? "500px" : "100px";
       iframeElement.style.height = type == "WINDOW_OPENED" ? "calc(100vh - 100px - 0rem)" : "100px"; 
