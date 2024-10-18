@@ -709,6 +709,8 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const handleKeyDown = (e: any) => {
+    if(e.shiftKey && e.key === 'Enter')
+      return;
     if (e.key === "Enter") {
       e.preventDefault();
       sendMessage(false);
