@@ -780,8 +780,7 @@ const Conversation = (props: ConversationProps) => {
     if (matchedBotPrefs?.id) return matchedBotPrefs?.settings.chatBotIconURL;
 
     return (
-      parentContext.chatPrefs.meta.decoration.headerPictureUrl ||
-      DEFAULT_AGENT_PROFILE_PIC
+      parentContext.chatPrefs.meta.decoration.headerPictureUrl
     );
   };
 
@@ -872,13 +871,14 @@ const Conversation = (props: ConversationProps) => {
             </svg>
           </div>
           <div className="chat__header-user">
-            <div>
+            
+            {getHeaderIcon() && <div>
               <div
                 className="chat__header-user-img"
                 style={{ backgroundImage: 'url("' + getHeaderIcon() + '")' }}
               ></div>
             </div>
-
+}
             <div className="chat__header-user-title">
               <h1 className="chat__header-user-name"> {getHeaderName()} </h1>
               {/* <p className="chat__header-user-lastseen">Active 30m ago</p> */}

@@ -1,7 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import attach from "../assets/img/attach.png";
-import loader from "../assets/img/loader.gif";
-import { FILE_UPLOAD_URL_PATH } from "../globals";
+import React, { useState } from "react";
 import { postReq } from "../request";
 import uploadFile from "../FileUpload";
 
@@ -10,169 +7,7 @@ interface FileUploadProps {
 }
 
 const FileUpload: React.FC<FileUploadProps> = (props) => {
-  const input = useRef<HTMLInputElement>(null);
-  const [files, setFiles] = useState([]);
-  const [filesCount, setFilesCount] = useState(0);
   const [status, setStatus] = useState("completed");
-  const [excludeExt, setExcludeExt] = useState(["html", "exe", "xhtml"]);
-  const [bucketURL, setBucketURL] = useState(
-    "https://s3.amazonaws.com/ebuploads2/"
-  );
-
-  const iconUrl = () => {
-    return status !== "uploading" ? attach : loader;
-  };
-  useEffect(() => {
-    return () => { };
-  }, []);
-  const uploadFile1 = (input: any) => {
-    setFiles(input.files);
-    setFilesCount(input.files.length);
-
-    // Check size and ignore
-    if (input.files.length == 0) return;
-
-    // Upload one by one
-    setStatus("uploading");
-    for (var i = 0; i < input.files.length; i++) {
-      uploadToS3(input.files[i]);
-    }
-  };
-  const uploadToS3 = (file: any) => {
-    // Validate
-    if (!isValidFile(file)) return;
-
-    //Change unique file name
-    setFilePath(file);
-
-    var that = this;
-    const wait = postReq(FILE_UPLOAD_URL_PATH + "?file=" + file.file_resource, {
-      fileUrl: file.file_resource,
-    });
-    wait
-      .then((response: any) => {
-        file.file_resource = response.data.fileURL;
-        uploadToAWSBucket(getFileData(file), file);
-      })
-      .catch(() => { });
-    //this.sync(this.getRestURL("api/panel/contentbox/repo/getFilePath?file=" +file.file_resource) ,{"fileUrl":file.file_resource},function(data){
-
-    //	file.file_resource = data.fileURL;
-    //	that.uploadToAWSBucket(that.getFileData(file), file);
-    //	})
-  };
-
-  /**
-   * UPload to amazon
-   *
-   * @param form_data
-   * @param file
-   */
-  const uploadToAWSBucket = (form_data: any, file: any) => {
-    var that = this;
-
-    // Construct http request for post request
-    var xhr = new window.XMLHttpRequest();
-    xhr.upload.addEventListener("progress", function (evt) { }, false);
-    xhr.addEventListener(
-      "load",
-      function (evt: any) {
-        var statusCode = evt.target
-          ? evt.target.status
-          : evt.currentTarget.status;
-
-        emitEvent(
-          statusCode >= 200 && statusCode <= 300 ? "success" : "error",
-          file
-        );
-      },
-      false
-    );
-    xhr.addEventListener(
-      "error",
-      function (evt) {
-        file.error_mssg =
-          "Sorry, you cannot upload files at this moment. Please try again later.";
-        emitEvent("error", file);
-      },
-      false
-    );
-    xhr.addEventListener(
-      "abort",
-      function (evt) {
-        file.error_mssg =
-          "Sorry, you cannot upload files at this moment. Please try again later.";
-        emitEvent("error", file);
-      },
-      false
-    );
-
-    // Must be last line before send
-    xhr.open("POST", bucketURL, true);
-    xhr.send(form_data);
-  };
-
-  const setFilePath = (file: any) => {
-    var file_name = file.name.split(".")[0];
-    var file_extension = file.name.split(".").pop();
-
-    file.file_resource =
-      "uploads/" +
-      file_name.replace(/[^a-zA-Z0-9]/g, "_") +
-      "." +
-      file_extension;
-
-    file.bucketURL = bucketURL;
-  };
-
-  const getFileData = (file: any) => {
-    var fd = new FormData();
-
-    // Construct post data
-    fd.append("key", file.file_resource);
-    fd.append("acl", "public-read");
-    fd.append("AWSAccessKeyId", "AKIAIUBC6PDU7ZVBXFJA");
-    fd.append(
-      "policy",
-      "ewogICJleHBpcmF0aW9uIjogIjIwMjktMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJlYnVwbG9hZHMyIiB9LAogICAgeyJhY2wiOiAicHVibGljLXJlYWQiIH0sCiAgICBbInN0YXJ0cy13aXRoIiwgIiRrZXkiLCAidXBsb2Fkcy8iXSwKICAgIFsic3RhcnRzLXdpdGgiLCAiJENvbnRlbnQtVHlwZSIsICIiXQogIF0KfQo="
-    );
-    fd.append("signature", "yQfJQnt5Jdbomu680QKvK4oD15c=");
-    // fd.append('Content-Type', file.type | 'binary/octet-stream');
-    fd.append("Content-Type", "binary/octet-stream");
-    fd.append("file", file);
-
-    return fd;
-  };
-
-  const isValidFile = (file: any) => {
-    var file_name = file.name.split(".")[0];
-    var file_extension = file.name.split(".").pop();
-
-    if (excludeExt.includes(file_extension)) {
-      file.error_mssg = "Sorry, you cannot upload such files.";
-      emitEvent("error", file);
-      return false;
-    }
-
-    // Large file limit (5MB)
-    if (file.size > 50 * 1024 * 1024) {
-      file.error_mssg = "Sorry, you cannot upload files larger than 50 MB.";
-      emitEvent("error", file);
-      return false;
-    }
-
-    return true;
-  };
-
-  const emitEvent = (status: string, file: any) => {
-    props.fileUploadCallback(status, file);
-
-    // File count change for completed status
-    if (status == "success") {
-      setStatus("completed");
-      if (input.current) input.current.setAttribute("value", "");
-    }
-  };
 
   return (
     <div className="chat__actions-item chat__attachments">
@@ -202,7 +37,7 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
           </svg>
         ) : (
           <img
-            src={loader}
+            src={"https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/loader.gif"}
             alt="Attachments"
             className="chat__actions-item-trigger"
           />
