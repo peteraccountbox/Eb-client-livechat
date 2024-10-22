@@ -154,6 +154,19 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
           !response.data.executionList
         )
           return;
+          // const newExecutionList = response.data.executionList;
+
+          // if (
+          //   newExecutionList[newExecutionList.length - 1].executed &&
+          //   !newExecutionList[newExecutionList.length - 1].nextNodeId &&
+          //   newExecutionList[newExecutionList.length - 1].node.data.nodeType ==
+          //     InteractiveNodeTypes.END
+          // ) {
+          //   removeSessionStoragePrefs(OPENED_CHAT);
+          //   removeSessionStoragePrefs("flow_execution_id");
+          //   props.backToHome();
+          //   return;
+          // }
 
         setSessionStoragePrefs(
           "flow_execution_id",
@@ -269,7 +282,7 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
                         : InteractiveFlowNodes[exe.node.data.nodeType];
                     if (
                       exe.node.data.nodeType == InteractiveNodeTypes.END &&
-                      exe.node.data.formData?.action == "ticket"
+                      (exe.node.data.formData?.action == "ticket" || exe.node.data.formData?.action == "end")
                     )
                       return <></>;
                     if (
