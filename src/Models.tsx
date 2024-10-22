@@ -111,6 +111,7 @@ export type ChatPrefsPayloadType = {
   flows: ChatFlowsPayloadObj[];
   orderManagement: any;
   name: string;
+  flowNames?:string[];
 
   // widget: ChatPrefsWidgetType;
   prechat: ChatPrefsPreChatType;

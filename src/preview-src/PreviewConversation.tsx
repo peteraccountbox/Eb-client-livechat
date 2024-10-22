@@ -2,6 +2,7 @@ import { FC, useMemo, useState } from "react";
 import { ChatPrefsPayloadType } from "../Models";
 import CloseWidgetPanel from "../components/CloseWidgetPanel";
 import { DEFAULT_AGENT_PROFILE_PIC } from "../globals";
+import Emoji from "../components/Emoji";
 
 export interface PreviewConversationComponentProps {
     chatPrefs: ChatPrefsPayloadType;
@@ -9,7 +10,23 @@ export interface PreviewConversationComponentProps {
   
   const PreviewConversation: FC<PreviewConversationComponentProps> = (props) => {
     const { chatPrefs } = props;
+    const {meta : {emailCaptureEnforcement, emailCaptureEnabled}} = chatPrefs;
     const settings = [{ tab: "Messages" }];
+
+    const onEmojiSelect = (emoji: any) => {
+      if (true) {
+        const current = true;
+        const value = current;
+        // current.textContent =
+          // value.slice(0, curPos) + emoji + value.slice(curPos);
+        // text.current.value = current.textContent;
+        // setTypeText(current.textContent);
+        setTimeout(() => {
+          // current.selectionStart = current.selectionEnd = curPos + emoji.length;
+        }, 0);
+        // text.current.focus();
+      }
+    };
 
     const appThemeStyle: Object = useMemo(() => {
       return {
@@ -47,6 +64,7 @@ export interface PreviewConversationComponentProps {
           }`}
       data-target="widget"
     >
+      <div className="chat__main">
     <div className="chat__conversation">
     <div className="chat__header">
       <div className="chat__header-action">
@@ -94,6 +112,41 @@ export interface PreviewConversationComponentProps {
     <div className="chat__content">
       <div className="chat__messages">
         <div className="chat__messages-track">
+        <div className="chat__messages-group chat__messages-group--me">
+          
+            <ul className="chat__messages-list">
+              <li className="chat__messages-list-item">
+                <div className="chat__messages-bubble chat__message-type-TEXT">
+                  <span className="actual">swssws</span>
+                  </div>
+                  </li>
+                  </ul>
+                  </div>
+          {emailCaptureEnabled && <div className="chat_agent_data" style={{ display: "flex" }}>
+      <div
+        className="chat__messages-form chatuserformdata"
+        style={{ flex: "1" }}
+      >
+        <div className="text-left" style={{ marginBottom: "5px" }}>
+          <pre>
+            <p className="mb-2">
+              Drop your email
+            </p>
+          </pre>
+        </div>
+
+        <div className="chat__messages-form-group">
+        <input
+                          type={"email"}
+                          placeholder={"reacho@email.com"}
+                          className="chat_form-control"
+                          disabled={true}
+                        />
+                        </div>
+      </div>
+      </div> }
+
+
           {/* <div>
             {!showChatForm ? (
               session?.messageList ? session?.messageList?.map(
@@ -173,31 +226,25 @@ export interface PreviewConversationComponentProps {
         </div>
       </div>
 
-      {/* <div
-        className={`chat__footer ${showChatForm ||
-          (!session.id && session.messageList?.length > 0) ||
-          (chatPrefs.meta.emailCaptureEnforcement == "required" &&
-            !emailCaptured &&
-            !session.id &&
-            session.messageList?.length > 0)
+      <div
+        className={`chat__footer ${
+            (emailCaptureEnabled && emailCaptureEnforcement == "required" 
+            )
           ? "hide"
           : ""
           }`}
       >
-        {getChatPrompts()}
+        {/* {getChatPrompts()} */}
 
         <div className={`chat__form`}>
           <textarea
-            ref={text}
             rows={1}
-            onChange={(e) => setTypeText(e.currentTarget.value)}
-            onScroll={(e) => handleScroll(e)}
+            // onChange={(e) => setTypeText(e.currentTarget.value)}
+            // onScroll={(e) => handleScroll(e)}
             className="chat__input chat__textarea"
-            value={text?.current?.value}
+            // value={text?.current?.value}
             placeholder={
-              !matchedBotPrefs || matchedBotPrefs.botPrompts?.length == 0
-                ? parentContext.chatPrefs.meta.decoration.introductionText
-                : matchedBotPrefs.settings.placeHolderText
+                 chatPrefs.meta.decoration.introductionText
             }
             contentEditable="true"
             onPaste={(e) => {
@@ -208,47 +255,43 @@ export interface PreviewConversationComponentProps {
                 e.clipboardData.getData("text/plain")
               );
             }}
-            onKeyDown={handleKeyDown}
-            onInput={(e) => handleKeyPress(e)}
-            onKeyUp={userTyping}
+            // onKeyDown={handleKeyDown}
+            // onInput={(e) => handleKeyPress(e)}
+            // onKeyUp={userTyping}
             id="chatMessageEditable"
           ></textarea>
 
           <div className="chat__actions">
-            <Emoji onEmojiSelect={onEmojiSelect} />
-
-            {session &&
+          <Emoji onEmojiSelect={()=> {}}/>
+            {/* {session &&
               session.id ? (
               <FileUpload fileUploadCallback={fileUploadCallback} />
             ) : (
               <></>
-            )}
+            )} */}
 
-            {typeText ? (
-              <button
-                className="chat__btn chat_send_btn"
-                onClick={() => sendMessage(false)}
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
+<button
+                  className="chat__btn chat_send_btn1 chat_send_btn-icon"
+                  // onClick={() => sendMessage(false)}
                 >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M4.394 14.7L13.75 9.3c1-.577 1-2.02 0-2.598L4.394 1.299a1.5 1.5 0 00-2.25 1.3v3.438l4.059 1.088c.494.132.494.833 0 .966l-4.06 1.087v4.224a1.5 1.5 0 002.25 1.299z"
-                  ></path>
-                </svg>
-              </button>
-            ) : (
-              <></>
-            )}
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M4.394 14.7L13.75 9.3c1-.577 1-2.02 0-2.598L4.394 1.299a1.5 1.5 0 00-2.25 1.3v3.438l4.059 1.088c.494.132.494.833 0 .966l-4.06 1.087v4.224a1.5 1.5 0 002.25 1.299z"
+                    ></path>
+                  </svg>
+                </button>
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
+  </div>
   </div>
   </div>
   <div
