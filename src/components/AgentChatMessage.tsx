@@ -6,6 +6,7 @@ import boticon from "../assets/img/chatbot-final.png";
 import { AppContext } from "../appContext";
 import { DEFAULT_AGENT_PROFILE_PIC } from "../globals";
 import TimeAgo from "./TimeAgo";
+import Tippy from "@tippyjs/react";
 
 export interface AgentChatMessagePropsType {
   message: EventPayloadObj;
@@ -45,6 +46,11 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
         <div className="chat__messages-agent-info chat__messages-agent-item">
           <div className="chat__messages-agent">
             <div className="chat__messages-agent-avatar">
+            <Tippy
+      content={
+        agent?.name
+      }
+    >
               <img
                 src={
                   agent && agent?.userPicURL
@@ -53,6 +59,7 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
                 }
                 alt={agent && agent.name ? agent.name : "Agent"}
               />
+              </Tippy>
             </div>
 
             <ul className="chat__messages-list">
