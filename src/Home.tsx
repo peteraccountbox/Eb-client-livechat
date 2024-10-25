@@ -286,7 +286,7 @@ const Home = ({
           <div className="chat__tabs-footer">
             <div className="chat__powered__by-footer">
               <a target="_blank" href="https://www.reacho.com">
-                Powered by Reacho
+                Powered by <strong>Reacho</strong>
               </a>
             </div>
           </div>
