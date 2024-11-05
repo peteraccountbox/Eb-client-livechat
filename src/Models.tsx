@@ -112,7 +112,7 @@ export type ChatPrefsPayloadType = {
   orderManagement: any;
   name: string;
   flowNames?:string[];
-
+  managementName?: string;
   // widget: ChatPrefsWidgetType;
   prechat: ChatPrefsPreChatType;
   systemMessage: ChatPrefsSystemMessageType;
