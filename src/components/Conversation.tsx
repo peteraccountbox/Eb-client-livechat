@@ -899,7 +899,7 @@ const Conversation = (props: ConversationProps) => {
             session.messageList.length < session.messagesCount && 
             <>
             <div className="old-chat">
-              <span onClick={(e) => {
+              <span onClick={(e: any) => {
                 getMessageList();
                 e.currentTarget.style.display = "none";
                 if(e.currentTarget.nextElementSibling)

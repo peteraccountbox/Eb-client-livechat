@@ -53,14 +53,12 @@ const Home = ({
                 />
               </div> */}
 
-              {chatPrefs.meta.decoration.headerPictureUrl ? (
-                <div>
+              {chatPrefs.meta.decoration.headerPictureUrl && (
+                
                   <div className="home__feeds-chat-header-logo">
                     <img src={chatPrefs.meta.decoration.headerPictureUrl} />
                   </div>
-                </div>
-              ) : (
-                <></>
+                
               )}
               <div className="home__feeds-chat-header-name">
                 <span className="home__feeds-chat-name">{chatPrefs.name}</span>

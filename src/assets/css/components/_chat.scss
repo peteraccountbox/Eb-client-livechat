@@ -5393,11 +5393,13 @@ input[type="checkbox"] {
 .home__feeds-chat-header-logo {
 	width: 32px;
 	height: 32px;
+	margin-right: 10px;
 
 	img {
-		width: auto;
-		height: 32px;
-		border-radius: 50px;
+		width: 40px;
+		height: 40px;
+		border-radius: 100%;
+		object-fit: fill;
 	}
 }
 
