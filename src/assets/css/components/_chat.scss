@@ -5462,5 +5462,11 @@ input[type="checkbox"] {
 	font-weight: normal !important;
 	color: #393939 !important;
 }
-
+.old-chat {
+	margin-bottom: 10px;
+  span {
+	cursor: pointer;
+	color:#0041ff;
+  }
+}
 .epr-emoji-category-content .button {}

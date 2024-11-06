@@ -10,6 +10,7 @@ import {
 } from "../../Models";
 import { renderToString } from "react-dom/server";
 import { OrderManageTypes } from "../TrackManageUtils";
+import { uuidv4 } from "../../Utils";
 
 const RaisedIssue = (props: any) => {
   const orderManagementContext = useContext(OrderManagementContext);
@@ -57,11 +58,12 @@ const RaisedIssue = (props: any) => {
       visibility: "PUBLIC",
       from: MessageByTypeEnum.CUSTOMER,
       message: message,
-      createdTime: new Date(),
+      createdTime: new Date().toJSON(),
+      tempId: uuidv4(),
     };
 
     createSessionData.messageList = [event];
-
+    if(reason.automatedMessage) {
     message = {
       bodyText: reason.automatedMessage,
       format: MessageFormatType.TEXT,
@@ -72,9 +74,11 @@ const RaisedIssue = (props: any) => {
       visibility: "PUBLIC",
       from: MessageByTypeEnum.AGENT,
       message: message,
-      createdTime: new Date(),
+      createdTime: new Date().toJSON(),
+      tempId: uuidv4(),
     };
     createSessionData.messageList.push(event);
+  }
     createSessionData.sessionDetails = {
       channelId: CHANNEL_ID,
       visitorId: VISITOR_UUID,

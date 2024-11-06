@@ -219,6 +219,8 @@ export type ChatSessionPaylodObj = {
   messageList: EventPayloadObj[];
 
   identifiers: any;
+  newTicket?: boolean;
+  messagesCount: number;
 
   customerUnreadMessagesCount: number;
 

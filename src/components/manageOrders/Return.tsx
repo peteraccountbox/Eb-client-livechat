@@ -10,6 +10,7 @@ import { renderToString } from "react-dom/server";
 import OrderDetails from "./OrderDetails";
 import { CHANNEL_ID, CUSTOMER, VISITOR_UUID } from "../../globals";
 import { getSessionStoragePrefs } from "../../Storage";
+import { uuidv4 } from "../../Utils";
 
 const Return = (props: any) => {
   const orderManagementContext = useContext(OrderManagementContext);
@@ -136,9 +137,11 @@ const Return = (props: any) => {
       visibility: "PUBLIC",
       from: MessageByTypeEnum.CUSTOMER,
       message: message,
-      createdTime: new Date(),
+      createdTime: new Date().toJSON(),
+      tempId: uuidv4(),
     };
     createSessionData.messageList = [event];
+    if(returnOrderPolicy.automatedMessage) {
     message = {
       bodyText: returnOrderPolicy.automatedMessage,
       format: MessageFormatType.TEXT,
@@ -149,9 +152,11 @@ const Return = (props: any) => {
       visibility: "PUBLIC",
       from: MessageByTypeEnum.AGENT,
       message: message,
-      createdTime: new Date(),
+      createdTime: new Date().toJSON(),
+      tempId: uuidv4(),
     };
     createSessionData.messageList.push(event);
+  }
     createSessionData.sessionDetails = {
       channelId: CHANNEL_ID,
       visitorId: VISITOR_UUID,

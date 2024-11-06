@@ -11,6 +11,7 @@ import OrderDetails from "./OrderDetails";
 import { CHANNEL_ID, CUSTOMER, VISITOR_UUID } from "../../globals";
 import { getSessionStoragePrefs } from "../../Storage";
 import OrderComponent from "./OrderComponent";
+import { uuidv4 } from "../../Utils";
 
 const Cancel = (props: any) => {
   const orderManagementContext = useContext(OrderManagementContext);
@@ -60,9 +61,11 @@ const Cancel = (props: any) => {
       visibility: "PUBLIC",
       from: MessageByTypeEnum.CUSTOMER,
       message: message,
-      createdTime: new Date(),
+      createdTime: new Date().toJSON(),
+      tempId: uuidv4(),
     };
     createSessionData.messageList = [event];
+    if(cancelOrderPolicy.automatedMessage) {
     message = {
       bodyText: cancelOrderPolicy.automatedMessage,
       format: MessageFormatType.TEXT,
@@ -73,9 +76,11 @@ const Cancel = (props: any) => {
       visibility: "PUBLIC",
       from: MessageByTypeEnum.AGENT,
       message: message,
-      createdTime: new Date(),
+      createdTime: new Date().toJSON(),
+      tempId: uuidv4(),
     };
     createSessionData.messageList.push(event);
+  }
     createSessionData.sessionDetails = {
       channelId: CHANNEL_ID,
       visitorId: VISITOR_UUID,

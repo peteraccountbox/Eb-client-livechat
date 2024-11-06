@@ -209,7 +209,7 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const isEmailCaptured = (): boolean => {
-    return !session.identifiers?.email && chatPrefs.meta.emailCaptureEnabled
+    return (!session.identifiers?.email && !session.customerEmail) && chatPrefs.meta.emailCaptureEnabled
       ? false
       : true;
   };
@@ -894,6 +894,28 @@ const Conversation = (props: ConversationProps) => {
       <div className="chat__content">
         <div className="chat__messages">
           <div className="chat__messages-track">
+            {session?.newTicket == false && 
+            session.messageList && 
+            session.messageList.length < session.messagesCount && 
+            <>
+            <div className="old-chat">
+              <span onClick={(e) => {
+                getMessageList();
+                e.currentTarget.style.display = "none";
+                if(e.currentTarget.nextElementSibling)
+                e.currentTarget.nextElementSibling.style.display = "block";
+              }}>Previous History</span>
+              <p style={{ textAlign: "center" , display:"none"}}>
+              <div className="chat__form-loader1">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </p>
+            </div>
+            </> 
+            }
             {!showChatForm ? (
               session?.messageList ? (
                 session?.messageList?.map(
