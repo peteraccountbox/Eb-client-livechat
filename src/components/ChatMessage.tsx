@@ -115,34 +115,28 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                       ),
                     }}
                   ></span>
-                  {attachments &&
+                  <div className="inbox-attachments inbox-attachments-links">{attachments &&
                     attachments.length &&
                     attachments.map((attachment: any) => {
                       return (
                         <div className="inbox-attachment-item" key={attachment}>
-                          <div className="inbox-attachment-item-body">
-                            <div className="inbox-attachment-item-avatr">
-                              <div className="chat__header-user-img chat__header-user-file-img">
-                                <img src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/chatfile.png" />
-                              </div>
-                            </div>
+                          
                             <a
                               className="inbox-attachment-filename chat__header-user-table-cell"
                               href={attachment.url}
                               target="_blank"
                               rel="noreferrer"
                             >
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" className="attach-icon"><path stroke-linecap="round" stroke-linejoin="round" d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"></path></svg>
                               <span>
                                 {attachment.fileName || attachment.name}
                               </span>
                             </a>
-                            {/* <div className="inbox-attachment-toolbar">
-                                                                <XMarkIcon className="w-3.5 h-3.5"></XMarkIcon>
-                                                            </div> */}
-                          </div>
+                            
+                          
                         </div>
                       );
-                    })}
+                    })}</div>
 
                   {props.message.from === MessageByTypeEnum.GPT &&
                   props.message.sources &&
@@ -239,34 +233,29 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                         <span>{fileSize(props.message.message)}</span>
                       </div>
                     </div> */}
-                    {attachments &&
+                    <div className="inbox-attachments inbox-attachments-links">
+                      {attachments &&
                     attachments.length &&
                     attachments.map((attachment: any) => {
                       return (
                         <div className="inbox-attachment-item" key={attachment}>
-                          <div className="inbox-attachment-item-body">
-                            <div className="inbox-attachment-item-avatr">
-                              <div className="chat__header-user-img chat__header-user-file-img">
-                                <img src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/chatfile.png" />
-                              </div>
-                            </div>
+
                             <a
                               className="inbox-attachment-filename chat__header-user-table-cell"
                               href={attachment.url}
                               target="_blank"
                               rel="noreferrer"
                             >
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" className="attach-icon"><path stroke-linecap="round" stroke-linejoin="round" d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"></path></svg>
                               <span>
                                 {attachment.fileName || attachment.name}
                               </span>
                             </a>
-                            {/* <div className="inbox-attachment-toolbar">
-                                                                <XMarkIcon className="w-3.5 h-3.5"></XMarkIcon>
-                                                            </div> */}
-                          </div>
+                           
                         </div>
                       );
                     })}
+                    </div>
                   </div>
                 </div>
               );
