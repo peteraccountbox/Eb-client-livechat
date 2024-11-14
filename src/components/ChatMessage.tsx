@@ -93,6 +93,18 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
           switch (format) {
             case "TEXT":
               return (
+                <span
+                    className="actual"
+                    dangerouslySetInnerHTML={{
+                      __html: linkifyHtml(
+                        convertEmojis(props.message.message.bodyText),
+                        { target: "_blank" }
+                      ),
+                    }}
+                  ></span>
+              )
+            case "TEXT_AND_FILE":
+              return (
                 <>
                   <span
                     className="actual"
@@ -206,7 +218,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
               return (
                 <div className="chat__header-user">
                   <div className="chat__header-user-table xs-mb-0">
-                    <div className="chat__header-user-img chat__header-user-file-img">
+                    {/* <div className="chat__header-user-img chat__header-user-file-img">
                       <img src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/chatfile.png" />
                     </div>
                     <div className="chat__header-user-name chat__header-user-table-cell file-info">
@@ -226,7 +238,35 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                       >
                         <span>{fileSize(props.message.message)}</span>
                       </div>
-                    </div>
+                    </div> */}
+                    {attachments &&
+                    attachments.length &&
+                    attachments.map((attachment: any) => {
+                      return (
+                        <div className="inbox-attachment-item" key={attachment}>
+                          <div className="inbox-attachment-item-body">
+                            <div className="inbox-attachment-item-avatr">
+                              <div className="chat__header-user-img chat__header-user-file-img">
+                                <img src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/chatfile.png" />
+                              </div>
+                            </div>
+                            <a
+                              className="inbox-attachment-filename chat__header-user-table-cell"
+                              href={attachment.url}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              <span>
+                                {attachment.fileName || attachment.name}
+                              </span>
+                            </a>
+                            {/* <div className="inbox-attachment-toolbar">
+                                                                <XMarkIcon className="w-3.5 h-3.5"></XMarkIcon>
+                                                            </div> */}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               );
