@@ -84,6 +84,7 @@ export interface ChatChannelMeta {
   storeId: string;
   sendChatTranscript: boolean;
   flowIds?: string[];
+  installedDomains?: string[];
 }
 
 export interface Decoration {

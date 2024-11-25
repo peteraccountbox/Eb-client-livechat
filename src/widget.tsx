@@ -32,13 +32,6 @@ const root = ReactDOM.createRoot(
 root.render(<App />);
 
 
-try {
-  if((window as any).CHANNEL_ID)
-    localStorage.setItem("reacho-chat-widget-loaded", (window as any).CHANNEL_ID)
-} catch (error) {
-    console.log("error", error);
-}
-
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

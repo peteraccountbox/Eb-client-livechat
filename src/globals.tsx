@@ -99,6 +99,16 @@ export const EXECUTE_FLOW_NODE_URL_PATH = REQUEST_PREFIX_PATH + "/flow/execute";
 export const CONVERSATION_MESSAGE_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/get-chat-messages";
 
+
+export const CHAT_WORKER_URL_PATH =
+  "https://reacho-chat-worker.peter-13d.workers.dev/update-installed-domains/?domain=" +
+  (window as any).location.host +
+  "&channel_id=" +
+  CHANNEL_ID +
+  "&tenant_id=" +
+  TENANT_ID;
+
+
 export const CHANNEL_PREFS_FETCH_URL_PATH =
   "https://reacho-chat-worker.peter-13d.workers.dev/?channel_id=" +
   CHANNEL_ID +

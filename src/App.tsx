@@ -29,6 +29,7 @@ import {
   USER_PREFS_FETCH_URL_PATH,
   TRACK_MANAGE,
   USERS_FETCH_URL,
+  CHAT_WORKER_URL_PATH,
 } from "./globals";
 import {
   ActiveSessionObjType,
@@ -149,6 +150,8 @@ const App: React.FunctionComponent = () => {
     if (prefsFetched) {
       //fetchChatFlows();
       setChatFlows(chatPrefs?.flows || []);
+
+      registerChannelInstallation();
     }
   }, [prefsFetched]);
 
@@ -258,6 +261,31 @@ const App: React.FunctionComponent = () => {
     };
   }, []);
 
+  const registerChannelInstallation = () => {
+    try {
+      // check this url is available in installedDomains list
+      const installedDomainsList = chatPrefs?.meta.installedDomains;
+      console.log("Installed Domains: ", installedDomainsList);
+
+      const domain = (window as any).location.host;
+      if (installedDomainsList && installedDomainsList.includes(domain)) {
+        console.log("Channel is already installed.");
+        return;
+      }
+
+      // If not send request to worker to sync the domain list
+      axios
+        .get(CHAT_WORKER_URL_PATH)
+        .then((response) => {
+          if (!response) return;
+          console.log("response: ", response);
+        })
+        .catch(() => {});
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const closeNotify = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     setNotificationPrompt({
@@ -300,40 +328,7 @@ const App: React.FunctionComponent = () => {
         (response: AxiosResponse<any, any>) => {
           let prefs = response.data as ChatPrefsPayloadType;
 
-          // if (prefs.botPrefs && prefs.botPrefs.length > 0)
-          //   prefs.matchedBotPrefs = prefs.botPrefs[0];
-
-          // let chatChannelMeta: ChatChannelMeta = {
-          //   deactivated: false,
-          //   hideOnMobile: true,
-          //   hideOnOutsideBusinessHours: true,
-          //   emailCaptureEnabled: true,
-          //   emailCaptureEnforcement: false,
-          //   liveChatAvailability: "always-live-during-business-hours",
-          //   sendChatTranscript: true,
-          //   decoration: {
-          //     headerPictureUrl: "https://example.com/image.png",
-          //     fontFamily: "Arial",
-          //     mainColor: "#FFFFFF",
-          //     conversationColor: "#000000",
-          //     backgroundStyle: "solid",
-          //     introductionText: "Welcome to our chat!",
-          //     offlineIntroductionText: "We are currently offline.",
-          //     avatarType: "circle",
-          //     widgetAlignment: "right",
-          //     widgetAlignmentOffsetX: 10,
-          //     widgetAlignmentOffsetY: 20,
-          //     launcherType: "icon",
-          //     agentAvatarImageType: "image",
-          //     agentAvatarNameType: "name",
-          //     botAvatarImage: "https://example.com/bot.png",
-          //   },
-          // };
-
-          // prefs.meta = chatChannelMeta;
-
           setChatPrefs(prefs);
-
           setPrefsFetched(true);
         }
       );
