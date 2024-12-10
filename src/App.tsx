@@ -30,6 +30,7 @@ import {
   TRACK_MANAGE,
   USERS_FETCH_URL,
   CHAT_WORKER_URL_PATH,
+  getIntegrationSource,
 } from "./globals";
 import {
   ActiveSessionObjType,
@@ -814,7 +815,7 @@ const App: React.FunctionComponent = () => {
                   data-target="widget"
                 >
                   <div
-                    className="chat__main"
+                    className={`chat__main ${getIntegrationSource() + "-SOURCE"}`}
                     style={{
                       minWidth: `${
                         promtWidth == PromtWidth.Large ? "700px" : "auto"

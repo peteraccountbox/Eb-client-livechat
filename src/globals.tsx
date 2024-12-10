@@ -218,6 +218,13 @@ export const getClientLocationInfo = () => {
 
 }
 
+export const getIntegrationSource = () => {
+  try {
+    return (window as any).parent.reachoJSClient.getIntegrationSource();
+  } catch (e) { }
+  return undefined;
+}
+
 export const getReachoOnsite = () => {
   try {
     return (window as any).parent._reachoOnsite;
