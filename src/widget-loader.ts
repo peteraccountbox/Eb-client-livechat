@@ -46,7 +46,10 @@ function initializeChatWidget(container: Element, channelId: string | null) {
             };
 
             for (let key in data) {
-                if (window.location.href.indexOf(data[key]) > -1) {
+                
+                const url = (window as any).reachoModulesObject?.storeURL || window.location.href;
+
+                if (url && url.indexOf(data[key]) > -1) {
 
                     channelId = key;
 
