@@ -1,9 +1,11 @@
 // Function to handle file upload
-export default function uploadFile(getRequest, setStatus, callback) {
+export default function uploadFile(getRequest, setStatus, isMultiple, callback) {
 
   // Dynamically create the file input element
   const fileInput = document.createElement('input');
   fileInput.type = 'file';
+  if(isMultiple)
+  fileInput.multiple = true;
   fileInput.style.display = 'none';
 
   // Trigger the file input click
@@ -11,12 +13,55 @@ export default function uploadFile(getRequest, setStatus, callback) {
 
   // Handle file input change (when a file is selected)
   fileInput.addEventListener('change', function (event) {
-
+    let resolved = [];
+    const files = event.target.files
     const file = event.target.files[0]; // Get the selected file
-    if (file) {
+    if(files.length > 1) {
+      for (let file of files) 
+        resolved.push(upload(file));
+
+      Promise.all(resolved)
+  .then(response => {
+    console.log(response); 
+    if (callback) callback("success", response.map(result => result.data));
+
+    console.log('File uploaded successfully:', response);
+
+
+  })
+    .catch((error) => {
+
+      if (callback) callback("fail", JSON.stringify(error));
+
+      console.log('Error uploading file:', error);
+
+    });
+  }
+
+    
+    else if(file) {
       // Call uploadFile and provide a callback function
       setStatus("uploading");
-      upload(file);
+      let req = upload(file);
+      req.then((response) => {
+        console.log(response);
+  
+        if (callback) callback("success", response.data);
+  
+        console.log('File uploaded successfully:', response.data);
+  
+        // Remove the file input element after upload
+        // callback(data); // Execute the callback with the response data
+  
+      })
+        .catch((error) => {
+  
+          if (callback) callback("fail", JSON.stringify(error));
+  
+          console.log('Error uploading file:', error);
+  
+        });
+  
     }
     document.body.removeChild(fileInput);
 
@@ -35,6 +80,8 @@ export default function uploadFile(getRequest, setStatus, callback) {
       'Content-Type': 'multipart/form-data',
       // Authorization: API_KEY,
     });
+
+    return req;
 
     req.then((response) => {
       console.log(response);

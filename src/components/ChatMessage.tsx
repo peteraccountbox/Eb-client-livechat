@@ -211,7 +211,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
             case "FILE":
               return (
                 <div className="chat__header-user">
-                  <div className="chat__header-user-table xs-mb-0">
+                  <div className="chat__header-user-table">
                     {/* <div className="chat__header-user-img chat__header-user-file-img">
                       <img src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/chatfile.png" />
                     </div>

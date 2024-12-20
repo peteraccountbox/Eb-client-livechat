@@ -30,7 +30,7 @@ const MultiChoice: React.FC<InteractiveNodeProps> = ({
           <div className="chat__messages-list-item">
             <div className="chat__messages-bubble chat__message-type-TEXT">
               <span className="actual">
-                {execution.node.data.formData?.question}
+                {execution.node.data.formData?.message}
               </span>
             </div>
           </div>

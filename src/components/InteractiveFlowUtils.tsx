@@ -1,4 +1,5 @@
 import Automated from "./interactiveNodes/Automated";
+import CollectFileUpload from "./interactiveNodes/CollectFileUpload";
 import CollectTextReply from "./interactiveNodes/CollectTextReply";
 import CustomerIdentification from "./interactiveNodes/CustomerIdentification";
 import End from "./interactiveNodes/End";
@@ -41,6 +42,7 @@ export enum InteractiveNodeTypes {
   MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
   AUTOMATED_ANSWER = "AUTOMATED_ANSWER",
   COLLECT_TEXT_REPLY = "COLLECT_TEXT_REPLY",
+  COLLECT_FILE_UPLOAD = "COLLECT_FILE_UPLOAD",
   CUSTOMER_IDENTIFICATION = "CUSTOMER_IDENTIFICATION",
   ORDER_SELECTION = "ORDER_SELECTION",
   ITEM_SELECTION = "ITEM_SELECTION",
@@ -61,6 +63,7 @@ export const InteractiveFlowNodes: {
   [InteractiveNodeTypes[InteractiveNodeTypes.AUTOMATED_ANSWER]]: Automated,
   [InteractiveNodeTypes[InteractiveNodeTypes.COLLECT_TEXT_REPLY]]:
     CollectTextReply,
+  [InteractiveNodeTypes[InteractiveNodeTypes.COLLECT_FILE_UPLOAD]]: CollectFileUpload,  
   [InteractiveNodeTypes[InteractiveNodeTypes.CUSTOMER_IDENTIFICATION]]:
     CustomerIdentification,
   [InteractiveNodeTypes[InteractiveNodeTypes.ORDER_SELECTION]]: OrderSelection,
