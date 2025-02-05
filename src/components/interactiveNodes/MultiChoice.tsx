@@ -16,7 +16,7 @@ const MultiChoice: React.FC<InteractiveNodeProps> = ({
     execution.executed = true;
     execution.responseAction = [
       {
-        id: edge.id,
+        id: edge.target,
         type: "CHOICES",
         data: JSON.stringify(edge.data),
       },
@@ -40,13 +40,13 @@ const MultiChoice: React.FC<InteractiveNodeProps> = ({
       {!execution.executed ? (
         <div className="chat__messages-group">
           <ul className="chat__messages-list multi_choice-list">
-            {execution.relatedEdges.map((edge: any) => {
+            {execution.relatedEdges.map((edge: any, index: number) => {
               return (
                 <div
-                  className="multi_choice-list-item-btn"
+                  className={`multi_choice-list-item-btn ${execution.executed ? 'disabled': ''}`}
                   onClick={() => onChoiceSelected(edge)}
                 >
-                  <span className="actual">{edge.data.displayText}</span>
+                  <span className="actual">{edge.data?.displayText || execution.node.data.formData.edgeOptions[index]?.displayText}</span>
                 </div>
               );
             })}
