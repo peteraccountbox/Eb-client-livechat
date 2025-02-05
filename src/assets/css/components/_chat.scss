@@ -4628,6 +4628,12 @@
 				background-color: var(--themeColor);
 				color: $color-white;
 			}
+			&.disabled {
+				pointer-events: none;
+				cursor: default;
+				text-decoration: none;
+				opacity: 0.5;
+			}
 		}
 
 	}
