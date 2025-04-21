@@ -61,15 +61,6 @@ interface AppContextPayload {
   createSessionData: any;
 }
 
-interface OrderManagementContextPayload {
-  managementComponent: string;
-  setManagementComponent: (prefs: string) => void;
-  data: any;
-  setData: (prefs: any) => void;
-  setPrevComponent: (prefs: any) => void;
-  setPrevData: (prefs: any) => void;
-  customer: any;
-}
 
 export const AppContext = createContext({
   agentsPrefs: [] as AgentPrefsPayloadType[],
@@ -94,12 +85,3 @@ export const AppContext = createContext({
   },
 } as AppContextPayload);
 
-export const OrderManagementContext = createContext({
-  managementComponent: "" as any,
-  setManagementComponent: (prefs: string) => {},
-  data: {} as any,
-  setData: (prefs: any) => {},
-  setPrevComponent: (prefs: any) => {},
-  setPrevData: (prefs: any) => {},
-  customer: {} as any,
-} as OrderManagementContextPayload);

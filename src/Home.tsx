@@ -141,54 +141,7 @@ const Home = ({
                   </div>
                 </>
               )}
-              {chatPrefs.orderManagement && (
-                <>
-                  <div className="home__feeds-send-card home__feeds-recent-card order__management-card">
-                    <div
-                      className="home__feeds-media order__management-card-media"
-                      onClick={() =>
-                        openTrackAndManage(chatPrefs.orderManagement.id)
-                      }
-                    >
-                      <div className="order__management-card-profile flex-none">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          role="img"
-                        >
-                          <path d="M11.9311 3.08561C11.7334 2.97146 11.4129 2.97146 11.2152 3.08561L4.77137 6.80594C4.57365 6.92009 4.57365 7.10516 4.77137 7.21931L7.27729 8.66611C7.37614 8.72318 7.53642 8.72318 7.63528 8.66611L14.4371 4.73909C14.5359 4.68202 14.5359 4.58948 14.4371 4.53241L11.9311 3.08561Z"></path>
-                          <path d="M15.869 5.35915C15.7702 5.30207 15.6099 5.30207 15.511 5.35915L8.70924 9.28616C8.61039 9.34324 8.61039 9.43577 8.70924 9.49285L11.2152 10.9396C11.4129 11.0538 11.7334 11.0538 11.9311 10.9396L18.3749 7.21931C18.5727 7.10516 18.5727 6.92009 18.3749 6.80594L15.869 5.35915Z"></path>
-                          <path d="M11.9865 12.3038C11.9865 12.0755 12.1468 11.7979 12.3445 11.6837L18.7883 7.96338C18.986 7.84923 19.1463 7.94176 19.1463 8.17006V15.6107C19.1463 15.839 18.986 16.1166 18.7883 16.2308L12.3445 19.9511C12.1468 20.0653 11.9865 19.9727 11.9865 19.7444V12.3038Z"></path>
-                          <path d="M4 8.17006C4 7.94176 4.16028 7.84923 4.35799 7.96338L6.86391 9.41017C6.96277 9.46725 7.04291 9.60605 7.04291 9.7202V11.3737C7.04291 11.4878 7.12304 11.6266 7.2219 11.6837L7.93788 12.0971C8.03673 12.1542 8.11687 12.1079 8.11687 11.9937V10.3403C8.11687 10.2261 8.19701 10.1798 8.29587 10.2369L10.8018 11.6837C10.9995 11.7979 11.1598 12.0755 11.1598 12.3038V19.7444C11.1598 19.9727 10.9995 20.0653 10.8018 19.9511L4.35799 16.2308C4.16028 16.1166 4 15.839 4 15.6107L4 8.17006Z"></path>
-                        </svg>
-                      </div>
-                      <div className="home__feeds-media-content">
-                        <div className="order__management-card-name">
-                          {chatPrefs.orderManagement.name}
-                        </div>
-                      </div>
 
-                      <div className="order__management-card-arrow">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                        >
-                          <path
-                            d="M5.42773 4.70898C5.46387 4.85254 5.53809 4.98828 5.65039 5.10059L8.54932 8L5.64893 10.9004C5.31689 11.2324 5.31689 11.7705 5.64893 12.1025C5.98096 12.4336 6.51904 12.4336 6.85107 12.1025L10.3516 8.60059C10.5591 8.39355 10.6367 8.10449 10.585 7.83691C10.5537 7.67578 10.4761 7.52246 10.3516 7.39844L6.85254 3.89941C6.52051 3.56738 5.98242 3.56738 5.65039 3.89941C5.43066 4.11816 5.35645 4.42871 5.42773 4.70898Z"
-                            fill="#000000"
-                          ></path>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
 
               {recentSessions && recentSessions.length > 0 && (
                 <>
@@ -219,8 +172,7 @@ const Home = ({
                   </div>
                 </>
               )}
-              {!chatPrefs.orderManagement &&
-              (!recentSessions || !recentSessions.length) &&
+              {(!recentSessions || !recentSessions.length) &&
               (!chatFlows || !chatFlows.length) ? (
                 <div className="home__feeds-no-data-send-card">
                   <h5 className="home__feeds-no-data-send-card-title">
@@ -281,17 +233,10 @@ const Home = ({
               )}
             </div>
           </div>
-          <div className="chat__tabs-footer">
-            <div className="chat__powered__by-footer">
-              <a target="_blank" href="https://www.reacho.com">
-                Powered by <strong>Reacho</strong>
-              </a>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* <ChatTabsList /> */}
+      <ChatTabsList />
     </>
   );
 };

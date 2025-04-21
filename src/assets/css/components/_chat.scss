@@ -1192,9 +1192,9 @@
 		}
 
 		&-form {
-			text-align: start;
 			padding-top: 0px;
 			padding: 20px 15px;
+			text-align: center;
 			background-color: #ecf6fd;
 			// color: #657786;
 			color: $body-color;
@@ -2403,7 +2403,7 @@
 }
 
 .chat__tabs-footer {
-	// position: absolute;
+	position: absolute;
 	z-index: 99;
 	bottom: 0;
 	width: 100%;
@@ -4265,13 +4265,13 @@
 
 .chat__powered__by {
 	&-footer {
-		// background: linear-gradient(90deg, #f7f8fa 1.08%, #fafcff);
-		height: 50px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 12px;
-		letter-spacing: .05px;
+		background: linear-gradient(90deg, #f7f8fa 1.08%, #fafcff);
+		height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        letter-spacing: 0.5px;
 
 		a {
 			text-decoration: none !important;

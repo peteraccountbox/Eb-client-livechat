@@ -24,6 +24,7 @@ import {
 } from "../globals";
 import { getReq, postReq } from "../request";
 import IrrelevantNode from "./interactiveNodes/IrrelevantNode";
+import { getFormMetaData } from "../Utils";
 export interface InteractiveFlowProps {
   showConversation(): void;
   backToHome: () => void;
@@ -107,11 +108,9 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
           ),
           ...newExecutionList,
         ]);
-        if (newExecutionList[newExecutionList.length - 1].info?.ticket) {
+        if (newExecutionList[newExecutionList.length - 1].info?.session) {
           const session =
-            newExecutionList[newExecutionList.length - 1].info.ticket;
-          session.messageList =
-            newExecutionList[newExecutionList.length - 1].info?.events;
+            newExecutionList[newExecutionList.length - 1].info.session;
           removeSessionStoragePrefs(OPENED_CHAT);
           removeSessionStoragePrefs("flow_execution_id");
           props.addNewSession(session);
@@ -121,11 +120,12 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
           newExecutionList[newExecutionList.length - 1].executed &&
           !newExecutionList[newExecutionList.length - 1].nextNodeId &&
           newExecutionList[newExecutionList.length - 1].node.data.nodeType ==
-            InteractiveNodeTypes.END
+            InteractiveNodeTypes.END &&
+            newExecutionList[newExecutionList.length - 1].node.data.formData?.action == "end"
         ) {
           removeSessionStoragePrefs(OPENED_CHAT);
           removeSessionStoragePrefs("flow_execution_id");
-          props.backToHome();
+          goBack();
         }
 
         setScrollBottom();
@@ -140,6 +140,8 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
       START_FLOW_URL_PATH + "/" + chatFlow.id + "/" + VISITOR_UUID,
       {
         id: chatFlow.id,
+        meta_data: JSON.stringify(getFormMetaData()),
+        matched_bot_id: chatPrefs.matchedBotPrefs?.id,
         channelId: chatPrefs.id,
         channelType: "CHAT",
       }
@@ -281,8 +283,9 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
                         ? InteractiveFlowNodes[exe.node.type]
                         : InteractiveFlowNodes[exe.node.data.nodeType];
                     if (
-                      exe.node.data.nodeType == InteractiveNodeTypes.END &&
-                      (exe.node.data.formData?.action == "ticket" || exe.node.data.formData?.action == "end")
+                      exe.node.data.nodeType == InteractiveNodeTypes.END 
+                      // &&
+                      // (exe.node.data.formData?.action == "ticket" || exe.node.data.formData?.action == "end")
                     )
                       return <></>;
                     if (
@@ -346,7 +349,7 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
                 src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/love-icon.svg"
                 width="12px"
               />
-              Reacho
+              EngageBay
             </a>
           </div>
         </div>

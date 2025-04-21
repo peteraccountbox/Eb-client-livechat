@@ -10,6 +10,7 @@ import {
   ChatPrefsPayloadType,
   ChatSessionPaylodObj,
   EventPayloadObj,
+  JSONObjectType1,
   MessageByTypeEnum,
   TicketFromFieldDataPayLoad,
 } from "./Models";
@@ -75,6 +76,23 @@ export const getFormData = () => {
   if (formData) dataJSON = JSON.parse(formData);
 
   return JSON.stringify(dataJSON);
+};
+
+export const getFormMetaData = () => {
+  // Browser
+  var browser: any = getBrowserInfo();
+  var meta: JSONObjectType1 = {};
+  meta.browser_info = browser;
+
+  // Form data if any
+  var formData: any = getFormData();
+  if (formData) {
+    // Reset first message
+    formData = JSON.parse(formData);
+    meta.user_info = formData;
+  }
+
+  return meta;
 };
 
 export const getOperatorImage = (
@@ -197,7 +215,7 @@ export const getOperatorFromSession = (
   return userId ? getOperator(userId, agents) : undefined;
 };
 
-export function isValidTicketField(field: TicketFromFieldDataPayLoad) {
+export function isValidTicketField(field: ChatFromFieldDataPayLoad) {
   if (field.required && (!field.value || field.value.length === 0)) {
     field.is_valid = false;
     field.error = "This field is required";

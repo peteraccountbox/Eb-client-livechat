@@ -29,7 +29,6 @@ import {
   USER_PREFS_FETCH_URL_PATH,
   TRACK_MANAGE,
   USERS_FETCH_URL,
-  CHAT_WORKER_URL_PATH,
   getIntegrationSource,
 } from "./globals";
 import {
@@ -86,8 +85,9 @@ export enum NotificationPromtTypes {
 
 const App: React.FunctionComponent = () => {
   // Context states
-  const [chatPrefs, setChatPrefs] = useState<ChatPrefsPayloadType | undefined>(
-    undefined
+  console.log("running.........")
+  const [chatPrefs, setChatPrefs] = useState<ChatPrefsPayloadType>(
+    CHANNEL_PREFS
   );
   const [agents, setAgents] = useState<AgentPaylodObj[]>([]);
 
@@ -100,16 +100,31 @@ const App: React.FunctionComponent = () => {
   useEffect(() => {
     sessionsRef.current = sessions;
   }, [sessions]);
-  const getWidgetActiveTabs = () => {
-    if (!chatPrefs) return [];
+  // const getWidgetActiveTabs = () => {
+  //   if (!chatPrefs) return [];
 
+  //   let activeTabname = getSessionStoragePrefs(WIDGET_ACTIVE_TAB);
+  //   if (!activeTabname) activeTabname = widgetFooterTabs.Home;
+  //   try {
+  //     if (!FooterTabs.find((footer) => footer.tab == activeTabname)) {
+  //       activeTabname = FooterTabs[0].tab;
+  //     }
+  //   } catch (error) {}
+
+  //   return activeTabname;
+  // };
+
+  const getWidgetActiveTabs = () => {
+    const footerTabs = chatPrefs?.meta?.chatFooterSettings.filter(
+      (footer) => footer.enable == true
+    );
     let activeTabname = getSessionStoragePrefs(WIDGET_ACTIVE_TAB);
     if (!activeTabname) activeTabname = widgetFooterTabs.Home;
     try {
-      if (!FooterTabs.find((footer) => footer.tab == activeTabname)) {
-        activeTabname = FooterTabs[0].tab;
+      if (!footerTabs.find((footer) => footer.tab == activeTabname)) {
+        activeTabname = footerTabs[0].tab;
       }
-    } catch (error) {}
+    } catch (error) { }
 
     return activeTabname;
   };
@@ -189,20 +204,27 @@ const App: React.FunctionComponent = () => {
     console.log("useEffect1");
 
     const prefsReq = axios.get(USER_PREFS_FETCH_URL_PATH);
-    const usersReq = axios.get(USERS_FETCH_URL);
+    // const usersReq = axios.get(USERS_FETCH_URL);
 
-    axios
-      .all([prefsReq, usersReq])
-      .then(
-        axios.spread((prefsRes, usersRes) => {
-          if (prefsRes && prefsRes.data) setAgentsPrefs(prefsRes.data);
+    prefsReq.then((prefsRes) => {
+      if (prefsRes && prefsRes.data) setAgentsPrefs(prefsRes.data);
+    })
+    .catch((error) => {
+      console.error("There was an error!", error);
+    });
 
-          if (usersRes && usersRes.data) setAgents(usersRes.data);
-        })
-      )
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
+    // axios
+    //   .all([prefsReq, usersReq])
+    //   .then(
+    //     axios.spread((prefsRes, usersRes) => {
+    //       if (prefsRes && prefsRes.data) setAgentsPrefs(prefsRes.data);
+
+    //       // if (usersRes && usersRes.data) setAgents(usersRes.data);
+    //     })
+    //   )
+    //   .catch((error) => {
+    //     console.error("There was an error!", error);
+    //   });
 
     // Fetch chat prefs
     console.log("useEffect 2");
@@ -275,13 +297,13 @@ const App: React.FunctionComponent = () => {
       }
 
       // If not send request to worker to sync the domain list
-      axios
-        .get(CHAT_WORKER_URL_PATH)
-        .then((response) => {
-          if (!response) return;
-          console.log("response: ", response);
-        })
-        .catch(() => {});
+      // axios
+      //   .get(CHAT_WORKER_URL_PATH)
+      //   .then((response) => {
+      //     if (!response) return;
+      //     console.log("response: ", response);
+      //   })
+      //   .catch(() => {});
     } catch (error) {
       console.log("error", error);
     }
@@ -325,14 +347,14 @@ const App: React.FunctionComponent = () => {
     try {
       console.log("CHANNEL_PREFS_FETCH_URL_PATH", CHANNEL_PREFS_FETCH_URL_PATH);
 
-      axios(CHANNEL_PREFS_FETCH_URL_PATH, {}).then(
-        (response: AxiosResponse<any, any>) => {
-          let prefs = response.data as ChatPrefsPayloadType;
+      // axios(CHANNEL_PREFS_FETCH_URL_PATH, {}).then(
+      //   (response: AxiosResponse<any, any>) => {
+      //     let prefs = response.data as ChatPrefsPayloadType;
 
-          setChatPrefs(prefs);
-          setPrefsFetched(true);
-        }
-      );
+      //     setChatPrefs(prefs);
+      //     setPrefsFetched(true);
+      //   }
+      // );
 
       // let prefs = response.data as ChatPrefsPayloadType;
 
@@ -724,14 +746,13 @@ const App: React.FunctionComponent = () => {
   );
 
   const appThemeStyle: object = useMemo(() => {
-    if (!chatPrefs || !agentsPrefs.length) return {};
+    if (!chatPrefs
+      //  || !agentsPrefs.length
+      ) return {};
 
-    const settings = [
-      {
-        tab: "Messages",
-        enable: true,
-      },
-    ];
+    const settings = chatPrefs?.meta?.chatFooterSettings.filter(
+      (footer) => footer.enable == true
+    );
 
     const mainColor = chatPrefs && chatPrefs.meta.decoration.mainColor;
     const offlineColor =
@@ -754,7 +775,7 @@ const App: React.FunctionComponent = () => {
     };
   }, [chatPrefs, agentsPrefs]);
 
-  if (prefsFetched && chatPrefs && !chatPrefs.meta.deactivated) {
+  if (prefsFetched && chatPrefs && !(chatPrefs.meta.hideOnNonBusiness && !isUserBusinessHour(chatPrefs, agentsPrefs))) {
     return (
       <AppContext.Provider
         value={{

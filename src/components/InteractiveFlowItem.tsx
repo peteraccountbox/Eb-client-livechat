@@ -10,8 +10,9 @@ const InteractiveFlowItem = (props: any) => {
       ? InteractiveFlowNodes[props.execution.node.type]
       : InteractiveFlowNodes[props.execution.node.data.nodeType];
   if (
-    props.execution.node.data.nodeType == "END" &&
-    props.execution.node.data.formData?.action == "ticket"
+    props.execution.node.data.nodeType == "END"
+    // &&
+    // props.execution.node.data.formData?.action == "agent"
   )
     return <></>;
   else

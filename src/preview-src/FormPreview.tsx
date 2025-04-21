@@ -74,16 +74,15 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                 <div className="text-left" style={{ marginBottom: "10px" }}>
                   <pre>
                     {" "}
-                    {chatPrefs.prechat.title ? (
-                      <p className="mb-2"> {"title"} </p>
-                    ) : (
-                      <p className="mb-2"> {"title"} </p>
-                    )}{" "}
+                    
+                      <p className="mb-2"> {chatPrefs.meta?.title} </p>
+                   
+                   {" "}
                   </pre>
                 </div>
 
-                {chatPrefs.prechat &&
-                  chatPrefs.prechat.formData.map((field, index) => {
+                {chatPrefs.meta &&
+                  chatPrefs.meta.fields.map((field, index) => {
                     return (
                       <>
                         <div className="chat__messages-form-group">
@@ -252,7 +251,7 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                     cursor: "pointer",
                   }}
                 >
-                  <span> {chatPrefs.prechat.button_text} </span>
+                  <span> {chatPrefs.meta.btnText} </span>
                 </a>
               </form>
             </div>

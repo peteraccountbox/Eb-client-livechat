@@ -11,13 +11,11 @@ import {
 } from "./Storage";
 import { OPENED_CHAT, OPENED_FLOW, TRACK_MANAGE } from "./globals";
 import InteractiveFlow from "./components/InteractiveFlow";
-import TrackManage from "./components/TrackManage";
 
 enum LivechatComponentNames {
   ConversationList = "ConversationList",
   Conversation = "Conversation",
   Flow = "Flow",
-  TrackManage = "TrackManage",
 }
 
 export type LivechatComponentProps = {
@@ -43,8 +41,6 @@ export default function LiveChat({
     componentName = LivechatComponentNames.Conversation;
   } else if (getSessionStoragePrefs(OPENED_FLOW) != null) {
     componentName = LivechatComponentNames.Flow;
-  } else if (getSessionStoragePrefs(TRACK_MANAGE) != null) {
-    componentName = LivechatComponentNames.TrackManage;
   }
 
   const [activeComponentName, setActiveComponentName] =
@@ -111,15 +107,6 @@ export default function LiveChat({
                   backToHome={backToHome}
                 />
               );
-            } else if (
-              activeComponentName === LivechatComponentNames.TrackManage
-            ) {
-              return (
-                <TrackManage
-                  backToHome={backToHome}
-                  startNewChat={startNewChat}
-                />
-              );
             } else {
               return <>None</>;
             }
@@ -127,11 +114,11 @@ export default function LiveChat({
         </>
       )}
 
-      {/* {activeComponentName == LivechatComponentNames.ConversationList ? (
+      {activeComponentName == LivechatComponentNames.ConversationList ? (
         <ChatTabsList />
       ) : (
         <></>
-      )} */}
+      )}
     </>
   );
 }

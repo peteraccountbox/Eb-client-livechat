@@ -1,77 +1,52 @@
-import { createElement } from 'react';
 import loadChat, { createEle } from './frame';
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { API_KEY, CHANNEL_PREFS_FETCH_URL_PATH } from './globals';
+import { ChatPrefsPayloadType } from './Models';
 
-function initializeChatWidget(container: Element, channelId: string | null) {
 
-    if (!container || !channelId)
-        return;
+(async () => {
 
-    // Get prefs and validate it
-    axios.get("https://reacho-chat-worker.peter-13d.workers.dev/?channel_id=" +
-        channelId +
-        "&tenant_id=" +
-        (window as any).reachoModulesObject.companyId).then((response) => {
-            if (!response)
-                return;
-            loadChat(container, response.data);
-        }).catch(() => {
+    let channelIds = []
+    try {        
+        const widgetContainers = document.querySelectorAll(`[class^="engagebay-chat-widget"]`);
+        if(widgetContainers.length == 0)
+            return
+        console.log("widgetContainers ", widgetContainers);
+        for (let index = 0; index < widgetContainers.length; index++) {
+            const element = widgetContainers[index];
+            channelIds.push(element.getAttribute("data-id"))
+        }
+        const channels: any[] = (await axios(CHANNEL_PREFS_FETCH_URL_PATH + "?channelIds=" + channelIds.join() + "&apiKey=" + API_KEY, {})).data
 
-        });
+        let selectedChannel:any,channelId;
 
-}
+            channels.map((channel) => {
+                const widgetContainer = document.querySelector('[class^="engagebay-chat-widget"][data-id="' + channel.id +'"]');
 
-(() => {
-
-    let channelId;
-    try {
-        const elements = document.querySelectorAll('[class^="reacho-chat-widget"]');
-        let widgetContainer = elements[0];
-        channelId = widgetContainer.getAttribute("data-id");
-        initializeChatWidget(widgetContainer, channelId);
-    } catch (error) {
-
-    }
-
-    // Check for installations
-    if (!channelId) {
-        // Get prefs and validate it
-        axios.get("https://files.reacho.com/app/" + (window as any).reachoModulesObject.companyId + "/installed-chat-widgets.json").then((response) => {
-
-            if (!response || !response.data)
-                return;
-
-            let data = response.data as {
-                [key: string]: string
-            };
-
-            for (let key in data) {
-                
-                const url = (window as any).reachoModulesObject?.storeURL || window.location.href;
-
-                if (url && url.indexOf(data[key]) > -1) {
-
-                    channelId = key;
-
-                    console.log("channelId1", channelId)
-
-                    // create container
-                    const widgetContainer: HTMLIFrameElement = createEle("div", {
-                        "class": "reacho-chat-widget",
-                        "data-id": channelId
-                    }) as HTMLIFrameElement;
-
-                    document.body.appendChild(widgetContainer);
-
-                    initializeChatWidget(widgetContainer, channelId);
-                    return;
+                if(channel.systemCreated)
+                    selectedChannel = channel
+                else 
+                if(!channel.meta.deactivated && widgetContainer && (!selectedChannel || selectedChannel.systemCreated)) {
+                    selectedChannel = channel
+                    channelId = channel.id
+                   loadChat(widgetContainer, channel);  
                 }
+            })
+
+            if(!channelId) {
+                 // create container
+                 const widgetContainer: HTMLIFrameElement = createEle("div", {
+                    "class": "engagebay-chat-widget",
+                    "data-id": selectedChannel.id
+                }) as HTMLIFrameElement;
+
+                document.body.appendChild(widgetContainer);
+
+                loadChat(widgetContainer, selectedChannel);
             }
 
+    } catch (error) {
 
-        }).catch(() => {
-
-        });
     }
 
 })();

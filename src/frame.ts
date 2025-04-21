@@ -19,13 +19,13 @@ const isMobileDevice = () => {
 
 export default function loadChat(container: Element, prefs: ChatPrefsPayloadType) {
 
-    if(!(window as any).reachoJSClient){
-        console.log("waiting for reachoJSClient");
-        setTimeout(() => {
-            loadChat(container, prefs);
-        }, 20);
-        return;
-    }
+    // if(!(window as any).reachoJSClient){
+    //     console.log("waiting for reachoJSClient");
+    //     setTimeout(() => {
+    //         loadChat(container, prefs);
+    //     }, 20);
+    //     return;
+    // }
     
     // Validate contitions
     if (!prefs || prefs.meta.deactivated || (prefs.meta.hideOnMobile && isMobileDevice()))
@@ -46,23 +46,23 @@ export default function loadChat(container: Element, prefs: ChatPrefsPayloadType
 
     const reachoModulesObject = (window as any).reachoModulesObject || {};
     let SERVER_HOST_DOMAIN_URL = "https://" + ((reachoModulesObject && reachoModulesObject.mode) ? reachoModulesObject.mode : "live") + ".reacho.com/";
-    if (reachoModulesObject.mode && reachoModulesObject.mode == "local")
+    // if (reachoModulesObject.mode && reachoModulesObject.mode == "local")
         SERVER_HOST_DOMAIN_URL = "http://localhost:8091/"
 
-    let scirptURL = "https://static.reacho.com/onsite/js/chat/main/main.min.js?v=751";
-    if (reachoModulesObject.mode && reachoModulesObject.mode == "local")
-        scirptURL = "http://localhost:3031/main/main.min.js?v=311";
+    // let scirptURL = "https://static.reacho.com/onsite/js/chat/main/main.min.js?v=751";
+    // if (reachoModulesObject.mode && reachoModulesObject.mode == "local")
+    let scirptURL = "http://localhost:3031/build/main/main.min.js";
 
-    reachoModulesObject.ChatPrefs = {};
-    reachoModulesObject.ChatPrefs[prefs.id] = prefs;
+    // reachoModulesObject.ChatPrefs = {};
+    // reachoModulesObject.ChatPrefs[prefs.id] = prefs;
 
-    Object.defineProperty(window, "reachoModulesObject", {
-        value: reachoModulesObject,
-        enumerable: false
-    });
+    // Object.defineProperty(window, "reachoModulesObject", {
+    //     value: reachoModulesObject,
+    //     enumerable: false
+    // });
 
 
-    const vId = (window as any).reachoJSClient.getVisitorId();
+    const vId = VISITOR_UUID;
 
     let content = `
     <!DOCTYPE html>
@@ -73,8 +73,8 @@ export default function loadChat(container: Element, prefs: ChatPrefsPayloadType
     <body>
         <div id="root"></p>
         <script >
-            var TENANT_ID = "${reachoModulesObject.companyId}";
-            // var CHANNEL_PREFS = '${JSON.stringify(prefs)}';
+            var TENANT_ID = "${prefs.tenantId}";
+            var CHANNEL_PREFS = '${JSON.stringify(prefs)}';
             var CHANNEL_ID = "${prefs.id}";
             var FRAME_REF_ID = "${frameId}";
             var SERVER_HOST_DOMAIN_URL = "${SERVER_HOST_DOMAIN_URL}";

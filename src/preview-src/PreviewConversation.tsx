@@ -168,7 +168,7 @@ export interface PreviewConversationComponentProps {
               src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/love-icon.svg"
               width="12px"
             />
-            Reacho
+            Engagebay
           </a>
         </div>
       </div>

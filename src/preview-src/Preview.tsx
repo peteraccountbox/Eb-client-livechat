@@ -13,7 +13,9 @@ export interface PreviewComponentProps {
 const Preview: FC<PreviewComponentProps> = (props) => {
   const { chatPrefs } = props;
 
-  const settings = [{ tab: "Messages" }];
+  const settings = chatPrefs?.meta?.chatFooterSettings.filter(
+    (footer) => footer.enable == true
+  );
 
   const appThemeStyle: Object = useMemo(() => {
     return {
@@ -41,6 +43,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
     if (label == "Help") return "Help Center";
     return label;
   };
+  const [tab, setTab] = useState(settings ? settings[0]?.tab : "Messages");
 
   return (
     chatPrefs && (
@@ -344,6 +347,36 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                 </div>
               </div>
             </div>
+            {settings && settings.length > 1 && (
+              <div className="chat__tabs-footer">
+                <div className="chat__tabs-bottom-bar">
+                  {settings.map((footerTab) => {
+                    return (
+                      <div
+                        className={`chat__tabs-nav-link ${
+                          footerTab.tab == tab ? "active" : ""
+                        }`}
+                        onClick={() => setTab(footerTab.tab)}
+                      >
+                        <div className="chat__tabs-icon">
+                          {footerTab.tab == tab
+                            ? icons["active" + footerTab.tab]
+                            : icons[footerTab.tab]}
+                        </div>
+                        <span className="chat__tabs-title">
+                          {getLabel(footerTab.tab)}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                {!chatPrefs.isWhiteLabelEnabled && (
+                  <div className="chat__powered__by-footer">
+                    <a href="javascript:void(0);">Powered by EngageBay</a>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
         <div

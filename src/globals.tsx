@@ -3,6 +3,7 @@ import { getSessionStoragePrefs, setSessionStoragePrefs } from "./Storage";
 
 export const TENANT_ID: string = (window as any).TENANT_ID;
 export const CHANNEL_ID: string = (window as any).CHANNEL_ID;
+export const API_KEY: string = (window as any).API_KEY;
 
 export function getReachoModule() {
   let prefs;
@@ -16,7 +17,7 @@ let prefs;
 try {
   prefs = getReachoModule().ChatPrefs[CHANNEL_ID];
 } catch (e) { }
-export const CHANNEL_PREFS: ChatPrefsPayloadType | undefined = prefs;
+export const CHANNEL_PREFS: ChatPrefsPayloadType = (window as any).CHANNEL_PREFS ? JSON.parse((window as any).CHANNEL_PREFS) : undefined;
 
 export const VISITOR_UUID: string = (window as any).VISITOR_UUID;
 
@@ -51,7 +52,7 @@ export const UPDATE_READ_URL_PATH: string =
 export const MESSAGE_URL_PATH: string = REQUEST_PREFIX_PATH + "/new-message";
 
 export const AGENTS_FETCH_URL_PATH: string =
-  REQUEST_PREFIX_PATH + "/get-agents";
+   "/user/get-users?tid=5943959859757056";
 
 export const CONNECT_TO_AGENT_URL_PATH: string =
   "api/support/jsclient/widget/connect-to-agent/";
@@ -66,7 +67,7 @@ export const ORDER_FETCH_URL: string =
   "api/support/jsclient/inbox/get-store-order";
 
 export const USERS_FETCH_URL: string =
-  "https://files.reacho.com/app/" + TENANT_ID + "/user/users-info.json";
+  "http://localhost:8787/user/get-users?tid=" + TENANT_ID;
 
 export const USER_FETCH_URL: string = "jsapi/rest/user/";
 export const TICKET_CREATE_URL: string =
@@ -100,24 +101,26 @@ export const CONVERSATION_MESSAGE_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/get-chat-messages";
 
 
-export const CHAT_WORKER_URL_PATH =
-  "https://reacho-chat-worker.peter-13d.workers.dev/update-installed-domains/?domain=" +
-  (window as any).location.host +
-  "&channel_id=" +
-  CHANNEL_ID +
-  "&tenant_id=" +
-  TENANT_ID;
+// export const CHAT_WORKER_URL_PATH =
+//   "https://reacho-chat-worker.peter-13d.workers.dev/update-installed-domains/?domain=" +
+//   (window as any).location.host +
+//   "&channel_id=" +
+//   CHANNEL_ID +
+//   "&tenant_id=" +
+//   TENANT_ID;
 
 
 export const CHANNEL_PREFS_FETCH_URL_PATH =
-  "https://reacho-chat-worker.peter-13d.workers.dev/?channel_id=" +
-  CHANNEL_ID +
-  "&tenant_id=" +
-  TENANT_ID;
+  // "https://reacho-chat-worker.peter-13d.workers.dev/?channel_id=" +
+  // CHANNEL_ID +
+  // "&tenant_id=" +
+  // TENANT_ID;
+  // "https://pub-3e072d94a58945b58f996ad31f85ae61.r2.dev/channel/" + CHANNEL_ID + ".json"
+  "http://localhost:8787/channel/get-active-channel"
 // REQUEST_PREFIX_PATH + "/channel/chat/" + CHANNEL_ID;
 
 export const USER_PREFS_FETCH_URL_PATH =
-  "https://files.reacho.com/app/" + TENANT_ID + "/user/users-prefs.json";
+  "http://localhost:8787/user/get-users?tid=" + TENANT_ID;
 
 export const WEB_RULES_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "widget/web-rules";
@@ -145,6 +148,8 @@ export const WIDGET_ACTIVE_TAB = "widget_active_tab";
 export const PROACTIVE_MESSAGE = "proactive-message";
 
 export const FORM_DATA = "form_data";
+
+export const FORM_DATA_ARRAY = "form_data_array";
 
 export const TICKET_ACTIVE_ID = "ticket_active_id";
 

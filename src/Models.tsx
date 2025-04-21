@@ -45,6 +45,8 @@ export type ChatFromFieldDataPayLoad = {
   value: string | string[];
   valueArr: string[];
   is_valid: boolean;
+  label?: string;
+  field_label?:string;
 };
 
 export type TicketFromFieldDataPayLoad = {
@@ -80,11 +82,21 @@ export interface ChatChannelMeta {
   emailCaptureEnabled: boolean;
   emailCaptureEnforcement: string;
   decoration: Decoration;
-  liveChatAvailability: "liveChatBusiness" | "liveChat" | "liveChatOffline";
+  liveChatAvailability: "liveChatBusiness" | "liveChat" | "liveChatOffline" |  "liveChatOnline";
   storeId: string;
   sendChatTranscript: boolean;
   flowIds?: string[];
   installedDomains?: string[];
+  chatFooterSettings: ChatFooterDataPayload[];
+  fields: ChatFromFieldDataPayLoad[];
+  title: string;
+  btnText: string;
+  disableCustomBusinessHours: ConstrainBooleanParameters;
+  timezone: string;
+  businessHours:BusinessHour[];
+  hideOnNonBusiness:boolean;
+  messagePlaceholder: string;
+  requiredContactInformation: string;
 }
 
 export interface Decoration {
@@ -110,11 +122,10 @@ export type ChatPrefsPayloadType = {
   id: string;
   meta: ChatChannelMeta;
   flows: ChatFlowsPayloadObj[];
-  orderManagement: any;
   name: string;
-
+  tenantId: string;
   // widget: ChatPrefsWidgetType;
-  prechat: ChatPrefsPreChatType;
+  // prechat: ChatPrefsPreChatType;
   systemMessage: ChatPrefsSystemMessageType;
   botPrefs?: AIBotPrefPayloadType[];
   matchedBotPrefs?: AIBotPrefPayloadType;
@@ -183,7 +194,7 @@ export type AgentPaylodObj = {
 
 export type AgentPrefsPayloadType = {
   availability: string;
-  businessHours: BusinessHour[];
+  business_hours: BusinessHour[];
   timezone: string;
   id: string;
   tenantId: string;
@@ -199,7 +210,6 @@ export type ChatFlowsPayloadObj = {
   [x: string]: any;
 };
 
-export type OrderManagementObj = {};
 
 export type ChatSessionPaylodObj = {
   updatedTime: any;
@@ -245,6 +255,7 @@ export type ChatSessionPaylodObj = {
   lastMessageAt: string;
   lastAgentMessageAt?: string;
   lastCustomerMessageAt?: string;
+  formData?: string;
 };
 
 export type BotDetails = {

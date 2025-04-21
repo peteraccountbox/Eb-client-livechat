@@ -1,11 +1,11 @@
 import Automated from "./interactiveNodes/Automated";
 import CollectFileUpload from "./interactiveNodes/CollectFileUpload";
+import CollectFormData from "./interactiveNodes/CollectFormData";
 import CollectTextReply from "./interactiveNodes/CollectTextReply";
 import CustomerIdentification from "./interactiveNodes/CustomerIdentification";
 import End from "./interactiveNodes/End";
 import ItemSelection from "./interactiveNodes/ItemSelection";
 import MultiChoice from "./interactiveNodes/MultiChoice";
-import OrderSelection from "./interactiveNodes/OrderSelection";
 import Start from "./interactiveNodes/Start";
 
 export type NodeExecutionPayload = {
@@ -23,6 +23,7 @@ export type NodeExecutionPayload = {
   node: any;
   relatedEdges: any;
   createdTime: any;
+  created_time_in_millis: any; 
 };
 
 export type NodeResonseType = {
@@ -43,6 +44,7 @@ export enum InteractiveNodeTypes {
   AUTOMATED_ANSWER = "AUTOMATED_ANSWER",
   COLLECT_TEXT_REPLY = "COLLECT_TEXT_REPLY",
   COLLECT_FILE_UPLOAD = "COLLECT_FILE_UPLOAD",
+  COLLECT_FORM_DATA = "COLLECT_FORM_DATA",
   CUSTOMER_IDENTIFICATION = "CUSTOMER_IDENTIFICATION",
   ORDER_SELECTION = "ORDER_SELECTION",
   ITEM_SELECTION = "ITEM_SELECTION",
@@ -63,9 +65,5 @@ export const InteractiveFlowNodes: {
   [InteractiveNodeTypes[InteractiveNodeTypes.AUTOMATED_ANSWER]]: Automated,
   [InteractiveNodeTypes[InteractiveNodeTypes.COLLECT_TEXT_REPLY]]:
     CollectTextReply,
-  [InteractiveNodeTypes[InteractiveNodeTypes.COLLECT_FILE_UPLOAD]]: CollectFileUpload,  
-  [InteractiveNodeTypes[InteractiveNodeTypes.CUSTOMER_IDENTIFICATION]]:
-    CustomerIdentification,
-  [InteractiveNodeTypes[InteractiveNodeTypes.ORDER_SELECTION]]: OrderSelection,
-  [InteractiveNodeTypes[InteractiveNodeTypes.ITEM_SELECTION]]: ItemSelection,
+  [InteractiveNodeTypes[InteractiveNodeTypes.COLLECT_FORM_DATA]]: CollectFormData
 };

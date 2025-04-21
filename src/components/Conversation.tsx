@@ -85,61 +85,8 @@ const Conversation = (props: ConversationProps) => {
 
   const _reachoOnsite =  getReachoOnsite();
 
-  const singlefield = [
-    {
-      name: "customerEmail",
-      label: "Drop your email",
-      type: "email",
-      required: true,
-      value:
-        customerProfile && customerProfile.email ? customerProfile.email : "",
-      placeholder: "reacho@email.com",
-      error: "",
-      is_valid: true,
-      helpText:
-        "Messages and ticket updates will be sent to this email address",
-    },
-  ];
-
-  const fields = [
-    {
-      name: "customerEmail",
-      label: "Drop your email",
-      type: "email",
-      required: true,
-      value:
-        customerProfile && customerProfile.email ? customerProfile.email : "",
-      placeholder: "reacho@email.com",
-      error: "",
-      is_valid: true,
-      helpText:
-        "Messages and ticket updates will be sent to this email address",
-    },
-    {
-      name: "customerName",
-      label: "Drop your name",
-      type: "text",
-      required: true,
-      value:
-        customerProfile && customerProfile.name ? customerProfile.name : "",
-      placeholder: "Enter Name",
-      error: "",
-      is_valid: true,
-    },
-    {
-      name: "query",
-      label: "Drop query",
-      type: "textarea",
-      required: true,
-      value: "",
-      placeholder: "Drop Query",
-      error: "",
-      is_valid: true,
-    },
-  ];
-
   const text = useRef<HTMLTextAreaElement>(null);
-  const [formFields, setFormFields] = useState<any[]>(fields);
+  const [formFields, setFormFields] = useState<ChatFromFieldDataPayLoad[]>([]);
   const [typeText, setTypeText] = useState("");
   const [showChatForm, setShowChatForm] = useState(false);
   const [typingTimer, setTypingTimer] = useState<any>();
@@ -306,37 +253,37 @@ const Conversation = (props: ConversationProps) => {
     return chatPrefs.matchedBotPrefs;
   };
 
-  // useEffect(() => {
-  //   let storedFormData: JSONObjectType = {};
-  //   try {
-  //     let obj: any = getFormData();
-  //     if (obj) storedFormData = JSON.parse(obj) as JSONObjectType;
-  //   } catch (error) {}
+  useEffect(() => {
+    let storedFormData: JSONObjectType = {};
+    try {
+      let obj: any = getFormData();
+      if (obj) storedFormData = JSON.parse(obj) as JSONObjectType;
+    } catch (error) {}
 
-  //   let fields: ChatFromFieldDataPayLoad[] = [];
+    let fields: ChatFromFieldDataPayLoad[] = [];
 
-  //   // chatPrefs.prechat.formData.forEach(
-  //   //   (field: ChatFromFieldDataPayLoad, index: number) => {
-  //   //     let fieldClone = JSON.parse(
-  //   //       JSON.stringify(field)
-  //   //     ) as ChatFromFieldDataPayLoad;
+    chatPrefs.meta?.fields?.forEach(
+      (field: ChatFromFieldDataPayLoad, index: number) => {
+        let fieldClone = JSON.parse(
+          JSON.stringify(field)
+        ) as ChatFromFieldDataPayLoad;
 
-  //   //     fieldClone.value =
-  //   //       storedFormData[fieldClone.name] &&
-  //   //         !(field.field_type == "SYSTEM" && field.name == "message")
-  //   //         ? storedFormData[fieldClone.name]
-  //   //         : "";
-  //   //     if (fieldClone.type == "multicheckbox" || fieldClone.type == "checkbox")
-  //   //       fieldClone.valueArr = storedFormData[fieldClone.name]
-  //   //         ? Array.from(storedFormData[fieldClone.name])
-  //   //         : [];
-  //   //     fieldClone.is_valid = false;
-  //   //     fields.push(fieldClone);
-  //   //   }
-  //   // );
+        fieldClone.value =
+          storedFormData[fieldClone.name] &&
+            !(field.field_type == "SYSTEM" && field.name == "message")
+            ? storedFormData[fieldClone.name]
+            : "";
+        if (fieldClone.type == "multicheckbox" || fieldClone.type == "checkbox")
+          fieldClone.valueArr = storedFormData[fieldClone.name]
+            ? Array.from(storedFormData[fieldClone.name])
+            : [];
+        fieldClone.is_valid = false;
+        fields.push(fieldClone);
+      }
+    );
 
-  //   setFormFields(fields);
-  // }, [showChatForm]);
+    setFormFields(fields);
+  }, [showChatForm]);
 
   const publishMessageToChatAgents = (message: any) => {
     if (!session) return;
@@ -505,11 +452,11 @@ const Conversation = (props: ConversationProps) => {
         .catch(() => {});
       return;
     }
-    session.customerEmail = formData.customerEmail as string;
-    session.customerName = formData.customerName as string;
-    if (formData.query) {
+    session.customerEmail = formData.email as string;
+    session.customerName = formData.name as string;
+    if (formData.message) {
       var msg: ChatMessagePayloadObj = getChatMessage(
-        formData.query,
+        formData.message,
         undefined
       );
       let event: EventPayloadObj = {
@@ -529,6 +476,9 @@ const Conversation = (props: ConversationProps) => {
       session.createdBy = MessageByTypeEnum.CUSTOMER;
       session.unRead = session.unRead ? session.unRead + 1 : 1;
       session.messageList.push(event);
+      session.meta = {
+        formData:getFormData()
+      }
     }
     submitSessionEvent(NEW_SESSION_URL_PATH, session, (response: any) => {
       // if (newChat) {
@@ -735,8 +685,7 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const shouldShowForm = () => {
-    return false;
-    //return  parentContext.chatPrefs.prechat.enabled;
+    return chatPrefs.meta.requiredContactInformation;
   };
 
   /**
@@ -934,18 +883,6 @@ const Conversation = (props: ConversationProps) => {
                                 nextMessage={session?.messageList[index + 1]}
                                 updateMessage={updateMessage}
                               />
-                              {index == 0 && !emailCaptured && (message.id || message.tempId) && (
-                                <ChatForm
-                                  closeChatForm={() => {
-                                    setShowChatForm(false);
-                                  }}
-                                  fields={singlefield}
-                                  submitChatForm={submitChatForm}
-                                  typeText={typeText}
-                                  setTypeText={setTypeText}
-                                  saving={saving}
-                                />
-                              )}
                             </>
                           )}
                       </>
@@ -968,15 +905,16 @@ const Conversation = (props: ConversationProps) => {
 
             {showChatForm ? (
               <ChatForm
-                closeChatForm={() => {
-                  setShowChatForm(false);
-                }}
-                fields={fields}
-                submitChatForm={submitChatForm}
-                typeText={typeText}
-                setTypeText={setTypeText}
-                saving={saving}
-              />
+                  closeChatForm={() => {
+                    setShowChatForm(false);
+                  }}
+                  formFields={formFields}
+                  setFormFields={setFormFields}
+                  submitChatForm={submitChatForm}
+                  typeText={typeText}
+                  setTypeText={setTypeText}
+                  saving={saving}
+                />
             ) : (
               <></>
             )}
@@ -988,7 +926,7 @@ const Conversation = (props: ConversationProps) => {
                 src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/love-icon.svg"
                 width="12px"
               />
-              Reacho
+              EngageBay
             </a>
           </div>
         </div>
@@ -997,9 +935,7 @@ const Conversation = (props: ConversationProps) => {
           className={`chat__footer ${
             showChatForm ||
             (!session.id && session.messageList?.length > 0) ||
-            (chatPrefs.meta.emailCaptureEnforcement == "required" &&
-              !emailCaptured &&
-              !session.id &&
+            ( !session.id &&
               session.messageList?.length > 0)
               ? "hide"
               : ""
@@ -1018,7 +954,7 @@ const Conversation = (props: ConversationProps) => {
               value={text?.current?.value}
               placeholder={
                 !matchedBotPrefs || matchedBotPrefs.botPrompts?.length == 0
-                  ? parentContext.chatPrefs.meta.decoration.introductionText
+                  ? parentContext.chatPrefs.meta.messagePlaceholder
                   : matchedBotPrefs.settings.placeHolderText
               }
               contentEditable="true"

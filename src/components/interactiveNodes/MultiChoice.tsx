@@ -6,10 +6,6 @@ const MultiChoice: React.FC<InteractiveNodeProps> = ({
   execution,
   executeNodeOnUserInteraction,
 }: InteractiveNodeProps) => {
-  const parentContext = useContext(AppContext);
-  const chatFlow = parentContext.chatFlows.find(
-    (chatFlow) => chatFlow.id === execution.flowId
-  );
 
   const onChoiceSelected = (edge: any) => {
     execution.nodeId = execution.node.id;
@@ -37,7 +33,7 @@ const MultiChoice: React.FC<InteractiveNodeProps> = ({
         </ul>
       </div>
 
-      {!execution.executed ? (
+      {/* {!execution.executed ? ( */}
         <div className="chat__messages-group">
           <ul className="chat__messages-list multi_choice-list">
             {execution.relatedEdges.map((edge: any, index: number) => {
@@ -52,8 +48,8 @@ const MultiChoice: React.FC<InteractiveNodeProps> = ({
             })}
           </ul>
         </div>
-      ) : (
-        <div className="chat__messages-group chat__messages-group--me">
+      {/* ) : ( */}
+      {execution.executed && <div className="chat__messages-group chat__messages-group--me">
           <ul className="chat__messages-list">
             <div className="chat__messages-list-item">
               <div className="chat__messages-bubble chat__message-type-TEXT">
@@ -64,7 +60,7 @@ const MultiChoice: React.FC<InteractiveNodeProps> = ({
             </div>
           </ul>
         </div>
-      )}
+      }
     </>
   );
 };
