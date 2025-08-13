@@ -57,6 +57,7 @@ export const postReq = async (path: string, data: object, headers?: object) => {
   headers = (headers) ? headers : {
     "Content-Type": "application/json",
     // Authorization: API_KEY,
+    'X-JS-Client-Key': TENANT_ID,
   };
   return reachoAPI
     .post(getServerHost(path), data, {
