@@ -89,6 +89,7 @@ const Conversation = (props: ConversationProps) => {
   const [formFields, setFormFields] = useState<ChatFromFieldDataPayLoad[]>([]);
   const [typeText, setTypeText] = useState("");
   const [showChatForm, setShowChatForm] = useState(false);
+  const [files, setFiles] = useState<any>([]);
   const [typingTimer, setTypingTimer] = useState<any>();
   const [saving, setSaving] = useState<boolean>(false);
   useEffect(() => {
@@ -523,18 +524,18 @@ const Conversation = (props: ConversationProps) => {
   /**
    * Send uploaded file
    */
-  const sendFileUploadMessage = (file: AttachmentType) => {
+  const sendFileUploadMessage = (file: any) => {
     if (!file) return;
 
     // // Message as JSON for file upload
-    // var message: any = {};
-    // message.fileName = file.name;
-    // message.fileUrl = file.bucketURL + file.file_resource;
-    // message.fileSize = file.size;
-    // message.fileType = file.type;
+    var message: any = {};
+    message.fileName = file.name;
+    message.url = file.bucketURL + file.file_resource;
+    message.name = file.name;
+
 
     // Send message
-    postMessage(getChatMessage("", MessageFormatType.TEXT, [file]));
+    postMessage(getChatMessage("", MessageFormatType.TEXT, [message]));
   };
 
   const getFormMetaData = () => {
@@ -976,7 +977,7 @@ const Conversation = (props: ConversationProps) => {
               <Emoji onEmojiSelect={onEmojiSelect} />
 
               {session && session.id ? (
-                <FileUpload fileUploadCallback={fileUploadCallback} />
+                <FileUpload setFiles={setFiles} fileUploadCallback={fileUploadCallback} />
               ) : (
                 <></>
               )}

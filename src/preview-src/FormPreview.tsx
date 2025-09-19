@@ -236,6 +236,9 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                             }
                           })()}
                         </div>
+                        {field.name== "email" && <p style={{ marginBottom: "10px" }}>
+                            A New customer will be created when provided new email address on the form
+                          </p>}
                         {field.error ? (
                           <div className="error-content">{field.error}</div>
                         ) : (

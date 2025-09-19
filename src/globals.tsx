@@ -127,7 +127,7 @@ export const WEB_RULES_FETCH_URL_PATH =
 export const TYPING_ALERT_URL_PATH =
   REQUEST_PREFIX_PATH + "widget/typing-alerts/VISITOR";
 export const FILE_UPLOAD_URL_PATH =
-  REQUEST_PREFIX_PATH + "panel/contentbox/repo/getFilePath";
+  REQUEST_PREFIX_PATH + "/get-file-path";
 export const GET_BIG_TEXT_URL_PATH =
   REQUEST_PREFIX_PATH + "widget/get-big-text/";
 
