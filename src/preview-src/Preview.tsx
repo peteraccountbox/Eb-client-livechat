@@ -350,8 +350,8 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                           <PreviewListItem />
                           <PreviewListItem />
                           <PreviewListItem />
-                          <PreviewListItem />
-                          <PreviewListItem />
+                          {/* <PreviewListItem />
+                          <PreviewListItem /> */}
                         </div>
                       </div>
                     </div>

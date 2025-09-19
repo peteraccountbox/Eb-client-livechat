@@ -58,7 +58,7 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
             </div>
 
             <div className="chat__header-user-title">
-              <h1 className="chat__header-user-name">title</h1>
+              <h1 className="chat__header-user-name">{chatPrefs.name}</h1>
             </div>
           </div>
         </div>
@@ -85,7 +85,7 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                   chatPrefs.meta.fields.map((field, index) => {
                     return (
                       <>
-                        <div className="chat__messages-form-group">
+                        {field.name != "message" && <div className="chat__messages-form-group">
                           {(() => {
                             switch (true) {
                               case field.type == "textarea" && field.visible:
@@ -235,7 +235,7 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                                 break;
                             }
                           })()}
-                        </div>
+                        </div>}
                         {field.name== "email" && <p style={{ marginBottom: "10px" }}>
                             A New customer will be created when provided new email address on the form
                           </p>}
@@ -247,6 +247,13 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                       </>
                     );
                   })}
+                  <div className="chat__messages-form-group">
+                  <textarea
+                            className="chat_form-control"
+                            placeholder={chatPrefs.meta.messagePlaceholder}
+                            name={"message"}
+                          ></textarea>
+                  </div>
 
                 <a
                   className="chat__messages-btn"
