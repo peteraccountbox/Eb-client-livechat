@@ -106,15 +106,6 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
             case "TEXT_AND_FILE":
               return (
                 <>
-                  <span
-                    className="actual"
-                    dangerouslySetInnerHTML={{
-                      __html: linkifyHtml(
-                        convertEmojis(props.message.message.bodyText),
-                        { target: "_blank" }
-                      ),
-                    }}
-                  ></span>
                   <div className="inbox-attachments inbox-attachments-links">{attachments &&
                     attachments.length &&
                     attachments.map((attachment: any) => {
@@ -137,6 +128,15 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                         </div>
                       );
                     })}</div>
+                    <span
+                    className="actual"
+                    dangerouslySetInnerHTML={{
+                      __html: linkifyHtml(
+                        convertEmojis(props.message.message.bodyText),
+                        { target: "_blank" }
+                      ),
+                    }}
+                  ></span>
 
                   {props.message.from === MessageByTypeEnum.GPT &&
                   props.message.sources &&
