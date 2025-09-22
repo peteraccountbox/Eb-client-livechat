@@ -97,7 +97,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
     const agent: AgentPaylodObj | undefined = parentContext.agents.find(
       (agent) => agent.id == props.session.agentId
     );
-    return agent?.userPicURL || DEFAULT_AGENT_PROFILE_PIC;
+    return agent?.profile_image_url || DEFAULT_AGENT_PROFILE_PIC;
 
     // const lastMessage = getLatestChat();
     // if (!lastMessage)
