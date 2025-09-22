@@ -725,7 +725,7 @@ const Conversation = (props: ConversationProps) => {
 
   const getHeaderIcon = () => {
     const agent = getOperatorFromSession(session, parentContext.agents);
-    if (agent && agent?.profile_img_url) return agent?.profile_img_url;
+    if (agent && agent?.profile_image_url) return agent?.profile_image_url;
 
     if (matchedBotPrefs?.id) return matchedBotPrefs?.settings.chatBotIconURL;
 

@@ -101,7 +101,7 @@ export const getOperatorImage = (
   chatPrefs: ChatPrefsPayloadType
 ) => {
   //const agent = getOperator(id, agents);
-  // return agent?.profile_img_url || chatPrefs.widget.default_profile_image || "boticon";
+  // return agent?.profile_image_url || chatPrefs.widget.default_profile_image || "boticon";
   return boticon;
 };
 
@@ -121,8 +121,8 @@ export const promptImg = (
   const agent = agents?.find((agent) => {
     return agent.id === user_id;
   });
-  return agent && agent.profile_img_url
-    ? agent.profile_img_url
+  return agent && agent.profile_image_url
+    ? agent.profile_image_url
     : chatPrefs?.meta.decoration.headerPictureUrl;
 };
 export const pushMessage = (

@@ -30,7 +30,7 @@ const CollectionHeader: FC<CollectionHeaderComponentProps> = (props) => {
             return (
               <div className="img-frame">
                 <div className="img-container">
-                  <img src={author.profile_img_url} />
+                  <img src={author.profile_image_url} />
                 </div>
               </div>
             );

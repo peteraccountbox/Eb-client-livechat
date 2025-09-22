@@ -736,7 +736,7 @@
 				height: 32px;
 				line-height: 32px;
 				border-radius: 50%;
-				margin-right: 10px;
+				// margin-right: 10px;
 				// position: absolute;
 				// top: -25px;
 				// left: 10%;
@@ -808,6 +808,7 @@
 				-webkit-box-pack: center;
 				justify-content: center;
 				gap: 1px;
+				margin-left: 10px;
 			}
 
 			&-name {

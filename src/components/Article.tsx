@@ -208,7 +208,7 @@ const Article: FC<ArticleComponentProps> = (props) => {
                         className="avatar-img chat__all-messages-item-profile"
                         style={{
                           backgroundImage:
-                            'url("' + author.profile_img_url + '")',
+                            'url("' + author.profile_image_url + '")',
                         }}
                       ></div>
                       <div className="avatar__info">

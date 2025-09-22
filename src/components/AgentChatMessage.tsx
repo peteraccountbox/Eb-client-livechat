@@ -23,7 +23,7 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
   const parentContext = useContext(AppContext);
 
   const agent = parentContext.agents?.find((agent) => {
-    return agent.id == props.message.userId;
+    return agent.id == props.message.agentId;
   });
 
   return (
