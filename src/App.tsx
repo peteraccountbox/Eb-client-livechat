@@ -204,7 +204,7 @@ const App: React.FunctionComponent = () => {
     console.log("useEffect1");
 
     const prefsReq = axios.get(USER_PREFS_FETCH_URL_PATH);
-    // const usersReq = axios.get(USERS_FETCH_URL);
+    const usersReq = axios.get(USERS_FETCH_URL);
 
     prefsReq.then((prefsRes) => {
       if (prefsRes && prefsRes.data) setAgentsPrefs(prefsRes.data);
@@ -213,18 +213,18 @@ const App: React.FunctionComponent = () => {
       console.error("There was an error!", error);
     });
 
-    // axios
-    //   .all([prefsReq, usersReq])
-    //   .then(
-    //     axios.spread((prefsRes, usersRes) => {
-    //       if (prefsRes && prefsRes.data) setAgentsPrefs(prefsRes.data);
+    axios
+      .all([prefsReq, usersReq])
+      .then(
+        axios.spread((prefsRes, usersRes) => {
+          if (prefsRes && prefsRes.data) setAgentsPrefs(prefsRes.data);
 
-    //       // if (usersRes && usersRes.data) setAgents(usersRes.data);
-    //     })
-    //   )
-    //   .catch((error) => {
-    //     console.error("There was an error!", error);
-    //   });
+          if (usersRes && usersRes.data) setAgents(usersRes.data);
+        })
+      )
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
 
     // Fetch chat prefs
     console.log("useEffect 2");

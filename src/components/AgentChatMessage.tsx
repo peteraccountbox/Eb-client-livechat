@@ -23,7 +23,7 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
   const parentContext = useContext(AppContext);
 
   const agent = parentContext.agents?.find((agent) => {
-    return agent.id === props.message.agentId;
+    return agent.id == props.message.userId;
   });
 
   return (
@@ -53,8 +53,8 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
     >
               <img
                 src={
-                  agent && agent?.userPicURL
-                    ? agent?.userPicURL
+                  agent && agent?.profile_image_url
+                    ? agent?.profile_image_url
                     : DEFAULT_AGENT_PROFILE_PIC
                 }
                 alt={agent && agent.name ? agent.name : "Agent"}

@@ -189,7 +189,7 @@ export type AgentPaylodObj = {
   name: string;
   email: string;
   userPicURL?: any;
-  profile_img_url?: string;
+  profile_image_url?: string;
 };
 
 export type AgentPrefsPayloadType = {
