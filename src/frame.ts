@@ -37,8 +37,8 @@ export default function loadChat(container: Element, prefs: ChatPrefsPayloadType
 
     const frameId = uuidv4();
     const iframeEle: HTMLIFrameElement = createEle("iframe", {
-        "class": "reacho-messenger-frame " + prefs.meta.decoration.widgetAlignment + " " + prefs.id,
-        "name": "reacho-messenger-frame",
+        "class": "engagebay-messenger-frame " + prefs.meta.decoration.widgetAlignment + " " + prefs.id,
+        "name": "engagebay-messenger-frame",
         "id": frameId
     }) as HTMLIFrameElement;
 
