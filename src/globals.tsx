@@ -67,7 +67,7 @@ export const ORDER_FETCH_URL: string =
   "api/support/jsclient/inbox/get-store-order";
 
 export const USERS_FETCH_URL: string =
-  "http://localhost:8787/user/get-users?tid=" + TENANT_ID;
+  "https://eb-webhooks.engagebay.com/user/get-users?tid=" + TENANT_ID;
 
 export const USER_FETCH_URL: string = "jsapi/rest/user/";
 export const TICKET_CREATE_URL: string =
@@ -120,7 +120,7 @@ export const CHANNEL_PREFS_FETCH_URL_PATH =
 // REQUEST_PREFIX_PATH + "/channel/chat/" + CHANNEL_ID;
 
 export const USER_PREFS_FETCH_URL_PATH =
-  "http://localhost:8787/user/get-users?tid=" + TENANT_ID;
+  "https://eb-webhooks.engagebay.com/user/get-users?tid=" + TENANT_ID;
 
 export const WEB_RULES_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "widget/web-rules";
