@@ -325,7 +325,7 @@ export function isValidField(field: ChatFromFieldDataPayLoad) {
 
 export function getBrowserInfo() {
   var json = {
-    OS: Browser().os,
+    os: Browser().os,
     browser: Browser().name,
     version: Browser().version,
     mobile: Browser().mobile,

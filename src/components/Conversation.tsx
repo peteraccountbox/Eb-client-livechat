@@ -80,10 +80,9 @@ const Conversation = (props: ConversationProps) => {
   const parentContext = useContext(AppContext);
   const { chatPrefs, sessions, setSessions, agentsPrefs, createSessionData } =
     parentContext;
-  const customerProfile =
-  getCustomerProfile()
+  const customerProfile = getCustomerProfile();
 
-  const _reachoOnsite =  getReachoOnsite();
+  const _reachoOnsite = getReachoOnsite();
 
   const text = useRef<HTMLTextAreaElement>(null);
   const [formFields, setFormFields] = useState<ChatFromFieldDataPayLoad[]>([]);
@@ -157,7 +156,9 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const isEmailCaptured = (): boolean => {
-    return (!session.identifiers?.email && !session.customerEmail) && chatPrefs.meta.emailCaptureEnabled
+    return !session.identifiers?.email &&
+      !session.customerEmail &&
+      chatPrefs.meta.emailCaptureEnabled
       ? false
       : true;
   };
@@ -271,7 +272,7 @@ const Conversation = (props: ConversationProps) => {
 
         fieldClone.value =
           storedFormData[fieldClone.name] &&
-            !(field.field_type == "SYSTEM" && field.name == "message")
+          !(field.field_type == "SYSTEM" && field.name == "message")
             ? storedFormData[fieldClone.name]
             : "";
         if (fieldClone.type == "multicheckbox" || fieldClone.type == "checkbox")
@@ -478,8 +479,11 @@ const Conversation = (props: ConversationProps) => {
       session.unRead = session.unRead ? session.unRead + 1 : 1;
       session.messageList.push(event);
       session.meta = {
-        formData:getFormData()
-      }
+        formData: getFormData(),
+        browserInfo: getBrowserInfo(),
+        locationInfo: getClientLocationInfo(),
+        clientInfo: getClientInfo(),
+      };
     }
     submitSessionEvent(NEW_SESSION_URL_PATH, session, (response: any) => {
       // if (newChat) {
@@ -505,7 +509,8 @@ const Conversation = (props: ConversationProps) => {
     if (status == "success") {
       sendFileUploadMessage(file);
     } else {
-      var mssg = "Whoops! Something went wrong. Please try again later.";
+      var mssg = file.error_mssg;
+      // "Whoops! Something went wrong. Please try again later.";
 
       var data: ChatMessagePayloadObj = getChatMessage(mssg, undefined);
       let event: EventPayloadObj = {
@@ -532,7 +537,6 @@ const Conversation = (props: ConversationProps) => {
     message.fileName = file.name;
     message.url = file.bucketURL + file.file_resource;
     message.name = file.name;
-
 
     // Send message
     postMessage(getChatMessage("", MessageFormatType.TEXT, [message]));
@@ -621,10 +625,10 @@ const Conversation = (props: ConversationProps) => {
       if (customerProfile && customerProfile.name)
         session.customerName = customerProfile.name;
       session.meta = {
-        locationInfo : getClientLocationInfo(),
+        locationInfo: getClientLocationInfo(),
         browserInfo: getClientBrowserInfo(),
         clientInfo: getClientInfo(),
-      }
+      };
       pushMessage(event, session);
     } else {
       data.ticketId = session?.id + "";
@@ -660,8 +664,7 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const handleKeyDown = (e: any) => {
-    if(e.shiftKey && e.key === 'Enter')
-      return;
+    if (e.shiftKey && e.key === "Enter") return;
     if (e.key === "Enter") {
       e.preventDefault();
       sendMessage(false);
@@ -729,9 +732,7 @@ const Conversation = (props: ConversationProps) => {
 
     if (matchedBotPrefs?.id) return matchedBotPrefs?.settings.chatBotIconURL;
 
-    return (
-      parentContext.chatPrefs.meta.decoration.headerPictureUrl
-    );
+    return parentContext.chatPrefs.meta.decoration.headerPictureUrl;
   };
 
   const getHeaderName = () => {
@@ -821,14 +822,14 @@ const Conversation = (props: ConversationProps) => {
             </svg>
           </div>
           <div className="chat__header-user">
-            
-            {getHeaderIcon() && <div>
-              <div
-                className="chat__header-user-img"
-                style={{ backgroundImage: 'url("' + getHeaderIcon() + '")' }}
-              ></div>
-            </div>
-}
+            {getHeaderIcon() && (
+              <div>
+                <div
+                  className="chat__header-user-img"
+                  style={{ backgroundImage: 'url("' + getHeaderIcon() + '")' }}
+                ></div>
+              </div>
+            )}
             <div className="chat__header-user-title">
               <h1 className="chat__header-user-name"> {getHeaderName()} </h1>
               {/* <p className="chat__header-user-lastseen">Active 30m ago</p> */}
@@ -844,48 +845,53 @@ const Conversation = (props: ConversationProps) => {
       <div className="chat__content">
         <div className="chat__messages">
           <div className="chat__messages-track">
-            {session?.newTicket == false && 
-            session.messageList && 
-            session.messageList.length < session.messagesCount && 
-            <>
-            <div className="old-chat">
-              <span onClick={(e: any) => {
-                getMessageList();
-                e.currentTarget.style.display = "none";
-                if(e.currentTarget.nextElementSibling)
-                e.currentTarget.nextElementSibling.style.display = "block";
-              }}>Previous History</span>
-              <p style={{ textAlign: "center" , display:"none"}}>
-              <div className="chat__form-loader1">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </p>
-            </div>
-            </> 
-            }
+            {session?.newTicket == false &&
+              session.messageList &&
+              session.messageList.length < session.messagesCount && (
+                <>
+                  <div className="old-chat">
+                    <span
+                      onClick={(e: any) => {
+                        getMessageList();
+                        e.currentTarget.style.display = "none";
+                        if (e.currentTarget.nextElementSibling)
+                          e.currentTarget.nextElementSibling.style.display =
+                            "block";
+                      }}
+                    >
+                      Previous History
+                    </span>
+                    <p style={{ textAlign: "center", display: "none" }}>
+                      <div className="chat__form-loader1">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
+                    </p>
+                  </div>
+                </>
+              )}
             {!showChatForm ? (
               session?.messageList ? (
                 session?.messageList?.map(
                   (message: EventPayloadObj, index: number) => {
                     return (
                       <>
-                          {message.eventType == "INTERACTIVE_FLOW_NODE" ? (
-                            <InteractiveFlowItem
-                              execution={message.meta.executionNode}
+                        {message.eventType == "INTERACTIVE_FLOW_NODE" ? (
+                          <InteractiveFlowItem
+                            execution={message.meta.executionNode}
+                          />
+                        ) : (
+                          <>
+                            <ConversationItem
+                              message={message}
+                              session={session}
+                              nextMessage={session?.messageList[index + 1]}
+                              updateMessage={updateMessage}
                             />
-                          ) : (
-                            <>
-                              <ConversationItem
-                                message={message}
-                                session={session}
-                                nextMessage={session?.messageList[index + 1]}
-                                updateMessage={updateMessage}
-                              />
-                            </>
-                          )}
+                          </>
+                        )}
                       </>
                     );
                   }
@@ -906,16 +912,16 @@ const Conversation = (props: ConversationProps) => {
 
             {showChatForm ? (
               <ChatForm
-                  closeChatForm={() => {
-                    setShowChatForm(false);
-                  }}
-                  formFields={formFields}
-                  setFormFields={setFormFields}
-                  submitChatForm={submitChatForm}
-                  typeText={typeText}
-                  setTypeText={setTypeText}
-                  saving={saving}
-                />
+                closeChatForm={() => {
+                  setShowChatForm(false);
+                }}
+                formFields={formFields}
+                setFormFields={setFormFields}
+                submitChatForm={submitChatForm}
+                typeText={typeText}
+                setTypeText={setTypeText}
+                saving={saving}
+              />
             ) : (
               <></>
             )}
@@ -936,8 +942,7 @@ const Conversation = (props: ConversationProps) => {
           className={`chat__footer ${
             showChatForm ||
             (!session.id && session.messageList?.length > 0) ||
-            ( !session.id &&
-              session.messageList?.length > 0)
+            (!session.id && session.messageList?.length > 0)
               ? "hide"
               : ""
           }`}
@@ -977,7 +982,10 @@ const Conversation = (props: ConversationProps) => {
               <Emoji onEmojiSelect={onEmojiSelect} />
 
               {session && session.id ? (
-                <FileUpload setFiles={setFiles} fileUploadCallback={fileUploadCallback} />
+                <FileUpload
+                  setFiles={setFiles}
+                  fileUploadCallback={fileUploadCallback}
+                />
               ) : (
                 <></>
               )}

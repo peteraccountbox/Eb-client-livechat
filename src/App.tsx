@@ -85,10 +85,9 @@ export enum NotificationPromtTypes {
 
 const App: React.FunctionComponent = () => {
   // Context states
-  console.log("running.........")
-  const [chatPrefs, setChatPrefs] = useState<ChatPrefsPayloadType>(
-    CHANNEL_PREFS
-  );
+  console.log("running.........");
+  const [chatPrefs, setChatPrefs] =
+    useState<ChatPrefsPayloadType>(CHANNEL_PREFS);
   const [agents, setAgents] = useState<AgentPaylodObj[]>([]);
 
   const [agentsPrefs, setAgentsPrefs] = useState<AgentPrefsPayloadType[]>([]);
@@ -124,7 +123,7 @@ const App: React.FunctionComponent = () => {
       if (!footerTabs.find((footer) => footer.tab == activeTabname)) {
         activeTabname = footerTabs[0].tab;
       }
-    } catch (error) { }
+    } catch (error) {}
 
     return activeTabname;
   };
@@ -206,12 +205,13 @@ const App: React.FunctionComponent = () => {
     const prefsReq = axios.get(USER_PREFS_FETCH_URL_PATH);
     const usersReq = axios.get(USERS_FETCH_URL);
 
-    prefsReq.then((prefsRes) => {
-      if (prefsRes && prefsRes.data) setAgentsPrefs(prefsRes.data);
-    })
-    .catch((error) => {
-      console.error("There was an error!", error);
-    });
+    prefsReq
+      .then((prefsRes) => {
+        if (prefsRes && prefsRes.data) setAgentsPrefs(prefsRes.data);
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
 
     axios
       .all([prefsReq, usersReq])
@@ -250,7 +250,7 @@ const App: React.FunctionComponent = () => {
     // }
 
     // Subscribe to event bus
-    eventBus.on("reacho-socket-event", function () {});
+    eventBus.on("engagebay-event", function () {});
 
     eventBus.on("new_ticket_message", function (message) {
       let messageSession: ChatSessionPaylodObj | undefined =
@@ -406,8 +406,7 @@ const App: React.FunctionComponent = () => {
         info: undefined,
         id: undefined,
       });
-    if (!isOpened) 
-      resizeFrame("WINDOW_OPENED");
+    if (!isOpened) resizeFrame("WINDOW_OPENED");
     else {
       setIsOpened(!isOpened);
       setTimeout(() => {
@@ -746,9 +745,11 @@ const App: React.FunctionComponent = () => {
   );
 
   const appThemeStyle: object = useMemo(() => {
-    if (!chatPrefs
+    if (
+      !chatPrefs
       //  || !agentsPrefs.length
-      ) return {};
+    )
+      return {};
 
     const settings = chatPrefs?.meta?.chatFooterSettings.filter(
       (footer) => footer.enable == true
@@ -775,7 +776,14 @@ const App: React.FunctionComponent = () => {
     };
   }, [chatPrefs, agentsPrefs]);
 
-  if (prefsFetched && chatPrefs && !(chatPrefs.meta.hideOnNonBusiness && !isUserBusinessHour(chatPrefs, agentsPrefs))) {
+  if (
+    prefsFetched &&
+    chatPrefs &&
+    !(
+      chatPrefs.meta.hideOnNonBusiness &&
+      !isUserBusinessHour(chatPrefs, agentsPrefs)
+    )
+  ) {
     return (
       <AppContext.Provider
         value={{
@@ -836,7 +844,9 @@ const App: React.FunctionComponent = () => {
                   data-target="widget"
                 >
                   <div
-                    className={`chat__main ${getIntegrationSource() + "-SOURCE"}`}
+                    className={`chat__main ${
+                      getIntegrationSource() + "-SOURCE"
+                    }`}
                     style={{
                       minWidth: `${
                         promtWidth == PromtWidth.Large ? "700px" : "auto"
@@ -870,8 +880,6 @@ const App: React.FunctionComponent = () => {
                       if (widgetFooterTabs.Loader == activeTab) {
                         return <Loader />;
                       }
-
-                      
 
                       if (widgetFooterTabs.Help == activeTab) {
                         return <HelpCenter />;

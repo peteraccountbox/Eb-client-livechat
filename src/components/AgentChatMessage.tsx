@@ -22,7 +22,7 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
 
   const parentContext = useContext(AppContext);
 
-  const agent = parentContext.agents?.find((agent) => {
+  const agent = parentContext.agents.find((agent) => {
     return agent.id == props.message.agentId;
   });
 
@@ -46,19 +46,18 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
         <div className="chat__messages-agent-info chat__messages-agent-item">
           <div className="chat__messages-agent">
             <div className="chat__messages-agent-avatar">
-            <Tippy
-      content={
-        agent?.name
-      }
-    >
-              <img
-                src={
-                  agent && agent?.profile_image_url
-                    ? agent?.profile_image_url
-                    : DEFAULT_AGENT_PROFILE_PIC
-                }
-                alt={agent && agent.name ? agent.name : "Agent"}
-              />
+              <Tippy
+                content={agent?.name}
+                disabled={agent?.name ? false : true}
+              >
+                <img
+                  src={
+                    agent && agent?.profile_image_url
+                      ? agent?.profile_image_url
+                      : DEFAULT_AGENT_PROFILE_PIC
+                  }
+                  alt={agent && agent.name ? agent.name : "Agent"}
+                />
               </Tippy>
             </div>
 
@@ -74,8 +73,8 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
           </div>
 
           {/* <div className="chat__messages-timestamp"> */}
-            {/* <>{getMessageTime()}</> */}
-            {/* <TimeAgo time={props.message.createdTime} /> */}
+          {/* <>{getMessageTime()}</> */}
+          {/* <TimeAgo time={props.message.createdTime} /> */}
           {/* </div> */}
         </div>
       </div>

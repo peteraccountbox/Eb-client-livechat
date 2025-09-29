@@ -1,4 +1,4 @@
-const prefix = "reacho-" + (window as any).CHANNEL_ID + "-";
+const prefix = "engagbay-" + (window as any).CHANNEL_ID + "-";
 
 export const setLocalStoragePrefs: Function = (key: any, value: any) => {
   if (key === undefined || value === undefined) return null;
@@ -31,7 +31,7 @@ export const getSessionStoragePrefs: Function = (key: any) => {
 };
 
 // export const deleteStoragePrefs: Function = (key: any) => {
-//     localStorage.removeItem('reacho-' + key);
+//     localStorage.removeItem('engagebay-' + key);
 // }
 
 export const getCookie: Function = (key: string) => {

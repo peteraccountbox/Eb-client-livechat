@@ -15,10 +15,10 @@ export const initalizeSocket = () => {
         let channelName = TENANT_ID + "-" + VISITOR_UUID;
         console.log("channelName", channelName);
         // const pusher = new Pusher("9efc22b651b6b9401c10", {
-        const pusher = new Pusher('9efc22b651b6b9401c10', {
-            cluster: 'mt1',
-            forceTLS: true,
-        });
+            const pusher = new Pusher("1bd6d84d7a6d517eeee5", {
+                cluster: "ap2",
+                forceTLS: true,
+              });
         var channel: Channel = pusher.subscribe(channelName);
 
 
@@ -40,11 +40,11 @@ export const initalizeSocket = () => {
 
         // Subscribe to event for messages
         channel.bind(
-            "reacho-socket-event",
+            "engagebay-event",
             function (message: string, channel: any, ortc: any) {
 
                 // alert("innnn");
-                if (JSON.parse(message).message_type == "new_ticket_message") {
+                if (JSON.parse(message).event_type == "new_ticket_message") {
                     eventBus.emit("new_ticket_message", JSON.parse(message).message)
                 }
 

@@ -12,7 +12,7 @@ interface FileUploadProps {
 }
 
 const FileUpload: React.FC<FileUploadProps> = (props) => {
-  const {files, setFiles} = props
+  const { files, setFiles } = props;
   const input = useRef<HTMLInputElement>(null);
   const [filesCount, setFilesCount] = useState(0);
   const [status, setStatus] = useState("completed");
@@ -25,9 +25,9 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
     return status !== "uploading" ? attach : loader;
   };
   useEffect(() => {
-    if(files?.length > 0 && setFiles) {
-    uploadFile(files)
-    setFiles([]);
+    if (files?.length > 0 && setFiles) {
+      uploadFile(files);
+      setFiles([]);
     }
     return () => {};
   }, [files]);
@@ -173,8 +173,8 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
     props.fileUploadCallback(status, file);
 
     // File count change for completed status
+    setStatus("completed");
     if (status == "success") {
-      setStatus("completed");
       if (input.current) input.current.setAttribute("value", "");
     }
   };

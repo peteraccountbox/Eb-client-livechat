@@ -25,10 +25,10 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
   // if (liveChatAvailability == "liveChat") {
   //   return agentsPrefs.some((agentPref) => (agentPref.availability && agentPref.availability == "ONLINE"));
   // }
-  if (liveChatAvailability == "liveChatBusiness" || liveChatAvailability == "liveChat") {
+  // if (liveChatAvailability == "liveChatBusiness" || liveChatAvailability == "liveChat") {
 
     try {
-      if(chatprefs.meta.disableCustomBusinessHours || liveChatAvailability == "liveChat")
+      if(chatprefs.meta.disableCustomBusinessHours)
       return agentsPrefs.some((agentPref: AgentPrefsPayloadType) => {
         const timezone = agentPref.timezone;
         const now = moment.tz(timezone);
@@ -66,9 +66,9 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
 
     }
 
-    return true;
-  }
-  if (liveChatAvailability == "liveChatOnline") 
-    return true;
+    // return true;
+  // }
+  // if (liveChatAvailability == "liveChatOnline") 
+  //   return true;
   return false;
 };
