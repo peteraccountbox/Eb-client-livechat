@@ -18,15 +18,15 @@ const Notice: FC<NoticePropsType> = (props) => {
   ] as unknown as MessageByTypeEnum;
 
   const getSystemMessageNotice = (message: any) => {
-    if (
-      message &&
-      message.from === "System" &&
-      (!message.message ||
-        message.SYSTEM_message_type === "CHAT_SESSION_CLOSED")
-    )
-      return getSystemMessage(message.SYSTEM_message_type);
+    // if (
+    //   message &&
+    //   message.from === "System" &&
+    //   (!message.message ||
+    //     message.SYSTEM_message_type === "CHAT_SESSION_CLOSED")
+    // )
+    //   return getSystemMessage(message.SYSTEM_message_type);
 
-    return message.message;
+    return message.bodyText;
   };
 
   return (
