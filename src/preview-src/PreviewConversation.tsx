@@ -4,37 +4,38 @@ import CloseWidgetPanel from "../components/CloseWidgetPanel";
 import { DEFAULT_AGENT_PROFILE_PIC } from "../globals";
 
 export interface PreviewConversationComponentProps {
-    chatPrefs: ChatPrefsPayloadType;
-  }
-  
-  const PreviewConversation: FC<PreviewConversationComponentProps> = (props) => {
-    const { chatPrefs } = props;
-    const settings = [{ tab: "Messages" }];
+  chatPrefs: ChatPrefsPayloadType;
+}
 
-    const appThemeStyle: Object = useMemo(() => {
-      return {
-        "--bottom": settings?.length < 2 ? "20px" : "125px",
-        "--reduceHeight": settings?.length < 2 ? "135px" : "210px",
-        "--themeColor":
-          chatPrefs && chatPrefs.meta.decoration.mainColor
-            ? chatPrefs.meta.decoration.mainColor
-            : "blue",
-        // "--themeColor2":
-        //   chatPrefs && chatPrefs.meta.decoration.mainColor
-        //     ? chatPrefs.meta.decoration.mainColor
-        //     : "red",
-      };
-    }, [chatPrefs]);
-    return    chatPrefs && 
-    <div
-    id="App"
-    className={`engagebay-viewport ${
-      !chatPrefs.meta.deactivated ? "" : "hide"
-    } `}
-    style={appThemeStyle}
-  >
-    <div
-      className={`chat is-open
+const PreviewConversation: FC<PreviewConversationComponentProps> = (props) => {
+  const { chatPrefs } = props;
+  const settings = [{ tab: "Messages" }];
+
+  const appThemeStyle: Object = useMemo(() => {
+    return {
+      "--bottom": settings?.length < 2 ? "20px" : "125px",
+      "--reduceHeight": settings?.length < 2 ? "135px" : "210px",
+      "--themeColor":
+        chatPrefs && chatPrefs.meta.decoration.mainColor
+          ? chatPrefs.meta.decoration.mainColor
+          : "#345BD7",
+      "--themeColor2":
+        chatPrefs && chatPrefs.meta.decoration.gradientColor
+          ? chatPrefs.meta.decoration.gradientColor
+          : "#9f5050",
+    };
+  }, [chatPrefs]);
+  return (
+    chatPrefs && (
+      <div
+        id="App"
+        className={`engagebay-viewport ${
+          !chatPrefs.meta.deactivated ? "" : "hide"
+        } `}
+        style={appThemeStyle}
+      >
+        <div
+          className={`chat is-open
           ${
             chatPrefs.meta.decoration.widgetAlignment == "bottom left"
               ? "left"
@@ -45,56 +46,64 @@ export interface PreviewConversationComponentProps {
               ? "right"
               : ""
           }`}
-      data-target="widget"
-    >
-    <div className="chat__conversation">
-    <div className="chat__header">
-      <div className="chat__header-action">
-        <div
-          data-trigger="all"
-          className="chat__header-back"
-        //   onClick={() => goBack()}
+          data-target="widget"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-            color="currentColor"
-          >
-            <path
-              stroke="#fff"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.7"
-              d="m14 18-6-6 6-6"
-            ></path>
-          </svg>
-        </div>
-        <div className="chat__header-user">
-          <div>
-            <div
-              className="chat__header-user-img"
-              style={{ backgroundImage: 'url("' + chatPrefs.meta.decoration.headerPictureUrl || DEFAULT_AGENT_PROFILE_PIC + '")' }}
-            ></div>
-          </div>
+          <div className="chat__conversation">
+            <div className="chat__header">
+              <div className="chat__header-action">
+                <div
+                  data-trigger="all"
+                  className="chat__header-back"
+                  //   onClick={() => goBack()}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    color="currentColor"
+                  >
+                    <path
+                      stroke="#fff"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.7"
+                      d="m14 18-6-6 6-6"
+                    ></path>
+                  </svg>
+                </div>
+                <div className="chat__header-user">
+                  <div>
+                    <div
+                      className="chat__header-user-img"
+                      style={{
+                        backgroundImage:
+                          'url("' +
+                            chatPrefs.meta.decoration.headerPictureUrl ||
+                          DEFAULT_AGENT_PROFILE_PIC + '")',
+                      }}
+                    ></div>
+                  </div>
 
-          <div className="chat__header-user-title">
-            <h1 className="chat__header-user-name"> {chatPrefs.name} </h1>
-          </div>
-        </div>
-      </div>
+                  <div className="chat__header-user-title">
+                    <h1 className="chat__header-user-name">
+                      {" "}
+                      {chatPrefs.name}{" "}
+                    </h1>
+                  </div>
+                </div>
+              </div>
 
-      <div className="chat__help-end">
-        <CloseWidgetPanel />
-      </div>
-    </div>
+              <div className="chat__help-end">
+                <CloseWidgetPanel />
+              </div>
+            </div>
 
-    <div className="chat__content">
-      <div className="chat__messages">
-        <div className="chat__messages-track">
-          {/* <div>
+            <div className="chat__content">
+              <div className="chat__messages">
+                <div className="chat__messages-track">
+                  {/* <div>
             {!showChatForm ? (
               session?.messageList ? session?.messageList?.map(
                 (message: EventPayloadObj, index: number) => {
@@ -160,20 +169,20 @@ export interface PreviewConversationComponentProps {
               <></>
             )}
           </div> */}
-        </div>
-        <div className="chat__messages-sign hide">
-          <a target="_blank">
-            We
-            <img
-              src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/love-icon.svg"
-              width="12px"
-            />
-            Engagebay
-          </a>
-        </div>
-      </div>
+                </div>
+                <div className="chat__messages-sign hide">
+                  <a target="_blank">
+                    We
+                    <img
+                      src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/love-icon.svg"
+                      width="12px"
+                    />
+                    Engagebay
+                  </a>
+                </div>
+              </div>
 
-      {/* <div
+              {/* <div
         className={`chat__footer ${showChatForm ||
           (!session.id && session.messageList?.length > 0) ||
           (chatPrefs.meta.emailCaptureEnforcement == "required" &&
@@ -248,10 +257,10 @@ export interface PreviewConversationComponentProps {
           </div>
         </div>
       </div> */}
-    </div>
-  </div>
-  </div>
-  <div
+            </div>
+          </div>
+        </div>
+        <div
           className={`chat__trigger ${
             !chatPrefs.meta.deactivated ? "" : "hide"
           } ${
@@ -280,7 +289,9 @@ export interface PreviewConversationComponentProps {
             </svg>
           </div>
         </div>
-  </div>
-  }
+      </div>
+    )
+  );
+};
 
-  export default PreviewConversation;
+export default PreviewConversation;

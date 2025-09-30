@@ -756,6 +756,7 @@ const App: React.FunctionComponent = () => {
     );
 
     const mainColor = chatPrefs && chatPrefs.meta.decoration.mainColor;
+    const gradientColor = chatPrefs && chatPrefs.meta.decoration.gradientColor;
     const offlineColor =
       chatPrefs &&
       !chatPrefs.meta.decoration.useMainColorOutsideBusinessHour &&
@@ -769,10 +770,13 @@ const App: React.FunctionComponent = () => {
         : mainColor
         ? chatPrefs.meta.decoration.mainColor
         : "#345BD7",
-      // "--themeColor2":
-      //   chatPrefs && chatPrefs.meta.decoration.mainColor
-      //     ? chatPrefs.meta.decoration.mainColor
-      //     : "red",
+      ...(offlineColor
+        ? { "--themeColor2": "#959ba8" }
+        : {
+            "--themeColor2": gradientColor
+              ? chatPrefs.meta.decoration.gradientColor
+              : "#9f5050",
+          }),
     };
   }, [chatPrefs, agentsPrefs]);
 

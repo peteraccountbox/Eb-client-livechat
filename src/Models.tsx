@@ -103,6 +103,7 @@ export interface Decoration {
   headerPictureUrl: string;
   fontFamily: string;
   mainColor: string;
+  gradientColor: string;
   useMainColorOutsideBusinessHour: boolean;
   conversationColor: string;
   backgroundStyle: string;
