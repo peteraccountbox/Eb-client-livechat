@@ -46,7 +46,7 @@ export type ChatFromFieldDataPayLoad = {
   valueArr: string[];
   is_valid: boolean;
   label?: string;
-  field_label?:string;
+  field_label?: string;
 };
 
 export type TicketFromFieldDataPayLoad = {
@@ -82,7 +82,11 @@ export interface ChatChannelMeta {
   emailCaptureEnabled: boolean;
   emailCaptureEnforcement: string;
   decoration: Decoration;
-  liveChatAvailability: "liveChatBusiness" | "liveChat" | "liveChatOffline" |  "liveChatOnline";
+  liveChatAvailability:
+    | "liveChatBusiness"
+    | "liveChat"
+    | "liveChatOffline"
+    | "liveChatOnline";
   storeId: string;
   sendChatTranscript: boolean;
   flowIds?: string[];
@@ -93,8 +97,8 @@ export interface ChatChannelMeta {
   btnText: string;
   disableCustomBusinessHours: ConstrainBooleanParameters;
   timezone: string;
-  businessHours:BusinessHour[];
-  hideOnNonBusiness:boolean;
+  businessHours: BusinessHour[];
+  hideOnNonBusiness: boolean;
   messagePlaceholder: string;
   requiredContactInformation: string;
 }
@@ -191,6 +195,7 @@ export type AgentPaylodObj = {
   email: string;
   userPicURL?: any;
   profile_image_url?: string;
+  profile_img_url?: string;
 };
 
 export type AgentPrefsPayloadType = {
@@ -210,7 +215,6 @@ export type ChatFlowsPayloadObj = {
   id: string;
   [x: string]: any;
 };
-
 
 export type ChatSessionPaylodObj = {
   updatedTime: any;
@@ -285,7 +289,7 @@ export type AttachmentType = {
   url: string;
   fileName: string;
   name: string;
-}
+};
 
 export type ChatMessagePayloadObj = {
   [x: string]: any;
@@ -532,3 +536,18 @@ export type TicketNoteType = {
   ticket_id: number;
   type: string;
 };
+
+export interface HelpCenterItemSchema {
+  id: string;
+  title: string;
+  description?: string;
+  parentId?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  author?: string;
+  status?: string;
+  type: "COLLECTION" | "ARTICLE";
+  position?: number;
+  pageViews?: number;
+  articles_length?: number;
+}

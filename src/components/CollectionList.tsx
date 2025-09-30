@@ -12,7 +12,7 @@ import CollectionItem from "./CollectionItem";
 import ArticleItem from "./ArticleItem";
 import { AppContext } from "../appContext";
 import CloseWidgetPanel from "./CloseWidgetPanel";
-import { ArticleType, CollectionType } from "../Models";
+import { ArticleType, CollectionType, HelpCenterItemSchema } from "../Models";
 
 export interface CollectionListComponentProps {
   searchTxt: string;
@@ -23,6 +23,8 @@ export interface CollectionListComponentProps {
   collections: CollectionType[];
   setCollections: (arg0: CollectionType[]) => void;
   openArticle: (articleId: Number) => void;
+  setVersion?: (version: string | null) => void;
+  setV2CollectionsData?: (items: HelpCenterItemSchema[]) => void;
 }
 
 const CollectionList: FC<CollectionListComponentProps> = (props) => {
@@ -36,6 +38,8 @@ const CollectionList: FC<CollectionListComponentProps> = (props) => {
     collections,
     setCollections,
     openArticle,
+    setVersion,
+    setV2CollectionsData,
   } = props;
   const [display, setDisplay] = useState(searchTxt);
   const [loading, setLoading] = useState(false);
@@ -51,8 +55,24 @@ const CollectionList: FC<CollectionListComponentProps> = (props) => {
       : getReq(KB_COLLECTION_URL_PATH, {});
     wait
       .then((response) => {
-        let newSearchItems = response.data;
-        console.log(response.data);
+        let newSearchItems = response.data?.data;
+        // console.log(response.data);
+        if (
+          response.data?.version &&
+          response.data?.version.toLowerCase() === `v2`
+        ) {
+          if (setVersion) {
+            setVersion("v2");
+          }
+          if (setV2CollectionsData) {
+            setV2CollectionsData(response?.data?.data);
+            return; // Exit early to avoid processing v2 data with v1 logic
+          }
+        }
+
+        // If no data is returned in the first request, try again using the fallback URL
+        if (!newSearchItems && response.data) newSearchItems = response.data;
+
         setFetching(false);
         setCollections([
           ...newSearchItems.filter(
@@ -95,8 +115,22 @@ const CollectionList: FC<CollectionListComponentProps> = (props) => {
         : getReq(KB_COLLECTION_URL_PATH, {});
       wait
         .then((response) => {
-          let newSearchItems = response.data;
+          let newSearchItems = response.data?.data;
           console.log(response.data);
+
+          if (
+            response.data?.version &&
+            response.data?.version.toLowerCase() === `v2`
+          ) {
+            if (setVersion) {
+              setVersion("v2");
+            }
+            if (setV2CollectionsData) {
+              setV2CollectionsData(response?.data?.data);
+              return; // Exit early to avoid processing v2 data with v1 logic
+            }
+          }
+
           setCollections([
             ...newSearchItems.filter(
               (data: ArticleType | CollectionType) =>

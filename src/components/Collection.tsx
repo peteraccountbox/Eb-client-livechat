@@ -64,27 +64,29 @@ const Collection: FC<CollectionComponentProps> = (props) => {
         <div className="chat__conversation chat__create-ticket">
           <div className="chat__header">
             <div className="ticket__header-action">
-              <div
-                data-trigger="all"
-                className="chat__header-back chat__help-action"
-                onClick={() => backToCollectionList()}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  color="currentColor"
+              <div className="chat__help-action">
+                <div
+                  data-trigger="all"
+                  className="chat__header-back"
+                  onClick={() => backToCollectionList()}
                 >
-                  <path
-                    stroke="#fff"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.7"
-                    d="m14 18-6-6 6-6"
-                  ></path>
-                </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    color="currentColor"
+                  >
+                    <path
+                      stroke="#fff"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.7"
+                      d="m14 18-6-6 6-6"
+                    ></path>
+                  </svg>
+                </div>
               </div>
 
               <div className="chat__help-user">

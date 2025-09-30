@@ -9,15 +9,17 @@ export function getReachoModule() {
   let prefs;
   try {
     prefs = (window as any).parent.reachoModulesObject;
-  } catch (e) { }
+  } catch (e) {}
   return prefs;
 }
 
 let prefs;
 try {
   prefs = getReachoModule().ChatPrefs[CHANNEL_ID];
-} catch (e) { }
-export const CHANNEL_PREFS: ChatPrefsPayloadType = (window as any).CHANNEL_PREFS ? (window as any).CHANNEL_PREFS : undefined;
+} catch (e) {}
+export const CHANNEL_PREFS: ChatPrefsPayloadType = (window as any).CHANNEL_PREFS
+  ? (window as any).CHANNEL_PREFS
+  : undefined;
 
 export const VISITOR_UUID: string = (window as any).VISITOR_UUID;
 
@@ -51,8 +53,11 @@ export const UPDATE_READ_URL_PATH: string =
 
 export const MESSAGE_URL_PATH: string = REQUEST_PREFIX_PATH + "/new-message";
 
+export const KB_COLLECTION_CHILDREN_BY_ID: string = "jsapi/rest/hc/collections";
+export const KB_ARTICLE_GET_PATH: string = "jsapi/rest/help-center/article";
+
 export const AGENTS_FETCH_URL_PATH: string =
-   "/user/get-users?tid=5943959859757056";
+  "/user/get-users?tid=5943959859757056";
 
 export const CONNECT_TO_AGENT_URL_PATH: string =
   "api/support/jsclient/widget/connect-to-agent/";
@@ -79,6 +84,7 @@ export const KB_COLLECTION_URL_PATH: string = "jsapi/rest/hc/collections";
 export const KB_COLLECTION_URL_PATH_BY_ID: string = "jsapi/rest/hc/collection/";
 export const KB_ARTICLE_URL_PATH: string = "jsapi/rest/hc/article/";
 export const KB_SEARCH_URL_PATH: string = "jsapi/rest/hc/search";
+export const KB_SEARCH_URL_PATH_V2: string = "jsapi/rest/hc/v2/search";
 
 export const GPT_MESSAGE_SCORE_UPDATE_URL_PATH: string =
   "api/support/jsclient/widget/submit-gpt-message-feedback";
@@ -100,7 +106,6 @@ export const EXECUTE_FLOW_NODE_URL_PATH = REQUEST_PREFIX_PATH + "/flow/execute";
 export const CONVERSATION_MESSAGE_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/get-chat-messages";
 
-
 // export const CHAT_WORKER_URL_PATH =
 //   "https://reacho-chat-worker.peter-13d.workers.dev/update-installed-domains/?domain=" +
 //   (window as any).location.host +
@@ -109,14 +114,13 @@ export const CONVERSATION_MESSAGE_FETCH_URL_PATH =
 //   "&tenant_id=" +
 //   TENANT_ID;
 
-
 export const CHANNEL_PREFS_FETCH_URL_PATH =
   // "https://reacho-chat-worker.peter-13d.workers.dev/?channel_id=" +
   // CHANNEL_ID +
   // "&tenant_id=" +
   // TENANT_ID;
   // "https://pub-3e072d94a58945b58f996ad31f85ae61.r2.dev/channel/" + CHANNEL_ID + ".json"
-  "http://localhost:8787/channel/get-active-channel"
+  "http://localhost:8787/channel/get-active-channel";
 // REQUEST_PREFIX_PATH + "/channel/chat/" + CHANNEL_ID;
 
 export const USER_PREFS_FETCH_URL_PATH =
@@ -126,8 +130,7 @@ export const WEB_RULES_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "widget/web-rules";
 export const TYPING_ALERT_URL_PATH =
   REQUEST_PREFIX_PATH + "widget/typing-alerts/VISITOR";
-export const FILE_UPLOAD_URL_PATH =
-  REQUEST_PREFIX_PATH + "/get-file-path";
+export const FILE_UPLOAD_URL_PATH = REQUEST_PREFIX_PATH + "/get-file-path";
 export const GET_BIG_TEXT_URL_PATH =
   REQUEST_PREFIX_PATH + "widget/get-big-text/";
 
@@ -188,47 +191,44 @@ export const FooterTabs = [
 ];
 
 export const getCustomerProfile = () => {
-
   try {
     return (window as any).parent.reachoJSClient.getCustomerProfile();
-  } catch (e) { }
+  } catch (e) {}
   return undefined;
-
-}
+};
 
 export const getClientBrowserInfo = () => {
- 
   try {
     return (window as any).parent.reachoJSClient.getBrowserInfo();
-  } catch (e) { }
+  } catch (e) {}
   return undefined;
-  
-}
+};
 
 export const getClientInfo = () => {
-
   try {
     return (window as any).parent.reachoJSClient.getClientInfo();
-  } catch (e) { }
+  } catch (e) {}
   return undefined;
-
-}
+};
 
 export const getClientLocationInfo = () => {
-
   try {
-    return (window as any).parent.reachoModulesObject.clientInfo;
-  } catch (e) { }
-  return undefined;
-
-}
+    return JSON.parse(
+      (window as any).parent.EngHub_Storage.get_local_pref(
+        (window as any).parent.EngHub_Storage.client_info_key
+      )
+    );
+  } catch (e) {
+    return undefined;
+  }
+};
 
 export const getIntegrationSource = () => {
   try {
     return (window as any).parent.reachoJSClient.getIntegrationSource();
-  } catch (e) { }
+  } catch (e) {}
   return undefined;
-}
+};
 
 export const getReachoOnsite = () => {
   try {
@@ -236,4 +236,4 @@ export const getReachoOnsite = () => {
   } catch (error) {
     return undefined;
   }
-}
+};

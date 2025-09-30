@@ -20,7 +20,7 @@ const TimeAgo = ({
   date,
   time,
 }: {
-  date?: Date | undefined;
+  date?: Date | number | undefined;
   time?: string;
 }) => {
   // date = date + "";
@@ -38,7 +38,10 @@ const TimeAgo = ({
 
   return (
     <>
-      {newDate && (
+      {typeof date === "number" && (
+        <ReactTimeAgo date={new Date(date)} locale="en-US" tooltip={false} />
+      )}
+      {typeof date !== "number" && newDate && (
         <ReactTimeAgo date={newDate} locale="en-US" tooltip={false} />
       )}
     </>
