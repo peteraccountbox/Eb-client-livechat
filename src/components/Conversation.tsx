@@ -24,6 +24,7 @@ import {
 import {
   getBrowserInfo,
   getFormData,
+  getIdentifiersData,
   getOperatorFromSession,
   isGPTEnabled,
   pushMessage,
@@ -209,12 +210,12 @@ const Conversation = (props: ConversationProps) => {
       setMatchedBotPrefs(matchedBot);
     }
 
-    if (
-      !session.id &&
-      !session.messageList.length &&
-      !isUserBusinessHour(chatPrefs, agentsPrefs)
-    )
-      setShowChatForm(true);
+    // if (
+    //   !session.id &&
+    //   !session.messageList.length &&
+    //   !isUserBusinessHour(chatPrefs, agentsPrefs)
+    // )
+    //   setShowChatForm(true);
     if (session.id && !session.messageList) getMessageList();
     if (session.id)
       getReq(UPDATE_READ_URL_PATH + "/" + session.id, {}).then((response) => {
@@ -222,7 +223,7 @@ const Conversation = (props: ConversationProps) => {
         setSessions([...sessions]);
         eventBus.emit("message_read");
       });
-  }, [session]);
+  }, []);
 
   const getMessageList = async () => {
     if (!session.id) return;
@@ -457,6 +458,7 @@ const Conversation = (props: ConversationProps) => {
     session.customerEmail = formData.email as string;
     session.customerName = formData.name as string;
     if (formData.message) {
+      session.subject = formData.message as string;
       var msg: ChatMessagePayloadObj = getChatMessage(
         formData.message,
         undefined
@@ -478,6 +480,7 @@ const Conversation = (props: ConversationProps) => {
       session.createdBy = MessageByTypeEnum.CUSTOMER;
       session.unRead = session.unRead ? session.unRead + 1 : 1;
       session.messageList.push(event);
+      session.identifiers = getIdentifiersData();
       session.meta = {
         formData: getFormData(),
         browserInfo: getBrowserInfo(),
@@ -624,9 +627,18 @@ const Conversation = (props: ConversationProps) => {
       }
       if (customerProfile && customerProfile.name)
         session.customerName = customerProfile.name;
+      const identifiers = getIdentifiersData();
+      if (identifiers && identifiers.name)
+        session.customerName = identifiers.name;
+      if (identifiers && identifiers.email) {
+        session.customerEmail = identifiers.email;
+        setEmailCaptured((emailCaptured) => true);
+      }
+      session.identifiers = identifiers;
       session.meta = {
+        formData: getFormData(),
+        browserInfo: getBrowserInfo(),
         locationInfo: getClientLocationInfo(),
-        browserInfo: getClientBrowserInfo(),
         clientInfo: getClientInfo(),
       };
       pushMessage(event, session);

@@ -81,6 +81,19 @@ export const getFormData = () => {
   return JSON.stringify(dataJSON);
 };
 
+export const getIdentifiersData = () => {
+  var formData = getLocalStoragePrefs(FORM_DATA);
+
+  let dataJSON: { [key: string]: string } = {};
+  if (formData) dataJSON = JSON.parse(formData);
+
+  if (!dataJSON["name"] && dataJSON["email"]) {
+    dataJSON["name"] = dataJSON["email"].split("@")[0];
+  }
+
+  return dataJSON;
+};
+
 export const getFormMetaData = () => {
   // Browser
   var browser: any = getBrowserInfo();
@@ -128,6 +141,30 @@ export const promptImg = (
     ? agent.profile_image_url
     : chatPrefs?.meta.decoration.headerPictureUrl;
 };
+
+const playSound = (url: string) => {
+  if (!url) return;
+
+  try {
+    const sound = new Audio(url);
+
+    sound
+      .play()
+      .then(() => {
+        console.log("played.");
+      })
+      .catch((error) => {
+        if (error.name === "NotAllowedError") {
+          console.log("Audio play blocked, user interaction required.");
+        } else {
+          console.log("Audio play error:", error);
+        }
+      });
+  } catch (error) {
+    console.log("playSound", error);
+  }
+};
+
 export const pushMessage = (
   event: EventPayloadObj,
   session: ChatSessionPaylodObj
@@ -177,9 +214,11 @@ export const pushMessage = (
   )
     session.messageList.push(event);
 
-  //if (message.from != "Visitor") {
-  // Play sound
-  //this.playSound();
+  if (event.from != "CUSTOMER")
+    // Play sound
+    playSound(
+      "https://d2p078bqz5urf7.cloudfront.net/cloud/assets/sounds/track3.mp3"
+    );
 
   // Update document title for
   // this.blinkTitle(message.message);
