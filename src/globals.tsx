@@ -18,7 +18,7 @@ try {
   prefs = getReachoModule().ChatPrefs[CHANNEL_ID];
 } catch (e) {}
 export const CHANNEL_PREFS: ChatPrefsPayloadType = (window as any).CHANNEL_PREFS
-  ? JSON.parse((window as any).CHANNEL_PREFS)
+  ? (window as any).CHANNEL_PREFS
   : undefined;
 
 export const VISITOR_UUID: string = (window as any).VISITOR_UUID;
