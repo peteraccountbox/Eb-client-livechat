@@ -225,16 +225,22 @@ const FormComponent: FC<FormComponentPropsType> = (props) => {
                 }
               })()}
             </div>
-            {field.name == "email" && field.visible && (
-              <p style={{ marginBottom: "10px" }}>
-                A New customer will be created when provided new email address
-                on the form
-              </p>
-            )}
             {field.error ? (
               <div className="error-content">{field.error}</div>
             ) : (
               <></>
+            )}
+            {field.name == "email" && field.visible && (
+              <p
+                style={{
+                  marginBottom: "10px",
+                  fontSize: "12px",
+                  fontWeight: 400,
+                }}
+              >
+                A New customer will be created when provided new email address
+                on the form
+              </p>
             )}
           </>
         );

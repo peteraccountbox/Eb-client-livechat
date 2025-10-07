@@ -47,7 +47,7 @@ const ConversationList = ({
       return parentContext.chatPrefs.matchedBotPrefs?.settings
         .newConversationBtnText;
 
-    return "start new chat";
+    return "Start New Chat";
   };
 
   return (

@@ -3,9 +3,10 @@ import React from "react";
 import { icons } from "../icons";
 import PreviewListItem from "./PreviewListItem";
 
-import { ChatPrefsPayloadType } from "../Models";
+import { ChatFooterDataPayload, ChatPrefsPayloadType } from "../Models";
 import CloseWidgetPanel from "../components/CloseWidgetPanel";
 import PreviewFlowListItem from "./PreviewFlowListItem";
+import { widgetFooterTabs } from "../App";
 export interface PreviewComponentProps {
   chatPrefs: ChatPrefsPayloadType;
 }
@@ -13,12 +14,15 @@ export interface PreviewComponentProps {
 const Preview: FC<PreviewComponentProps> = (props) => {
   const { chatPrefs } = props;
 
-  const settings = [{ tab: "Messages" }];
+  const footerTabs = chatPrefs?.meta?.chatFooterSettings.filter(
+    (footer) => footer.enable == true
+  );
+  const [tab, setTab] = useState(footerTabs ? footerTabs[0]?.tab : "Messages");
 
   const appThemeStyle: Object = useMemo(() => {
     return {
-      "--bottom": settings?.length < 2 ? "20px" : "125px",
-      "--reduceHeight": settings?.length < 2 ? "135px" : "210px",
+      "--bottom": footerTabs?.length < 2 ? "20px" : "125px",
+      "--reduceHeight": footerTabs?.length < 2 ? "135px" : "210px",
       "--themeColor":
         chatPrefs && chatPrefs.meta.decoration.mainColor
           ? chatPrefs.meta.decoration.mainColor
@@ -33,7 +37,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
     if (chatPrefs.matchedBotPrefs?.id)
       return chatPrefs.matchedBotPrefs?.settings.newConversationBtnText;
 
-    return "Start New";
+    return "Start New Chat";
   };
 
   const getLabel = (label: string) => {
@@ -254,14 +258,62 @@ const Preview: FC<PreviewComponentProps> = (props) => {
           data-target="widget"
         >
           <div className="chat__main">
-            <div className="home__feeds-main-wrapper">
-              <div className="home__feeds-main">
-                <div className="home__feeds-bg-primary">
-                  <div className="home__feeds-bg-shadow"></div>
+            {tab != "Home" ? (
+              <>
+                <div className="chat__ticket">
+                  <div className="chat__header">
+                    <div className="chat__header-user">
+                      <h3 className="chat__header-user-name">
+                        {tab != "Help" ? chatPrefs.name : tab}
+                      </h3>
+                    </div>
+                  </div>
                 </div>
-                <div className="home__feeds-body">
-                  <div className="home__feeds-header">
-                    {/* <div className="home__feeds-logo-brand">
+                <div className="list-view" style={{ overflow: "hidden" }}>
+                  <PreviewListItem />
+                  <PreviewListItem />
+                  <PreviewListItem />
+                  <PreviewListItem />
+                  <PreviewListItem />
+                  <PreviewListItem />
+                </div>
+                {tab == "Tickets" && (
+                  <button className="chat__all-btn d-flex create_ticket_button">
+                    <span>Create Ticket</span>
+                  </button>
+                )}
+                {tab == "Messages" && (
+                  <button
+                    className="chat__all-btn"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <span style={{ marginRight: "5px" }}>
+                      {getStartConvButtonText()}
+                    </span>
+                    <svg
+                      className="chat_send_icon"
+                      id="fi_9290348"
+                      enable-background="new 0 0 32 32"
+                      viewBox="0 0 32 32"
+                      style={{ fill: "white" }}
+                      width={16}
+                      height={16}
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="m21.1646194 29.9911366c-1.0395126.0777702-2.0082016-.2969723-2.7011948-.9899673-.6219101-.2503929-4.0971422-8.8551025-4.4971895-9.5459404l6.646821-6.646822c.395977-.395978.3889008-1.0253134 0-1.4142132-.3959789-.395978-1.0182362-.395978-1.4142132 0l-6.646822 6.6468201-8.4994373-3.7759256c-1.3576331-.6081448-2.1566238-1.9445429-2.0435059-3.4294939.1201961-1.4778719 1.1243188-2.6799183 2.552645-3.0617409l21.0859309-5.6568974c1.2091236-.3181636 2.4607162.0141559 3.3446007.8980393.8768063.8768055 1.2091255 2.1283982.8909607 3.3375232l-5.6568527 21.0859737c-.3818227 1.4283253-1.5839139 2.4324051-3.0617429 2.5526444z"></path>
+                    </svg>
+                  </button>
+                )}
+              </>
+            ) : (
+              <div className="home__feeds-main-wrapper">
+                <div className="home__feeds-main">
+                  <div className="home__feeds-bg-primary">
+                    <div className="home__feeds-bg-shadow"></div>
+                  </div>
+                  <div className="home__feeds-body">
+                    <div className="home__feeds-header">
+                      {/* <div className="home__feeds-logo-brand">
                       <img
                         src={
                           "https://cdn5.engagebay.com/assets/img/engagebay-brand-logo-white.svg"
@@ -269,30 +321,33 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                         alt="Logo"
                       />
                     </div> */}
-                    {chatPrefs.meta.decoration.headerPictureUrl ? (
-                      <img
-                        style={{
-                          width: "4rem",
-                          height: "4rem",
-                          borderRadius: "5px",
-                        }}
-                        src={chatPrefs.meta.decoration.headerPictureUrl}
-                      />
-                    ) : (
-                      chatPrefs.name
-                    )}
-                    <div className="chat__help-end">
-                      <CloseWidgetPanel />
+                      {chatPrefs.meta.decoration.headerPictureUrl && (
+                        <img
+                          style={{
+                            width: "4rem",
+                            height: "4rem",
+                            borderRadius: "5px",
+                          }}
+                          src={chatPrefs.meta.decoration.headerPictureUrl}
+                        />
+                      )}
+                      <div className="home__feeds-chat-header-name">
+                        <span className="home__feeds-chat-name">
+                          {chatPrefs.name}
+                        </span>
+                      </div>
+                      <div className="chat__help-end">
+                        <CloseWidgetPanel />
+                      </div>
+                    </div>
+
+                    <div className="home__feeds-home-title">
+                      {chatPrefs.meta.decoration.introductionText}
                     </div>
                   </div>
-
-                  <div className="home__feeds-home-title">
-                    {chatPrefs.meta.decoration.introductionText}
-                  </div>
-                </div>
-                <div className="home__feeds-cards-main">
-                  <div className="home__feeds-cards-sec">
-                    {/* <div className="home__feeds-send-card home__feeds-recent-card">
+                  <div className="home__feeds-cards-main">
+                    <div className="home__feeds-cards-sec">
+                      {/* <div className="home__feeds-send-card home__feeds-recent-card">
                       <div className="home__feeds-media">
                         <div className="home__feeds-media-content">
                           <PreviewFlowListItem />
@@ -300,7 +355,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                         </div>
                       </div>
                     </div> */}
-                    {/* {chatPrefs.flowNames && chatPrefs.flowNames.length > 0 && (
+                      {/* {chatPrefs.flowNames && chatPrefs.flowNames.length > 0 && (
                 <>
                   <div className="home__feeds-send-card home__feeds-flow-list-card home__feeds-recent-card">
                     <div className="home__feeds-media">
@@ -338,7 +393,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                 </>
               )} */}
 
-                    <div className="home__feeds-send-card home__feeds-recent-card">
+                      {/* <div className="home__feeds-send-card home__feeds-recent-card">
                       <div className="home__feeds-media">
                         <div className="home__feeds-media-content">
                           <h4
@@ -350,13 +405,11 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                           <PreviewListItem />
                           <PreviewListItem />
                           <PreviewListItem />
-                          {/* <PreviewListItem />
-                          <PreviewListItem /> */}
                         </div>
                       </div>
-                    </div>
+                    </div> */}
 
-                    {/* <div className="home__feeds-send-card">
+                      {/* <div className="home__feeds-send-card">
                       <div className="home__feeds-media">
                         <div className="home__feeds-media-content">
                           <h5>Send us a message </h5>
@@ -378,11 +431,40 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                       </div>
                     </div> */}
 
-                    {!chatPrefs?.flows || !chatPrefs?.flows.length ? (
-                      <div className="home__feeds-no-data-send-card">
-                        <h5 className="home__feeds-no-data-send-card-title">
-                          Begin the Conversation
-                        </h5>
+                      {false ||
+                      !chatPrefs?.flows ||
+                      !chatPrefs?.flows.length ? (
+                        <div className="home__feeds-no-data-send-card">
+                          <h5 className="home__feeds-no-data-send-card-title">
+                            Begin the Conversation
+                          </h5>
+                          <div
+                            className="home__feeds-send-card"
+                            // onClick={() => startNewChat()}
+                          >
+                            <div className="home__feeds-media">
+                              <div className="home__feeds-media-content">
+                                <h5>Send us a message </h5>
+                                {/* <p>We typically reply within a day</p> */}
+                              </div>
+                              <div className="home__feeds-media-icon">
+                                <svg
+                                  className="chat_send_icon"
+                                  id="fi_9290348"
+                                  enable-background="new 0 0 32 32"
+                                  viewBox="0 0 32 32"
+                                  style={{ fill: "white" }}
+                                  width={18}
+                                  height={18}
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path d="m21.1646194 29.9911366c-1.0395126.0777702-2.0082016-.2969723-2.7011948-.9899673-.6219101-.2503929-4.0971422-8.8551025-4.4971895-9.5459404l6.646821-6.646822c.395977-.395978.3889008-1.0253134 0-1.4142132-.3959789-.395978-1.0182362-.395978-1.4142132 0l-6.646822 6.6468201-8.4994373-3.7759256c-1.3576331-.6081448-2.1566238-1.9445429-2.0435059-3.4294939.1201961-1.4778719 1.1243188-2.6799183 2.552645-3.0617409l21.0859309-5.6568974c1.2091236-.3181636 2.4607162.0141559 3.3446007.8980393.8768063.8768055 1.2091255 2.1283982.8909607 3.3375232l-5.6568527 21.0859737c-.3818227 1.4283253-1.5839139 2.4324051-3.0617429 2.5526444z"></path>
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
                         <div
                           className="home__feeds-send-card"
                           // onClick={() => startNewChat()}
@@ -408,37 +490,44 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div
-                        className="home__feeds-send-card"
-                        // onClick={() => startNewChat()}
-                      >
-                        <div className="home__feeds-media">
-                          <div className="home__feeds-media-content">
-                            <h5>Send us a message </h5>
-                            {/* <p>We typically reply within a day</p> */}
-                          </div>
-                          <div className="home__feeds-media-icon">
-                            <svg
-                              className="chat_send_icon"
-                              id="fi_9290348"
-                              enable-background="new 0 0 32 32"
-                              viewBox="0 0 32 32"
-                              style={{ fill: "white" }}
-                              width={18}
-                              height={18}
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path d="m21.1646194 29.9911366c-1.0395126.0777702-2.0082016-.2969723-2.7011948-.9899673-.6219101-.2503929-4.0971422-8.8551025-4.4971895-9.5459404l6.646821-6.646822c.395977-.395978.3889008-1.0253134 0-1.4142132-.3959789-.395978-1.0182362-.395978-1.4142132 0l-6.646822 6.6468201-8.4994373-3.7759256c-1.3576331-.6081448-2.1566238-1.9445429-2.0435059-3.4294939.1201961-1.4778719 1.1243188-2.6799183 2.552645-3.0617409l21.0859309-5.6568974c1.2091236-.3181636 2.4607162.0141559 3.3446007.8980393.8768063.8768055 1.2091255 2.1283982.8909607 3.3375232l-5.6568527 21.0859737c-.3818227 1.4283253-1.5839139 2.4324051-3.0617429 2.5526444z"></path>
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
+            )}
+            <div className="chat__tabs-footer">
+              <div className="chat__tabs-bottom-bar">
+                {footerTabs.map((footerTab: ChatFooterDataPayload) => {
+                  return (
+                    <div
+                      className={`chat__tabs-nav-link ${
+                        footerTab.tab == tab ? "active" : ""
+                      }`}
+                      onClick={() => setTab(footerTab.tab as widgetFooterTabs)}
+                    >
+                      <div className="chat__tabs-icon">
+                        {footerTab.tab == tab
+                          ? icons["active" + footerTab.tab]
+                          : icons[footerTab.tab]}
+                      </div>
+                      <span className="chat__tabs-title">
+                        {getLabel(footerTab.tab)}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+              {!chatPrefs.isWhiteLabelEnabled && (
+                <div className="chat__powered__by-footer">
+                  <a
+                    target="_blank"
+                    href="https://www.engagebay.com/?utm_source=powered-by&amp;utm_medium=widget&amp;utm_campaign=www-engagebay-com"
+                  >
+                    Powered by EngageBay
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>
