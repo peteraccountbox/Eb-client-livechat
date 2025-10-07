@@ -3,6 +3,7 @@ import { widgetFooterTabs } from "../App";
 import { AppContext } from "../appContext";
 import { icons } from "../icons";
 import { ChatFooterDataPayload } from "../Models";
+import { isWhiteLabelEnabled } from "../Utils";
 
 const ChatTabsList = (props: any) => {
   const parentContext = useContext(AppContext);
@@ -24,8 +25,9 @@ const ChatTabsList = (props: any) => {
         {footerTabs.map((footerTab: ChatFooterDataPayload) => {
           return (
             <div
-              className={`chat__tabs-nav-link ${footerTab.tab == activeTab ? "active" : ""
-                }`}
+              className={`chat__tabs-nav-link ${
+                footerTab.tab == activeTab ? "active" : ""
+              }`}
               onClick={() => changeActiveTab(footerTab.tab as widgetFooterTabs)}
             >
               <div className="chat__tabs-icon">
@@ -40,7 +42,7 @@ const ChatTabsList = (props: any) => {
           );
         })}
       </div>
-      {!chatPrefs.isWhiteLabelEnabled && (
+      {isWhiteLabelEnabled() == false && (
         <div className="chat__powered__by-footer">
           <a
             target="_blank"

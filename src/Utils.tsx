@@ -33,6 +33,11 @@ import { getLocalStoragePrefs } from "./Storage";
 //     parent.EngageBay_Livechat.ref.UI().resize(type);
 // };
 
+export const isWhiteLabelEnabled = () => {
+  return (window as any).parent.EngageBay_Livechat.ref.settings
+    .isWhiteLabelEnabled;
+};
+
 export const getOperator = (
   id: number | undefined,
   agents: AgentPaylodObj[] | undefined

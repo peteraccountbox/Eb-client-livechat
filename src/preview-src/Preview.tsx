@@ -7,6 +7,7 @@ import { ChatFooterDataPayload, ChatPrefsPayloadType } from "../Models";
 import CloseWidgetPanel from "../components/CloseWidgetPanel";
 import PreviewFlowListItem from "./PreviewFlowListItem";
 import { widgetFooterTabs } from "../App";
+import { isWhiteLabelEnabled } from "../Utils";
 export interface PreviewComponentProps {
   chatPrefs: ChatPrefsPayloadType;
 }
@@ -518,7 +519,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                   );
                 })}
               </div>
-              {!chatPrefs.isWhiteLabelEnabled && (
+              {isWhiteLabelEnabled() == false && (
                 <div className="chat__powered__by-footer">
                   <a
                     target="_blank"
