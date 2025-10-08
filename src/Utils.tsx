@@ -34,8 +34,8 @@ import { getLocalStoragePrefs } from "./Storage";
 // };
 
 export const isWhiteLabelEnabled = () => {
-  return (window as any).parent.EngageBay_Livechat.ref.settings
-    .isWhiteLabelEnabled;
+  return (window as any).parent.EngageBay_Livechat?.ref?.settings
+    ?.isWhiteLabelEnabled;
 };
 
 export const getOperator = (

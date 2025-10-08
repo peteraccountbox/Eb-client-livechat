@@ -519,16 +519,9 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                   );
                 })}
               </div>
-              {isWhiteLabelEnabled() == false && (
-                <div className="chat__powered__by-footer">
-                  <a
-                    target="_blank"
-                    href="https://www.engagebay.com/?utm_source=powered-by&amp;utm_medium=widget&amp;utm_campaign=www-engagebay-com"
-                  >
-                    Powered by EngageBay
-                  </a>
-                </div>
-              )}
+              <div className="chat__powered__by-footer">
+                <a href="javascript:void(0);">Powered by EngageBay</a>
+              </div>
             </div>
           </div>
         </div>
