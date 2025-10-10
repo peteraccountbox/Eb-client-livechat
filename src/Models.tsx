@@ -88,6 +88,8 @@ export interface ChatChannelMeta {
     | "liveChatOffline"
     | "liveChatOnline";
   storeId: string;
+  chatMessageOfflineStatusMessage?: string;
+  chatMessageOfflineStatusMessageEnabled?: boolean;
   sendChatTranscript: boolean;
   flowIds?: string[];
   installedDomains?: string[];

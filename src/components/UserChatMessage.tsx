@@ -8,6 +8,7 @@ import {
 } from "../Models";
 import ChatMessage from "./ChatMessage";
 import { getCustomerProfile } from "../globals";
+import { isUserBusinessHour } from "../BusinessHours";
 // import TimeAgo from 'react-timeago';
 
 export interface UserChatMessagePropsType {
@@ -21,8 +22,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
 
   const { chatPrefs, sessions, setSessions, agentsPrefs, createSessionData } =
     parentContext;
-    const customerProfile =
-    getCustomerProfile()
+  const customerProfile = getCustomerProfile();
   const getMessageTime = () => {
     // let myDate = new Date(props.message.created_time * 1000);
     // let dateStr = myDate.getDate() + "/" + (myDate.getMonth() + 1) + "/" + myDate.getFullYear()
@@ -108,12 +108,19 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
               message={props.message}
               updateMessage={() => {}}
             />
-            
           </li>
-          {!props.message.id && props.message.tempId && (chatPrefs.meta.emailCaptureEnforcement != "required" || props.message.ticketId || (customerProfile && customerProfile.email)) && <div>Sending ...</div>}
+          {!props.message.id &&
+            props.message.tempId &&
+            (chatPrefs.meta.emailCaptureEnforcement != "required" ||
+              props.message.ticketId ||
+              (customerProfile && customerProfile.email)) && (
+              <div>Sending ...</div>
+            )}
         </ul>
 
-        {canShowAnavailableMessage() ? (
+        {!isUserBusinessHour(chatPrefs, agentsPrefs) &&
+        !props.nextMessage &&
+        chatPrefs.meta.chatMessageOfflineStatusMessageEnabled ? (
           <div className="chat__messages-footer">
             <div
               style={{
@@ -127,7 +134,9 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
                 marginTop: "5px",
               }}
             >
-              <span className="message-sent-status">{"sent status"}</span>
+              <span className="message-sent-status">
+                {chatPrefs.meta.chatMessageOfflineStatusMessage}
+              </span>
             </div>
           </div>
         ) : (
