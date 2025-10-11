@@ -92,6 +92,12 @@ export const getIdentifiersData = () => {
   let dataJSON: { [key: string]: string } = {};
   if (formData) dataJSON = JSON.parse(formData);
 
+  Object.keys(dataJSON).forEach((key) => {
+    if (Array.isArray(dataJSON[key])) {
+      dataJSON[key] = JSON.stringify(dataJSON[key]); // convert array to string literal
+    }
+  });
+
   if (!dataJSON["name"] && dataJSON["email"]) {
     dataJSON["name"] = dataJSON["email"].split("@")[0];
   }
@@ -354,7 +360,10 @@ export function isValidField(field: ChatFromFieldDataPayLoad) {
           "(\\#[-a-z\\d_]*)?$",
         "i"
       ); // fragment locator
-      if (!pattern.test(field.value + "")) isValid = false;
+      if (!pattern.test(field.value + "")) {
+        isValid = false;
+        error = "Invalid field";
+      }
       break;
     case "textarea":
       break;

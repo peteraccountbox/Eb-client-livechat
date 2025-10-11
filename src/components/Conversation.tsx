@@ -276,7 +276,7 @@ const Conversation = (props: ConversationProps) => {
           !(field.field_type == "SYSTEM" && field.name == "message")
             ? storedFormData[fieldClone.name]
             : "";
-        if (fieldClone.type == "multicheckbox" || fieldClone.type == "checkbox")
+        if (fieldClone.type == "multicheckbox")
           fieldClone.valueArr = storedFormData[fieldClone.name]
             ? Array.from(storedFormData[fieldClone.name])
             : [];
