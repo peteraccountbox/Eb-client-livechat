@@ -56,7 +56,6 @@ const CollectionList: FC<CollectionListComponentProps> = (props) => {
     wait
       .then((response) => {
         let newSearchItems = response.data?.data;
-        // console.log(response.data);
         if (
           response.data?.version &&
           response.data?.version.toLowerCase() === `v2`
@@ -116,7 +115,6 @@ const CollectionList: FC<CollectionListComponentProps> = (props) => {
       wait
         .then((response) => {
           let newSearchItems = response.data?.data;
-          console.log(response.data);
 
           if (
             response.data?.version &&

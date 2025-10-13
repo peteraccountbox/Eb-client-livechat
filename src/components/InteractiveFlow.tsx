@@ -121,7 +121,8 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
           !newExecutionList[newExecutionList.length - 1].nextNodeId &&
           newExecutionList[newExecutionList.length - 1].node.data.nodeType ==
             InteractiveNodeTypes.END &&
-            newExecutionList[newExecutionList.length - 1].node.data.formData?.action == "end"
+          newExecutionList[newExecutionList.length - 1].node.data.formData
+            ?.action == "end"
         ) {
           removeSessionStoragePrefs(OPENED_CHAT);
           removeSessionStoragePrefs("flow_execution_id");
@@ -156,19 +157,19 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
           !response.data.executionList
         )
           return;
-          // const newExecutionList = response.data.executionList;
+        // const newExecutionList = response.data.executionList;
 
-          // if (
-          //   newExecutionList[newExecutionList.length - 1].executed &&
-          //   !newExecutionList[newExecutionList.length - 1].nextNodeId &&
-          //   newExecutionList[newExecutionList.length - 1].node.data.nodeType ==
-          //     InteractiveNodeTypes.END
-          // ) {
-          //   removeSessionStoragePrefs(OPENED_CHAT);
-          //   removeSessionStoragePrefs("flow_execution_id");
-          //   props.backToHome();
-          //   return;
-          // }
+        // if (
+        //   newExecutionList[newExecutionList.length - 1].executed &&
+        //   !newExecutionList[newExecutionList.length - 1].nextNodeId &&
+        //   newExecutionList[newExecutionList.length - 1].node.data.nodeType ==
+        //     InteractiveNodeTypes.END
+        // ) {
+        //   removeSessionStoragePrefs(OPENED_CHAT);
+        //   removeSessionStoragePrefs("flow_execution_id");
+        //   props.backToHome();
+        //   return;
+        // }
 
         setSessionStoragePrefs(
           "flow_execution_id",
@@ -259,22 +260,22 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
         <div className="chat__messages">
           <div className="chat__messages-track">
             <div>
-              {loading && <p style={{ marginTop: "60px", textAlign: "center" }}>
-                <div className="chat__form-loader1">
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                </div>
+              {loading && (
+                <p style={{ marginTop: "60px", textAlign: "center" }}>
+                  <div className="chat__form-loader1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
                 </p>
-                }
+              )}
 
               {!loading &&
                 executionList &&
                 executionList.length &&
                 executionList.map(
                   (exe: NodeExecutionPayload, index: number) => {
-                    console.log(InteractiveFlowNodes);
                     console.log(
                       exe.node.type as unknown as InteractiveNodeTypes
                     );
@@ -283,7 +284,7 @@ const InteractiveFlow = (props: InteractiveFlowProps) => {
                         ? InteractiveFlowNodes[exe.node.type]
                         : InteractiveFlowNodes[exe.node.data.nodeType];
                     if (
-                      exe.node.data.nodeType == InteractiveNodeTypes.END 
+                      exe.node.data.nodeType == InteractiveNodeTypes.END
                       // &&
                       // (exe.node.data.formData?.action == "ticket" || exe.node.data.formData?.action == "end")
                     )

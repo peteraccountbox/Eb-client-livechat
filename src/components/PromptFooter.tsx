@@ -25,7 +25,6 @@ const PromptFooter: FC<PromptFooterProp> = (props) => {
   };
 
   const handleKeyChange = (e: any) => {
-    console.log(e.currentTarget.value);
     if (e.currentTarget.value != null) setChatMessage(e.currentTarget.value);
     else setChatMessage("");
   };
@@ -47,9 +46,7 @@ const PromptFooter: FC<PromptFooterProp> = (props) => {
           <input
             type="text"
             className="chat__prompt-input"
-            placeholder={
-              "Write a reply"
-            }
+            placeholder={"Write a reply"}
             onChange={(e) => handleKeyChange(e)}
             onKeyDown={handleKeyDown}
           />

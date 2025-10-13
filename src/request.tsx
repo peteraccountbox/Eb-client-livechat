@@ -16,7 +16,6 @@ export const engageBayAPI = baseReqService.create({
 engageBayAPI.interceptors.request.use(
   (config) => {
     // Log the request configuration for debugging
-    console.log("Request config:", config);
     return config;
   },
   (error) => {

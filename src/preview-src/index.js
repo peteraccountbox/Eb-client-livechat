@@ -7,7 +7,6 @@ import '../assets/css/components/_chat.scss';
 import PreviewConversation from './PreviewConversation.tsx';
 import FormPreview from './FormPreview.tsx';
 window.renderPreview = function (chatPrefs, previewType) {
-  console.log("rendering view");
   const root = ReactDOM.createRoot(document.getElementById('root-preview'));
   root.render(
     <React.StrictMode>

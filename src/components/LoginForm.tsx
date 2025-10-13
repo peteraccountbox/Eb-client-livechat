@@ -55,7 +55,6 @@ const LoginForm = (props: any) => {
   };
 
   const onToggle = (value: string) => {
-    console.log("onToggle ", value);
     if (value == "email") {
       setToggleField(fields[1]);
       setFormFields([{ ...formFields[0], value: value }, fields[1]]);

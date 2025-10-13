@@ -55,8 +55,6 @@ const ChatForm: FC<ChatFormPropsType> = (props) => {
         if (field.value) obj[field.name] = field.value;
       });
 
-      console.log("formdata", obj);
-
       submitChatForm(obj);
     }
   };

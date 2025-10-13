@@ -172,7 +172,6 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
   const clearTimer = () => {
     if (agentTypingTimer) clearTimeout(agentTypingTimer);
 
-    // console.log("clearTimer", this.agentTypingTimer);
     setAgentTypingTimer(null);
   };
 

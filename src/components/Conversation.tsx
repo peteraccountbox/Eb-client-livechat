@@ -136,8 +136,6 @@ const Conversation = (props: ConversationProps) => {
         .then((response: any) => {
           let newNession = response.data as ChatSessionPaylodObj;
 
-          console.log(response);
-
           newNession.customerUnreadMessagesCount = 0;
           setSessionStoragePrefs(OPENED_CHAT, newNession.id);
           updateAndOpenSession(newNession);
@@ -161,7 +159,6 @@ const Conversation = (props: ConversationProps) => {
     let matchedSession = sessions.find(function (session) {
       return session.id == chatId;
     });
-    console.log("matchedSession", matchedSession);
 
     if (matchedSession) return matchedSession;
 
@@ -316,7 +313,6 @@ const Conversation = (props: ConversationProps) => {
 
     // Get session from session id
     let session = getSessionById(message.ticketId);
-    console.log("updating message session", session);
     if (!session || !session.messageList || session.messageList.length == 0)
       return;
 
@@ -347,7 +343,6 @@ const Conversation = (props: ConversationProps) => {
 
     // Get session from session id
     let session = getSessionById(message.ticketId);
-    console.log("updating message session", session);
     if (!session) return;
 
     session.messageList = session.messageList.map(
@@ -424,8 +419,6 @@ const Conversation = (props: ConversationProps) => {
       });
       wait
         .then((response: any) => {
-          console.log(response);
-
           let newNession = response.data as ChatSessionPaylodObj;
           newNession.messageList = session.messageList;
           updateAndOpenSession(newNession);
@@ -542,8 +535,6 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const updateAndOpenSession = (newNession: ChatSessionPaylodObj) => {
-    console.log("updating session", newNession);
-
     props.addNewSession(newNession);
 
     setTimeout(() => {
@@ -564,8 +555,6 @@ const Conversation = (props: ConversationProps) => {
     const wait = postReq(url, data);
     wait
       .then((response: any) => {
-        console.log(response);
-
         if (callback) callback(response);
       })
       .catch(() => {});

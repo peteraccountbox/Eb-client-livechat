@@ -49,7 +49,6 @@ const Article: FC<ArticleComponentProps> = (props) => {
     wait
       .then((response) => {
         // setPromtWidth(PromtWidth.Large);
-        console.log(response.data);
 
         if (!response.data || !response.data.id) {
           removeSessionStoragePrefs(HC_ACTIVE_COMPONENT);

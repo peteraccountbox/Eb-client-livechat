@@ -161,9 +161,7 @@ const playSound = (url: string) => {
 
     sound
       .play()
-      .then(() => {
-        console.log("played.");
-      })
+      .then(() => {})
       .catch((error) => {
         if (error.name === "NotAllowedError") {
           console.log("Audio play blocked, user interaction required.");
@@ -181,20 +179,11 @@ export const pushMessage = (
   session: ChatSessionPaylodObj
 ) => {
   if (!session) {
-    console.log("Session not found");
-    // if (activeSessionDetails.session_type == SessionStateEnum.NEW_SESSION) {
-    //   activeSessionDetails.session?.messageList.push(message);
-    //   setActiveSessionDetails(activeSessionDetails);
-    // }
-
     return;
   }
 
-  console.log("pushing new messge to", event.ticketId);
-
   // Get session from session id
   // let session = getSessionById(message.session_id);
-  console.log("having session", session);
 
   // Update time of the session
   // session.updated_time = parseInt((new Date().getTime() / 1000).toString());
@@ -202,7 +191,6 @@ export const pushMessage = (
 
   // Set unread count
   // if (!activeSessionDetails?.session_id || !activeSessionDetails?.session || activeSessionDetails.session.id != session.id) {
-  //   console.log("updating unread");
   //   session.unRead = session.unRead ? session.unRead + 1 : 1;
   // }
 

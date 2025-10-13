@@ -13,8 +13,6 @@ export const initalizeSocket = () => {
 
         // Get user sessions from visitorId
         let channelName = TENANT_ID + "-" + VISITOR_UUID;
-        console.log("channelName", channelName);
-        // const pusher = new Pusher("9efc22b651b6b9401c10", {
             const pusher = new Pusher("1bd6d84d7a6d517eeee5", {
                 cluster: "ap2",
                 forceTLS: true,
@@ -24,12 +22,7 @@ export const initalizeSocket = () => {
 
         channel.bind('pusher:subscription_succeeded', function () {
 
-            console.log("On pusher channel subscribe", channelName);
-            // Binding to event emit to receive trigger commands
-            // onEventReceived("send-engagebay-channel-message", (data) => {
-            // let wasTriggered = pusher.trigger('client-event', data);
-            // console.log(wasTriggered);
-            // });
+        
 
 
 

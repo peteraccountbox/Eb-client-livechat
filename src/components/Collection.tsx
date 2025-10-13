@@ -37,8 +37,6 @@ const Collection: FC<CollectionComponentProps> = (props) => {
         .then((response) => {
           setLoading(false);
 
-          console.log(response.data);
-
           if (
             !response.data ||
             !response.data.id ||

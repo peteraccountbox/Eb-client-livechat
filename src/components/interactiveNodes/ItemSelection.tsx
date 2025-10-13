@@ -26,7 +26,6 @@ const ItemSelection: React.FC<InteractiveNodeProps> = ({
           setItems(JSON.parse(response.data.meta)?.line_items);
           setOrderDetails(JSON.parse(response.data.meta));
         }
-        console.log(response.data);
       });
   }, []);
 
@@ -81,7 +80,6 @@ const ItemSelection: React.FC<InteractiveNodeProps> = ({
     executeNodeOnUserInteraction(execution);
   };
   const onChecked = (checked: boolean, item: any) => {
-    console.log(checked);
     if (checked) {
       setSelectedItems([...selectedItems, item]);
     } else {

@@ -70,7 +70,6 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   };
 
   const submitGPTFeedback = (feedback: number) => {
-    console.log("score");
     props.message.gpt_relavance_score = feedback;
     props.updateMessage(props.message.message);
 

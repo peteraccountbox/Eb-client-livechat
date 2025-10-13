@@ -85,7 +85,6 @@ export enum NotificationPromtTypes {
 
 const App: React.FunctionComponent = () => {
   // Context states
-  console.log("running.........");
   const [chatPrefs, setChatPrefs] =
     useState<ChatPrefsPayloadType>(CHANNEL_PREFS);
   const [agents, setAgents] = useState<AgentPaylodObj[]>([]);
@@ -200,8 +199,6 @@ const App: React.FunctionComponent = () => {
   }, [promtWidth, isOpened, isVisible]);
 
   useEffect(() => {
-    console.log("useEffect1");
-
     const prefsReq = axios.get(USER_PREFS_FETCH_URL_PATH);
     const usersReq = axios.get(USERS_FETCH_URL);
 
@@ -227,12 +224,10 @@ const App: React.FunctionComponent = () => {
       });
 
     // Fetch chat prefs
-    console.log("useEffect 2");
 
     fetchChatPrefs();
 
     // Restore storage prefs
-    // console.log("this.$isNewSession", this.$isNewSession);
     // if (IS_NEW_SESSION) {
     //   removeSessionStoragePrefs("window-open");
     //   removeSessionStoragePrefs("opened-chat");
@@ -336,8 +331,6 @@ const App: React.FunctionComponent = () => {
   };
 
   const fetchChatPrefs = async () => {
-    console.log("CHANNEL_PREFS", CHANNEL_PREFS);
-
     if (CHANNEL_PREFS) {
       setChatPrefs(CHANNEL_PREFS);
       setPrefsFetched(true);
@@ -345,22 +338,16 @@ const App: React.FunctionComponent = () => {
     }
 
     try {
-      console.log("CHANNEL_PREFS_FETCH_URL_PATH", CHANNEL_PREFS_FETCH_URL_PATH);
-
       // axios(CHANNEL_PREFS_FETCH_URL_PATH, {}).then(
       //   (response: AxiosResponse<any, any>) => {
       //     let prefs = response.data as ChatPrefsPayloadType;
-
       //     setChatPrefs(prefs);
       //     setPrefsFetched(true);
       //   }
       // );
-
       // let prefs = response.data as ChatPrefsPayloadType;
-
       // if (prefs.botPrefs && prefs.botPrefs.length > 0)
       //   prefs.matchedBotPrefs = prefs.botPrefs[0];
-
       // let chatChannelMeta: ChatChannelMeta = {
       //   deactivated: false,
       //   hideOnMobile: true,
@@ -385,11 +372,8 @@ const App: React.FunctionComponent = () => {
       //     botAvatarImage: "https://example.com/bot.png",
       //   },
       // };
-
       // prefs.meta = chatChannelMeta;
-
       // setChatPrefs(prefs);
-
       // setPrefsFetched(true);
     } catch (e) {
       console.log("errr", e);
@@ -447,7 +431,6 @@ const App: React.FunctionComponent = () => {
         sort: "lastMessageAt,DESC",
       });
 
-      console.log(response);
       // let agentsList = agents;
       // response.data.operators.forEach((agent) => {
       //   agentsList.push(agent);
@@ -619,8 +602,6 @@ const App: React.FunctionComponent = () => {
   };
 
   const handleMessage = (event: any) => {
-    console.log("handleMessage", event);
-
     // If typing alert
     if (event.event_type == "TYPING") {
       console.log("TYPING", event.message);
@@ -630,7 +611,6 @@ const App: React.FunctionComponent = () => {
 
     // If CALL alert
     //   if (event.event_type == "CALL_ALERT") {
-    //     console.log("CALL_ALERT", event);
     //     this.handleCallRequest(event.message);
     //     return;
     //   }
@@ -639,12 +619,6 @@ const App: React.FunctionComponent = () => {
 
     console.log(chat_message);
     if (!chat_message) return;
-
-    console.log("pusgedd alreadd");
-
-    sessions.forEach((element) => {
-      console.log("availablesessionids", element.id);
-    });
 
     let session = getSessionById(chat_message.session_id);
     console.log("sessionunavailabnle", chat_message.session_id);
@@ -699,7 +673,6 @@ const App: React.FunctionComponent = () => {
 
     // Get session from ID
     var session = getSessionById(message.session_id);
-    // console.log("handleInboundTyping", session);
 
     if (!session) return;
 
@@ -722,8 +695,6 @@ const App: React.FunctionComponent = () => {
       let sessionsList = sessions;
       sessionsList.push(session);
       setSessions([...sessionsList]);
-
-      console.log(sessions);
 
       bindPusherSocketEvents();
     },

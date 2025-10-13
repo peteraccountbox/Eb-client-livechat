@@ -8,7 +8,6 @@ const CollectTextReply: React.FC<InteractiveNodeProps> = ({
 }: InteractiveNodeProps) => {
   const [typeText, setTypeText] = useState<string>("");
   const handleKeyPress = (e: React.FormEvent<HTMLTextAreaElement>) => {
-    // console.log(e.currentTarget.textContent);
     if (e.currentTarget.textContent != null)
       setTypeText(e.currentTarget.textContent);
     else setTypeText("");

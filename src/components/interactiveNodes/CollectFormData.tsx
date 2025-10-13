@@ -110,8 +110,6 @@ const CollectFormData: React.FC<InteractiveNodeProps> = ({
         });
       });
 
-      console.log("formdata", obj);
-
       setLocalStoragePrefs(FORM_DATA_ARRAY, JSON.stringify(form_data));
       let formData = getLocalStoragePrefs(FORM_DATA);
       if (formData) {
