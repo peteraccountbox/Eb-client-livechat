@@ -26,7 +26,7 @@ export const initalizeSocket = () => {
 
             console.log("On pusher channel subscribe", channelName);
             // Binding to event emit to receive trigger commands
-            // onEventReceived("send-reacho-channel-message", (data) => {
+            // onEventReceived("send-engagebay-channel-message", (data) => {
             // let wasTriggered = pusher.trigger('client-event', data);
             // console.log(wasTriggered);
             // });
@@ -36,7 +36,7 @@ export const initalizeSocket = () => {
         });
 
         // unbind to event for messages
-        // channel.unbind("reacho-channel-client-event");
+        // channel.unbind("engagebay-channel-client-event");
 
         // Subscribe to event for messages
         channel.bind(

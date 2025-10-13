@@ -5,7 +5,7 @@ import { TENANT_ID, SERVER_REQ_HOST_PATH, API_KEY } from "./globals";
 
 export const baseReqService = axios;
 
-export const reachoAPI = baseReqService.create({
+export const engageBayAPI = baseReqService.create({
   headers: {
     "Content-Type": "application/json",
     // 'Authorization': TENANT_ID,
@@ -13,7 +13,7 @@ export const reachoAPI = baseReqService.create({
   },
 });
 
-reachoAPI.interceptors.request.use(
+engageBayAPI.interceptors.request.use(
   (config) => {
     // Log the request configuration for debugging
     console.log("Request config:", config);
@@ -52,7 +52,7 @@ export const getReq = async (
   path: string,
   data: object
 ): Promise<AxiosResponse> => {
-  return reachoAPI.get<AxiosResponse>(getServerHost(path), { params: data });
+  return engageBayAPI.get<AxiosResponse>(getServerHost(path), { params: data });
 };
 
 export const getReqHc = async (
@@ -73,7 +73,7 @@ export const postReq = async (path: string, data: object, headers?: object) => {
         // Authorization: API_KEY,
         "X-JS-Client-Key": TENANT_ID,
       };
-  return reachoAPI.post(getServerHost(path), data, {
+  return engageBayAPI.post(getServerHost(path), data, {
     headers: headers,
   });
 };

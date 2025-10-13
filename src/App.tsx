@@ -476,18 +476,6 @@ const App: React.FunctionComponent = () => {
       if (openedChat) {
         openChat(openedChat);
       }
-
-      // const agentResponse = await getReq(AGENTS_FETCH_URL_PATH, {});
-      // console.log("Agents reacho ", agentResponse);
-      // setAgents([
-      //   {
-      //     tenantId: "663b158cc77b6d29d332c88d",
-      //     id: "663b158cc77b6d29d332c88e",
-      //     name: "Ibrahim",
-      //     email: "ibrahimkhan40360@gmail.com",
-      //     userPicURL: null,
-      //   },
-      // ]);
     } catch (e) {
       console.log(e);
     }

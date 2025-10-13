@@ -106,22 +106,8 @@ export const EXECUTE_FLOW_NODE_URL_PATH = REQUEST_PREFIX_PATH + "/flow/execute";
 export const CONVERSATION_MESSAGE_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/get-chat-messages";
 
-// export const CHAT_WORKER_URL_PATH =
-//   "https://reacho-chat-worker.peter-13d.workers.dev/update-installed-domains/?domain=" +
-//   (window as any).location.host +
-//   "&channel_id=" +
-//   CHANNEL_ID +
-//   "&tenant_id=" +
-//   TENANT_ID;
-
 export const CHANNEL_PREFS_FETCH_URL_PATH =
-  // "https://reacho-chat-worker.peter-13d.workers.dev/?channel_id=" +
-  // CHANNEL_ID +
-  // "&tenant_id=" +
-  // TENANT_ID;
-  // "https://pub-3e072d94a58945b58f996ad31f85ae61.r2.dev/channel/" + CHANNEL_ID + ".json"
   "http://localhost:8787/channel/get-active-channel";
-// REQUEST_PREFIX_PATH + "/channel/chat/" + CHANNEL_ID;
 
 export const USER_PREFS_FETCH_URL_PATH =
   "https://eb-webhooks.engagebay.com/user/get-users?tid=" + TENANT_ID;
@@ -197,13 +183,6 @@ export const getCustomerProfile = () => {
   return undefined;
 };
 
-export const getClientBrowserInfo = () => {
-  try {
-    return (window as any).parent.reachoJSClient.getBrowserInfo();
-  } catch (e) {}
-  return undefined;
-};
-
 export const getClientInfo = () => {
   try {
     return {
@@ -231,12 +210,4 @@ export const getIntegrationSource = () => {
     return (window as any).parent.reachoJSClient.getIntegrationSource();
   } catch (e) {}
   return undefined;
-};
-
-export const getReachoOnsite = () => {
-  try {
-    return (window as any).parent._reachoOnsite;
-  } catch (error) {
-    return undefined;
-  }
 };
