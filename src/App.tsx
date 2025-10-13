@@ -714,8 +714,10 @@ const App: React.FunctionComponent = () => {
 
     const mainColor = chatPrefs && chatPrefs.meta.decoration.mainColor;
     const gradientColor = chatPrefs && chatPrefs.meta.decoration.gradientColor;
-    const offlineColor = chatPrefs && agentsPrefs;
-    !chatPrefs.meta.decoration.useMainColorOutsideBusinessHour &&
+    const offlineColor =
+      chatPrefs &&
+      agentsPrefs &&
+      !chatPrefs.meta.decoration.useMainColorOutsideBusinessHour &&
       !isUserBusinessHour(chatPrefs, agentsPrefs);
 
     return {
