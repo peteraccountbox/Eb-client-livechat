@@ -79,8 +79,6 @@ export interface ChatChannelMeta {
   deactivated: boolean;
   hideOnMobile: boolean;
   hideOnOutsideBusinessHours: boolean;
-  emailCaptureEnabled: boolean;
-  emailCaptureEnforcement: string;
   decoration: Decoration;
   liveChatAvailability:
     | "liveChatBusiness"

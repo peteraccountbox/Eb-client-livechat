@@ -365,8 +365,6 @@ const App: React.FunctionComponent = () => {
       //   deactivated: false,
       //   hideOnMobile: true,
       //   hideOnOutsideBusinessHours: true,
-      //   emailCaptureEnabled: true,
-      //   emailCaptureEnforcement: false,
       //   liveChatAvailability: "always-live-during-business-hours",
       //   sendChatTranscript: true,
       //   decoration: {

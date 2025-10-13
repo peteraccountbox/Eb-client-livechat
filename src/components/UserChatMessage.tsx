@@ -111,8 +111,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
           </li>
           {!props.message.id &&
             props.message.tempId &&
-            (chatPrefs.meta.emailCaptureEnforcement != "required" ||
-              props.message.ticketId ||
+            (props.message.ticketId ||
               (customerProfile && customerProfile.email)) && (
               <div>Sending ...</div>
             )}

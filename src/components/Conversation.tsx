@@ -152,14 +152,6 @@ const Conversation = (props: ConversationProps) => {
     return session;
   };
 
-  const isEmailCaptured = (): boolean => {
-    return !session.identifiers?.email &&
-      !session.customerEmail &&
-      chatPrefs.meta.emailCaptureEnabled
-      ? false
-      : true;
-  };
-
   const getSession = (): ChatSessionPaylodObj => {
     let chatId = getSessionStoragePrefs(OPENED_CHAT);
     if (!chatId || chatId == "new") {
@@ -177,9 +169,7 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const [session, setSession] = useState<ChatSessionPaylodObj>(getSession());
-  const [emailCaptured, setEmailCaptured] = useState<boolean>(
-    isEmailCaptured()
-  );
+
   const [matchedBotPrefs, setMatchedBotPrefs] = useState<
     AIBotPrefPayloadType | undefined
   >(undefined);
@@ -440,7 +430,6 @@ const Conversation = (props: ConversationProps) => {
           newNession.messageList = session.messageList;
           updateAndOpenSession(newNession);
           setSession(newNession);
-          setEmailCaptured(true);
           setSessionStoragePrefs(OPENED_CHAT, newNession.id);
         })
         .catch(() => {});
@@ -485,7 +474,6 @@ const Conversation = (props: ConversationProps) => {
       let newNession = response.data as ChatSessionPaylodObj;
       updateAndOpenSession(newNession);
       setSession(newNession);
-      setEmailCaptured(true);
       setSessionStoragePrefs(OPENED_CHAT, newNession.id);
       // } else {
       //   updateMessageList(response.data);
@@ -614,16 +602,13 @@ const Conversation = (props: ConversationProps) => {
       session.subject = data.bodyText;
       if (customerProfile && customerProfile.email) {
         session.customerEmail = customerProfile.email;
-        setEmailCaptured((emailCaptured) => true);
       }
       if (customerProfile && customerProfile.name)
         session.customerName = customerProfile.name;
       const identifiers = getIdentifiersData();
-      if (identifiers && identifiers.name)
-        session.customerName = identifiers.name;
-      if (identifiers && identifiers.email) {
-        session.customerEmail = identifiers.email;
-        setEmailCaptured((emailCaptured) => true);
+      if (identifiers) {
+        if (identifiers.name) session.customerName = identifiers.name;
+        if (identifiers.email) session.customerEmail = identifiers.email;
       }
       session.identifiers = identifiers;
       session.meta = {
@@ -637,14 +622,6 @@ const Conversation = (props: ConversationProps) => {
       data.ticketId = session?.id + "";
       pushMessage(event, session);
     }
-
-    if (
-      newChat &&
-      !emailCaptured &&
-      !session.customerEmail &&
-      chatPrefs.meta.emailCaptureEnforcement == "required"
-    )
-      return;
 
     submitSessionEvent(url, newChat ? session : event, (response: any) => {
       if (newChat) {
