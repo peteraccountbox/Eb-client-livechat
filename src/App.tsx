@@ -743,9 +743,8 @@ const App: React.FunctionComponent = () => {
 
     const mainColor = chatPrefs && chatPrefs.meta.decoration.mainColor;
     const gradientColor = chatPrefs && chatPrefs.meta.decoration.gradientColor;
-    const offlineColor =
-      chatPrefs &&
-      !chatPrefs.meta.decoration.useMainColorOutsideBusinessHour &&
+    const offlineColor = chatPrefs && agentsPrefs;
+    !chatPrefs.meta.decoration.useMainColorOutsideBusinessHour &&
       !isUserBusinessHour(chatPrefs, agentsPrefs);
 
     return {
@@ -769,6 +768,7 @@ const App: React.FunctionComponent = () => {
   if (
     prefsFetched &&
     chatPrefs &&
+    agentsPrefs?.length > 0 &&
     !(
       chatPrefs.meta.hideOnNonBusiness &&
       !isUserBusinessHour(chatPrefs, agentsPrefs)

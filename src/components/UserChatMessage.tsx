@@ -1,15 +1,9 @@
 import React, { FC, useContext, useEffect } from "react";
 import { AppContext } from "../appContext";
-import {
-  ChatMessagePayloadObj,
-  ChatSessionPaylodObj,
-  EventPayloadObj,
-  MessageByTypeEnum,
-} from "../Models";
+import { EventPayloadObj } from "../Models";
 import ChatMessage from "./ChatMessage";
 import { getCustomerProfile } from "../globals";
 import { isUserBusinessHour } from "../BusinessHours";
-// import TimeAgo from 'react-timeago';
 
 export interface UserChatMessagePropsType {
   message: EventPayloadObj;
