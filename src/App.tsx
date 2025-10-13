@@ -769,13 +769,13 @@ const App: React.FunctionComponent = () => {
         ? "#959ba8"
         : mainColor
         ? chatPrefs.meta.decoration.mainColor
-        : "#345BD7",
+        : "#000000",
       ...(offlineColor
         ? { "--themeColor2": "#959ba8" }
         : {
             "--themeColor2": gradientColor
               ? chatPrefs.meta.decoration.gradientColor
-              : "#9f5050",
+              : "#000000",
           }),
     };
   }, [chatPrefs, agentsPrefs]);

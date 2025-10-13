@@ -14,11 +14,11 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
       "--themeColor":
         chatPrefs && chatPrefs.meta.decoration.mainColor
           ? chatPrefs.meta.decoration.mainColor
-          : "#345BD7",
+          : "#000000",
       "--themeColor2":
         chatPrefs && chatPrefs.meta.decoration.gradientColor
           ? chatPrefs.meta.decoration.gradientColor
-          : "#9f5050",
+          : "#000000",
       position: "inherit",
       opacity: "inherit",
       transform: "none",
