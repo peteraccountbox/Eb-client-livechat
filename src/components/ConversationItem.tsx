@@ -73,7 +73,9 @@ const ConversationItem: FC<ConversationItemPropsType> = (props) => {
         <></>
       )}
 
-      {from === MessageByTypeEnum.SYSTEM && props.message.source == "SYSTEM" ? (
+      {from === MessageByTypeEnum.SYSTEM &&
+      (props.message.source == "SYSTEM" ||
+        props.message.source == "DASHBOARD") ? (
         <Notice message={props.message.message} />
       ) : (
         <></>
