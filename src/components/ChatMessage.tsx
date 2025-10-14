@@ -92,6 +92,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
 
   return (
     <Tippy
+      appendTo="parent"
       content={
         props.message.createdTime && (
           <TimeAgo time={props.message.createdTime} />

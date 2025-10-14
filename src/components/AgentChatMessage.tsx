@@ -45,11 +45,12 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
 
         <div className="chat__messages-agent-info chat__messages-agent-item">
           <div className="chat__messages-agent">
-            <div className="chat__messages-agent-avatar">
-              <Tippy
-                content={agent?.name}
-                disabled={agent?.name ? false : true}
-              >
+            <Tippy
+              appendTo="parent"
+              content={agent?.name}
+              disabled={agent?.name ? false : true}
+            >
+              <div className="chat__messages-agent-avatar">
                 <img
                   src={
                     agent && agent?.profile_image_url
@@ -58,8 +59,8 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
                   }
                   alt={agent && agent.name ? agent.name : "Agent"}
                 />
-              </Tippy>
-            </div>
+              </div>
+            </Tippy>
 
             <ul className="chat__messages-list">
               <li className="chat__messages-list-item">
