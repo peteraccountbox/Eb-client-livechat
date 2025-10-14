@@ -47,6 +47,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   // };
 
   const ifAnImage = (url: string) => {
+    return false;
     return [
       ".jpg",
       ".jpeg",
