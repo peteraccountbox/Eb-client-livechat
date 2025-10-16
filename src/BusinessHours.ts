@@ -25,7 +25,7 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
   // if (liveChatAvailability == "liveChat") {
   //   return agentsPrefs.some((agentPref) => (agentPref.availability && agentPref.availability == "ONLINE"));
   // }
-  // if (liveChatAvailability == "liveChatBusiness" || liveChatAvailability == "liveChat") {
+  if (liveChatAvailability == "liveChatBusiness") {
 
     try {
       if(chatprefs.meta.disableCustomBusinessHours)
@@ -66,9 +66,9 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
 
     }
 
-    // return true;
-  // }
-  // if (liveChatAvailability == "liveChatOnline") 
-  //   return true;
+    return true;
+  }
+  if (liveChatAvailability == "liveChatOnline") 
+    return true;
   return false;
 };
