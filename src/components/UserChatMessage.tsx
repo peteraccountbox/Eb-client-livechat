@@ -103,12 +103,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
               updateMessage={() => {}}
             />
           </li>
-          {!props.message.id &&
-            props.message.tempId &&
-            (props.message.ticketId ||
-              (customerProfile && customerProfile.email)) && (
-              <div>Sending ...</div>
-            )}
+          {!props.message.id && props.message.tempId && <div>Sending ...</div>}
         </ul>
 
         {!isUserBusinessHour(chatPrefs, agentsPrefs) &&

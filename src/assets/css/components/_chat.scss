@@ -2312,8 +2312,26 @@
 	overflow-y: auto;
 	display: flex;
 	flex-shrink: 0;
+	column-gap: 8px;
+	row-gap: 4px;
 	flex-wrap: wrap;
 	overflow-x: hidden;
+
+	&::-webkit-scrollbar {
+		width: 7px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: $scroll-primary-color;
+		border-radius: 10px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: $scroll-secondar-color;
+		border-radius: 10px;
+	}
+
+	gap: 6px;
 
 	.btn {
 		transition-property: all;
@@ -2324,8 +2342,8 @@
 		color: $color-primary;
 		padding-top: 0.125rem;
 		padding-bottom: 0.125rem;
-		padding-left: 0.5rem;
-		padding-right: 0.5rem;
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
 		border-radius: 9999px;
 		border: 1px solid $color-primary;
 		background-color: $color-white;

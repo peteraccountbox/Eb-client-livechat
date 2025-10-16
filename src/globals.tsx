@@ -94,6 +94,8 @@ export const BOT_FETCH_URL_PATH: string = "";
 export const CONVERSATIONS_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/get-chat-conversations/" + VISITOR_UUID;
 
+export const GET_AIBOT_PATH = REQUEST_PREFIX_PATH + "/get-aibot";
+
 export const CHAT_FLOWS_FETCH_URL_PATH = REQUEST_PREFIX_PATH + "/chat-flows/";
 
 export const START_FLOW_URL_PATH = REQUEST_PREFIX_PATH + "/flow/start";
@@ -126,6 +128,8 @@ export const CUSTOMER = "customer";
 
 export const OPENED_CHAT = "opened-chat";
 
+export const AIBOT_DETAILS = "aibot-details";
+
 export const OPENED_FLOW = "opened-flow";
 
 export const TRACK_MANAGE = "track-manage";
@@ -154,8 +158,6 @@ export const DEFAULT_AGENT_PROFILE_PIC =
   "https://files.reacho.com/images/app-images/profile-1.png";
 
 export const IS_NEW_SESSION: boolean = (function () {
-  // console.log("Checkingup the session");
-
   let isNew = getSessionStoragePrefs("chat-session-loaded") ? false : true;
   if (isNew) {
     setSessionStoragePrefs("chat-session-loaded", true, 7);

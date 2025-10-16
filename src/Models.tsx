@@ -126,6 +126,7 @@ export interface Decoration {
 export type ChatPrefsPayloadType = {
   id: string;
   meta: ChatChannelMeta;
+  aiAgentId?: string;
   flows: ChatFlowsPayloadObj[];
   name: string;
   tenantId: string;
@@ -160,6 +161,34 @@ export type AIBotPrefPayloadType = {
     welcomeMessage: string;
     placeHolderText: string;
   };
+};
+
+export type AIBotPayloadType = {
+  id?: string; // ObjectId as string
+  name?: string;
+  description?: string;
+  role?: string;
+  indexName?: string;
+  position?: number;
+
+  settings?: Record<string, any>; // Document equivalent
+  rules?: Record<string, any>[];
+  or_rules?: Record<string, any>[];
+  botStats?: Record<string, any>;
+  botPrompts?: AIBotPromptsPayloadType[];
+
+  syncKB?: boolean;
+  syncKBIds?: string[];
+  isEnabled?: boolean;
+
+  lastUpdatedTime?: number;
+  createdTime?: number;
+  ownerID?: number;
+  namespace?: number;
+
+  createAPIResponse?: string;
+  developmentMode?: boolean;
+  userEmail?: string;
 };
 
 export type WebActionType = {
@@ -261,6 +290,9 @@ export type ChatSessionPaylodObj = {
   lastAgentMessageAt?: string;
   lastCustomerMessageAt?: string;
   formData?: string;
+  lastConnectionWith?: ChatSessionConnectedWithEnum;
+  initialConnectionWith?: ChatSessionConnectedWithEnum;
+  aiAgentId?: string;
 };
 
 export type BotDetails = {
@@ -282,7 +314,7 @@ export enum MessageByTypeEnum {
 
 export enum ChatSessionConnectedWithEnum {
   AGENT = "AGENT",
-  GPT = "GPT",
+  AI_AGENT = "AI_AGENT",
 }
 
 export type AttachmentType = {
