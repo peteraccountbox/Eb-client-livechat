@@ -80,11 +80,7 @@ export interface ChatChannelMeta {
   hideOnMobile: boolean;
   hideOnOutsideBusinessHours: boolean;
   decoration: Decoration;
-  liveChatAvailability:
-    | "liveChatBusiness"
-    | "liveChat"
-    | "liveChatOffline"
-    | "liveChatOnline";
+  liveChatAvailability: "ONLINE_ONLY_ON_BUSINESS_HOURS" | "OFFLINE" | "ONLINE";
   storeId: string;
   chatMessageOfflineStatusMessage?: string;
   chatMessageOfflineStatusMessageEnabled?: boolean;
@@ -307,7 +303,7 @@ export type BotDetails = {
 
 export enum MessageByTypeEnum {
   AGENT = "AGENT",
-  GPT = "GPT",
+  AI_AGENT = "AI_AGENT",
   CUSTOMER = "CUSTOMER",
   SYSTEM = "SYSTEM",
 }
@@ -328,6 +324,7 @@ export type ChatMessagePayloadObj = {
   id?: string;
   ticketId?: string;
   from: MessageByTypeEnum;
+  aiInputMessage?: string;
   fromName: string;
   fromEmail: string;
   bodyHTML: string;
