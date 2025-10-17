@@ -20,7 +20,13 @@ const CollectFormData: React.FC<InteractiveNodeProps> = ({
   ) => {
     let results = formFields.map((eachField: ChatFromFieldDataPayLoad) => {
       if (eachField === field) {
-        if (eachField.type === "multicheckbox") {
+        if (eachField.type === "checkbox") {
+          if (!eachField.valueArr) eachField.valueArr = [];
+          if (!value && eachField.valueArr.length == 1)
+            eachField.valueArr.splice(0, 1);
+          else eachField.valueArr.push(value);
+          eachField.value = eachField.valueArr;
+        } else if (eachField.type === "multicheckbox") {
           if (!eachField.valueArr) eachField.valueArr = [];
           if (eachField.valueArr.includes(value)) {
             const index = eachField.valueArr.indexOf(value);
@@ -58,7 +64,7 @@ const CollectFormData: React.FC<InteractiveNodeProps> = ({
           !(field.field_type == "SYSTEM" && field.name == "message")
             ? storedFormData[fieldClone.name]
             : "";
-        if (fieldClone.type == "multicheckbox")
+        if (fieldClone.type == "multicheckbox" || fieldClone.type == "checkbox")
           fieldClone.valueArr = storedFormData[fieldClone.name]
             ? Array.from(storedFormData[fieldClone.name])
             : [];

@@ -26,7 +26,13 @@ const ChatForm: FC<ChatFormPropsType> = (props) => {
   ) => {
     let results = formFields.map((eachField: ChatFromFieldDataPayLoad) => {
       if (eachField === field) {
-        if (eachField.type === "multicheckbox") {
+        if (eachField.type === "checkbox") {
+          if (!eachField.valueArr) eachField.valueArr = [];
+          if (!value && eachField.valueArr.length == 1)
+            eachField.valueArr.splice(0, 1);
+          else eachField.valueArr.push(value);
+          eachField.value = eachField.valueArr;
+        } else if (eachField.type === "multicheckbox") {
           if (!eachField.valueArr) eachField.valueArr = [];
           if (eachField.valueArr.includes(value)) {
             const index = eachField.valueArr.indexOf(value);

@@ -28,7 +28,7 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
   if (liveChatAvailability == "liveChatBusiness") {
 
     try {
-      if(chatprefs.meta.disableCustomBusinessHours)
+      if(chatprefs.meta.considerUsersBusinessHours)
       return agentsPrefs.some((agentPref: AgentPrefsPayloadType) => {
         const timezone = agentPref.timezone;
         const now = moment.tz(timezone);

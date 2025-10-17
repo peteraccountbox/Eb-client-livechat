@@ -292,7 +292,12 @@ export function isValidTicketField(field: ChatFromFieldDataPayLoad) {
 }
 
 export function isValidField(field: ChatFromFieldDataPayLoad) {
-  if (field.required && (!field.value || field.value.length === 0)) {
+  if (
+    field.required &&
+    (!field.value || field.value.length === 0) &&
+    field.type !== "checkbox" &&
+    field.type !== "multicheckbox"
+  ) {
     field.is_valid = false;
     field.error = "This field is required";
     return field;

@@ -98,15 +98,18 @@ const FormComponent: FC<FormComponentPropsType> = (props) => {
                               id={field.name}
                               required={field.required}
                               value={field.value}
-                              checked={field.value == "true" ? true : false}
+                              checked={
+                                field.valueArr?.length == 1 ? true : false
+                              }
                               className="chat__form-check-input"
                               onChange={(e) => {
+                                // handleFieldValueChange(e.target.checked + '', field)
                                 if (e.target.checked)
                                   handleFieldValueChange(
                                     e.target.checked + "",
                                     field
                                   );
-                                else handleFieldValueChange("false", field);
+                                else handleFieldValueChange("", field);
                               }}
                             />
                             <label

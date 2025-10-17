@@ -95,7 +95,7 @@ export interface ChatChannelMeta {
   fields: ChatFromFieldDataPayLoad[];
   title: string;
   btnText: string;
-  disableCustomBusinessHours: ConstrainBooleanParameters;
+  considerUsersBusinessHours: ConstrainBooleanParameters;
   timezone: string;
   businessHours: BusinessHour[];
   hideOnNonBusiness: boolean;
