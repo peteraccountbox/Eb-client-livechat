@@ -244,7 +244,20 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
             case "TEXT_AND_FILE":
               return (
                 <>
-                  <div className="inbox-attachments inbox-attachments-links">
+                  <span
+                    className="actual"
+                    dangerouslySetInnerHTML={{
+                      __html: linkifyHtml(
+                        convertEmojis(props.message.message?.bodyText),
+                        { target: "_blank" }
+                      ),
+                    }}
+                  ></span>
+
+                  <div
+                    className="inbox-attachments inbox-attachments-links"
+                    style={{ marginTop: "8px" }}
+                  >
                     {attachments &&
                       attachments.length &&
                       attachments.map((attachment: any) => {
@@ -275,22 +288,24 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                               target="_blank"
                               rel="noreferrer"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                aria-hidden="true"
-                                data-slot="icon"
-                                className="attach-icon"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
-                                ></path>
-                              </svg>
+                              <div>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke-width="1.5"
+                                  stroke="currentColor"
+                                  aria-hidden="true"
+                                  data-slot="icon"
+                                  className="attach-icon"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
+                                  ></path>
+                                </svg>
+                              </div>
                               <span>
                                 {attachment.fileName || attachment.name}
                               </span>
@@ -299,15 +314,6 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                         );
                       })}
                   </div>
-                  <span
-                    className="actual"
-                    dangerouslySetInnerHTML={{
-                      __html: linkifyHtml(
-                        convertEmojis(props.message.message?.bodyText),
-                        { target: "_blank" }
-                      ),
-                    }}
-                  ></span>
 
                   {props.message.from === MessageByTypeEnum.AI_AGENT &&
                   props.message.sources &&
@@ -435,22 +441,24 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                                 target="_blank"
                                 rel="noreferrer"
                               >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke-width="1.5"
-                                  stroke="currentColor"
-                                  aria-hidden="true"
-                                  data-slot="icon"
-                                  className="attach-icon"
-                                >
-                                  <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
-                                  ></path>
-                                </svg>
+                                <div>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    aria-hidden="true"
+                                    data-slot="icon"
+                                    className="attach-icon"
+                                  >
+                                    <path
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
+                                    ></path>
+                                  </svg>
+                                </div>
                                 <span>
                                   {attachment.fileName || attachment.name}
                                 </span>

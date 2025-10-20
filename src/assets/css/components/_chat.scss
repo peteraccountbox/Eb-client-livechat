@@ -926,9 +926,9 @@
 								color: $color-white;
 								position: relative;
 
-								a {
-									color: $color-white;
-								}
+								// a {
+								// 	color: $color-white;
+								// }
 
 								.file-info,
 								.file-info a,
@@ -5494,14 +5494,17 @@ input[type="checkbox"] {
     line-height: 1rem;
     font-weight: 500;
 	span {
+		font-size: 13px;
 		max-width: 20rem;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
 	.attach-icon {
-		width: 0.875rem;
-		height: 0.875rem;
+		// width: 0.875rem;
+		// height: 0.875rem;
+		width: 14px;
+		height: 14px;
 		top: 1px;
 		position: relative;
 	}
