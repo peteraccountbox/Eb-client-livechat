@@ -305,6 +305,7 @@ export enum MessageByTypeEnum {
   AI_AGENT = "AI_AGENT",
   CUSTOMER = "CUSTOMER",
   SYSTEM = "SYSTEM",
+  GPT = "GPT"
 }
 
 export enum ChatSessionConnectedWithEnum {
