@@ -29,7 +29,6 @@ import {
   USER_PREFS_FETCH_URL_PATH,
   TRACK_MANAGE,
   USERS_FETCH_URL,
-  getIntegrationSource,
 } from "./globals";
 import {
   ActiveSessionObjType,
@@ -258,6 +257,7 @@ const App: React.FunctionComponent = () => {
         messageSession.lastMessage = message.message.message.bodyText;
         messageSession.lastAgentMessageAt = message.message.createdTime;
         messageSession.lastMessageAt = message.message.createdTime;
+        messageSession.lastConnectionWith = message.ticket.lastConnectionWith;
         pushMessage(message.message, messageSession);
       }
       if (chatId && chatId == message.ticket.id) {
@@ -807,9 +807,7 @@ const App: React.FunctionComponent = () => {
                   data-target="widget"
                 >
                   <div
-                    className={`chat__main ${
-                      getIntegrationSource() + "-SOURCE"
-                    }`}
+                    className={`chat__main `}
                     style={{
                       minWidth: `${
                         promtWidth == PromtWidth.Large ? "700px" : "auto"

@@ -59,8 +59,6 @@ export const KB_ARTICLE_GET_PATH: string = "jsapi/rest/help-center/article";
 export const AGENTS_FETCH_URL_PATH: string =
   "/user/get-users?tid=5943959859757056";
 
-export const CONNECT_TO_AGENT_URL_PATH: string =
-  "api/support/jsclient/widget/connect-to-agent/";
 export const TICKETS_FETCH_URL: string =
   "jsapi/rest/get-tickets/" + VISITOR_UUID;
 
@@ -107,6 +105,9 @@ export const EXECUTE_FLOW_NODE_URL_PATH = REQUEST_PREFIX_PATH + "/flow/execute";
 
 export const CONVERSATION_MESSAGE_FETCH_URL_PATH =
   REQUEST_PREFIX_PATH + "/get-chat-messages";
+
+export const CONNECT_TO_AGENT_URL_PATH =
+  REQUEST_PREFIX_PATH + "/connect-to-agent/";
 
 export const CHANNEL_PREFS_FETCH_URL_PATH =
   "http://localhost:8787/channel/get-active-channel";
@@ -157,6 +158,9 @@ export const HC_ACTIVE_COMPONENT = "hc_active_component";
 export const DEFAULT_AGENT_PROFILE_PIC =
   "https://files.reacho.com/images/app-images/profile-1.png";
 
+export const DEFAULT_BOT_ICON =
+  "https://d2p078bqz5urf7.cloudfront.net/cloud/assets/img/chatbot-default-icon.png";
+
 export const IS_NEW_SESSION: boolean = (function () {
   let isNew = getSessionStoragePrefs("chat-session-loaded") ? false : true;
   if (isNew) {
@@ -178,13 +182,6 @@ export const FooterTabs = [
   },
 ];
 
-export const getCustomerProfile = () => {
-  try {
-    return (window as any).parent.reachoJSClient.getCustomerProfile();
-  } catch (e) {}
-  return undefined;
-};
-
 export const getClientInfo = () => {
   try {
     return {
@@ -205,11 +202,4 @@ export const getClientLocationInfo = () => {
   } catch (e) {
     return undefined;
   }
-};
-
-export const getIntegrationSource = () => {
-  try {
-    return (window as any).parent.reachoJSClient.getIntegrationSource();
-  } catch (e) {}
-  return undefined;
 };

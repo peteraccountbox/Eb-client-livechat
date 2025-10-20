@@ -61,7 +61,6 @@ interface AppContextPayload {
   createSessionData: any;
 }
 
-
 export const AppContext = createContext({
   agentsPrefs: [] as AgentPrefsPayloadType[],
   setAgentsPrefs: (prefs: AgentPrefsPayloadType[]) => {},
@@ -84,4 +83,3 @@ export const AppContext = createContext({
     force: false as boolean,
   },
 } as AppContextPayload);
-

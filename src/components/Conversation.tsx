@@ -8,7 +8,6 @@ import {
   ChatFromFieldDataPayLoad,
   ChatMessagePayloadObj,
   ChatSessionPaylodObj,
-  ActiveSessionObjType,
   MessageByTypeEnum,
   MessageFormatType,
   JSONObjectType,
@@ -17,10 +16,10 @@ import {
   AIBotPromptsPayloadType,
   AIBotPromptActionEnum,
   AIBotPrefPayloadType,
-  BotDetails,
   EventPayloadObj,
   AttachmentType,
   AIBotPayloadType,
+  AgentPaylodObj,
 } from "../Models";
 import {
   getBrowserInfo,
@@ -43,7 +42,6 @@ import {
   GET_AIBOT_PATH,
   getClientInfo,
   getClientLocationInfo,
-  getCustomerProfile,
   MESSAGE_URL_PATH,
   NEW_SESSION_URL_PATH,
   OPENED_CHAT,
@@ -72,6 +70,7 @@ import eventBus from "../eventBus";
 import InteractiveFlowItem from "./InteractiveFlowItem";
 import { isUserBusinessHour } from "../BusinessHours";
 import Loader from "./Loader";
+import { set } from "date-fns";
 
 export interface ConversationProps {
   showChatsList(): void;
@@ -81,9 +80,9 @@ export interface ConversationProps {
 
 const Conversation = (props: ConversationProps) => {
   const parentContext = useContext(AppContext);
-  const { chatPrefs, sessions, setSessions, agentsPrefs, createSessionData } =
+  const { chatPrefs, sessions, setSessions, createSessionData, agents } =
     parentContext;
-  const customerProfile = getCustomerProfile();
+  const { botPrefs } = chatPrefs;
 
   const text = useRef<HTMLTextAreaElement>(null);
   const [formFields, setFormFields] = useState<ChatFromFieldDataPayLoad[]>([]);
@@ -92,9 +91,6 @@ const Conversation = (props: ConversationProps) => {
   const [files, setFiles] = useState<any>([]);
   const [typingTimer, setTypingTimer] = useState<any>();
   const [saving, setSaving] = useState<boolean>(false);
-  useEffect(() => {
-    if (!session?.messageList) setSession(getSession());
-  }, [sessions]);
 
   const getEmptySession = () => {
     let session = {} as ChatSessionPaylodObj;
@@ -112,19 +108,26 @@ const Conversation = (props: ConversationProps) => {
     //   } as ChatMessagePaylodObj);
     // }
 
-    // if (
-    //   chatPrefs.matchedBotPrefs &&
-    //   chatPrefs.matchedBotPrefs.id &&
-    //   chatPrefs.matchedBotPrefs.settings.welcomeMessage
-    // ) {
-    //   session.messageList.push({
-    //     from: MessageByTypeEnum.GPT,
-    //     bodyText: chatPrefs.matchedBotPrefs.settings.welcomeMessage,
-    //     format: MessageFormatType.TEXT,
-    //     session_id: undefined,
-    //     created_time: new Date().getTime() / 1000,
-    //   });
-    // }
+    if (chatPrefs.aiAgentId && botPrefs?.settings?.welcomeMessage) {
+      let msg: ChatMessagePayloadObj = {
+        bodyText: botPrefs?.settings?.welcomeMessage,
+        format: MessageFormatType.TEXT,
+        created_time: new Date().getTime(),
+      } as ChatMessagePayloadObj;
+
+      session.messageList.push({
+        from: MessageByTypeEnum.AI_AGENT,
+        message: msg,
+        eventType: "MESSAGE",
+        source: "SYSTEM",
+        visibility: "PUBLIC",
+      });
+      session.aiAgentId = chatPrefs.aiAgentId;
+      session.lastConnectionWith = ChatSessionConnectedWithEnum.AI_AGENT;
+    } else if (!chatPrefs.aiAgentId) {
+      session.lastConnectionWith = ChatSessionConnectedWithEnum.AGENT;
+    }
+
     if (createSessionData.force) {
       session.messageList = createSessionData.messageList;
       session.channelId = createSessionData.sessionDetails.channelId;
@@ -171,19 +174,15 @@ const Conversation = (props: ConversationProps) => {
 
   const [session, setSession] = useState<ChatSessionPaylodObj>(getSession());
 
-  const [matchedBotPrefs, setMatchedBotPrefs] = useState<
-    AIBotPrefPayloadType | undefined
-  >(undefined);
-
-  const [aiBotDetails, setAiBotDetails] = useState<
-    AIBotPayloadType | undefined
-  >(undefined);
-
-  const [fetchingBotDetails, setFetchingBotDetails] = useState<boolean>(false);
-
   useEffect(() => {
     setScrollBottom();
   }, [session?.messageList]);
+
+  useEffect(() => {
+    if (!session?.messageList) setSession(getSession());
+    else if (session.id)
+      setSession(sessions.find((s) => s.id == session.id) || session);
+  }, [sessions]);
 
   useEffect(() => {
     let chatId = getSessionStoragePrefs(OPENED_CHAT);
@@ -191,52 +190,12 @@ const Conversation = (props: ConversationProps) => {
       (!session ||
         !session?.messageList ||
         session?.messageList.length === 0) &&
-      (!chatId || chatId == "new")
-    ) {
-      if (shouldShowForm() && !chatPrefs?.aiAgentId) {
-        setShowChatForm(true);
-      } else if (chatPrefs?.aiAgentId) {
-        setFetchingBotDetails(true);
-        getReq(GET_AIBOT_PATH + "/" + chatPrefs.aiAgentId, {})
-          .then((response) => {
-            let aiBotDetails = response.data as AIBotPayloadType;
-            setLocalStoragePrefs(AIBOT_DETAILS, JSON.stringify(aiBotDetails));
-            setAiBotDetails(aiBotDetails);
-            setFetchingBotDetails(false);
-          })
-          .catch(() => {
-            setFetchingBotDetails(false);
-          });
-      }
-    } else if (
-      session.aiAgentId &&
-      session.lastConnectionWith == ChatSessionConnectedWithEnum.AI_AGENT
-    ) {
-      let aiBotDetails = getLocalStoragePrefs(AIBOT_DETAILS);
-      if (aiBotDetails) {
-        setAiBotDetails(JSON.parse(aiBotDetails) as AIBotPayloadType);
-      } else {
-        getReq(GET_AIBOT_PATH + "/" + session.aiAgentId, {}).then(
-          (response) => {
-            let aiBotDetails = response.data as AIBotPayloadType;
-            setLocalStoragePrefs(AIBOT_DETAILS, JSON.stringify(aiBotDetails));
-            setAiBotDetails(aiBotDetails);
-          }
-        );
-      }
-    }
+      (!chatId || chatId == "new") &&
+      shouldShowForm() &&
+      !chatPrefs?.aiAgentId
+    )
+      setShowChatForm(true);
 
-    // let matchedBot = getMatchedBotPrefs();
-    // if (matchedBot) {
-    //   setMatchedBotPrefs(matchedBot);
-    // }
-
-    // if (
-    //   !session.id &&
-    //   !session.messageList.length &&
-    //   !isUserBusinessHour(chatPrefs, agentsPrefs)
-    // )
-    //   setShowChatForm(true);
     if (session.id && !session.messageList) getMessageList();
     if (session.id)
       getReq(UPDATE_READ_URL_PATH + "/" + session.id, {}).then((response) => {
@@ -244,7 +203,7 @@ const Conversation = (props: ConversationProps) => {
         setSessions([...sessions]);
         eventBus.emit("message_read");
       });
-  }, []);
+  }, [session]);
 
   const getMessageList = async () => {
     if (!session.id) return;
@@ -359,6 +318,18 @@ const Conversation = (props: ConversationProps) => {
     });
   };
 
+  const disableType = () => {
+    return session.lastConnectionWith ==
+      ChatSessionConnectedWithEnum.AI_AGENT &&
+      session.messageList &&
+      (session.messageList[session.messageList.length - 1]?.message
+        .progressingMode ||
+        (session.messageList[session.messageList.length - 1]?.tempId &&
+          !session.messageList[session.messageList.length - 1]?.id))
+      ? true
+      : false;
+  };
+
   const updateMessageList = (message: EventPayloadObj) => {
     if (!message.ticketId) {
       return;
@@ -375,10 +346,13 @@ const Conversation = (props: ConversationProps) => {
         return eachmessage;
       }
     );
-    session.lastMessage = message.message.bodyText;
-    session.lastMessageAt = message.createdTime;
+    let lastMessage = session.messageList.at(-1);
+    if (lastMessage) {
+      session.lastMessage = lastMessage.message.bodyText;
+      session.lastMessageAt = lastMessage.createdTime;
+    }
     session.lastCustomerMessageAt = message.createdTime;
-
+    setSession({ ...session });
     setSessions([...sessions]);
   };
 
@@ -432,6 +406,7 @@ const Conversation = (props: ConversationProps) => {
     if (!formData) formData = {};
 
     setShowChatForm(false);
+    setTypeText("");
 
     setLocalStoragePrefs(FORM_DATA, JSON.stringify(formData));
     setSaving(true);
@@ -604,6 +579,8 @@ const Conversation = (props: ConversationProps) => {
       tempId: uuidv4(),
     };
 
+    let updatedSession: any;
+
     // Make temp push
     if (newChat) {
       session.channelId = CHANNEL_ID;
@@ -612,11 +589,6 @@ const Conversation = (props: ConversationProps) => {
       session.createdSource = "WEBSITE";
       session.createdBy = MessageByTypeEnum.CUSTOMER;
       session.subject = data.bodyText;
-      if (customerProfile && customerProfile.email) {
-        session.customerEmail = customerProfile.email;
-      }
-      if (customerProfile && customerProfile.name)
-        session.customerName = customerProfile.name;
       const identifiers = getIdentifiersData();
       if (identifiers) {
         if (identifiers.name) session.customerName = identifiers.name;
@@ -629,11 +601,13 @@ const Conversation = (props: ConversationProps) => {
         locationInfo: getClientLocationInfo(),
         clientInfo: getClientInfo(),
       };
-      pushMessage(event, session);
+      updatedSession = pushMessage(event, session);
     } else {
       data.ticketId = session?.id + "";
-      pushMessage(event, session);
+      updatedSession = pushMessage(event, session);
     }
+
+    setSession({ ...updatedSession });
 
     submitSessionEvent(url, newChat ? session : event, (response: any) => {
       if (newChat) {
@@ -687,6 +661,18 @@ const Conversation = (props: ConversationProps) => {
   /**
    * Send typed message
    */
+
+  const connectToAgent = () => {
+    var url = CONNECT_TO_AGENT_URL_PATH + session.id;
+
+    submitSessionEvent(url, session, (response: any) => {
+      // Get session
+      let newSession = response.data as ChatSessionPaylodObj;
+      session.lastConnectionWith = newSession.lastConnectionWith;
+      setSession({ ...session });
+    });
+  };
+
   const sendMessage = (check: boolean) => {
     if ((!session || !session.id) && shouldShowForm() && !check) {
       setShowChatForm(true);
@@ -719,27 +705,46 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const getHeaderIcon = () => {
-    const agent = getOperatorFromSession(session, parentContext.agents);
-    if (agent && agent?.profile_image_url) return agent?.profile_image_url;
+    const agent: AgentPaylodObj | undefined = agents?.find(
+      (agent) => agent.id == session?.agentId
+    );
+    if (agent) return agent?.profile_image_url || DEFAULT_AGENT_PROFILE_PIC;
+    if (
+      !chatPrefs.aiAgentId ||
+      session.lastConnectionWith == ChatSessionConnectedWithEnum.AGENT
+    )
+      return chatPrefs.meta.decoration.headerPictureUrl;
 
-    if (aiBotDetails) return aiBotDetails.settings?.chatBotIconURL;
-
-    return chatPrefs.meta.decoration.headerPictureUrl;
+    return botPrefs?.settings?.chatBotIconURL;
   };
 
   const getHeaderName = () => {
-    if (aiBotDetails) return aiBotDetails.name;
-    if (chatPrefs.name) return chatPrefs.name;
+    if (
+      !chatPrefs.aiAgentId ||
+      session.lastConnectionWith == ChatSessionConnectedWithEnum.AGENT
+    )
+      return chatPrefs.name;
+    return botPrefs?.name;
   };
 
+  const [clickTimeout, setClickTimeout] = useState<any>(null);
+
   const executeBotPromptAction = (prompt: AIBotPromptsPayloadType) => {
+    if (disableType()) return;
+    if (clickTimeout) return;
+    else {
+      const timeout = setTimeout(() => {
+        setClickTimeout(null);
+      }, 700); // Delay to detect if double-click happens
+      setClickTimeout(timeout);
+    }
     switch (prompt.action) {
       case AIBotPromptActionEnum.CONNECT_TO_AGENT:
-        if (matchedBotPrefs?.settings.showChatFormBeforeConnectToAgent) {
-          setShowChatForm(true);
-          return;
-        }
-
+        // if (aiBotDetails?.settings?.showChatFormBeforeConnectToAgent) {
+        //   setShowChatForm(true);
+        //   return;
+        // }
+        connectToAgent();
         break;
 
       case AIBotPromptActionEnum.MESSAGE:
@@ -747,13 +752,16 @@ const Conversation = (props: ConversationProps) => {
           prompt.message,
           MessageFormatType.TEXT
         );
-        message.from = MessageByTypeEnum.CUSTOMER;
 
-        console.log("in", message);
+        // console.log("in", message);
+        if ((!session || !session.id) && shouldShowForm()) {
+          setTypeText(prompt.message);
+          setShowChatForm(true);
+          return;
+        }
 
-        postMessage(getChatMessage(message.message, undefined));
+        postMessage(message);
         setScrollBottom();
-
         break;
 
       default:
@@ -762,18 +770,32 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const getChatPrompts = () => {
-    if (!aiBotDetails || aiBotDetails.botPrompts?.length == 0) return <></>;
+    if (
+      !chatPrefs.aiAgentId ||
+      !botPrefs ||
+      botPrefs.botPrompts?.length == 0 ||
+      (!botPrefs.botPrompts.find(
+        (prompt) => prompt.action == AIBotPromptActionEnum.MESSAGE
+      ) &&
+        !session.id) ||
+      session.lastConnectionWith == ChatSessionConnectedWithEnum.AGENT
+    )
+      return <></>;
 
     return (
       <div className="chat_prompts_actions">
-        {aiBotDetails.botPrompts?.map((prompt) => (
-          <button
-            className={"btn btn-outline-primary"}
-            onClick={() => executeBotPromptAction(prompt)}
-          >
-            {prompt.label}
-          </button>
-        ))}
+        {botPrefs?.botPrompts?.map((prompt: any) =>
+          session.id || prompt.action == AIBotPromptActionEnum.MESSAGE ? (
+            <button
+              className={"btn btn-outline-primary"}
+              onClick={() => executeBotPromptAction(prompt)}
+            >
+              {prompt.label}
+            </button>
+          ) : (
+            <></>
+          )
+        )}
       </div>
     );
   };
@@ -789,116 +811,73 @@ const Conversation = (props: ConversationProps) => {
 
   return (
     <div className="chat__conversation">
-      {fetchingBotDetails ? (
-        <Loader />
-      ) : (
-        <>
-          <div className="chat__header">
-            <div className="chat__header-action">
-              <div
-                data-trigger="all"
-                className="chat__header-back"
-                onClick={() => goBack()}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  color="currentColor"
-                >
-                  <path
-                    stroke="#fff"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.7"
-                    d="m14 18-6-6 6-6"
-                  ></path>
-                </svg>
+      <div className="chat__header">
+        <div className="chat__header-action">
+          <div
+            data-trigger="all"
+            className="chat__header-back"
+            onClick={() => goBack()}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+              color="currentColor"
+            >
+              <path
+                stroke="#fff"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.7"
+                d="m14 18-6-6 6-6"
+              ></path>
+            </svg>
+          </div>
+          <div className="chat__header-user">
+            {getHeaderIcon() && (
+              <div>
+                <div
+                  className="chat__header-user-img"
+                  style={{
+                    backgroundImage: 'url("' + getHeaderIcon() + '")',
+                  }}
+                ></div>
               </div>
-              <div className="chat__header-user">
-                {getHeaderIcon() && (
-                  <div>
-                    <div
-                      className="chat__header-user-img"
-                      style={{
-                        backgroundImage: 'url("' + getHeaderIcon() + '")',
-                      }}
-                    ></div>
-                  </div>
-                )}
-                <div className="chat__header-user-title">
-                  <h1 className="chat__header-user-name">
-                    {" "}
-                    {getHeaderName()}{" "}
-                  </h1>
-                  {/* <p className="chat__header-user-lastseen">Active 30m ago</p> */}
-                </div>
-              </div>
-            </div>
-
-            <div className="chat__help-end">
-              <CloseWidgetPanel />
+            )}
+            <div className="chat__header-user-title">
+              <h1 className="chat__header-user-name"> {getHeaderName()} </h1>
+              {/* <p className="chat__header-user-lastseen">Active 30m ago</p> */}
             </div>
           </div>
+        </div>
 
-          <div className="chat__content">
-            <div className="chat__messages">
-              <div className="chat__messages-track">
-                {session?.newTicket == false &&
-                  session.messageList &&
-                  session.messageList.length < session.messagesCount && (
-                    <>
-                      <div className="old-chat">
-                        <span
-                          onClick={(e: any) => {
-                            getMessageList();
-                            e.currentTarget.style.display = "none";
-                            if (e.currentTarget.nextElementSibling)
-                              e.currentTarget.nextElementSibling.style.display =
-                                "block";
-                          }}
-                        >
-                          Previous History
-                        </span>
-                        <p style={{ textAlign: "center", display: "none" }}>
-                          <div className="chat__form-loader1">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                          </div>
-                        </p>
-                      </div>
-                    </>
-                  )}
-                {!showChatForm ? (
-                  session?.messageList ? (
-                    session?.messageList?.map(
-                      (message: EventPayloadObj, index: number) => {
-                        return (
-                          <>
-                            {message.eventType == "INTERACTIVE_FLOW_NODE" ? (
-                              <InteractiveFlowItem
-                                execution={message.meta.executionNode}
-                              />
-                            ) : (
-                              <>
-                                <ConversationItem
-                                  message={message}
-                                  session={session}
-                                  nextMessage={session?.messageList[index + 1]}
-                                  updateMessage={updateMessage}
-                                />
-                              </>
-                            )}
-                          </>
-                        );
-                      }
-                    )
-                  ) : (
-                    <p style={{ marginTop: "60px", textAlign: "center" }}>
+        <div className="chat__help-end">
+          <CloseWidgetPanel />
+        </div>
+      </div>
+
+      <div className="chat__content">
+        <div className="chat__messages">
+          <div className="chat__messages-track">
+            {session?.newTicket == false &&
+              session.messageList &&
+              session.messageList.length < session.messagesCount && (
+                <>
+                  <div className="old-chat">
+                    <span
+                      onClick={(e: any) => {
+                        getMessageList();
+                        e.currentTarget.style.display = "none";
+                        if (e.currentTarget.nextElementSibling)
+                          e.currentTarget.nextElementSibling.style.display =
+                            "block";
+                      }}
+                    >
+                      Previous History
+                    </span>
+                    <p style={{ textAlign: "center", display: "none" }}>
                       <div className="chat__form-loader1">
                         <span></span>
                         <span></span>
@@ -906,122 +885,145 @@ const Conversation = (props: ConversationProps) => {
                         <span></span>
                       </div>
                     </p>
-                  )
-                ) : (
-                  <></>
-                )}
-
-                {showChatForm ? (
-                  <ChatForm
-                    closeChatForm={() => {
-                      setShowChatForm(false);
-                    }}
-                    formFields={formFields}
-                    setFormFields={setFormFields}
-                    submitChatForm={submitChatForm}
-                    typeText={typeText}
-                    setTypeText={setTypeText}
-                    saving={saving}
-                  />
-                ) : (
-                  <></>
-                )}
-              </div>
-              <div className="chat__messages-sign hide">
-                <a target="_blank">
-                  We
-                  <img
-                    src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/love-icon.svg"
-                    width="12px"
-                  />
-                  EngageBay
-                </a>
-              </div>
-            </div>
-            {!showChatForm && getChatPrompts()}
-            <div
-              className={`chat__footer ${
-                showChatForm ||
-                (chatPrefs.aiAgentId &&
-                  !aiBotDetails &&
-                  (session.id == "new" ||
-                    !session.id ||
-                    session.lastConnectionWith ==
-                      ChatSessionConnectedWithEnum.AI_AGENT))
-                  ? "hide"
-                  : ""
-              }`}
-            >
-              <div className={`chat__form`}>
-                <textarea
-                  ref={text}
-                  rows={1}
-                  maxLength={5000}
-                  onChange={(e) => setTypeText(e.currentTarget.value)}
-                  onScroll={(e) => handleScroll(e)}
-                  className="chat__input chat__textarea"
-                  value={text?.current?.value}
-                  placeholder={
-                    !aiBotDetails
-                      ? chatPrefs.meta.messagePlaceholder
-                      : aiBotDetails.settings?.placeHolderText
-                  }
-                  contentEditable="true"
-                  onPaste={(e) => {
-                    e.preventDefault();
-                    document.execCommand(
-                      "insertHTML",
-                      false,
-                      e.clipboardData.getData("text/plain")
+                  </div>
+                </>
+              )}
+            {!showChatForm ? (
+              session?.messageList ? (
+                session?.messageList?.map(
+                  (message: EventPayloadObj, index: number) => {
+                    return (
+                      <>
+                        {message.eventType == "INTERACTIVE_FLOW_NODE" ? (
+                          <InteractiveFlowItem
+                            execution={message.meta.executionNode}
+                          />
+                        ) : (
+                          <>
+                            <ConversationItem
+                              message={message}
+                              session={session}
+                              nextMessage={session?.messageList[index + 1]}
+                              updateMessage={updateMessage}
+                            />
+                          </>
+                        )}
+                      </>
                     );
-                  }}
-                  onKeyDown={handleKeyDown}
-                  onInput={(e) => handleKeyPress(e)}
-                  onKeyUp={userTyping}
-                  id="chatMessageEditable"
-                ></textarea>
+                  }
+                )
+              ) : (
+                <p style={{ marginTop: "60px", textAlign: "center" }}>
+                  <div className="chat__form-loader1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </p>
+              )
+            ) : (
+              <></>
+            )}
 
-                <div className="chat__actions">
-                  <Emoji onEmojiSelect={onEmojiSelect} />
+            {showChatForm ? (
+              <ChatForm
+                closeChatForm={() => {
+                  setShowChatForm(false);
+                }}
+                formFields={formFields}
+                setFormFields={setFormFields}
+                submitChatForm={submitChatForm}
+                typeText={typeText}
+                setTypeText={setTypeText}
+                saving={saving}
+              />
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className="chat__messages-sign hide">
+            <a target="_blank">
+              We
+              <img
+                src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/love-icon.svg"
+                width="12px"
+              />
+              EngageBay
+            </a>
+          </div>
+        </div>
+        {!showChatForm && getChatPrompts()}
+        <div className={`chat__footer ${showChatForm ? "hide" : ""}`}>
+          <div className={`chat__form`}>
+            <textarea
+              ref={text}
+              rows={1}
+              maxLength={5000}
+              onChange={(e) => setTypeText(e.currentTarget.value)}
+              onScroll={(e) => handleScroll(e)}
+              className="chat__input chat__textarea"
+              value={text?.current?.value}
+              placeholder={
+                session.lastConnectionWith == ChatSessionConnectedWithEnum.AGENT
+                  ? chatPrefs.meta.messagePlaceholder
+                  : botPrefs?.settings?.placeHolderText
+              }
+              contentEditable="true"
+              onPaste={(e) => {
+                e.preventDefault();
+                document.execCommand(
+                  "insertHTML",
+                  false,
+                  e.clipboardData.getData("text/plain")
+                );
+              }}
+              onKeyDown={handleKeyDown}
+              disabled={disableType()}
+              onInput={(e) => handleKeyPress(e)}
+              onKeyUp={userTyping}
+              id="chatMessageEditable"
+            ></textarea>
 
-                  {session &&
-                  session.lastConnectionWith ===
-                    ChatSessionConnectedWithEnum.AGENT ? (
-                    <FileUpload
-                      setFiles={setFiles}
-                      fileUploadCallback={fileUploadCallback}
-                    />
-                  ) : (
-                    <></>
-                  )}
+            <div className="chat__actions">
+              {!disableType() && <Emoji onEmojiSelect={onEmojiSelect} />}
 
-                  {typeText ? (
-                    <button
-                      className="chat__btn chat_send_btn1 chat_send_btn-icon"
-                      onClick={() => sendMessage(false)}
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                          d="M4.394 14.7L13.75 9.3c1-.577 1-2.02 0-2.598L4.394 1.299a1.5 1.5 0 00-2.25 1.3v3.438l4.059 1.088c.494.132.494.833 0 .966l-4.06 1.087v4.224a1.5 1.5 0 002.25 1.299z"
-                        ></path>
-                      </svg>
-                    </button>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              </div>
+              {session &&
+              session.lastConnectionWith ===
+                ChatSessionConnectedWithEnum.AGENT ? (
+                <FileUpload
+                  setFiles={setFiles}
+                  fileUploadCallback={fileUploadCallback}
+                />
+              ) : (
+                <></>
+              )}
+
+              {typeText ? (
+                <button
+                  className="chat__btn chat_send_btn1 chat_send_btn-icon"
+                  onClick={() => sendMessage(false)}
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M4.394 14.7L13.75 9.3c1-.577 1-2.02 0-2.598L4.394 1.299a1.5 1.5 0 00-2.25 1.3v3.438l4.059 1.088c.494.132.494.833 0 .966l-4.06 1.087v4.224a1.5 1.5 0 002.25 1.299z"
+                    ></path>
+                  </svg>
+                </button>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 };

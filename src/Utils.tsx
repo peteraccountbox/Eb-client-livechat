@@ -8,6 +8,7 @@ import {
   ChatFromFieldDataPayLoad,
   ChatMessagePayloadObj,
   ChatPrefsPayloadType,
+  ChatSessionConnectedWithEnum,
   ChatSessionPaylodObj,
   EventPayloadObj,
   JSONObjectType1,
@@ -225,8 +226,10 @@ export const pushMessage = (
 
   if (event.from == MessageByTypeEnum.AGENT) {
     // Close typing
+    session.lastConnectionWith = ChatSessionConnectedWithEnum.AGENT;
     session.typing = false;
   }
+  return session;
 };
 
 export const getOperatorFromSession = (

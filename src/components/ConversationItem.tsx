@@ -9,6 +9,7 @@ import {
   EventPayloadObj,
   MessageByTypeEnum,
 } from "../Models";
+import GPTChatMessage from "./GPTChatMessage";
 
 export interface ConversationItemPropsType {
   message: EventPayloadObj;
@@ -51,16 +52,14 @@ const ConversationItem: FC<ConversationItemPropsType> = (props) => {
         <></>
       )}
 
-      {from === MessageByTypeEnum.GPT ? (
-        <></>
-      ) : (
-        // <GPTChatMessage
-        //   sessionId={props.session?.id}
-        //   message={props.message.message}
-        //   formatMessageTime={formatMessageTime}
-        //   updateMessage={props.updateMessage}
-        // />
-        <></>
+      {from === MessageByTypeEnum.AI_AGENT && (
+        <GPTChatMessage
+          sessionId={props.session?.id}
+          message={props.message}
+          formatMessageTime={formatMessageTime}
+          updateMessage={props.updateMessage}
+          // executeAiAction={!props.nextMessage ? props.executeAiAction : null}
+        />
       )}
 
       {from === MessageByTypeEnum.CUSTOMER ? (
@@ -73,9 +72,7 @@ const ConversationItem: FC<ConversationItemPropsType> = (props) => {
         <></>
       )}
 
-      {from === MessageByTypeEnum.SYSTEM &&
-      (props.message.source == "SYSTEM" ||
-        props.message.source == "DASHBOARD") ? (
+      {from === MessageByTypeEnum.SYSTEM ? (
         <Notice message={props.message.message} />
       ) : (
         <></>

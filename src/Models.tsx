@@ -129,7 +129,7 @@ export type ChatPrefsPayloadType = {
   // widget: ChatPrefsWidgetType;
   // prechat: ChatPrefsPreChatType;
   systemMessage: ChatPrefsSystemMessageType;
-  botPrefs?: AIBotPrefPayloadType[];
+  botPrefs?: AIBotPrefPayloadType;
   matchedBotPrefs?: AIBotPrefPayloadType;
   isWhiteLabelEnabled?: boolean;
 };
@@ -254,7 +254,6 @@ export type ChatSessionPaylodObj = {
   customerName: string;
   subject: string;
   meta: any;
-  assignedToAgentId?: string;
   lastMessage: string;
 
   messageList: EventPayloadObj[];
@@ -321,6 +320,7 @@ export type AttachmentType = {
 
 export type ChatMessagePayloadObj = {
   [x: string]: any;
+  progressingMode?: boolean;
   id?: string;
   ticketId?: string;
   from: MessageByTypeEnum;
@@ -345,6 +345,7 @@ export type ChatMessagePayloadObj = {
 
 export type EventPayloadObj = {
   [x: string]: any;
+  tempId?: string;
   id?: string;
   ticketId?: any;
   eventType?: string;

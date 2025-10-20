@@ -20,6 +20,11 @@ import { postReq } from "../request";
 import Tippy from "@tippyjs/react";
 import TimeAgo from "./TimeAgo";
 import "tippy.js/dist/tippy.css";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw"; // For allowing raw HTML
+import remarkGfm from "remark-gfm"; // For GitHub-Flavored Markdown (breaks, tables, etc.)theme
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export interface ChatMessagePropsType {
   message: EventPayloadObj;
@@ -32,7 +37,9 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   const attachments = props.message.message.attachments as unknown as [];
 
   const errorStyle = useMemo(() => {
-    return !props.message.id && !props.message.tempId
+    return !props.message.id &&
+      !props.message.tempId &&
+      props.message.from !== MessageByTypeEnum.AI_AGENT
       ? { backgroundColor: "red" }
       : {};
   }, [!props.message.id]);
@@ -108,18 +115,131 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
       >
         {(() => {
           setScrollBottom();
+          if (props.message.message.progressingMode)
+            return (
+              <div>
+                <div className="loading-dots">
+                  {props.message.message?.bodyText}
+
+                  <span>
+                    <i className="loading-dots--dot"></i>
+                    <i className="loading-dots--dot"></i>
+                    <i className="loading-dots--dot"></i>
+                  </span>
+                </div>
+              </div>
+            );
           switch (format) {
             case "TEXT":
               return (
-                <span
-                  className="actual"
-                  dangerouslySetInnerHTML={{
-                    __html: linkifyHtml(
-                      convertEmojis(props.message.message.bodyText),
-                      { target: "_blank" }
-                    ),
-                  }}
-                ></span>
+                <>
+                  {props.message.from === MessageByTypeEnum.AI_AGENT ? (
+                    <ReactMarkdown
+                      className={"markdown-wrapper"}
+                      remarkPlugins={[remarkGfm]} // Enables GitHub-Flavored Markdown
+                      rehypePlugins={[rehypeRaw]} // Allows HTML inside markdown
+                      components={{
+                        code(props: any) {
+                          const { children, className, node, ...rest } = props;
+                          const match = /language-(\w+)/.exec(className || "");
+                          return match ? (
+                            <SyntaxHighlighter
+                              // {...rest}
+                              PreTag="div"
+                              children={String(children).replace(/\n$/, "")}
+                              language={match[1]}
+                              style={dark}
+                            />
+                          ) : (
+                            <code {...rest} className={className}>
+                              {children}
+                            </code>
+                          );
+                        },
+                      }}
+                    >
+                      {props.message.message?.bodyText}
+                    </ReactMarkdown>
+                  ) : (
+                    <span
+                      className="actual"
+                      dangerouslySetInnerHTML={{
+                        __html: createTextLinks_(
+                          convertEmojis(props.message.message?.bodyText)
+                        ),
+                      }}
+                    ></span>
+                  )}
+
+                  {props.message.from === MessageByTypeEnum.AI_AGENT &&
+                  props.message.sources &&
+                  JSON.parse(props.message.sources).length > 0 ? (
+                    <div className="source-label-sec">
+                      <div className="source-label-list">
+                        {JSON.parse(props.message.sources).map(
+                          (value: string, index: number) => {
+                            return (
+                              <div className="source-label">
+                                <p className="source-label-ellipsis">
+                                  <a
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href={value}
+                                    className="source-label-link"
+                                  >
+                                    {value}
+                                    <span className="source-label-link-absolute"></span>
+                                  </a>
+                                </p>
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+
+                  {/* {props.message.from === MessageByTypeEnum.AI_AGENT ? (
+                    <div className="feedback-actions">
+                      <span
+                        onClick={() => submitGPTFeedback(1)}
+                        className={`btn positive-btn ${
+                          props.message.gpt_relavance_score === 1
+                            ? "active"
+                            : ""
+                        }`}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"></path>
+                        </svg>
+                      </span>
+                      <span
+                        onClick={() => submitGPTFeedback(2)}
+                        className={`btn negative-btn ${
+                          props.message.gpt_relavance_score === 2
+                            ? "active"
+                            : ""
+                        }`}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z"></path>
+                        </svg>
+                      </span>
+                    </div>
+                  ) : (
+                    <></>
+                  )} */}
+                </>
               );
             case "TEXT_AND_FILE":
               return (
@@ -183,13 +303,13 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                     className="actual"
                     dangerouslySetInnerHTML={{
                       __html: linkifyHtml(
-                        convertEmojis(props.message.message.bodyText),
+                        convertEmojis(props.message.message?.bodyText),
                         { target: "_blank" }
                       ),
                     }}
                   ></span>
 
-                  {props.message.from === MessageByTypeEnum.GPT &&
+                  {props.message.from === MessageByTypeEnum.AI_AGENT &&
                   props.message.sources &&
                   JSON.parse(props.message.sources).length > 0 ? (
                     <div className="source-label-sec">
@@ -219,7 +339,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                     <></>
                   )}
 
-                  {props.message.from === MessageByTypeEnum.GPT ? (
+                  {props.message.from === MessageByTypeEnum.AI_AGENT ? (
                     <div className="feedback-actions">
                       <span
                         onClick={() => submitGPTFeedback(1)}
