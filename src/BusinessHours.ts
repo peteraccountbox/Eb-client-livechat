@@ -1,5 +1,5 @@
 import moment from 'moment-timezone';
-import { AgentPaylodObj, AgentPrefsPayloadType, ChatPrefsPayloadType } from './Models';
+import { AgentPrefsPayloadType, ChatPrefsPayloadType } from './Models';
 
 interface Session {
   startTime: string;
@@ -25,12 +25,14 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
   // if (liveChatAvailability == "liveChat") {
   //   return agentsPrefs.some((agentPref) => (agentPref.availability && agentPref.availability == "ONLINE"));
   // }
+  if (liveChatAvailability == "ONLINE") 
+    return true;
   if (liveChatAvailability == "ONLINE_ONLY_ON_BUSINESS_HOURS") {
 
     try {
       if(chatprefs.meta.considerUsersBusinessHours)
       return agentsPrefs.some((agentPref: AgentPrefsPayloadType) => {
-        const timezone = agentPref.timezone;
+        const timezone = agentPref.timezone || "UTC";
         const now = moment.tz(timezone);
         const currentDay = now.day(); // 0 (Sunday) to 6 (Saturday)
         const currentTime = now.format('HH:mm');
@@ -47,7 +49,7 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
         return false;
       })
       else {
-        const timezone = chatprefs.meta.timezone;
+        const timezone = chatprefs.meta.timezone || "UTC";
         const now = moment.tz(timezone);
         const currentDay = now.day(); // 0 (Sunday) to 6 (Saturday)
         const currentTime = now.format('HH:mm');
@@ -65,10 +67,7 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
     } catch (error) {
 
     }
-
-    return true;
+    
   }
-  if (liveChatAvailability == "ONLINE") 
-    return true;
   return false;
 };

@@ -3,6 +3,7 @@ import { AppContext } from "../appContext";
 import { EventPayloadObj } from "../Models";
 import ChatMessage from "./ChatMessage";
 import { isUserBusinessHour } from "../BusinessHours";
+import TimeAgo from "./TimeAgo";
 
 export interface UserChatMessagePropsType {
   message: EventPayloadObj;
@@ -13,15 +14,7 @@ export interface UserChatMessagePropsType {
 const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
   const parentContext = useContext(AppContext);
 
-  const { chatPrefs, sessions, setSessions, agentsPrefs, createSessionData } =
-    parentContext;
-  const getMessageTime = () => {
-    // let myDate = new Date(props.message.created_time * 1000);
-    // let dateStr = myDate.getDate() + "/" + (myDate.getMonth() + 1) + "/" + myDate.getFullYear()
-    // //+ " " + myDate.getHours() + ":" + myDate.getMinutes() + ":" + myDate.getSeconds()
-    // return dateStr;
-    return props.message.created_time * 1000;
-  };
+  const { chatPrefs, agentsPrefs } = parentContext;
 
   const canShowAnavailableMessage = () => {
     return false;
@@ -68,12 +61,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
                 {props.message.status == "SENDING" ? (
                   "Sending ..."
                 ) : (
-                  <>{getMessageTime()}</>
-                  // <ReactTimeAgo
-                  //   date={getMessageTime()}
-                  //   locale="en-US"
-                  //   tooltip={false}
-                  // />
+                  <TimeAgo time={props.message.createdTime} />
                 )}
               </span>
             </div>
@@ -108,6 +96,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
 
         {!isUserBusinessHour(chatPrefs, agentsPrefs) &&
         !props.nextMessage &&
+        props.message.id &&
         chatPrefs.meta.chatMessageOfflineStatusMessageEnabled ? (
           <div className="chat__messages-footer">
             <div
@@ -119,7 +108,7 @@ const UserChatMessage: FC<UserChatMessagePropsType> = (props) => {
                 fontSize: "10px",
                 padding: "5px",
                 textAlign: "center",
-                marginTop: "5px",
+                marginTop: "16px",
               }}
             >
               <span className="message-sent-status">
