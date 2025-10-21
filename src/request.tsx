@@ -8,7 +8,7 @@ export const baseReqService = axios;
 export const engageBayAPI = baseReqService.create({
   headers: {
     "Content-Type": "application/json",
-    // 'Authorization': TENANT_ID,
+    Authorization: API_KEY,
     "X-JS-Client-Key": TENANT_ID,
   },
 });
@@ -69,7 +69,7 @@ export const postReq = async (path: string, data: object, headers?: object) => {
     ? headers
     : {
         "Content-Type": "application/json",
-        // Authorization: API_KEY,
+        Authorization: API_KEY,
         "X-JS-Client-Key": TENANT_ID,
       };
   return engageBayAPI.post(getServerHost(path), data, {

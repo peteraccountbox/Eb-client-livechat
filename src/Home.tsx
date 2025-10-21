@@ -24,6 +24,8 @@ const Home = ({
     []
   );
 
+  const [recentSession, setRecentSession] = useState<ChatSessionPaylodObj>();
+
   useEffect(() => {
     function compare(a: ChatSessionPaylodObj, b: ChatSessionPaylodObj) {
       if (new Date(a.lastMessageAt) < new Date(b.lastMessageAt)) return 1;
@@ -32,7 +34,7 @@ const Home = ({
     }
     const sortedSessions = sessions?.sort(compare);
     setRecentSessions([...sortedSessions]);
-    // setRecentSession(sortedSessions[0]);
+    setRecentSession(sortedSessions[0]);
   }, [sessions]);
 
   return (
@@ -140,30 +142,34 @@ const Home = ({
                 </>
               )}
 
-              {recentSessions && recentSessions.length > 0 && (
+              {recentSession && (
                 <>
                   <div className="home__feeds-send-card home__feeds-recent-card">
                     <div className="home__feeds-media">
                       <div className="home__feeds-media-content">
                         <h4
-                          className={`${false ? "unRead" : ""}`}
+                          className={`${
+                            recentSession.customerUnreadMessagesCount
+                              ? "unRead"
+                              : ""
+                          }`}
                           style={{ cursor: "auto" }}
                         >
                           Recent conversation
                         </h4>
-                        {recentSessions.map(
+                        {/* {recentSessions.map(
                           (
                             recentSession: ChatSessionPaylodObj,
                             index: number
-                          ) => (
-                            <ConversationListItem
-                              session={recentSession}
-                              openChatConversation={openChat}
-                              // openBotConversation={props.openBotConversation}
-                              key={recentSession.id}
-                            />
-                          )
-                        )}
+                          ) => ( */}
+                        <ConversationListItem
+                          session={recentSession}
+                          openChatConversation={openChat}
+                          // openBotConversation={props.openBotConversation}
+                          key={recentSession.id}
+                        />
+                        {/* )
+                        )} */}
                       </div>
                     </div>
                   </div>
