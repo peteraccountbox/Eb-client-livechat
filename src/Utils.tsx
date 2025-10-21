@@ -183,20 +183,6 @@ export const pushMessage = (
     return;
   }
 
-  // Get session from session id
-  // let session = getSessionById(message.session_id);
-
-  // Update time of the session
-  // session.updated_time = parseInt((new Date().getTime() / 1000).toString());
-  session.updatedTime = new Date().toISOString().replace("Z", "");
-
-  // Set unread count
-  // if (!activeSessionDetails?.session_id || !activeSessionDetails?.session || activeSessionDetails.session.id != session.id) {
-  //   session.unRead = session.unRead ? session.unRead + 1 : 1;
-  // }
-
-  session.unRead = session.unRead ? session.unRead + 1 : 1;
-
   // Push message
   let matchFound = false;
   session.messageList &&

@@ -32,7 +32,6 @@ import {
 } from "../Utils";
 import { AppContext } from "../appContext";
 import {
-  ADD_EMAIL_URL_PATH,
   AIBOT_DETAILS,
   CHANNEL_ID,
   CONNECT_TO_AGENT_URL_PATH,
@@ -404,28 +403,15 @@ const Conversation = (props: ConversationProps) => {
 
   const submitChatForm = (formData: JSONObjectType) => {
     if (!formData) formData = {};
-
-    setShowChatForm(false);
     setTypeText("");
+    if (text.current) {
+      text.current.textContent = "";
+      text.current.value = "";
+    }
+    setShowChatForm(false);
 
     setLocalStoragePrefs(FORM_DATA, JSON.stringify(formData));
     setSaving(true);
-    if (session && session.id) {
-      const wait = getReq(ADD_EMAIL_URL_PATH, {
-        customerEmail: formData.customerEmail,
-        ticketId: session.id,
-      });
-      wait
-        .then((response: any) => {
-          let newNession = response.data as ChatSessionPaylodObj;
-          newNession.messageList = session.messageList;
-          updateAndOpenSession(newNession);
-          setSession(newNession);
-          setSessionStoragePrefs(OPENED_CHAT, newNession.id);
-        })
-        .catch(() => {});
-      return;
-    }
     session.customerEmail = formData.email as string;
     session.customerName = formData.name as string;
     if (formData.message) {
@@ -449,7 +435,6 @@ const Conversation = (props: ConversationProps) => {
       session.channelType = "CHAT";
       session.createdSource = "WEBSITE";
       session.createdBy = MessageByTypeEnum.CUSTOMER;
-      session.unRead = session.unRead ? session.unRead + 1 : 1;
       session.messageList.push(event);
       session.identifiers = getIdentifiersData();
       session.meta = {
@@ -801,8 +786,8 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const goBack = () => {
-    if (session.unRead) {
-      session.unRead = 0;
+    if (session.customerUnreadMessagesCount) {
+      session.customerUnreadMessagesCount = 0;
       setSessions([...sessions]);
     }
 

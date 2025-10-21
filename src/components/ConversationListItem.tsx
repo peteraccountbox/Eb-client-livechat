@@ -80,7 +80,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
   // }
 
   const clickOpenChatConversation = () => {
-    props.session.unRead = 0;
+    props.session.customerUnreadMessagesCount = 0;
     props.openChatConversation(props.session.id + "");
   };
 

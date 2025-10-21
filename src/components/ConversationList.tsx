@@ -21,10 +21,8 @@ const ConversationList = ({
 
   const sortedSessions: ChatSessionPaylodObj[] | undefined = useMemo(() => {
     function compare(a: ChatSessionPaylodObj, b: ChatSessionPaylodObj) {
-      if (new Date(a.updatedTime).valueOf() < new Date(b.updatedTime).valueOf())
-        return 1;
-      if (new Date(a.updatedTime).valueOf() > new Date(b.updatedTime).valueOf())
-        return -1;
+      if (new Date(a.lastMessageAt) < new Date(b.lastMessageAt)) return 1;
+      if (new Date(a.lastMessageAt) > new Date(b.lastMessageAt)) return -1;
       return 0;
     }
     return sessions?.sort(compare);

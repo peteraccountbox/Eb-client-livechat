@@ -46,8 +46,6 @@ export const NEW_SESSION_URL_PATH: string =
 export const VALIDATE_CUSTOMER_PATH =
   REQUEST_PREFIX_PATH + "/validate-customer";
 
-export const ADD_EMAIL_URL_PATH: string = REQUEST_PREFIX_PATH + "/add-email";
-
 export const UPDATE_READ_URL_PATH: string =
   REQUEST_PREFIX_PATH + "/update-read";
 

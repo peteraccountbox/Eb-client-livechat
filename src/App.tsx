@@ -258,6 +258,7 @@ const App: React.FunctionComponent = () => {
         messageSession.lastAgentMessageAt = message.message.createdTime;
         messageSession.lastMessageAt = message.message.createdTime;
         messageSession.lastConnectionWith = message.ticket.lastConnectionWith;
+        messageSession.updatedTime = message.ticket.updatedTime;
         pushMessage(message.message, messageSession);
       }
       if (chatId && chatId == message.ticket.id) {
@@ -268,7 +269,9 @@ const App: React.FunctionComponent = () => {
         );
       } else {
         if (messageSession) {
-          messageSession.customerUnreadMessagesCount += 1;
+          if (message.message.from == MessageByTypeEnum.AI_AGENT)
+            messageSession.customerUnreadMessagesCount = 1;
+          else messageSession.customerUnreadMessagesCount += 1;
         }
       }
       setSessions([...sessionsRef.current]);
