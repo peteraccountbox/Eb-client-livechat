@@ -50,22 +50,19 @@ export const getOperator = (
 
 export const resizeFrame = (type: string) => {
   try {
-    // let parentDocument = window.parent.document;
-
-    // if (!(window as any).FRAME_REF_ID) return;
-
-    // let frame = parentDocument.getElementById((window as any).FRAME_REF_ID);
-
-    // frame.addClass("collapase");
-
-    // (window as any).parent.EngageBay_Livechat.ref.UI().resize(type);
-    const iframeElement: any = (window as any).parent.document.querySelector(
-      'iframe[name="engagebay-messenger-frame"]'
+    const iframeParent: any = (window as any).parent.document.querySelector(
+      ".engagebay-chat-widget[data-id='" + (window as any).CHANNEL_ID + "']"
     );
-    if (iframeElement) {
-      iframeElement.style.width = type == "WINDOW_OPENED" ? "500px" : "100px";
-      iframeElement.style.height =
-        type == "WINDOW_OPENED" ? "calc(100vh - 100px - 0rem)" : "100px";
+    if (!iframeParent) return;
+
+    if (type == "WINDOW_CLOSED") {
+      iframeParent.style.setProperty("height", "100px", "important");
+      iframeParent.style.setProperty("width", "100px", "important");
+    } else if (type == "WINDOW_OPENED_LARGE") {
+      iframeParent.style.setProperty("width", "730px", "important");
+    } else if (type == "LIVECHAT_WRAPPER_CLOSED") {
+      iframeParent.style.setProperty("height", "0px", "important");
+      iframeParent.style.setProperty("width", "0px", "important");
     }
   } catch (error) {}
 };

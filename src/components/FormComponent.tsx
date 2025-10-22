@@ -24,6 +24,17 @@ const FormComponent: FC<FormComponentPropsType> = (props) => {
     saving,
     typeText,
   } = props;
+
+  function getFieldOptionsArr(options: string | undefined) {
+    if (!options) return [];
+    try {
+      return JSON.parse(options);
+    } catch (error) {
+      // console.error('Error parsing options:', error);
+      return options.split(",");
+    }
+  }
+
   return (
     <form
       action="javascript:void(0);"
@@ -80,7 +91,7 @@ const FormComponent: FC<FormComponentPropsType> = (props) => {
                           }
                         >
                           <option value="">{field.placeholder}</option>
-                          {JSON.parse(field?.options || "[]").map(
+                          {getFieldOptionsArr(field?.options).map(
                             (value: string, index: number) => {
                               return <option value={value}>{value}</option>;
                             }
@@ -131,7 +142,7 @@ const FormComponent: FC<FormComponentPropsType> = (props) => {
                             {" "}
                             {field.placeholder}{" "}
                           </label>
-                          {JSON.parse(field?.options || "[]").map(
+                          {getFieldOptionsArr(field?.options).map(
                             (opt: string, index: number) => {
                               return (
                                 <div className="chat__form-check">
@@ -174,7 +185,7 @@ const FormComponent: FC<FormComponentPropsType> = (props) => {
                             {" "}
                             {field.placeholder}{" "}
                           </label>
-                          {JSON.parse(field?.options || "[]").map(
+                          {getFieldOptionsArr(field?.options).map(
                             (opt: string, index: number) => {
                               return (
                                 <div className="chat__form-check radio-options">
