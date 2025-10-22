@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { TENANT_ID, SERVER_REQ_HOST_PATH, API_KEY } from "./globals";
 
-// axios.defaults.headers.common["X-API-Key"] = TENANT_ID;
+axios.defaults.headers.common["Authorization"] = API_KEY;
 
 export const baseReqService = axios;
 

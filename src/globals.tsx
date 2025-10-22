@@ -3,7 +3,7 @@ import { getSessionStoragePrefs, setSessionStoragePrefs } from "./Storage";
 
 export const TENANT_ID: string = (window as any).TENANT_ID;
 export const CHANNEL_ID: string = (window as any).CHANNEL_ID;
-export const API_KEY: string = (window as any).API_KEY;
+export const API_KEY: string = (window.parent as any).EhAccount?.getKey();
 
 export function getReachoModule() {
   let prefs;
