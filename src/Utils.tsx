@@ -54,6 +54,7 @@ export const resizeFrame = (type: string) => {
       ".engagebay-chat-widget[data-id='" + (window as any).CHANNEL_ID + "']"
     );
     if (!iframeParent) return;
+    iframeParent.removeAttribute("style");
 
     if (type == "WINDOW_CLOSED") {
       iframeParent.style.setProperty("height", "100px", "important");
