@@ -123,7 +123,7 @@ const Conversation = (props: ConversationProps) => {
       });
       session.aiAgentId = chatPrefs.aiAgentId;
       session.lastConnectionWith = ChatSessionConnectedWithEnum.AI_AGENT;
-    } else if (!chatPrefs.aiAgentId) {
+    } else if (!chatPrefs.aiAgentId || !botPrefs) {
       session.lastConnectionWith = ChatSessionConnectedWithEnum.AGENT;
     }
 
@@ -696,6 +696,7 @@ const Conversation = (props: ConversationProps) => {
     if (agent) return agent?.profile_image_url || DEFAULT_AGENT_PROFILE_PIC;
     if (
       !chatPrefs.aiAgentId ||
+      !botPrefs ||
       session.lastConnectionWith == ChatSessionConnectedWithEnum.AGENT
     )
       return chatPrefs.meta.decoration.headerPictureUrl;
@@ -706,6 +707,7 @@ const Conversation = (props: ConversationProps) => {
   const getHeaderName = () => {
     if (
       !chatPrefs.aiAgentId ||
+      !botPrefs ||
       session.lastConnectionWith == ChatSessionConnectedWithEnum.AGENT
     )
       return chatPrefs.name;
@@ -950,7 +952,8 @@ const Conversation = (props: ConversationProps) => {
               className="chat__input chat__textarea"
               value={text?.current?.value}
               placeholder={
-                session.lastConnectionWith == ChatSessionConnectedWithEnum.AGENT
+                session.lastConnectionWith ==
+                  ChatSessionConnectedWithEnum.AGENT || !botPrefs
                   ? chatPrefs.meta.messagePlaceholder
                   : botPrefs?.settings?.placeHolderText
               }
