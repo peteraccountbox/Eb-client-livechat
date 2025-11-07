@@ -191,7 +191,7 @@ const Conversation = (props: ConversationProps) => {
         session?.messageList.length === 0) &&
       (!chatId || chatId == "new") &&
       shouldShowForm() &&
-      !chatPrefs?.aiAgentId
+      (!chatPrefs?.aiAgentId || !botPrefs)
     )
       setShowChatForm(true);
 
