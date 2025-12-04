@@ -47,10 +47,7 @@ const getServerHost = (path: string) => {
       (path.indexOf("/hc/") > -1 || path.indexOf("/help-center/") > -1) &&
       (window.parent as any).EhAccount?.version
     )
-      return (
-        "https://app-dot-ebreachoservice-dot-accountbox-154605.appspot.com/" +
-        path
-      );
+      return "https://app-dot-qa-dot-accountbox-154605.appspot.com/" + path;
     else if (
       path &&
       (path.indexOf("/hc/") > -1 || path.indexOf("/help-center/") > -1)
