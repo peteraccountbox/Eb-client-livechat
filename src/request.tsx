@@ -47,7 +47,7 @@ const getServerHost = (path: string) => {
       (path.indexOf("/hc/") > -1 || path.indexOf("/help-center/") > -1) &&
       (window.parent as any).EhAccount?.version
     )
-      return (window.parent as any)?.EhAccount.getAppURL() + "/" + path;
+      return (window.parent as any).EhAccount.getAppURL() + "/" + path;
     else if (
       path &&
       (path.indexOf("/hc/") > -1 || path.indexOf("/help-center/") > -1)
