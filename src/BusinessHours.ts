@@ -25,7 +25,7 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
   // if (liveChatAvailability == "liveChat") {
   //   return agentsPrefs.some((agentPref) => (agentPref.availability && agentPref.availability == "ONLINE"));
   // }
-  if (liveChatAvailability == "ONLINE") 
+  if (liveChatAvailability == "ONLINE" && !chatprefs.meta.hideOnNonBusiness) 
     return true;
   if (liveChatAvailability == "ONLINE_ONLY_ON_BUSINESS_HOURS") {
 
