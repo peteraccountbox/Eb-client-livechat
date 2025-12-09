@@ -226,6 +226,10 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                                       className="chat_form-control"
                                       type={field.type}
                                       placeholder={field.placeholder}
+                                      onClick={(e) => {
+                                        if (field.type == "date")
+                                          e.currentTarget.showPicker();
+                                      }}
                                       required={field.required}
                                       name={field.name}
                                       value={field.value}
