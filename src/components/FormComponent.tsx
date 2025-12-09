@@ -228,6 +228,10 @@ const FormComponent: FC<FormComponentPropsType> = (props) => {
                           name={field.name}
                           value={field.value}
                           className="chat_form-control"
+                          onClick={(e) => {
+                            if (field.type == "date")
+                              e.currentTarget.showPicker();
+                          }}
                           onChange={(e) =>
                             handleFieldValueChange(e.target.value, field)
                           }
@@ -243,7 +247,7 @@ const FormComponent: FC<FormComponentPropsType> = (props) => {
             ) : (
               <></>
             )}
-            {field.name == "email" && field.visible && (
+            {/* {field.name == "email" && field.visible && (
               <p
                 style={{
                   marginBottom: "10px",
@@ -254,7 +258,7 @@ const FormComponent: FC<FormComponentPropsType> = (props) => {
                 A New customer will be created when provided new email address
                 on the form
               </p>
-            )}
+            )} */}
           </>
         );
       })}
