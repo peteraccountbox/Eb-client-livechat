@@ -247,7 +247,7 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                         ) : (
                           <></>
                         )}
-                        {field.name == "email" && (
+                        {/* {field.name == "email" && (
                           <p
                             style={{
                               marginBottom: "10px",
@@ -258,7 +258,7 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                             A New customer will be created when provided new
                             email address on the form
                           </p>
-                        )}
+                        )} */}
                       </>
                     );
                   })}
