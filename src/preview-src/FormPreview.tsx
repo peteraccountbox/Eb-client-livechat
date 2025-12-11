@@ -86,7 +86,7 @@ const FormPreview: FC<FormPreviewComponentProps> = (props) => {
                   chatPrefs.meta.fields.map((field, index) => {
                     return (
                       <>
-                        {field.name != "message" && (
+                        {field.name != "message" && field.visible && (
                           <div className="chat__messages-form-group">
                             {(() => {
                               switch (true) {
