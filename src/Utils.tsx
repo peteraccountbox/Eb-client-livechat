@@ -91,6 +91,8 @@ export const getIdentifiersData = () => {
   let dataJSON: { [key: string]: string } = {};
   if (formData) dataJSON = JSON.parse(formData);
 
+  if (dataJSON.hasOwnProperty("message")) delete dataJSON.message;
+
   Object.keys(dataJSON).forEach((key) => {
     if (Array.isArray(dataJSON[key])) {
       dataJSON[key] = JSON.stringify(dataJSON[key]); // convert array to string literal
