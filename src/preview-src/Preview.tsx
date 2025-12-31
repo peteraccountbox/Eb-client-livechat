@@ -445,7 +445,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                           >
                             <div className="home__feeds-media">
                               <div className="home__feeds-media-content">
-                                <h5>Send us a message </h5>
+                                <h5>{chatPrefs.meta.newConversationBtnText}</h5>
                                 {/* <p>We typically reply within a day</p> */}
                               </div>
                               <div className="home__feeds-media-icon">
@@ -472,7 +472,11 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                         >
                           <div className="home__feeds-media">
                             <div className="home__feeds-media-content">
-                              <h5>Send us a message </h5>
+                              <h5>
+                                {chatPrefs.meta.newConversationBtnText
+                                  ? chatPrefs.meta.newConversationBtnText
+                                  : ""}
+                              </h5>
                               {/* <p>We typically reply within a day</p> */}
                             </div>
                             <div className="home__feeds-media-icon">

@@ -78,6 +78,7 @@ export type ChatPrefsSystemMessageType = {
 export interface ChatChannelMeta {
   deactivated: boolean;
   hideOnMobile: boolean;
+  newConversationBtnText: string;
   hideOnOutsideBusinessHours: boolean;
   decoration: Decoration;
   liveChatAvailability: "ONLINE_ONLY_ON_BUSINESS_HOURS" | "OFFLINE" | "ONLINE";
@@ -305,7 +306,7 @@ export enum MessageByTypeEnum {
   AI_AGENT = "AI_AGENT",
   CUSTOMER = "CUSTOMER",
   SYSTEM = "SYSTEM",
-  GPT = "GPT"
+  GPT = "GPT",
 }
 
 export enum ChatSessionConnectedWithEnum {
