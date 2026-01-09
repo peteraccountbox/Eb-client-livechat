@@ -323,14 +323,11 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                       />
                     </div> */}
                       {chatPrefs.meta.decoration.headerPictureUrl && (
-                        <img
-                          style={{
-                            width: "4rem",
-                            height: "4rem",
-                            borderRadius: "5px",
-                          }}
-                          src={chatPrefs.meta.decoration.headerPictureUrl}
-                        />
+                        <div className="home__feeds-logo-brand">
+                          <img
+                            src={chatPrefs.meta.decoration.headerPictureUrl}
+                          />
+                        </div>
                       )}
                       <div className="home__feeds-chat-header-name">
                         <span className="home__feeds-chat-name">
