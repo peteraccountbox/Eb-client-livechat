@@ -9,8 +9,8 @@ import { ChatPrefsPayloadType } from './Models';
     let channelIds = []
     try {        
         const widgetContainers = document.querySelectorAll(`[class^="engagebay-chat-widget"]`);
-        if(widgetContainers.length == 0)
-            return
+        // if(widgetContainers.length == 0)
+        //     return
         console.log("widgetContainers ", widgetContainers);
         for (let index = 0; index < widgetContainers.length; index++) {
             const element = widgetContainers[index];
@@ -46,7 +46,7 @@ import { ChatPrefsPayloadType } from './Models';
             }
 
     } catch (error) {
-
+      console.log("error: ", error)
     }
 
 })();

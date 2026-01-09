@@ -1,5 +1,6 @@
-mkdir -p /home/eb137/Documents/eb-ticketing-frontend/public/assets/chat-preview/
-cp -r build/* /home/eb137/Documents/eb-ticketing-frontend/public/assets/chat-preview/
+mkdir -p /home/eb137/IdeaProjects/engagebay-frontend/public/assets/chat-preview/
+cp -r build/* /home/eb137/IdeaProjects/engagebay-frontend/public/assets/chat-preview/
+cp -r build/* /home/eb137/IdeaProjects/engagebay-maven/src/main/webapp/livechat-react-unified
 npm run build
 
 
