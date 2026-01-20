@@ -16,7 +16,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
   const { chatPrefs } = props;
 
   const footerTabs = chatPrefs?.meta?.chatFooterSettings.filter(
-    (footer) => footer.enable == true
+    (footer) => footer.enable == true,
   );
   const [tab, setTab] = useState(footerTabs ? footerTabs[0]?.tab : "Messages");
 
@@ -215,7 +215,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
       //         ? "left"
       //         : ""
       //     } ${
-      //       chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""
+      //       chatPrefs.meta.decoration.widgetAlignment == "bottom right" ? "right" : ""
       //     } chat-opend`}
       //   >
       //     <div className="close_chat_bubble">
@@ -534,7 +534,9 @@ const Preview: FC<PreviewComponentProps> = (props) => {
               ? "left"
               : ""
           } ${
-            chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""
+            chatPrefs.meta.decoration.widgetAlignment == "bottom right"
+              ? "right"
+              : ""
           } chat-opend`}
         >
           <div className="close_chat_bubble">

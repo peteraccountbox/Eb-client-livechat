@@ -268,7 +268,9 @@ const PreviewConversation: FC<PreviewConversationComponentProps> = (props) => {
               ? "left"
               : ""
           } ${
-            chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""
+            chatPrefs.meta.decoration.widgetAlignment == "bottom right"
+              ? "right"
+              : ""
           } chat-opend`}
         >
           <div className="close_chat_bubble">
