@@ -24,7 +24,7 @@ engageBayAPI.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 engageBayTicketingAPI.interceptors.request.use(
@@ -34,7 +34,7 @@ engageBayTicketingAPI.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 const getServerHost = (path: string) => {
@@ -50,9 +50,10 @@ const getServerHost = (path: string) => {
       return (window.parent as any).EhAccount.getAppURL() + "/" + path;
     else if (
       path &&
-      (path.indexOf("/hc/") > -1 || path.indexOf("/help-center/") > -1)
+      (path.indexOf("/hc/") > -1 || path.indexOf("/help-center/") > -1) &&
+      !(window.parent as any).EhAccount.version
     )
-      return "http://localhost:8888/" + path;
+      return "https://app.engagebay.com/" + path;
   } catch (error) {}
 
   return SERVER_REQ_HOST_PATH + path;
@@ -60,12 +61,12 @@ const getServerHost = (path: string) => {
 
 export const getReq = async (
   path: string,
-  data: object
+  data: object,
 ): Promise<AxiosResponse> => {
   if (path && (path.indexOf("/hc/") > -1 || path.indexOf("/help-center/") > -1))
     return engageBayAPI.get<AxiosResponse>(
       getServerHost(path) + "?apiKey=" + API_KEY,
-      { params: data }
+      { params: data },
     );
   return engageBayTicketingAPI.get<AxiosResponse>(getServerHost(path), {
     params: data,
@@ -82,7 +83,7 @@ export const postReq = async (path: string, data: object, headers?: object) => {
         : {
             "Content-Type": "application/json",
             Authorization: API_KEY,
-          }
+          },
     );
   return engageBayTicketingAPI.post(
     getServerHost(path),
@@ -92,7 +93,7 @@ export const postReq = async (path: string, data: object, headers?: object) => {
       : {
           "Content-Type": "application/json",
           "X-JS-Client-Key": TENANT_ID,
-        }
+        },
   );
 };
 
