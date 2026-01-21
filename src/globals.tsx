@@ -193,11 +193,15 @@ export const getClientInfo = () => {
 
 export const getClientLocationInfo = () => {
   try {
-    return JSON.parse(
+    const locationInfo = JSON.parse(
       (window as any).parent.EngHub_Storage.get_local_pref(
-        (window as any).parent.EngHub_Storage.client_info_key
-      )
+        (window as any).parent.EngHub_Storage.client_info_key,
+      ),
     );
+    if (locationInfo && locationInfo.geo_info) {
+      delete locationInfo.geo_info;
+    }
+    return locationInfo;
   } catch (e) {
     return undefined;
   }
