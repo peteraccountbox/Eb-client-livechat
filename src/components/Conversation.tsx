@@ -212,7 +212,7 @@ const Conversation = (props: ConversationProps) => {
     try {
       const response = await getReq(
         CONVERSATION_MESSAGE_FETCH_URL_PATH + "/" + session.id,
-        { page: 0, size: 50, sort: "createdTime" }
+        { page: 0, size: 50, sort: "createdTime" },
       );
 
       session.messageList = response.data.data;
@@ -232,7 +232,7 @@ const Conversation = (props: ConversationProps) => {
     chatPrefs.meta?.fields?.forEach(
       (field: ChatFromFieldDataPayLoad, index: number) => {
         let fieldClone = JSON.parse(
-          JSON.stringify(field)
+          JSON.stringify(field),
         ) as ChatFromFieldDataPayLoad;
 
         fieldClone.value =
@@ -246,7 +246,7 @@ const Conversation = (props: ConversationProps) => {
             : [];
         fieldClone.is_valid = false;
         fields.push(fieldClone);
-      }
+      },
     );
 
     setFormFields(fields);
@@ -343,7 +343,7 @@ const Conversation = (props: ConversationProps) => {
         if (eachmessage.tempId && eachmessage.tempId == message.tempId)
           return message;
         return eachmessage;
-      }
+      },
     );
     let lastMessage = session.messageList.at(-1);
     if (lastMessage) {
@@ -358,7 +358,7 @@ const Conversation = (props: ConversationProps) => {
   const getChatMessage = (
     msg: string | string[] | null,
     type?: MessageFormatType,
-    attachments?: AttachmentType[]
+    attachments?: AttachmentType[],
   ) => {
     let state: ChatMessagePayloadObj = {
       bodyText: msg,
@@ -418,7 +418,7 @@ const Conversation = (props: ConversationProps) => {
       session.subject = formData.message as string;
       var msg: ChatMessagePayloadObj = getChatMessage(
         formData.message,
-        undefined
+        undefined,
       );
       let event: EventPayloadObj = {
         ticketId: session?.id,
@@ -437,10 +437,12 @@ const Conversation = (props: ConversationProps) => {
       session.createdBy = MessageByTypeEnum.CUSTOMER;
       session.messageList.push(event);
       session.identifiers = getIdentifiersData();
+      const locationInfo = getClientLocationInfo();
+      if (locationInfo && locationInfo.geo_info) delete locationInfo.geo_info;
       session.meta = {
         formData: getFormData(),
         browserInfo: getBrowserInfo(),
-        locationInfo: getClientLocationInfo(),
+        locationInfo: locationInfo,
         clientInfo: getClientInfo(),
       };
     }
@@ -580,10 +582,12 @@ const Conversation = (props: ConversationProps) => {
         if (identifiers.email) session.customerEmail = identifiers.email;
       }
       session.identifiers = identifiers;
+      const locationInfo = getClientLocationInfo();
+      if (locationInfo && locationInfo.geo_info) delete locationInfo.geo_info;
       session.meta = {
         formData: getFormData(),
         browserInfo: getBrowserInfo(),
-        locationInfo: getClientLocationInfo(),
+        locationInfo: locationInfo,
         clientInfo: getClientInfo(),
       };
       updatedSession = pushMessage(event, session);
@@ -691,7 +695,7 @@ const Conversation = (props: ConversationProps) => {
 
   const getHeaderIcon = () => {
     const agent: AgentPaylodObj | undefined = agents?.find(
-      (agent) => agent.id == session?.agentId
+      (agent) => agent.id == session?.agentId,
     );
     if (agent) return agent?.profile_image_url || DEFAULT_AGENT_PROFILE_PIC;
     if (
@@ -737,7 +741,7 @@ const Conversation = (props: ConversationProps) => {
       case AIBotPromptActionEnum.MESSAGE:
         let message: ChatMessagePayloadObj = getChatMessage(
           prompt.message,
-          MessageFormatType.TEXT
+          MessageFormatType.TEXT,
         );
 
         // console.log("in", message);
@@ -762,7 +766,7 @@ const Conversation = (props: ConversationProps) => {
       !botPrefs ||
       botPrefs.botPrompts?.length == 0 ||
       (!botPrefs.botPrompts.find(
-        (prompt) => prompt.action == AIBotPromptActionEnum.MESSAGE
+        (prompt) => prompt.action == AIBotPromptActionEnum.MESSAGE,
       ) &&
         !session.id) ||
       session.lastConnectionWith == ChatSessionConnectedWithEnum.AGENT
@@ -781,7 +785,7 @@ const Conversation = (props: ConversationProps) => {
             </button>
           ) : (
             <></>
-          )
+          ),
         )}
       </div>
     );
@@ -897,7 +901,7 @@ const Conversation = (props: ConversationProps) => {
                         )}
                       </>
                     );
-                  }
+                  },
                 )
               ) : (
                 <p style={{ marginTop: "60px", textAlign: "center" }}>
@@ -963,7 +967,7 @@ const Conversation = (props: ConversationProps) => {
                 document.execCommand(
                   "insertHTML",
                   false,
-                  e.clipboardData.getData("text/plain")
+                  e.clipboardData.getData("text/plain"),
                 );
               }}
               onKeyDown={handleKeyDown}
