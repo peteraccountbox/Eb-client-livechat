@@ -21,7 +21,11 @@ const NewPromptMessage = (props: NewPromptMessageComponentProps) => {
   return (
     <div
       className={`chat_popover ${
-        chatPrefs.meta.decoration.widgetAlignment == "LEFT" ? "left" : "right"
+        chatPrefs.meta.decoration.widgetAlignment == "bottom left" ? "left" : ""
+      } ${
+        chatPrefs.meta.decoration.widgetAlignment == "bottom right"
+          ? "right"
+          : ""
       } `}
     >
       <div className="chat_popover-content chat" onClick={open}>
@@ -86,7 +90,7 @@ const NewPromptMessage = (props: NewPromptMessageComponentProps) => {
                             // href={fileUrl(info as ChatMessagePaylodObj)}
                             dangerouslySetInnerHTML={{
                               __html: createTextLinks_(
-                                fileName(info as ChatMessagePayloadObj)
+                                fileName(info as ChatMessagePayloadObj),
                               ),
                             }}
                           ></a>
