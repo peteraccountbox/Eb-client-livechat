@@ -1,6 +1,5 @@
-import axios, { AxiosResponse } from "axios";
-import { API_KEY, CHANNEL_PREFS_FETCH_URL_PATH } from './globals';
-import { ChatPrefsPayloadType } from './Models';
+import axios from "axios";
+import { EngagebayChatWidgetManager } from "./EngagebayChatWidgetManager";
 
 function createEle (tag: string, attrs: any) {
     var el = document.createElement(tag);
@@ -110,92 +109,7 @@ function loadChat(container: any, prefs: any, type: string) {
         frameDoc.write(html);
         frameDoc.close();
     }
-    (window as any).playSound = function (soundUrl: string) {
-		try {
-			if (soundUrl)
-				return;
-
-			const audio = new Audio(soundUrl);
-			audio.play();
-		} catch (error) {
-			console.error("Error playing notification sound:", error);
-		}
-	},
-    (window as any).blinkTitle = function (message: string) {
-		var timeoutId:any, originalTitle = "";
-		var blink = function () {
-			document.title = document.title == message ? originalTitle
-				: message;
-		}, /* function to BLINK browser tab */
-			clear = function () { /* function to set title back to original */
-				if (timeoutId)
-					clearInterval(timeoutId);
-				if (originalTitle)
-					document.title = originalTitle;
-				timeoutId = null;
-			};
-		clear();
-		originalTitle = document.title;
-		if (!timeoutId) {
-			timeoutId = setInterval(blink, 1000);
-		}
-		// Add focus event
-		window.onfocus = function () {
-			clear();
-		};
-	},
-    (window as any).resize = function (type: string) {
-        (window as any).EhLog.log("resize", type);
-       
-        const iframeParent: any = document.querySelector(
-                ".engagebay-chat-widget[data-id='" + prefs.id + "']"
-              );
-        if (!iframeParent)
-            return;
-        iframeParent.removeAttribute('style');
-        // that.UI().toggleClass(el, "frame-closed", "REMOVE");
-        // Get frame
-        var iframe = iframeParent.getElementsByTagName("iframe")[0];
-        var frameDocument: any = (iframe.contentWindow || iframe.contentDocument);
-        frameDocument = frameDocument.document || frameDocument;
-        // Set height on type
-        if (type == "WINDOW_CLOSED") {
-            // setTimeout(function () {
-            // el.style.height = "120px";
-            // el.style.width = "120px";
-            iframeParent.style.setProperty("height", "100px", "important");
-            iframeParent.style.setProperty("width", "100px", "important");
-            /// that.UI().toggleClass(el, "frame-closed");
-            // }, 100);
-        } else if (type == "PROMPT_OPENED" || type == "WINDOW_OPENED_LARGE") {
-
-            if (type == "WINDOW_OPENED_LARGE") {
-                iframeParent.style.setProperty("width", "730px", "important");
-            }
-
-            setTimeout(
-                function () {
-
-                    if (type == "WINDOW_OPENED_LARGE") {
-                        iframeParent.style.setProperty("width", "730px", "important");
-                    }
-
-                    var frameheight = frameDocument
-                        .getElementsByClassName("chat__prompt")[0].scrollHeight;
-                        iframeParent.style.height = frameheight + 180 + "px";
-                }, 200);
-            // el.style.height = "calc(100% - 30%)";
-
-        } else if (type == "LIVECHAT_WRAPPER_CLOSED") {
-            iframeParent.style.setProperty("height", "0px", "important");
-            iframeParent.style.setProperty("width", "0px", "important");
-        }
-
-        if (eh_is_mobile_browser()) {
-            frameDocument.getElementsByClassName("chat__main")[0].classList
-                .add("chat__mobile")
-        }
-    }
+    (window as any).EngagebayChatWidget = new EngagebayChatWidgetManager(prefs);
 
 }
 
