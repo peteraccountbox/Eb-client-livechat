@@ -16,7 +16,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
   const { chatPrefs } = props;
 
   const footerTabs = chatPrefs?.meta?.chatFooterSettings.filter(
-    (footer) => footer.enable == true
+    (footer) => footer.enable == true,
   );
   const [tab, setTab] = useState(footerTabs ? footerTabs[0]?.tab : "Messages");
 
@@ -215,7 +215,7 @@ const Preview: FC<PreviewComponentProps> = (props) => {
       //         ? "left"
       //         : ""
       //     } ${
-      //       chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""
+      //       chatPrefs.meta.decoration.widgetAlignment == "bottom right" ? "right" : ""
       //     } chat-opend`}
       //   >
       //     <div className="close_chat_bubble">
@@ -323,14 +323,11 @@ const Preview: FC<PreviewComponentProps> = (props) => {
                       />
                     </div> */}
                       {chatPrefs.meta.decoration.headerPictureUrl && (
-                        <img
-                          style={{
-                            width: "4rem",
-                            height: "4rem",
-                            borderRadius: "5px",
-                          }}
-                          src={chatPrefs.meta.decoration.headerPictureUrl}
-                        />
+                        <div className="home__feeds-logo-brand">
+                          <img
+                            src={chatPrefs.meta.decoration.headerPictureUrl}
+                          />
+                        </div>
                       )}
                       <div className="home__feeds-chat-header-name">
                         <span className="home__feeds-chat-name">
@@ -537,7 +534,9 @@ const Preview: FC<PreviewComponentProps> = (props) => {
               ? "left"
               : ""
           } ${
-            chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""
+            chatPrefs.meta.decoration.widgetAlignment == "bottom right"
+              ? "right"
+              : ""
           } chat-opend`}
         >
           <div className="close_chat_bubble">

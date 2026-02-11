@@ -113,7 +113,7 @@ const App: React.FunctionComponent = () => {
 
   const getWidgetActiveTabs = () => {
     const footerTabs = chatPrefs?.meta?.chatFooterSettings.filter(
-      (footer) => footer.enable == true
+      (footer) => footer.enable == true,
     );
     let activeTabname = getSessionStoragePrefs(WIDGET_ACTIVE_TAB);
     if (!activeTabname) activeTabname = widgetFooterTabs.Home;
@@ -127,14 +127,14 @@ const App: React.FunctionComponent = () => {
   };
 
   const [activeTab, setActiveTab] = useState<widgetFooterTabs>(
-    getWidgetActiveTabs() as widgetFooterTabs
+    getWidgetActiveTabs() as widgetFooterTabs,
   );
   const [promtWidth, setPromtWidth] = useState<PromtWidth>(PromtWidth.Small);
 
   // Maintaining the recent session when message inbound or outboud times are updated.
   const [hideChatBubble, setHideChatBubble] = useState<boolean>(false);
   const [isOpened, setIsOpened] = useState<boolean>(
-    getSessionStoragePrefs(WINDOW_OPEN) ? true : false
+    getSessionStoragePrefs(WINDOW_OPEN) ? true : false,
   );
   const [isVisible, setIsVisible] = useState(true);
 
@@ -191,7 +191,7 @@ const App: React.FunctionComponent = () => {
         resizeFrame(
           promtWidth && promtWidth == PromtWidth.Large
             ? "WINDOW_OPENED_LARGE"
-            : "WINDOW_OPENED"
+            : "WINDOW_OPENED",
         );
       }
     }, 300);
@@ -216,7 +216,7 @@ const App: React.FunctionComponent = () => {
           if (prefsRes && prefsRes.data) setAgentsPrefs(prefsRes.data);
 
           if (usersRes && usersRes.data) setAgents(usersRes.data);
-        })
+        }),
       )
       .catch((error) => {
         console.error("There was an error!", error);
@@ -225,6 +225,8 @@ const App: React.FunctionComponent = () => {
     // Fetch chat prefs
 
     fetchChatPrefs();
+
+    executeWebrules();
 
     // Restore storage prefs
     // if (IS_NEW_SESSION) {
@@ -265,7 +267,7 @@ const App: React.FunctionComponent = () => {
         getReq(UPDATE_READ_URL_PATH + "/" + message.ticket.id, {}).then(
           (response) => {
             eventBus.emit("on-ticket-updated", messageSession);
-          }
+          },
         );
       } else {
         if (messageSession) {
@@ -471,19 +473,15 @@ const App: React.FunctionComponent = () => {
 
   const executeWebrules = () => {
     if (
-      PARENT_WINDOW &&
-      PARENT_WINDOW.EhWebRules &&
-      !PARENT_WINDOW.EhWebRules.webRulesFetched
-    ) {
-      setTimeout(function () {
-        executeWebrules();
-      }, 500);
-    }
+      !PARENT_WINDOW ||
+      !PARENT_WINDOW.EhWebRules ||
+      !chatPrefs.webRules ||
+      chatPrefs.webRules.length == 0
+    )
+      return;
 
-    if (!PARENT_WINDOW || !PARENT_WINDOW.EhWebRules) return;
-
-    PARENT_WINDOW.EhWebRules.executeScopeBasedRules(
-      "LIVECHAT",
+    PARENT_WINDOW.EhWebRules.execute(
+      chatPrefs.webRules[0],
       function (rule: WebRulesPayloadType) {
         // console.log("rule1", rule);
 
@@ -498,7 +496,7 @@ const App: React.FunctionComponent = () => {
               // Show proactive message
               let proactiveMsg = "";
               try {
-                proactiveMsg = JSON.parse(rule.customData).message;
+                proactiveMsg = rule.actionValue;
               } catch (error) {}
               // console.log("proactiveMsg", proactiveMsg);
 
@@ -540,7 +538,7 @@ const App: React.FunctionComponent = () => {
         // Saving visitor
         if (PARENT_WINDOW && rule && rule.id)
           PARENT_WINDOW.EhGrabberVisitor.saveFrequency(rule.id);
-      }
+      },
     );
   };
 
@@ -701,7 +699,7 @@ const App: React.FunctionComponent = () => {
 
       bindPusherSocketEvents();
     },
-    [sessions]
+    [sessions],
   );
 
   const appThemeStyle: object = useMemo(() => {
@@ -712,7 +710,7 @@ const App: React.FunctionComponent = () => {
       return {};
 
     const settings = chatPrefs?.meta?.chatFooterSettings.filter(
-      (footer) => footer.enable == true
+      (footer) => footer.enable == true,
     );
 
     const mainColor = chatPrefs && chatPrefs.meta.decoration.mainColor;
@@ -729,8 +727,8 @@ const App: React.FunctionComponent = () => {
       "--themeColor": offlineColor
         ? "#959ba8"
         : mainColor
-        ? chatPrefs.meta.decoration.mainColor
-        : "#000000",
+          ? chatPrefs.meta.decoration.mainColor
+          : "#000000",
       ...(offlineColor
         ? { "--themeColor2": "#959ba8" }
         : {
@@ -803,7 +801,7 @@ const App: React.FunctionComponent = () => {
                   : ""
               } 
               ${
-                chatPrefs.meta.decoration.widgetAlignment == "RIGHT"
+                chatPrefs.meta.decoration.widgetAlignment == "bottom right"
                   ? "right"
                   : ""
               }`}

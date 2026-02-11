@@ -56,7 +56,7 @@ const Home = ({
               </div> */}
 
               {chatPrefs.meta.decoration.headerPictureUrl && (
-                <div className="home__feeds-chat-header-logo">
+                <div className="home__feeds-logo-brand">
                   <img src={chatPrefs.meta.decoration.headerPictureUrl} />
                 </div>
               )}
