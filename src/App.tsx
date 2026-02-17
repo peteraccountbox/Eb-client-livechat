@@ -309,6 +309,64 @@ const App: React.FunctionComponent = () => {
     }
   };
 
+  const processWebRule = (rule: WebRulesPayloadType) => {
+    // console.log("rule1", rule);
+
+    let ruleType = rule.actionType;
+    if (!ruleType) return;
+
+    // console.log("ruleType", ruleType);
+
+    switch (ruleType) {
+      case "LIVECHAT_PROACTIVE_MESSAGE":
+        setTimeout(function () {
+          // Show proactive message
+          let proactiveMsg = "";
+          try {
+            proactiveMsg = rule.actionValue;
+          } catch (error) {}
+          // console.log("proactiveMsg", proactiveMsg);
+
+          // if (proactiveMsg)
+          // setIsOpened(true);
+          let opened = getSessionStoragePrefs(WINDOW_OPEN);
+          if (!opened && !isPromptEnabled() && proactiveMsg) {
+            // setLoadingChats(false);
+            // chatBubbleClicked();
+
+            resizeFrame("WINDOW_OPENED");
+
+            setNotificationPrompt({
+              enabled: true,
+              type: NotificationPromtTypes.Proactive,
+              info: { message: proactiveMsg, user_id: undefined },
+              id: undefined,
+            });
+
+            // startNewChat(proactiveMsg);
+            // setSessionStoragePrefs(
+            //   "notification_type",
+            //   NotificationPromtTypes.Proactive
+            // );
+          }
+
+          // showProactiveMessage(proactiveMsg);
+        }, 1000);
+        break;
+
+      case "LIVECHAT_HIDE":
+        setHideChatBubble(true);
+        break;
+
+      default:
+        break;
+    }
+
+    // Saving visitor
+    if (PARENT_WINDOW && rule && rule.id)
+      PARENT_WINDOW.EhGrabberVisitor.saveFrequency(rule.id);
+  };
+
   const closeNotify = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     setNotificationPrompt({
@@ -480,66 +538,9 @@ const App: React.FunctionComponent = () => {
     )
       return;
 
-    PARENT_WINDOW.EhWebRules.execute(
-      chatPrefs.webRules[0],
-      function (rule: WebRulesPayloadType) {
-        // console.log("rule1", rule);
+    PARENT_WINDOW.EhWebRules.execute(chatPrefs.webRules[0], processWebRule);
 
-        let ruleType = rule.actionType;
-        if (!ruleType) return;
-
-        // console.log("ruleType", ruleType);
-
-        switch (ruleType) {
-          case "LIVECHAT_PROACTIVE_MESSAGE":
-            setTimeout(function () {
-              // Show proactive message
-              let proactiveMsg = "";
-              try {
-                proactiveMsg = rule.actionValue;
-              } catch (error) {}
-              // console.log("proactiveMsg", proactiveMsg);
-
-              // if (proactiveMsg)
-              // setIsOpened(true);
-              let opened = getSessionStoragePrefs(WINDOW_OPEN);
-              if (!opened && !isPromptEnabled() && proactiveMsg) {
-                // setLoadingChats(false);
-                // chatBubbleClicked();
-
-                resizeFrame("WINDOW_OPENED");
-
-                setNotificationPrompt({
-                  enabled: true,
-                  type: NotificationPromtTypes.Proactive,
-                  info: { message: proactiveMsg, user_id: undefined },
-                  id: undefined,
-                });
-
-                // startNewChat(proactiveMsg);
-                // setSessionStoragePrefs(
-                //   "notification_type",
-                //   NotificationPromtTypes.Proactive
-                // );
-              }
-
-              // showProactiveMessage(proactiveMsg);
-            }, 1000);
-            break;
-
-          case "LIVECHAT_HIDE":
-            setHideChatBubble(true);
-            break;
-
-          default:
-            break;
-        }
-
-        // Saving visitor
-        if (PARENT_WINDOW && rule && rule.id)
-          PARENT_WINDOW.EhGrabberVisitor.saveFrequency(rule.id);
-      },
-    );
+    PARENT_WINDOW.EhWebRules.execute(chatPrefs.webRules[1], processWebRule);
   };
 
   const openChat = (id: string) => {
