@@ -537,10 +537,10 @@ const App: React.FunctionComponent = () => {
       chatPrefs.webRules.length == 0
     )
       return;
-
-    PARENT_WINDOW.EhWebRules.execute(chatPrefs.webRules[0], processWebRule);
-
-    PARENT_WINDOW.EhWebRules.execute(chatPrefs.webRules[1], processWebRule);
+    if (chatPrefs.webRules[0] && !chatPrefs.webRules[0].disabled)
+      PARENT_WINDOW.EhWebRules.execute(chatPrefs.webRules[0], processWebRule);
+    if (chatPrefs.webRules[1] && !chatPrefs.webRules[1].disabled)
+      PARENT_WINDOW.EhWebRules.execute(chatPrefs.webRules[1], processWebRule);
   };
 
   const openChat = (id: string) => {
