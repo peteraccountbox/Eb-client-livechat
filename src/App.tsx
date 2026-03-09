@@ -179,19 +179,35 @@ const App: React.FunctionComponent = () => {
     setSessionStoragePrefs(WIDGET_ACTIVE_TAB, activeTab);
   }, [activeTab]);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (isOpened) setIsVisible(true);
+
+  //   if (!isVisible) return resizeFrame("LIVECHAT_WRAPPER_CLOSED");
+
+  //   setTimeout(() => {
+  //     if (!isOpened) {
+  //       resizeFrame("WINDOW_CLOSED");
+  //     } else {
+  //       resizeFrame(
+  //         promtWidth && promtWidth == PromtWidth.Large
+  //           ? "WINDOW_OPENED_LARGE"
+  //           : "WINDOW_OPENED",
+  //       );
+  //     }
+  //   }, 300);
+  // }, [promtWidth, isOpened, isVisible]);
+
+    useEffect(() => {
     if (isOpened) setIsVisible(true);
 
-    if (!isVisible) return resizeFrame("LIVECHAT_WRAPPER_CLOSED");
-
     setTimeout(() => {
-      if (!isOpened) {
-        resizeFrame("WINDOW_CLOSED");
+      if (!isOpened && !notificationPrompt.enabled) {
+        resizeFrame((!isVisible) ? "LIVECHAT_WRAPPER_CLOSED" : "WINDOW_CLOSED");
       } else {
         resizeFrame(
           promtWidth && promtWidth == PromtWidth.Large
             ? "WINDOW_OPENED_LARGE"
-            : "WINDOW_OPENED",
+            : "WINDOW_OPENED"
         );
       }
     }, 300);
@@ -355,7 +371,7 @@ const App: React.FunctionComponent = () => {
         break;
 
       case "LIVECHAT_HIDE":
-        setHideChatBubble(true);
+        setIsVisible(true);
         break;
 
       default:
@@ -773,7 +789,7 @@ const App: React.FunctionComponent = () => {
         <div
           id="App"
           className={`engagebay-viewport ${
-            !isOpened && hideChatBubble ? "hide" : ""
+            !isOpened && !isVisible ? "hide" : ""
           } `}
           style={appThemeStyle}
         >
