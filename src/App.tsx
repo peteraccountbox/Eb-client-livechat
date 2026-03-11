@@ -335,6 +335,7 @@ const App: React.FunctionComponent = () => {
 
     switch (ruleType) {
       case "LIVECHAT_PROACTIVE_MESSAGE":
+        if(isVisible)
         setTimeout(function () {
           // Show proactive message
           let proactiveMsg = "";
@@ -553,9 +554,9 @@ const App: React.FunctionComponent = () => {
       chatPrefs.webRules.length == 0
     )
       return;
-    if (chatPrefs.webRules[0] && !chatPrefs.webRules[0].disabled && !(chatPrefs.webRules[0].rules?.length == 0 && chatPrefs.webRules[0].or_rules?.length == 0))
+    if (chatPrefs.webRules[0] && !chatPrefs.webRules[0].disabled)
       PARENT_WINDOW.EhWebRules.execute(chatPrefs.webRules[0], processWebRule);
-    if (chatPrefs.webRules[1] && !chatPrefs.webRules[1].disabled && !(chatPrefs.webRules[1].rules?.length == 0 && chatPrefs.webRules[1].or_rules?.length == 0))
+    if (chatPrefs.webRules[1] && !chatPrefs.webRules[1].disabled)
       PARENT_WINDOW.EhWebRules.execute(chatPrefs.webRules[1], processWebRule);
   };
 
