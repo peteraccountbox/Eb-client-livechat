@@ -201,7 +201,7 @@ const App: React.FunctionComponent = () => {
     if (isOpened) setIsVisible(true);
 
     setTimeout(() => {
-      if (!isOpened && !notificationPrompt.enabled) {
+      if (!isOpened && (!notificationPrompt.enabled || !isVisible)) {
         resizeFrame((!isVisible) ? "LIVECHAT_WRAPPER_CLOSED" : "WINDOW_CLOSED");
       } else {
         resizeFrame(
