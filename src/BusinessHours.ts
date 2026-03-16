@@ -32,15 +32,16 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
     try {
       if(chatprefs.meta.considerUsersBusinessHours)
       return agentsPrefs.some((agentPref: AgentPrefsPayloadType) => {
+        if (!agentPref.business_hours || !agentPref.business_hours.length) return false;
         const timezone = agentPref.timezone || "UTC";
         const now = moment.tz(timezone);
         const currentDay = now.day(); // 0 (Sunday) to 6 (Saturday)
         const currentTime = now.format('HH:mm');
         const todayBusinessHours = agentPref.business_hours.find((currentBusinessHours: any) => currentBusinessHours.day === DAYS[currentDay].toLowerCase()) as any;
-        const timeFrom = todayBusinessHours.timeFrom.split(',')
-        const timeTill = todayBusinessHours.timeTill.split(',')
+        const timeFrom = todayBusinessHours?.timeFrom.split(',') || [];
+        const timeTill = todayBusinessHours?.timeTill.split(',') || [];
 
-        if (todayBusinessHours.isActive && todayBusinessHours.isActive == "true") {
+        if (todayBusinessHours && todayBusinessHours.isActive && todayBusinessHours.isActive == "true") {
           return timeFrom.some((currTimeFrom: string, index: number) => {
             const  startTime = currTimeFrom, endTime = timeTill[index];
             return currentTime >= startTime && currentTime <= endTime;
