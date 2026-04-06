@@ -29,9 +29,7 @@ const PreviewConversation: FC<PreviewConversationComponentProps> = (props) => {
     chatPrefs && (
       <div
         id="App"
-        className={`engagebay-viewport ${
-          !chatPrefs.meta.deactivated ? "" : "hide"
-        } `}
+        className={`engagebay-viewport`}
         style={appThemeStyle}
       >
         <div
@@ -262,13 +260,13 @@ const PreviewConversation: FC<PreviewConversationComponentProps> = (props) => {
         </div>
         <div
           className={`chat__trigger ${
-            !chatPrefs.meta.deactivated ? "" : "hide"
-          } ${
             chatPrefs.meta.decoration.widgetAlignment == "bottom left"
               ? "left"
               : ""
           } ${
-            chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""
+            chatPrefs.meta.decoration.widgetAlignment == "bottom right"
+              ? "right"
+              : ""
           } chat-opend`}
         >
           <div className="close_chat_bubble">

@@ -122,6 +122,7 @@ export interface Decoration {
 
 export type ChatPrefsPayloadType = {
   id: string;
+  webRules: any[];
   meta: ChatChannelMeta;
   aiAgentId?: string;
   flows: ChatFlowsPayloadObj[];
@@ -201,6 +202,7 @@ export type WebRulesPayloadType = {
   actionType: string;
   createdTime: number;
   customData: string;
+  actionValue: string;
   disabled: boolean;
   force: boolean;
   id: number;

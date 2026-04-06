@@ -110,7 +110,7 @@ const FormComponent: FC<FormComponentPropsType> = (props) => {
                               required={field.required}
                               value={field.value}
                               checked={
-                                field.valueArr?.length == 1 ? true : false
+                                field.value == "true" ? true : false
                               }
                               className="chat__form-check-input"
                               onChange={(e) => {

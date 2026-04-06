@@ -33,7 +33,9 @@ const ChatBubble: React.FC<ChatBubbleProps> = (props) => {
       className={`chat__trigger ${isVisible ? "" : "hide"} ${
         chatPrefs.meta.decoration.widgetAlignment == "bottom left" ? "left" : ""
       } ${
-        chatPrefs.meta.decoration.widgetAlignment == "RIGHT" ? "right" : ""
+        chatPrefs.meta.decoration.widgetAlignment == "bottom right"
+          ? "right"
+          : ""
       } ${props.opened ? "chat-opend" : "chat-closed"}`}
       data-trigger="widget"
       // onClick={() => props.chatBubbleClicked()}
