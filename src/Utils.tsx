@@ -93,6 +93,24 @@ export const getIdentifiersData = () => {
 
   if (dataJSON.hasOwnProperty("message")) delete dataJSON.message;
 
+  const addressKeys = ["address_line_1", "city", "country", "state", "zip"];
+  let addressObj: any = {};
+  let hasAddress = false;
+
+  addressKeys.forEach((suffix) => {
+    const key = `address.${suffix}`;
+    if (dataJSON.hasOwnProperty(key)) {
+      const nestedKey = suffix === "address_line_1" ? "address" : suffix;
+      addressObj[nestedKey] = dataJSON[key];
+      delete dataJSON[key];
+      hasAddress = true;
+    }
+  });
+
+  if (hasAddress) {
+    dataJSON["address"] = JSON.stringify(addressObj);
+  }
+
   Object.keys(dataJSON).forEach((key) => {
     if (Array.isArray(dataJSON[key])) {
       dataJSON[key] = JSON.stringify(dataJSON[key]); // convert array to string literal
