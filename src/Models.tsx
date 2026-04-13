@@ -250,8 +250,8 @@ export type ChatSessionPaylodObj = {
   visitorId: string;
   agentId?: string;
   createdBy: "CUSTOMER";
-  createdSource?: "WEBSITE";
   channelType: "CHAT";
+  createdSource?: "LIVECHAT";
   channelId: string;
   customerEmail: string;
   customerName: string;

@@ -427,7 +427,7 @@ const Conversation = (props: ConversationProps) => {
       let event: EventPayloadObj = {
         ticketId: session?.id,
         eventType: "MESSAGE",
-        source: "WEBSITE",
+        source: "LIVECHAT",
         visibility: "PUBLIC",
         from: MessageByTypeEnum.CUSTOMER,
         message: msg,
@@ -437,7 +437,7 @@ const Conversation = (props: ConversationProps) => {
       session.channelId = CHANNEL_ID;
       session.visitorId = VISITOR_UUID;
       session.channelType = "CHAT";
-      session.createdSource = "WEBSITE";
+      session.createdSource = "LIVECHAT";
       session.createdBy = MessageByTypeEnum.CUSTOMER;
       session.messageList.push(event);
       session.identifiers = getIdentifiersData();
@@ -480,7 +480,7 @@ const Conversation = (props: ConversationProps) => {
       let event: EventPayloadObj = {
         ticketId: session?.id,
         eventType: "MESSAGE",
-        source: "WEBSITE",
+        source: "LIVECHAT",
         from: MessageByTypeEnum.CUSTOMER,
         message: data,
       };
@@ -563,7 +563,7 @@ const Conversation = (props: ConversationProps) => {
     let event: EventPayloadObj = {
       ticketId: session?.id,
       eventType: "MESSAGE",
-      source: "WEBSITE",
+      source: "LIVECHAT",
       visibility: "PUBLIC",
       from: MessageByTypeEnum.CUSTOMER,
       message: data,
@@ -577,7 +577,7 @@ const Conversation = (props: ConversationProps) => {
       session.channelId = CHANNEL_ID;
       session.visitorId = VISITOR_UUID;
       session.channelType = "CHAT";
-      session.createdSource = "WEBSITE";
+      session.createdSource = "LIVECHAT";
       session.createdBy = MessageByTypeEnum.CUSTOMER;
       session.subject = data.bodyText;
       const identifiers = getIdentifiersData();
