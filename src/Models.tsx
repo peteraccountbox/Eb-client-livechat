@@ -250,8 +250,8 @@ export type ChatSessionPaylodObj = {
   visitorId: string;
   agentId?: string;
   createdBy: "CUSTOMER";
-  createdSource?: "WEBSITE";
   channelType: "CHAT";
+  createdSource?: "LIVECHAT";
   channelId: string;
   customerEmail: string;
   customerName: string;
@@ -353,7 +353,7 @@ export type EventPayloadObj = {
   id?: string;
   ticketId?: any;
   eventType?: string;
-  source?: string;
+  source?: "LIVECHAT";
   from: MessageByTypeEnum;
   agentId?: string;
   message: ChatMessagePayloadObj;
