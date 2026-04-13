@@ -353,7 +353,7 @@ export type EventPayloadObj = {
   id?: string;
   ticketId?: any;
   eventType?: string;
-  source?: "LIVECHAT";
+  source?: string;
   from: MessageByTypeEnum;
   agentId?: string;
   message: ChatMessagePayloadObj;
