@@ -244,6 +244,10 @@ const Conversation = (props: ConversationProps) => {
           fieldClone.valueArr = storedFormData[fieldClone.name]
             ? Array.from(storedFormData[fieldClone.name])
             : [];
+        if (fieldClone.type == "checkbox")
+          fieldClone.value = storedFormData[fieldClone.name]
+            ? storedFormData[fieldClone.name]
+            : "false";
         fieldClone.is_valid = false;
         fields.push(fieldClone);
       },
