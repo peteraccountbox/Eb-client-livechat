@@ -29,6 +29,8 @@ import {
   USER_PREFS_FETCH_URL_PATH,
   TRACK_MANAGE,
   USERS_FETCH_URL,
+  WIDGET_TYPE,
+  FRAME_REF_ID,
 } from "./globals";
 import {
   ActiveSessionObjType,
@@ -461,6 +463,28 @@ const App: React.FunctionComponent = () => {
   };
 
   const chatBubbleClicked = () => {
+    if (WIDGET_TYPE === "LAUNCHER") {
+      window.parent.postMessage(
+        {
+          type: "OPEN_MESSENGER",
+          frameId: FRAME_REF_ID
+        },
+        "*",
+      );
+      return;
+    }
+
+    if (WIDGET_TYPE === "MESSENGER") {
+      window.parent.postMessage(
+        {
+          type: "CLOSE_MESSENGER",
+          frameId: FRAME_REF_ID
+        },
+        "*",
+      );
+      // We don't necessarily need to return here if we still want to update local state
+    }
+
     notificationPrompt.enabled &&
       setNotificationPrompt({
         enabled: false,
@@ -766,6 +790,21 @@ const App: React.FunctionComponent = () => {
       !isUserBusinessHour(chatPrefs, agentsPrefs)
     )
   ) {
+    if (WIDGET_TYPE === "LAUNCHER") {
+      return (
+        <div id="App" className="engagebay-viewport" style={appThemeStyle}>
+          <ChatBubble
+            isVisible={isVisible}
+            notifyEnabled={notificationPrompt.enabled}
+            setIsVisible={setIsVisible}
+            chatBubbleClicked={chatBubbleClicked}
+            opened={false}
+            chatPrefs={chatPrefs}
+          />
+        </div>
+      );
+    }
+
     return (
       <AppContext.Provider
         value={{
@@ -796,14 +835,6 @@ const App: React.FunctionComponent = () => {
         >
           {isVisible ? (
             <>
-              <ChatBubble
-                isVisible={isVisible}
-                notifyEnabled={notificationPrompt.enabled}
-                setIsVisible={setIsVisible}
-                chatBubbleClicked={chatBubbleClicked}
-                opened={isOpened}
-              />
-
               {notificationPrompt.enabled ? (
                 <NewPromptMessage
                   info={notificationPrompt.info}
@@ -812,12 +843,11 @@ const App: React.FunctionComponent = () => {
                 />
               ) : (
                 <div
-                  className={`chat ${isOpened ? "is-open" : ""} 
-              ${
-                chatPrefs.meta.decoration.widgetAlignment == "bottom left"
-                  ? "left"
-                  : ""
-              } 
+                  className={`chat is-open ${
+                    chatPrefs.meta.decoration.widgetAlignment == "bottom left"
+                      ? "left"
+                      : ""
+                  } 
               ${
                 chatPrefs.meta.decoration.widgetAlignment == "bottom right"
                   ? "right"

@@ -23,6 +23,8 @@ export const CHANNEL_PREFS: ChatPrefsPayloadType = (window as any).CHANNEL_PREFS
   : undefined;
 
 export const VISITOR_UUID: string = (window as any).VISITOR_UUID;
+export const WIDGET_TYPE: string = (window as any).WIDGET_TYPE;
+export const FRAME_REF_ID: string = (window as any).FRAME_REF_ID;
 
 export const SERVER_REQ_HOST_PATH: string =
   (window as any).SERVER_HOST_DOMAIN_URL ||

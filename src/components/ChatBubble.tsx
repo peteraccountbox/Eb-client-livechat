@@ -7,6 +7,7 @@ import React, {
 } from "react";
 
 import { AppContext } from "../appContext";
+import { ChatPrefsPayloadType } from "../Models";
 
 interface ChatBubbleProps {
   isVisible: boolean;
@@ -14,6 +15,7 @@ interface ChatBubbleProps {
   chatBubbleClicked(): void;
   opened: boolean;
   notifyEnabled: boolean;
+  chatPrefs: ChatPrefsPayloadType;
 }
 
 const ChatBubble: React.FC<ChatBubbleProps> = (props) => {
@@ -21,8 +23,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = (props) => {
     return () => {};
   }, []);
 
-  const chatPrefs = useContext(AppContext).chatPrefs;
-  const { isVisible, setIsVisible, notifyEnabled } = props;
+  const { isVisible, setIsVisible, notifyEnabled, chatPrefs } = props;
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
