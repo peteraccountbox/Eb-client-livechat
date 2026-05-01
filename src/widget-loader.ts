@@ -23,13 +23,8 @@ import { loadLivechatWidget } from "./widgetUtils";
         .then((response: any) => {
             if (!response || (!Array.isArray(response) && response.widget && !response.widget.chatEnabled))
                 return;
-            if (response) {
-                if(!Array.isArray(response.data)) {
-                    new EngageBay_Livechat(response).loadWidget();
-                }
-                else
-                    loadLivechatWidget(response, !Array.isArray(response) && response.widget ? "legacy-chat" : "unified-inbox");
-            }
+            loadLivechatWidget(response, !Array.isArray(response) && response.widget ? "legacy-chat" : "unified-inbox");
+            
         })
         .catch((error) => {
             console.error("Error fetching channel prefs: ", error);
