@@ -1,52 +1,36 @@
-import loadChat, { createEle } from './frame';
-import axios, { AxiosResponse } from "axios";
-import { API_KEY, CHANNEL_PREFS_FETCH_URL_PATH } from './globals';
-import { ChatPrefsPayloadType } from './Models';
+import axios from "axios";
+import { loadLivechatWidget } from "./widgetUtils";
 
 
-(async () => {
+(() => {
 
-    let channelIds = []
+    var channelIds: string[] = [];
     try {        
-        const widgetContainers = document.querySelectorAll(`[class^="engagebay-chat-widget"]`);
-        if(widgetContainers.length == 0)
-            return
+        var widgetContainers = document.querySelectorAll('[class^="engagebay-chat-widget"]');
+
         console.log("widgetContainers ", widgetContainers);
-        for (let index = 0; index < widgetContainers.length; index++) {
-            const element = widgetContainers[index];
-            channelIds.push(element.getAttribute("data-id"))
-        }
-        const channels: any[] = (await axios(CHANNEL_PREFS_FETCH_URL_PATH + "?channelIds=" + channelIds.join() + "&apiKey=" + API_KEY, {})).data
 
-        let selectedChannel:any,channelId;
+        Array.prototype.forEach.call(widgetContainers, function (element) {
+            channelIds.push(element.getAttribute("data-id"));
+        });
 
-            channels.map((channel) => {
-                const widgetContainer = document.querySelector('[class^="engagebay-chat-widget"][data-id="' + channel.id +'"]');
-
-                if(channel.systemCreated)
-                    selectedChannel = channel
-                else 
-                if(!channel.meta.deactivated && widgetContainer && (!selectedChannel || selectedChannel.systemCreated)) {
-                    selectedChannel = channel
-                    channelId = channel.id
-                   loadChat(widgetContainer, channel);  
-                }
-            })
-
-            if(!channelId) {
-                 // create container
-                 const widgetContainer: HTMLIFrameElement = createEle("div", {
-                    "class": "engagebay-chat-widget",
-                    "data-id": selectedChannel.id
-                }) as HTMLIFrameElement;
-
-                document.body.appendChild(widgetContainer);
-
-                loadChat(widgetContainer, selectedChannel);
-            }
-
+        axios(
+            "https://eb-webhooks.engagebay.com/channel/get-active-channel-by-ids?apiKey=" +
+            (window as any).EhAccount.getKey() +
+            "&channelIds=" +
+            channelIds.join(","), {}
+        )
+        .then((response: any) => {
+            if (!response || (!Array.isArray(response) && response.widget && !response.widget.chatEnabled))
+                return;
+            loadLivechatWidget(response, !Array.isArray(response) && response.widget ? "legacy-chat" : "unified-inbox");
+            
+        })
+        .catch((error) => {
+            console.error("Error fetching channel prefs: ", error);
+        });
     } catch (error) {
-
+        console.error("Error initializing live chat widget: ", error);
     }
 
 })();
