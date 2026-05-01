@@ -63,7 +63,7 @@ function loadChat(container: any, prefs: any, type: string) {
 
     if (!(window as any).EhAccount.version || ((window as any).EhAccount.version && (window as any).EhAccount.version != "localhost")) {
         filePrefix = (window as any).EhAccount.cloudPathURl + (type === "unified-inbox" ? "livechat-react-unified/" : "livechat-react/")
-            + ((window as any).EhAccount.version || (type === "unified-inbox" ? "1-0" : "1-22")) + "/";
+            + ((window as any).EhAccount.version || (type === "unified-inbox" ? "1-1" : "1-22")) + "/";
         fileSuffix = "?" + new Date().getTime();
         
     }
