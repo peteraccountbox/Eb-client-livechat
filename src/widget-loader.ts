@@ -21,9 +21,10 @@ import { loadLivechatWidget } from "./widgetUtils";
             channelIds.join(","), {}
         )
         .then((response: any) => {
-            if (!response || (!Array.isArray(response) && response.widget && !response.widget.chatEnabled))
+            const channelData = response.data;
+            if (!channelData || (!Array.isArray(channelData) && channelData.widget && !channelData.widget.chatEnabled))
                 return;
-            loadLivechatWidget(response, !Array.isArray(response) && response.widget ? "legacy-chat" : "unified-inbox");
+            loadLivechatWidget(channelData, !Array.isArray(channelData) && channelData.widget ? "legacy-chat" : "unified-inbox");
             
         })
         .catch((error) => {
