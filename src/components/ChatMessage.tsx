@@ -21,6 +21,7 @@ import { GPT_MESSAGE_SCORE_UPDATE_URL_PATH } from "../globals";
 import { postReq } from "../request";
 import Tippy from "@tippyjs/react";
 import TimeAgo from "./TimeAgo";
+import "tippy.js/dist/tippy.css";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw"; // For allowing raw HTML
 import remarkGfm from "remark-gfm"; // For GitHub-Flavored Markdown (breaks, tables, etc.)theme
@@ -240,7 +241,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
 
                   <div
                     // className="inbox-attachments inbox-attachments-links"
-                    style={{ marginTop: "8px" }}
+                    style={{ marginTop: "8px" , gap: "5px", display: "grid"}}
                   >
                     {attachments && attachments.length && attachments.map((attachment: any) => {
                   return (
@@ -262,12 +263,12 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                           __html: createTextLinks_(sanitizeText(attachment.name)),
                         }}
                       ></a>
-                      <div
+                      {/* <div
                         className="file-info-name"
                         style={{ marginTop: "5px" }}
                       >
                         <span>{fileSize(attachment.size)}</span>
-                      </div>
+                      </div> */}
                     </div>
                       </div>
                     </div>
@@ -347,7 +348,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
               );
             case "FILE":
               return (
-                <>
+                <div style={{gap: "5px", display: "grid"}}>
                 {attachments && attachments.length && attachments.map((attachment: any) => {
                   return (
                     <div className="chat__header-user">
@@ -368,18 +369,18 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                           __html: createTextLinks_(sanitizeText(attachment.name)),
                         }}
                       ></a>
-                      <div
+                      {/* <div
                         className="file-info-name"
                         style={{ marginTop: "5px" }}
                       >
                         <span>{fileSize(attachment.size)}</span>
-                      </div>
+                      </div> */}
                     </div>
                       </div>
                     </div>
                   );
                 })}
-                </>  
+                </div>  
               );
             case "FETCHING":
               return (
