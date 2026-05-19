@@ -968,24 +968,45 @@
 					}
 				}
 
-				.chat__message-type-FILE {
-					padding: 9px 12px;
+				// .chat__message-type-FILE, .chat__message-type-TEXT_AND_FILE {
+				// 	padding: 9px 12px;
 
-					.chat__header-user {
-						&-name {
-							font-size: 14px;
-							font-weight: 500;
-						}
+				// 	.chat__header-user {
+				// 		&-name {
+				// 			font-size: 14px;
+				// 			font-weight: 500;
+				// 		}
 
-						&-table {
-							display: flex;
-							align-items: center;
-						}
+				// 		&-table {
+				// 			display: flex;
+				// 			align-items: center;
+				// 		}
 
-						&-file-img {
-							margin-left: 0;
-							padding-right: 0;
-						}
+				// 		&-file-img {
+				// 			margin-left: 0;
+				//			padding-right: 0;
+				// 		}
+				// 	}
+				// }
+			}
+
+			.chat__message-type-FILE, .chat__message-type-TEXT_AND_FILE {
+				padding: 9px 12px;
+
+				.chat__header-user {
+					&-name {
+						font-size: 14px;
+						font-weight: 500;
+					}
+
+					&-table {
+						display: flex;
+						align-items: center;
+					}
+
+					&-file-img {
+						margin-left: 0;
+						padding-right: 0;
 					}
 				}
 			}
