@@ -76,36 +76,36 @@ const NewPromptMessage = (props: NewPromptMessageComponentProps) => {
                       }}
                     ></span>
                   );
-                case "FILE":
-                  return (
-                    <div className="chat_popover-user">
-                      <div className="chat_popover-user-table">
-                        <div className="chat_popover-file-img">
-                          <img src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/chatfile.png" />
-                        </div>
-                        <div className="chat_popover-file-info">
-                          <a
-                            className="chat_popover-user-name"
-                            target="_blank"
-                            // href={fileUrl(info as ChatMessagePaylodObj)}
-                            dangerouslySetInnerHTML={{
-                              __html: createTextLinks_(
-                                fileName(info as ChatMessagePayloadObj),
-                              ),
-                            }}
-                          ></a>
-                          <div
-                            className="chat_popover-file-name"
-                            style={{ marginTop: "5px" }}
-                          >
-                            <span>
-                              {fileSize(info as ChatMessagePayloadObj)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
+                // case "FILE":
+                //   return (
+                //     <div className="chat_popover-user">
+                //       <div className="chat_popover-user-table">
+                //         <div className="chat_popover-file-img">
+                //           <img src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/chatfile.png" />
+                //         </div>
+                //         <div className="chat_popover-file-info">
+                //           <a
+                //             className="chat_popover-user-name"
+                //             target="_blank"
+                //             // href={fileUrl(info as ChatMessagePaylodObj)}
+                //             dangerouslySetInnerHTML={{
+                //               __html: createTextLinks_(
+                //                 fileName(info as ChatMessagePayloadObj),
+                //               ),
+                //             }}
+                //           ></a>
+                //           <div
+                //             className="chat_popover-file-name"
+                //             style={{ marginTop: "5px" }}
+                //           >
+                //             <span>
+                //               {fileSize(info as ChatMessagePayloadObj)}
+                //             </span>
+                //           </div>
+                //         </div>
+                //       </div>
+                //     </div>
+                //   );
                 default:
                   return info?.message;
               }
