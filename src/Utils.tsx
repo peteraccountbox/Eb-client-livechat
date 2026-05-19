@@ -500,8 +500,47 @@ export function fileUrl(message: ChatMessagePayloadObj) {
   return JSON.parse(message.message).fileUrl;
 }
 
-export function fileSize(message: ChatMessagePayloadObj) {
-  return formatBytes(JSON.parse(message.message).fileSize, 0);
+export function fileSize(size: number) {
+  if (!size) return "0 Bytes";
+  return formatBytes(size, 0);
+}
+
+export function sanitizeText(text: string | null) {
+  if (!text) return "";
+
+  return text
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+};
+
+export function getTypeOfFile(fileUrl: string){
+  if (['.jpg', '.jpeg', '.png', '.webp', '.svg', '.gif', '.jpe', '.ico', '.jfif', '.bmp'].some(function (ext) { return fileUrl.endsWith(ext) })) return "image";
+  if (['.mp4', '.mkv', '.avi', '.mov', '.wmv', '.flv', '.3gp'].some(function (ext) { return fileUrl.endsWith(ext) })) return "video";
+  if (['.mp3', '.wav', '.ogg', '.aac', '.m4a', '.amr'].some(function (ext) { return fileUrl.endsWith(ext) })) return "audio";
+  if (['.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.txt', '.csv', '.json', '.rtf', '.odt', '.csv'].some(function (ext) { return fileUrl.endsWith(ext) })) return "document";
+  return null;
+}
+
+export function ifAnImage(url: string) {
+  const imageExtensions = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".svg",
+    ".gif",
+    ".jpe",
+    ".ico",
+    ".jfif",
+    ".bmp",
+  ];
+  try {
+    return imageExtensions.some(function (ext) {
+      return url.endsWith(ext);
+    });
+  } catch (error) {
+    return false;
+  }
 }
 
 export function getSystemMessage(type: string) {
