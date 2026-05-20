@@ -26,6 +26,7 @@ import {
   getFormData,
   getIdentifiersData,
   getOperatorFromSession,
+  getTypeOfFile,
   isGPTEnabled,
   pushMessage,
   uuidv4,
@@ -501,6 +502,8 @@ const Conversation = (props: ConversationProps) => {
     message.fileName = file.name;
     message.url = file.bucketURL + file.file_resource;
     message.name = file.name;
+    message.type = getTypeOfFile(file.file_resource);
+    message.size = file.size;  
 
     // Send message
     postMessage(getChatMessage("", MessageFormatType.TEXT, [message]));

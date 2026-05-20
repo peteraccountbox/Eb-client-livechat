@@ -14,6 +14,8 @@ import {
   fileSize,
   fileUrl,
   formatBytes,
+  ifAnImage,
+  sanitizeText,
 } from "../Utils";
 import { GPT_MESSAGE_SCORE_UPDATE_URL_PATH } from "../globals";
 import { postReq } from "../request";
@@ -53,23 +55,6 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   //   return formatBytes(JSON.parse(props.message.message).fileSize, 0);
   // };
 
-  const ifAnImage = (url: string) => {
-    return false;
-    return [
-      ".jpg",
-      ".jpeg",
-      ".png",
-      ".webp",
-      ".svg",
-      ".gif",
-      ".jpe",
-      ".ico",
-      ".jfif",
-      ".bmp",
-    ].some(function (ext) {
-      return url.endsWith(ext);
-    });
-  };
 
   const getMessageTime = () => {
     return props.message.createdTime
@@ -255,64 +240,40 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                   ></span>
 
                   <div
-                    className="inbox-attachments inbox-attachments-links"
-                    style={{ marginTop: "8px" }}
+                    // className="inbox-attachments inbox-attachments-links"
+                    style={{ marginTop: "8px" , gap: "5px", display: "grid"}}
                   >
-                    {attachments &&
-                      attachments.length &&
-                      attachments.map((attachment: any) => {
-                        return ifAnImage(attachment.url) ? (
-                          attachment?.name ? (
-                            // <Tippy content={attachment.name}>
-                            <img
-                              src={attachment.url}
-                              alt={attachment.name || "Image"}
-                              className="w-20 h-20 object-cover"
-                            />
-                          ) : (
-                            // </Tippy>
-                            <img
-                              src={attachment.url}
-                              alt="Image"
-                              className="w-20 h-20 object-cover"
-                            />
-                          )
-                        ) : (
-                          <div
-                            className="inbox-attachment-item"
-                            key={attachment}
-                          >
-                            <a
-                              className="inbox-attachment-filename chat__header-user-table-cell"
-                              href={attachment.url}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              <div>
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke-width="1.5"
-                                  stroke="currentColor"
-                                  aria-hidden="true"
-                                  data-slot="icon"
-                                  className="attach-icon"
-                                >
-                                  <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
-                                  ></path>
-                                </svg>
-                              </div>
-                              <span>
-                                {attachment.fileName || attachment.name}
-                              </span>
-                            </a>
-                          </div>
-                        );
-                      })}
+                    {attachments && attachments.length && attachments.map((attachment: any) => {
+                  return (
+                    <div className="chat__header-user">
+                      <div className="chat__header-user-table">
+                      <div className="chat__header-user-img chat__header-user-file-img">
+                      {ifAnImage(attachment.url) ? (
+                        <img src={attachment.url} />
+                      ) : (
+                        <img src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/chatfile.png" />
+                      )}
+                    </div>
+                    <div className="chat__header-user-name chat__header-user-table-cell file-info">
+                      <a
+                        className="chat__header-user-name"
+                        target="_blank"
+                        href={attachment.url}
+                        dangerouslySetInnerHTML={{
+                          __html: createTextLinks_(sanitizeText(attachment.name)),
+                        }}
+                      ></a>
+                      {/* <div
+                        className="file-info-name"
+                        style={{ marginTop: "5px" }}
+                      >
+                        <span>{fileSize(attachment.size)}</span>
+                      </div> */}
+                    </div>
+                      </div>
+                    </div>
+                  );
+                })}
                   </div>
 
                   {props.message.from === MessageByTypeEnum.AI_AGENT &&
@@ -382,93 +343,44 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                     </div>
                   ) : (
                     <></>
-                  )}
+                  )}  
                 </>
               );
             case "FILE":
               return (
-                <div className="chat__header-user">
-                  <div className="chat__header-user-table">
-                    {/* <div className="chat__header-user-img chat__header-user-file-img">
-                      <img src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/chatfile.png" />
+                <div style={{gap: "5px", display: "grid"}}>
+                {attachments && attachments.length && attachments.map((attachment: any) => {
+                  return (
+                    <div className="chat__header-user">
+                      <div className="chat__header-user-table">
+                      <div className="chat__header-user-img chat__header-user-file-img">
+                      {ifAnImage(attachment.url) ? (
+                        <img src={attachment.url} />
+                      ) : (
+                        <img src="https://d2p078bqz5urf7.cloudfront.net/cloud/assets/livechat/chatfile.png" />
+                      )}
                     </div>
                     <div className="chat__header-user-name chat__header-user-table-cell file-info">
                       <a
                         className="chat__header-user-name"
                         target="_blank"
-                        href={fileUrl(props.message.message)}
+                        href={attachment.url}
                         dangerouslySetInnerHTML={{
-                          __html: createTextLinks_(
-                            fileName(props.message.message)
-                          ),
+                          __html: createTextLinks_(sanitizeText(attachment.name)),
                         }}
                       ></a>
-                      <div
+                      {/* <div
                         className="file-info-name"
                         style={{ marginTop: "5px" }}
                       >
-                        <span>{fileSize(props.message.message)}</span>
-                      </div>
-                    </div> */}
-                    <div className="inbox-attachments inbox-attachments-links">
-                      {attachments &&
-                        attachments.length &&
-                        attachments.map((attachment: any) => {
-                          return ifAnImage(attachment.url) ? (
-                            attachment?.name ? (
-                              // <Tippy content={attachment.name}>
-                              <img
-                                src={attachment.url}
-                                alt={attachment.name || "Image"}
-                                className="w-20 h-20 object-cover"
-                              />
-                            ) : (
-                              // </Tippy>
-                              <img
-                                src={attachment.url}
-                                alt="Image"
-                                className="w-20 h-20 object-cover"
-                              />
-                            )
-                          ) : (
-                            <div
-                              className="inbox-attachment-item"
-                              key={attachment}
-                            >
-                              <a
-                                className="inbox-attachment-filename chat__header-user-table-cell"
-                                href={attachment.url}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                <div>
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="1.5"
-                                    stroke="currentColor"
-                                    aria-hidden="true"
-                                    data-slot="icon"
-                                    className="attach-icon"
-                                  >
-                                    <path
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
-                                    ></path>
-                                  </svg>
-                                </div>
-                                <span>
-                                  {attachment.fileName || attachment.name}
-                                </span>
-                              </a>
-                            </div>
-                          );
-                        })}
+                        <span>{fileSize(attachment.size)}</span>
+                      </div> */}
                     </div>
-                  </div>
-                </div>
+                      </div>
+                    </div>
+                  );
+                })}
+                </div>  
               );
             case "FETCHING":
               return (
