@@ -173,7 +173,7 @@ const App: React.FunctionComponent = () => {
   useEffect(() => {
     if (chatPrefs) {
       setActiveTab(getWidgetActiveTabs());
-      if(!(agentsPrefs?.length > 0 && 
+      if(agentsPrefs?.length > 0 && !(
         !(chatPrefs.meta.hideOnNonBusiness &&
         !isUserBusinessHour(chatPrefs, agentsPrefs))))
         setIsVisible(false);
