@@ -171,8 +171,14 @@ const App: React.FunctionComponent = () => {
   const [loadingSessions, setLoadingSessions] = useState<boolean>(true);
 
   useEffect(() => {
-    setActiveTab(getWidgetActiveTabs());
-  }, [chatPrefs]);
+    if (chatPrefs) {
+      setActiveTab(getWidgetActiveTabs());
+      if(!(agentsPrefs?.length > 0 && 
+        !(chatPrefs.meta.hideOnNonBusiness &&
+        !isUserBusinessHour(chatPrefs, agentsPrefs))))
+        setIsVisible(false);
+    }
+  }, [chatPrefs, agentsPrefs]);
 
   useEffect(() => {
     setPromtWidth(PromtWidth.Small);
