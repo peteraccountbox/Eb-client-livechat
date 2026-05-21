@@ -22,12 +22,8 @@ export interface UserBusinessData {
 
 export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs: AgentPrefsPayloadType[]): boolean => {
   const liveChatAvailability = chatprefs.meta.liveChatAvailability;
-  // if (liveChatAvailability == "liveChat") {
-  //   return agentsPrefs.some((agentPref) => (agentPref.availability && agentPref.availability == "ONLINE"));
-  // }
-  if (liveChatAvailability == "ONLINE" && !chatprefs.meta.hideOnNonBusiness) 
-    return true;
-  if (liveChatAvailability == "ONLINE_ONLY_ON_BUSINESS_HOURS") {
+
+  if ((liveChatAvailability == "ONLINE" && chatprefs.meta.hideOnNonBusiness) || liveChatAvailability == "ONLINE_ONLY_ON_BUSINESS_HOURS") {
 
     try {
       if(chatprefs.meta.considerUsersBusinessHours)
@@ -70,5 +66,7 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
     }
     
   }
+  if (liveChatAvailability == "ONLINE") 
+    return true;
   return false;
 };
