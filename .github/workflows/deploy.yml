@@ -1,0 +1,86 @@
+name: Deploy Eb-client-livechat
+
+on:
+  push:
+    branches:
+      - qa
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Read VERSION
+        id: version
+        run: |
+          VERSION=$(cat VERSION | tr -d '[:space:]')
+          if [ -z "$VERSION" ]; then
+            echo "::error::VERSION file is missing or empty — add a VERSION file at the repo root"
+            exit 1
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "VERSION resolved to: $VERSION"
+
+      - name: Write SSH key and known_hosts
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$EC2_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Ensure target directory exists on EC2
+        env:
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          ssh -i ~/.ssh/id_rsa "$EC2_USER@$EC2_HOST" "mkdir -p ~/livechat-react-unified"
+
+      - name: Package and deploy versioned build to EC2
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          mkdir -p "$VERSION"
+          cp -r build/* "$VERSION/"
+          zip -r "$VERSION.zip" "$VERSION"
+          scp -i ~/.ssh/id_rsa "$VERSION.zip" "$EC2_USER@$EC2_HOST:~/livechat-react-unified/"
+          ssh -i ~/.ssh/id_rsa "$EC2_USER@$EC2_HOST" \
+            "unzip -o livechat-react-unified/$VERSION -d livechat-react-unified && rm -f livechat-react-unified/$VERSION.zip"
+          echo "Deployed $VERSION to EC2"
+
+      - name: Invalidate CloudFront
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          CF_DIST_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+          AWS_PAGER: ''
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "$CF_DIST_ID" \
+            --paths "/livechat-react-unified/$VERSION/*"
+          echo "CloudFront invalidation submitted for $VERSION"
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/id_rsa
