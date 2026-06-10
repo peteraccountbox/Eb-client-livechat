@@ -7,8 +7,8 @@ import { postReq } from "../request";
 interface FileUploadProps {
   fileUploadCallback(status: string, file: any): void;
   component?: any;
-  files?: any;
-  setFiles?: (arg0: []) => void;
+  files:any;
+  setFiles:(arg0:[]) => void;
 }
 
 const FileUpload: React.FC<FileUploadProps> = (props) => {
@@ -25,9 +25,9 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
     return status !== "uploading" ? attach : loader;
   };
   useEffect(() => {
-    if (files?.length > 0 && setFiles) {
-      uploadFile(files);
-      setFiles([]);
+    if(files.length > 0) {
+    uploadFile(files)
+    setFiles([]);
     }
     return () => {};
   }, [files]);
@@ -144,6 +144,8 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
     fd.append("signature", "yQfJQnt5Jdbomu680QKvK4oD15c=");
     // fd.append('Content-Type', file.type | 'binary/octet-stream');
     fd.append("Content-Type", "binary/octet-stream");
+    if (file.type == 'image/svg+xml')
+      fd.set('Content-Type', file.type);
     fd.append("file", file);
 
     return fd;

@@ -91,6 +91,100 @@ const Conversation = (props: ConversationProps) => {
   const [files, setFiles] = useState<any>([]);
   const [typingTimer, setTypingTimer] = useState<any>();
   const [saving, setSaving] = useState<boolean>(false);
+  const [fileData, setFileData] = useState<Set<any>>(new Set());
+
+  const pasteFiles = (e: any, items: any, noFile?: boolean) => {
+    const files: any = [];
+    if (!noFile) {
+      for (const item of items) {
+        if (item.kind.indexOf("string") == -1) {
+          const blob = item.getAsFile();
+          files.push(blob);
+
+          const reader = new FileReader();
+
+          // Capture the current selection range
+          const selection = window.getSelection();
+          if (!selection || !selection.rangeCount) continue;
+          const range = selection.getRangeAt(0).cloneRange();
+
+          reader.onload = (elem) => {
+            document.querySelector(".img-wrapper")?.remove();
+            document.querySelector(".doc-wrapper")?.remove();
+            const wrapper = document.createElement("div");
+            if (
+              [
+                ".png",
+                ".jpg",
+                ".jpeg",
+                ".gif",
+                ".bmp",
+                ".svg",
+                ".ico",
+                ".jfif",
+                ".webp",
+                ".jpe",
+              ].some((ext) => blob.name.endsWith(ext))
+            ) {
+              wrapper.className = "img-wrapper";
+
+              const img: any = document.createElement("img");
+              img.className = "img-content";
+              img.src = elem?.target?.result;
+              wrapper.appendChild(img);
+            } else {
+              // console.log("doc ...");
+              wrapper.className = "doc-wrapper";
+              const subWrapper = document.createElement("div");
+              subWrapper.className = "doc-element";
+              subWrapper.innerHTML =
+                '<svg id="Icons" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="m20.828 9.917-7.984 7.983a4.93 4.93 0 0 1 -6.807.273 4.766 4.766 0 0 1 -.1-6.843l6.8-6.8a2.845 2.845 0 0 1 4.023 4.023l-6.8 6.8a.944.944 0 0 1 -1.3 0 .925.925 0 0 1 0-1.3l5.437-5.437a1 1 0 0 0 -1.424-1.416l-5.437 5.435a2.927 2.927 0 0 0 0 4.133 2.992 2.992 0 0 0 4.132 0l6.8-6.8a4.845 4.845 0 1 0 -6.855-6.848l-6.8 6.8a6.765 6.765 0 0 0 .148 9.713 6.607 6.607 0 0 0 4.562 1.767 7.122 7.122 0 0 0 5.035-2.087l7.984-7.984a1 1 0 1 0 -1.414-1.414z"></path></svg>';
+
+              const nameSpan = document.createElement("span");
+              nameSpan.className = "mx-2";
+              nameSpan.textContent = blob.name;
+              subWrapper.appendChild(nameSpan);
+              wrapper.appendChild(subWrapper);
+            }
+
+            const closeBtn = document.createElement("span");
+            closeBtn.className = "img-close";
+            closeBtn.innerHTML = "&times;";
+            closeBtn.onclick = () => {
+              wrapper.remove();
+              setFileData((prev) => {
+                const newSet = new Set(prev);
+                newSet.delete(blob);
+                return newSet;
+              });
+            };
+
+            wrapper.appendChild(closeBtn);
+
+            // Insert the image *after* the editable div
+            const inputBox = document.getElementById("chatMessageEditable");
+            if (inputBox) {
+              inputBox.insertAdjacentElement("afterend", wrapper);
+              scrollInput();
+            }
+          };
+
+          reader.readAsDataURL(blob);
+
+          // prevent default paste
+          e.preventDefault();
+        }
+        break; // Only handle one file for now
+      }
+    }
+
+    setFileData((prev: any) => new Set([...prev, ...files]));
+  };
+
+  const scrollInput = () => {
+    var elem = document.getElementsByClassName("chat__form")[0];
+    if (elem) elem.scrollTop = elem.scrollHeight;
+  };
 
   const getEmptySession = () => {
     let session = {} as ChatSessionPaylodObj;
@@ -970,12 +1064,19 @@ const Conversation = (props: ConversationProps) => {
               }
               contentEditable="true"
               onPaste={(e) => {
-                e.preventDefault();
-                document.execCommand(
-                  "insertHTML",
-                  false,
-                  e.clipboardData.getData("text/plain"),
-                );
+                // e.preventDefault();
+                const items: any = e.clipboardData?.items || [];
+                if (
+                  session &&
+                  session.lastConnectionWith === ChatSessionConnectedWithEnum.AGENT
+                )
+                  pasteFiles(e, items, false);
+                else pasteFiles(e, items, true);
+                // document.execCommand(
+                //   "insertHTML",
+                //   false,
+                //   e.clipboardData.getData("text/plain"),
+                // );
               }}
               onKeyDown={handleKeyDown}
               disabled={disableType()}
@@ -991,8 +1092,9 @@ const Conversation = (props: ConversationProps) => {
               session.lastConnectionWith ===
                 ChatSessionConnectedWithEnum.AGENT ? (
                 <FileUpload
-                  setFiles={setFiles}
                   fileUploadCallback={fileUploadCallback}
+                  files={files}
+                  setFiles={setFiles}
                 />
               ) : (
                 <></>

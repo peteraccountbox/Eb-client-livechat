@@ -1540,7 +1540,7 @@
 		// align-items: stretch;
 		// justify-content: space-between;
 		min-height: 57px;
-		max-height: 57px;
+		// max-height: 57px;
 		overflow-y: auto;
 		padding-right: 110px;
 		padding-left: 10px;
@@ -5568,3 +5568,65 @@ input[type="checkbox"] {
   }
 }
 .epr-emoji-category-content .button {}
+
+.img-wrapper {
+	display: inline-block;
+    position: relative;
+    width: 56px;
+    height: 56px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.doc-wrapper {
+    display: inline-block;
+    position: relative;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    background-color: white;
+    padding: 8px;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,6,36,.16);
+}
+
+.doc-element {
+	display: flex;
+    align-items: center;
+}
+
+.mx-2 {
+	margin-left: 0.5rem;
+	margin-right: 0.5rem;
+}
+.img-content {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border: 1px solid black;
+    border-radius: 20%;
+    margin-right: 8px;
+}
+
+.img-close {
+	position: absolute;
+    display: none;
+    top: -6px;
+    right: -6px;
+    background: black;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.img-wrapper:hover ,
+    .doc-wrapper:hover {
+            .img-close {
+                display: block;
+            }
+    }
