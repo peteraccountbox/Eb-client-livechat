@@ -564,3 +564,11 @@ export function getSystemMessage(type: string) {
   }
   return message;
 }
+
+export function getRestrictedFileTypes() {
+  try {
+    return (window.parent as any).Account_Box_File_Upload?.getRestrictedFileTypes();
+  } catch (error) {
+    return [];
+  }
+}

@@ -3,6 +3,7 @@ import attach from "../assets/img/attach.png";
 import loader from "../assets/img/loader.gif";
 import { FILE_UPLOAD_URL_PATH } from "../globals";
 import { postReq } from "../request";
+import { getRestrictedFileTypes } from "../Utils";
 
 interface FileUploadProps {
   fileUploadCallback(status: string, file: any): void;
@@ -16,7 +17,6 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
   const input = useRef<HTMLInputElement>(null);
   const [filesCount, setFilesCount] = useState(0);
   const [status, setStatus] = useState("completed");
-  const [excludeExt, setExcludeExt] = useState(["html", "exe", "xhtml"]);
   const [bucketURL, setBucketURL] = useState(
     "https://s3.amazonaws.com/ebuploads2/"
   );
@@ -153,7 +153,7 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
     var file_name = file.name.split(".")[0];
     var file_extension = file.name.split(".").pop();
 
-    if (excludeExt.includes(file_extension)) {
+    if (getRestrictedFileTypes().includes(file_extension)) {
       file.error_mssg = "Sorry, you cannot upload such files.";
       emitEvent("error", file);
       return false;
