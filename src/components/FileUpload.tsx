@@ -154,8 +154,9 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
     var file_extension = file.name.split(".").pop();
 
     if (getRestrictedFileTypes().includes(file_extension)) {
-      file.error_mssg = "Sorry, you cannot upload such files.";
+      file.error_mssg = 'Files with .' + (file_extension || 'unknown').toLowerCase() + ' extension are not allowed';
       emitEvent("error", file);
+      setStatus("completed");
       return false;
     }
 
@@ -163,6 +164,7 @@ const FileUpload: React.FC<FileUploadProps> = (props) => {
     if (file.size > 50 * 1024 * 1024) {
       file.error_mssg = "Sorry, you cannot upload files larger than 50 MB.";
       emitEvent("error", file);
+      setStatus("completed");
       return false;
     }
 
