@@ -1,4 +1,5 @@
 import { EngagebayChatWidgetManager } from "./EngagebayChatWidgetManager";
+import { PARENT_WINDOW } from "./globals";
 
 export function loadLivechatWidget(prefs: any, type: string) {
     var selectedChannel: any, channelId: any;
@@ -38,7 +39,20 @@ export function loadLivechatWidget(prefs: any, type: string) {
                         "class": "engagebay-namespace engagebay-chat-widget"
                     });
                     document.body.appendChild(widgetContainer);
-
+                    if (prefs.botPrefs && prefs.botPrefs.length > 0) {
+                        // Send each `bot to the web rule validator
+                        for (var i = 0; i < prefs.botPrefs.length; i++) {
+                            try {
+                                // do not validate rules in preview
+                                PARENT_WINDOW.EhGrabbers.validateRules(prefs.botPrefs[i]);
+                                // As valid rule, Setting matched pref as global to access in livechat
+                                prefs.matchedBotPrefs = prefs.botPrefs[i];
+                                break;
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                    }
                     if (widgetContainer) {
                         loadChat(widgetContainer, selectedChannel || prefs, type);
                     }
