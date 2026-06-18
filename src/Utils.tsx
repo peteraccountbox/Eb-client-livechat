@@ -200,23 +200,43 @@ export const pushMessage = (
   if (!session) {
     return;
   }
+  
+  let index = session.messageList?.findIndex((message) => message.id === event.id);
 
+  if (event._deleted) {
+    if (index !== undefined && index > -1) {
+      session.messageList?.splice(index, 1);
+    }
+    if (index == session.messageList?.length && session.messageList?.length > 0) {
+      session.lastMessage = session.messageList[session.messageList.length - 1].message.bodyText;
+      session.lastMessageAt = session.messageList[session.messageList.length - 1].createdTime;
+      let lastAgentMsgIndex = session.messageList?.findLastIndex((message) => message.from === "AGENT");
+      if (lastAgentMsgIndex !== undefined && lastAgentMsgIndex > -1)
+        session.lastAgentMessageAt = session.messageList[lastAgentMsgIndex].createdTime;
+      else
+        session.lastAgentMessageAt = undefined;
+    }
+    return session;
+  }
   // Push message
   let matchFound = false;
-  session.messageList &&
-    session.messageList.length &&
-    session.messageList.forEach(function (eachMessage, index) {
-      if (eachMessage.id && eachMessage.id == event.id) {
-        matchFound = true;
-        session.messageList[index] = event;
-      }
-    });
+  if (index !== undefined && index > -1) {
+    matchFound = true;
+    if (index == session.messageList?.length - 1)
+      session.lastMessage = event.message.bodyText;
+    session.messageList[index] = event;
+    session.customerUnreadMessagesCount -= 1;
+  }
 
   if (
     !matchFound &&
     (!session.id || (session.messageList && session.messageList.length))
-  )
+  ) {
+    session.lastMessage = event.message.bodyText;
+    session.lastAgentMessageAt = event.createdTime;
+    session.lastMessageAt = event.createdTime;
     session.messageList.push(event);
+  }
 
   if (event.from != "CUSTOMER")
     // Play sound
