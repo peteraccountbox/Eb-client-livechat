@@ -210,7 +210,15 @@ export const pushMessage = (
     if (index == session.messageList?.length && session.messageList?.length > 0) {
       session.lastMessage = session.messageList[session.messageList.length - 1].message.bodyText;
       session.lastMessageAt = session.messageList[session.messageList.length - 1].createdTime;
-      let lastAgentMsgIndex = session.messageList?.findLastIndex((message) => message.from === "AGENT");
+      let lastAgentMsgIndex = -1;
+      if (session.messageList) {
+        for (let i = session.messageList.length - 1; i >= 0; i--) {
+          if (session.messageList[i].from === "AGENT") {
+            lastAgentMsgIndex = i;
+            break; // Stop looping once the latest agent message is found
+          }
+        }
+      }
       if (lastAgentMsgIndex !== undefined && lastAgentMsgIndex > -1)
         session.lastAgentMessageAt = session.messageList[lastAgentMsgIndex].createdTime;
       else
