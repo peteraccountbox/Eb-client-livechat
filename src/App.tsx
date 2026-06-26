@@ -290,7 +290,7 @@ const App: React.FunctionComponent = () => {
           },
         );
       } else {
-        if (messageSession && !message.message?._deleted) {
+        if (messageSession) {
           if (message.message.from == MessageByTypeEnum.AI_AGENT)
             messageSession.customerUnreadMessagesCount = 1;
           else messageSession.customerUnreadMessagesCount += 1;
