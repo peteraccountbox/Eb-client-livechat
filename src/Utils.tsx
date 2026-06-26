@@ -203,29 +203,6 @@ export const pushMessage = (
   
   let index = session.messageList?.findIndex((message) => message.id === event.id);
 
-  if (event._deleted) {
-    if (index !== undefined && index > -1) {
-      session.messageList?.splice(index, 1);
-    }
-    if (index == session.messageList?.length && session.messageList?.length > 0) {
-      session.lastMessage = session.messageList[session.messageList.length - 1].message.bodyText;
-      session.lastMessageAt = session.messageList[session.messageList.length - 1].createdTime;
-      let lastAgentMsgIndex = -1;
-      if (session.messageList) {
-        for (let i = session.messageList.length - 1; i >= 0; i--) {
-          if (session.messageList[i].from === "AGENT") {
-            lastAgentMsgIndex = i;
-            break; // Stop looping once the latest agent message is found
-          }
-        }
-      }
-      if (lastAgentMsgIndex !== undefined && lastAgentMsgIndex > -1)
-        session.lastAgentMessageAt = session.messageList[lastAgentMsgIndex].createdTime;
-      else
-        session.lastAgentMessageAt = undefined;
-    }
-    return session;
-  }
   // Push message
   let matchFound = false;
   if (index !== undefined && index > -1) {

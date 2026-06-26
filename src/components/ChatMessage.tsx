@@ -146,6 +146,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                       {props.message.message?.bodyText}
                     </ReactMarkdown>
                   ) : (
+                    props.message.lastAction !== "DELETED" ?
                     <span
                       className="actual"
                       dangerouslySetInnerHTML={{
@@ -153,7 +154,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                           convertEmojis(props.message.message?.bodyText)
                         ),
                       }}
-                    ></span>
+                    ></span>:<span>This message was deleted by the agent</span>
                   )}
 
                   {props.message.from === MessageByTypeEnum.AI_AGENT &&
@@ -229,6 +230,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
             case "TEXT_AND_FILE":
               return (
                 <>
+                  {props.message.lastAction !== "DELETED" ?
                   <span
                     className="actual"
                     dangerouslySetInnerHTML={{
@@ -237,13 +239,13 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                         { target: "_blank" }
                       ),
                     }}
-                  ></span>
+                  ></span>: <span>This message was deleted by the agent</span>}
 
-                  <div
+                  {attachments && attachments.length && <div
                     // className="inbox-attachments inbox-attachments-links"
                     style={{ marginTop: "8px" , gap: "5px", display: "grid"}}
                   >
-                    {attachments && attachments.length && attachments.map((attachment: any) => {
+                    {attachments.map((attachment: any) => {
                   return (
                     <div className="chat__header-user">
                       <div className="chat__header-user-table">
@@ -274,7 +276,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                     </div>
                   );
                 })}
-                  </div>
+                  </div>}
 
                   {props.message.from === MessageByTypeEnum.AI_AGENT &&
                   props.message.sources &&
@@ -348,6 +350,8 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
               );
             case "FILE":
               return (
+                <>
+                {props.message.lastAction !== "DELETED" ?
                 <div style={{gap: "5px", display: "grid"}}>
                 {attachments && attachments.length && attachments.map((attachment: any) => {
                   return (
@@ -380,7 +384,8 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                     </div>
                   );
                 })}
-                </div>  
+                </div>: <span>This message was deleted by the agent</span>}
+                </>
               );
             case "FETCHING":
               return (
