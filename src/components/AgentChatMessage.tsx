@@ -72,7 +72,7 @@ const AgentChatMessage: FC<AgentChatMessagePropsType> = (props) => {
               </li>
             </ul>
           </div>
-          {props.message.lastAction == "EDITED" && <div style={{paddingLeft: "45px"}}>Edited</div>}
+          {props.message.lastAction == "EDITED" && <span style={{paddingLeft: "45px", fontSize: "14px", color: "gray"}}>Edited</span>}
 
           {/* <div className="chat__messages-timestamp"> */}
           {/* <>{getMessageTime()}</> */}
