@@ -1198,6 +1198,10 @@
 				color: $color-gray-alt-3;
 			}
 		}
+		&-deleted {
+			font-size: 12px;
+            padding: 12px 0px;
+		}
 
 		&-container {
 			padding: 20px;
