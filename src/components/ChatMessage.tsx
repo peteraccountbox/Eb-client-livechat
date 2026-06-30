@@ -95,7 +95,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
       disabled={props.message.id ? false : true}
     >
       <div
-        className={`chat__messages-bubble chat__message-type-${format}`}
+        className={`chat__messages-${props.message.lastAction === "DELETED" ? "deleted" : "bubble chat__message-type-" + format}`}
         style={errorStyle}
       >
         {(() => {
