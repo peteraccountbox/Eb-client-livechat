@@ -154,7 +154,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                           convertEmojis(props.message.message?.bodyText)
                         ),
                       }}
-                    ></span>:<span>This message was deleted by the agent</span>
+                    ></span>:<span>This message was deleted</span>
                   )}
 
                   {props.message.from === MessageByTypeEnum.AI_AGENT &&
@@ -239,7 +239,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                         { target: "_blank" }
                       ),
                     }}
-                  ></span>: <span>This message was deleted by the agent</span>}
+                  ></span>: <span>This message was deleted</span>}
 
                   {attachments && attachments.length && <div
                     // className="inbox-attachments inbox-attachments-links"
@@ -384,7 +384,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                     </div>
                   );
                 })}
-                </div>: <span>This message was deleted by the agent</span>}
+                </div>: <span>This message was deleted</span>}
                 </>
               );
             case "FETCHING":
