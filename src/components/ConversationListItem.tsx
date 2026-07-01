@@ -204,7 +204,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
                 >
                   {props.session.lastMessage
                     ? props.session.lastMessage
-                    : "This message was deleted by the agent"}
+                    : "This message was deleted"}
                 </p>
               </>
             )}
