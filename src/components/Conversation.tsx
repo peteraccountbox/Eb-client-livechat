@@ -696,8 +696,10 @@ const Conversation = (props: ConversationProps) => {
     //  userUnFocused();
 
     // Send message and make empty
-    postMessage(getChatMessage(message, undefined));
-    setScrollBottom();
+    if(message) {
+      postMessage(getChatMessage(message, undefined));
+      setScrollBottom();
+    }
   };
 
   const getHeaderIcon = () => {
