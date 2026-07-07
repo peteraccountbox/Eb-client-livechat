@@ -623,7 +623,7 @@ const Conversation = (props: ConversationProps) => {
 
   const handleKeyDown = (e: any) => {
     if (e.shiftKey && e.key === "Enter") return;
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && typeText?.trim()) {
       e.preventDefault();
       sendMessage(false);
     }
@@ -692,10 +692,8 @@ const Conversation = (props: ConversationProps) => {
     //  userUnFocused();
 
     // Send message and make empty
-    if(message) {
-      postMessage(getChatMessage(message, undefined));
-      setScrollBottom();
-    }
+    postMessage(getChatMessage(message, undefined));
+    setScrollBottom();
   };
 
   const getHeaderIcon = () => {
@@ -996,7 +994,7 @@ const Conversation = (props: ConversationProps) => {
                 <></>
               )}
 
-              {typeText ? (
+              {typeText?.trim() ? (
                 <button
                   className="chat__btn chat_send_btn1 chat_send_btn-icon"
                   onClick={() => sendMessage(false)}
