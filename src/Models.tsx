@@ -1,5 +1,5 @@
 import { type } from "node:os";
-import { BusinessHour } from "./BusinessHours";
+import { BusinessHour, DateOverride } from "./BusinessHours";
 
 // export type ChatPrefsWidgetType = {
 //   position: string;
@@ -229,6 +229,7 @@ export type AgentPaylodObj = {
 export type AgentPrefsPayloadType = {
   availability: string;
   business_hours: BusinessHour[];
+  date_overrides : DateOverride[];
   timezone: string;
   id: string;
   tenantId: string;

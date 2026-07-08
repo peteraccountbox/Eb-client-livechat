@@ -6,6 +6,11 @@ interface Session {
   endTime: string;
 }
 
+interface Interval {
+  from: string;
+  to: string;
+}
+
 export enum DAYS {
   SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY
 }
@@ -13,6 +18,11 @@ export enum DAYS {
 export interface BusinessHour {
   enabledDay: string;
   sessions: Session[];
+}
+
+export interface DateOverride {
+  dates: string[];
+  intervals: Interval[];
 }
 
 export interface UserBusinessData {
@@ -28,11 +38,20 @@ export const isUserBusinessHour = (chatprefs: ChatPrefsPayloadType, agentsPrefs:
     try {
       if(chatprefs.meta.considerUsersBusinessHours)
       return agentsPrefs.some((agentPref: AgentPrefsPayloadType) => {
-        if (!agentPref.business_hours || agentPref.business_hours.length === 0) return false;
         const timezone = agentPref.timezone || "UTC";
         const now = moment.tz(timezone);
-        const currentDay = now.day(); // 0 (Sunday) to 6 (Saturday)
         const currentTime = now.format('HH:mm');
+        if(agentPref.date_overrides?.length > 0) {
+          const currentDate = now.format('YYYY-MM-DD');
+          const dateOverride = agentPref.date_overrides.find((dateOverride: DateOverride) => dateOverride.dates?.length > 0 && dateOverride.dates.includes(currentDate));
+          if(dateOverride?.intervals)
+            return dateOverride.intervals?.some((interval: Interval) => {
+              const startTime = interval.from, endTime = interval.to;
+              return currentTime >= startTime && currentTime <= endTime;
+            }) || false;
+        }
+        if (!agentPref.business_hours || agentPref.business_hours.length === 0) return false;
+        const currentDay = now.day(); // 0 (Sunday) to 6 (Saturday)
         const todayBusinessHours = agentPref.business_hours.find((currentBusinessHours: any) => currentBusinessHours.day === DAYS[currentDay].toLowerCase()) as any;
         const timeFrom = todayBusinessHours?.timeFrom.split(',') || [];
         const timeTill = todayBusinessHours?.timeTill.split(',') || [];
