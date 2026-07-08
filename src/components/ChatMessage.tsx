@@ -63,7 +63,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   };
 
   const submitGPTFeedback = (feedback: number) => {
-    props.message.gpt_relavance_score = feedback;
+    props.message.message.gptRelevanceScore = feedback;
     props.updateMessage(props.message.message);
 
     // Push to server
@@ -192,7 +192,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                       <span
                         onClick={() => submitGPTFeedback(1)}
                         className={`btn positive-btn ${
-                          props.message.gpt_relavance_score === 1
+                          props.message.message.gptRelevanceScore === 1
                             ? "active"
                             : ""
                         }`}
@@ -208,7 +208,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                       <span
                         onClick={() => submitGPTFeedback(2)}
                         className={`btn negative-btn ${
-                          props.message.gpt_relavance_score === 2
+                          props.message.message.gptRelevanceScore === 2
                             ? "active"
                             : ""
                         }`}
@@ -313,7 +313,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                       <span
                         onClick={() => submitGPTFeedback(1)}
                         className={`btn positive-btn ${
-                          props.message.gpt_relavance_score === 1
+                          props.message.message.gptRelevanceScore === 1
                             ? "active"
                             : ""
                         }`}
@@ -329,7 +329,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                       <span
                         onClick={() => submitGPTFeedback(2)}
                         className={`btn negative-btn ${
-                          props.message.gpt_relavance_score === 2
+                          props.message.message.gptRelevanceScore === 2
                             ? "active"
                             : ""
                         }`}
