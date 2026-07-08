@@ -84,7 +84,7 @@ export const KB_SEARCH_URL_PATH: string = "jsapi/rest/hc/search";
 export const KB_SEARCH_URL_PATH_V2: string = "jsapi/rest/hc/v2/search";
 
 export const GPT_MESSAGE_SCORE_UPDATE_URL_PATH: string =
-  "api/support/jsclient/widget/submit-gpt-message-feedback";
+  "api/support/jsclient/inbox/submit-gpt-message-feedback";
 
 export const BOT_FETCH_URL_PATH: string = "";
 
