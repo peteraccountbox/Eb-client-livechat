@@ -187,7 +187,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                     <></>
                   )}
 
-                  {/* {props.message.from === MessageByTypeEnum.AI_AGENT ? (
+                  {props.message.from === MessageByTypeEnum.AI_AGENT ? (
                     <div className="feedback-actions">
                       <span
                         onClick={() => submitGPTFeedback(1)}
@@ -224,7 +224,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                     </div>
                   ) : (
                     <></>
-                  )} */}
+                  )}
                 </>
               );
             case "TEXT_AND_FILE":
