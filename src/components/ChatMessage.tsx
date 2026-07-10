@@ -31,7 +31,7 @@ import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 export interface ChatMessagePropsType {
   message: EventPayloadObj;
   sessionId?: number | string;
-  updateMessage: (message: ChatMessagePayloadObj) => void;
+  updateMessage: (message: EventPayloadObj) => void;
 }
 
 const ChatMessage: FC<ChatMessagePropsType> = (props) => {
@@ -76,8 +76,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
     if(feedback == props.message.message.gptRelevanceScore)
       new_feedback = 0; // Reset score if the same button is clicked again
     props.message.message.gptRelevanceScore = feedback;
-    props.message.feedback = "2";
-    props.updateMessage(props.message.message);
+    props.updateMessage(props.message);
 
     // Push to server
     const wait = postReq(
