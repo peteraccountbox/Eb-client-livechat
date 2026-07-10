@@ -38,15 +38,15 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   const format = props.message.message.format as unknown as string;
   const attachments = props.message.message.attachments as unknown as [];
   const lastClickTimeRef = useRef<number>(0);
-  const CLICK_DEBOUNCE_MS = 300;
+  const CLICK_DEBOUNCE_MS = 500;
 
-  // const errorStyle = useMemo(() => {
-  //   return !props.message.id &&
-  //     !props.message.tempId &&
-  //     props.message.from !== MessageByTypeEnum.AI_AGENT
-  //     ? { backgroundColor: "red" }
-  //     : {};
-  // }, [!props.message.id]);
+  const errorStyle = useMemo(() => {
+    return !props.message.id &&
+      !props.message.tempId &&
+      props.message.from !== MessageByTypeEnum.AI_AGENT
+      ? { backgroundColor: "red" }
+      : {};
+  }, [!props.message.id]);
   // const filename = (message: ChatMessagePaylodObj) => {
   //   return JSON.parse(message.message).fileName;
   // };
@@ -76,6 +76,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
     if(feedback == props.message.message.gptRelevanceScore)
       new_feedback = 0; // Reset score if the same button is clicked again
     props.message.message.gptRelevanceScore = feedback;
+    props.message.feedback = "2";
     props.updateMessage(props.message.message);
 
     // Push to server
@@ -110,7 +111,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
     >
       <div
         className={`chat__messages-${props.message.lastAction === "DELETED" ? "deleted" : "bubble chat__message-type-" + format}`}
-        // style={errorStyle}
+        style={errorStyle}
       >
         {(() => {
           setScrollBottom();
