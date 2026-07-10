@@ -292,7 +292,7 @@ const Conversation = (props: ConversationProps) => {
       .catch(() => {});
   };
 
-  const updateMessage = (message: ChatMessagePayloadObj) => {
+  const updateMessage = (message: EventPayloadObj) => {
     if (!message.ticketId) {
       return;
     }
