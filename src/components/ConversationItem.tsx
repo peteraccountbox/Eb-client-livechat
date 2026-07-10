@@ -16,7 +16,7 @@ export interface ConversationItemPropsType {
   session: ChatSessionPaylodObj | undefined;
   nextMessage: EventPayloadObj | undefined;
   // formFields: ChatFromFieldDataPayLoad[];
-  updateMessage: (message: ChatMessagePayloadObj) => void;
+  updateMessage: (message: EventPayloadObj) => void;
 }
 
 const ConversationItem: FC<ConversationItemPropsType> = (props) => {

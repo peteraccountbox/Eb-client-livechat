@@ -1,5 +1,5 @@
 import React, { FC, useContext, useEffect } from "react";
-import { ChatMessagePayloadObj } from "../Models";
+import { ChatMessagePayloadObj, EventPayloadObj } from "../Models";
 import ChatMessage from "./ChatMessage";
 
 import { AppContext } from "../appContext";
@@ -11,7 +11,7 @@ export interface GPTChatMessagePropsType {
   message: any;
   sessionId?: number | string;
   formatMessageTime(): void;
-  updateMessage: (message: ChatMessagePayloadObj) => void;
+  updateMessage: (message: EventPayloadObj) => void;
   //   executeAiAction:
   //     | ((action: string, message?: string, aiInputMessage?: string) => void)
   //     | null;
