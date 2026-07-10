@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo } from "react";
+import React, { FC, useEffect, useMemo, useRef } from "react";
 import { getTextOfJSDocComment } from "typescript";
 import {
   ChatMessagePayloadObj,
@@ -37,14 +37,16 @@ export interface ChatMessagePropsType {
 const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   const format = props.message.message.format as unknown as string;
   const attachments = props.message.message.attachments as unknown as [];
+  const lastClickTimeRef = useRef<number>(0);
+  const CLICK_DEBOUNCE_MS = 300;
 
-  const errorStyle = useMemo(() => {
-    return !props.message.id &&
-      !props.message.tempId &&
-      props.message.from !== MessageByTypeEnum.AI_AGENT
-      ? { backgroundColor: "red" }
-      : {};
-  }, [!props.message.id]);
+  // const errorStyle = useMemo(() => {
+  //   return !props.message.id &&
+  //     !props.message.tempId &&
+  //     props.message.from !== MessageByTypeEnum.AI_AGENT
+  //     ? { backgroundColor: "red" }
+  //     : {};
+  // }, [!props.message.id]);
   // const filename = (message: ChatMessagePaylodObj) => {
   //   return JSON.parse(message.message).fileName;
   // };
@@ -63,6 +65,16 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
   };
 
   const submitGPTFeedback = (feedback: number) => {
+    const now = Date.now();
+    if (now - lastClickTimeRef.current < CLICK_DEBOUNCE_MS) {
+      return; // Ignore double-click within debounce window
+    }
+    lastClickTimeRef.current = now;
+
+    console.log("score");
+    let new_feedback = feedback;
+    if(feedback == props.message.message.gptRelevanceScore)
+      new_feedback = 0; // Reset score if the same button is clicked again
     props.message.message.gptRelevanceScore = feedback;
     props.updateMessage(props.message.message);
 
@@ -71,6 +83,8 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
       GPT_MESSAGE_SCORE_UPDATE_URL_PATH + "/" + props.sessionId,
       props.message
     );
+    if(new_feedback == 0)
+      props.message.message.gptRelevanceScore = 0; // Reset score if the same button is clicked again
     wait.then((response: any) => {
       console.log(response);
     });
@@ -95,8 +109,8 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
       disabled={props.message.id ? false : true}
     >
       <div
-        className={`chat__messages-bubble chat__message-type-${format}`}
-        style={errorStyle}
+        className={`chat__messages-${props.message.lastAction === "DELETED" ? "deleted" : "bubble chat__message-type-" + format}`}
+        // style={errorStyle}
       >
         {(() => {
           setScrollBottom();
