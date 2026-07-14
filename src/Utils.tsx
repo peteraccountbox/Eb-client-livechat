@@ -201,7 +201,7 @@ export const pushMessage = (
     return;
   }
   
-  let index = session.messageList?.findIndex((message) => message.id === event.id);
+  let index = session.messageList?.findIndex((message) => message.id && message.id === event.id);
 
   // Push message
   let matchFound = false;
@@ -214,7 +214,7 @@ export const pushMessage = (
   }
 
   if (
-    !matchFound &&
+    !matchFound && event.from != MessageByTypeEnum.CUSTOMER &&
     (!session.id || (session.messageList && session.messageList.length))
   ) {
     session.lastMessage = event.message.bodyText;
@@ -222,8 +222,11 @@ export const pushMessage = (
     session.lastMessageAt = event.createdTime;
     session.messageList.push(event);
   }
+  else if (!matchFound && event.from == MessageByTypeEnum.CUSTOMER) {
+    session.messageList.push(event);
+  }
 
-  if (event.from != "CUSTOMER")
+  if (event.from != MessageByTypeEnum.CUSTOMER)
     // Play sound
     playSound(
       "https://d2p078bqz5urf7.cloudfront.net/cloud/assets/sounds/track3.mp3"
