@@ -19,7 +19,7 @@ import {
   EventPayloadObj,
   AttachmentType,
   AIBotPayloadType,
-  AgentPrefsPayloadType,
+  AgentPaylodObj,
 } from "../Models";
 import {
   getBrowserInfo,
@@ -80,7 +80,7 @@ export interface ConversationProps {
 
 const Conversation = (props: ConversationProps) => {
   const parentContext = useContext(AppContext);
-  const { chatPrefs, sessions, setSessions, createSessionData, agentsPrefs } =
+  const { chatPrefs, sessions, setSessions, createSessionData, agents } =
     parentContext;
   const { botPrefs } = chatPrefs;
 
@@ -701,7 +701,7 @@ const Conversation = (props: ConversationProps) => {
   };
 
   const getHeaderIcon = () => {
-    const agent: AgentPrefsPayloadType | undefined = agentsPrefs?.find(
+    const agent: AgentPaylodObj | undefined = agents?.find(
       (agent) => agent.id == session?.agentId,
     );
     if (agent) return agent?.profile_image_url || DEFAULT_AGENT_PROFILE_PIC;

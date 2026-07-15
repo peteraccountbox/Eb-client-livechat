@@ -45,8 +45,8 @@ export function App() {
 interface AppContextPayload {
   agentsPrefs: AgentPrefsPayloadType[];
   setAgentsPrefs: (prefs: AgentPrefsPayloadType[]) => void;
-  // agents: AgentPaylodObj[];
-  // setAgents: (prefs: AgentPaylodObj[]) => void;
+  agents: AgentPaylodObj[];
+  setAgents: (prefs: AgentPaylodObj[]) => void;
   sessions: ChatSessionPaylodObj[];
   setSessions: (prefs: ChatSessionPaylodObj[]) => void;
   chatFlows: ChatFlowsPayloadObj[];
@@ -64,8 +64,8 @@ interface AppContextPayload {
 export const AppContext = createContext({
   agentsPrefs: [] as AgentPrefsPayloadType[],
   setAgentsPrefs: (prefs: AgentPrefsPayloadType[]) => {},
-  // agents: [] as AgentPaylodObj[],
-  // setAgents: (prefs: AgentPaylodObj[]) => {},
+  agents: [] as AgentPaylodObj[],
+  setAgents: (prefs: AgentPaylodObj[]) => {},
   sessions: [] as ChatSessionPaylodObj[],
   setSessions: (prefs: ChatSessionPaylodObj[]) => {},
   chatFlows: [] as ChatFlowsPayloadObj[],

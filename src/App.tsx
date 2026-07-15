@@ -225,7 +225,10 @@ const App: React.FunctionComponent = () => {
 
     prefsReq
       .then((prefsRes) => {
-        if (prefsRes && prefsRes.data) setAgentsPrefs(prefsRes.data);
+        if (prefsRes && prefsRes.data) {
+          setAgentsPrefs(prefsRes.data);
+          setAgents(prefsRes.data);
+        }
       })
       .catch((error) => {
         console.error("There was an error!", error);
@@ -777,8 +780,8 @@ const App: React.FunctionComponent = () => {
         value={{
           agentsPrefs,
           setAgentsPrefs,
-          // agents,
-          // setAgents,
+          agents,
+          setAgents,
           chatPrefs,
           chatBubbleClicked,
           setChatPrefs,
