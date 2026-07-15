@@ -230,6 +230,7 @@ export type AgentPrefsPayloadType = {
   availability: string;
   business_hours: BusinessHour[];
   date_overrides : DateOverride[];
+  profile_image_url?: string;
   timezone: string;
   id: string;
   tenantId: string;
