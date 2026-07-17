@@ -119,7 +119,7 @@ const Conversation = (props: ConversationProps) => {
         from: MessageByTypeEnum.AI_AGENT,
         message: msg,
         eventType: "MESSAGE",
-        source: "SYSTEM",
+        source: "LIVECHAT",
         visibility: "PUBLIC",
       });
       session.aiAgentId = chatPrefs.aiAgentId;
