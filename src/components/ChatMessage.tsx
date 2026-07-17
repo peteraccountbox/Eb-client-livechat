@@ -201,7 +201,7 @@ const ChatMessage: FC<ChatMessagePropsType> = (props) => {
                     <></>
                   )}
 
-                  {props.message.from === MessageByTypeEnum.AI_AGENT ? (
+                  {props.message.from === MessageByTypeEnum.AI_AGENT && props.message.source == MessageByTypeEnum.SYSTEM ? (
                     <div className="feedback-actions">
                       <span
                         onClick={() => submitGPTFeedback(1)}
