@@ -40,7 +40,7 @@ export const PARENT_WINDOW_LIVECHAT_REF = PARENT_WINDOW
 //   : undefined;
 
 const LEGACY_REQUEST_PREFIX_PATH = "api/support/jsclient/inbox";
-const V1_REQUEST_PREFIX_PATH = "api/support/v1/jsclient/inbox";
+const V1_REQUEST_PREFIX_PATH = "api/support/v2/jsclient/inbox";
 
 let REQUEST_PREFIX_PATH = LEGACY_REQUEST_PREFIX_PATH;
 
