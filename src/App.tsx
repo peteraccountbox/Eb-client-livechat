@@ -29,6 +29,8 @@ import {
   USER_PREFS_FETCH_URL_PATH,
   TRACK_MANAGE,
   USERS_FETCH_URL,
+  SUBDOMAIN_URL_PATH,
+  applyInboxApiPrefix,
 } from "./globals";
 import {
   ActiveSessionObjType,
@@ -159,6 +161,7 @@ const App: React.FunctionComponent = () => {
   // });
 
   const [prefsFetched, setPrefsFetched] = useState<boolean>(false);
+  const [subdomainFetched, setSubdomainFetched] = useState<boolean>(false);
   useEffect(() => {
     if (prefsFetched) {
       //fetchChatFlows();
@@ -260,8 +263,7 @@ const App: React.FunctionComponent = () => {
     //   // deleteStoragePrefs("opened-chat-type");
     // }
 
-    // Fetch conversations
-    fetchConversationsAndAgents();
+    fetchSubdomainThenConversations();
 
     // Open window on localstorage value
     // let opened = getStoragePrefs("window-open");
@@ -508,6 +510,19 @@ const App: React.FunctionComponent = () => {
     });
 
     setChatFlows([...response.data]);
+  };
+
+  const fetchSubdomainThenConversations = async () => {
+    try {
+      const response = await getReq(SUBDOMAIN_URL_PATH, {});
+      applyInboxApiPrefix(!!response?.data?.migratedToPostgres);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setSubdomainFetched(true);
+    }
+
+    fetchConversationsAndAgents();
   };
 
   const fetchConversationsAndAgents = async () => {
@@ -766,6 +781,7 @@ const App: React.FunctionComponent = () => {
 
   if (
     prefsFetched &&
+    subdomainFetched &&
     chatPrefs &&
     agentsPrefs?.length > 0 &&
     !(
