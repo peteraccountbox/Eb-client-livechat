@@ -213,7 +213,7 @@ const Conversation = (props: ConversationProps) => {
     try {
       const response = await getReq(
         CONVERSATION_MESSAGE_FETCH_URL_PATH + "/" + session.id,
-        { page: 0, size: 50, sort: "createdTime,DESC" },
+        { page: 0, size: 50, sort: "createdTime,ASC" },
       );
 
       session.messageList = response.data.data;
