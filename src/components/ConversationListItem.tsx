@@ -126,7 +126,7 @@ const ConversationListItem: FC<ConversationListItemProp> = (props) => {
       props.session.lastMessageAt == props.session.lastAgentMessageAt
     ) {
       const agent = agents?.find((agent) => {
-        return agent.id == props.session.agentId;
+        return agent.id == props.session.lastMessageAgentId;
       });
       return agent && agent.name ? agent.name : "Agent";
     }
