@@ -510,7 +510,7 @@ const Conversation = (props: ConversationProps) => {
     message.size = file.size;  
 
     // Send message
-    postMessage(getChatMessage("", MessageFormatType.TEXT, [message]));
+    postMessage(getChatMessage("", MessageFormatType.FILE, [message]));
   };
 
   const getFormMetaData = () => {
