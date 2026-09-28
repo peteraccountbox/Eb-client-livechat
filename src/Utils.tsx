@@ -567,7 +567,7 @@ export function getSystemMessage(type: string) {
 
 export function getRestrictedFileTypes() {
   try {
-    return (window.parent as any).Account_Box_File_Upload?.getRestrictedFileTypes();
+    return (window.parent as any).Eb_Js_Api_Client_FileUpload?.getRestrictedFileTypes();
   } catch (error) {
     return [];
   }
