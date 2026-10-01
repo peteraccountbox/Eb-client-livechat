@@ -5,6 +5,7 @@ on:
     branches:
       - qa
       - main
+      - staging
 
 jobs:
   deploy:
