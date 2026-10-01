@@ -213,7 +213,7 @@ const Conversation = (props: ConversationProps) => {
     try {
       const response = await getReq(
         CONVERSATION_MESSAGE_FETCH_URL_PATH + "/" + session.id,
-        { size: 50, sort: "createdTime,ASC" },
+        { page: 0, size: 50, sort: "createdTime" },
       );
 
       session.messageList = response.data.data;
@@ -510,7 +510,7 @@ const Conversation = (props: ConversationProps) => {
     message.size = file.size;  
 
     // Send message
-    postMessage(getChatMessage("", MessageFormatType.FILE, [message]));
+    postMessage(getChatMessage("", MessageFormatType.TEXT, [message]));
   };
 
   const getFormMetaData = () => {
