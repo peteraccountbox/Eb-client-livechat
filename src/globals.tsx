@@ -44,7 +44,7 @@ const V1_REQUEST_PREFIX_PATH = "api/support/v2/jsclient/inbox";
 
 let REQUEST_PREFIX_PATH = LEGACY_REQUEST_PREFIX_PATH;
 
-const inboxUrl = (suffix: string) => REQUEST_PREFIX_PATH + suffix;
+const inboxUrl = (suffix: string) => V1_REQUEST_PREFIX_PATH + suffix;
 
 export const applyInboxApiPrefix = (migratedToPostgres?: boolean) => {
   REQUEST_PREFIX_PATH = migratedToPostgres

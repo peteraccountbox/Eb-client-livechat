@@ -263,7 +263,7 @@ const App: React.FunctionComponent = () => {
     //   // deleteStoragePrefs("opened-chat-type");
     // }
 
-    fetchSubdomainThenConversations();
+    // fetchSubdomainThenConversations();
 
     // Open window on localstorage value
     // let opened = getStoragePrefs("window-open");
@@ -781,7 +781,7 @@ const App: React.FunctionComponent = () => {
 
   if (
     prefsFetched &&
-    subdomainFetched &&
+    // subdomainFetched &&
     chatPrefs &&
     agentsPrefs?.length > 0 &&
     !(
