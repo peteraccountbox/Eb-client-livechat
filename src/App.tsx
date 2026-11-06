@@ -94,6 +94,7 @@ const App: React.FunctionComponent = () => {
 
   const [sessions, setSessions] = useState<ChatSessionPaylodObj[]>([]);
   const sessionsRef = useRef(sessions);
+  const exclusiveLivechatRuleHandledRef = useRef(false);
   const [chatFlows, setChatFlows] = useState<ChatFlowsPayloadObj[]>([]);
   const [createSessionData, setCreateSessionData] = useState<any>({});
   useEffect(() => {
@@ -339,6 +340,15 @@ const App: React.FunctionComponent = () => {
 
     let ruleType = rule.actionType;
     if (!ruleType) return;
+
+    // Proactive message and hide conflict; only the first one that matches runs.
+    if (
+      ruleType === "LIVECHAT_PROACTIVE_MESSAGE" ||
+      ruleType === "LIVECHAT_HIDE"
+    ) {
+      if (exclusiveLivechatRuleHandledRef.current) return;
+      exclusiveLivechatRuleHandledRef.current = true;
+    }
 
     // console.log("ruleType", ruleType);
 
